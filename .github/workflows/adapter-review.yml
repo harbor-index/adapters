@@ -43,9 +43,13 @@ jobs:
           PR_NUMBER="${{ github.event.issue.number }}"
           echo "number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
 
-          PR_DATA=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUMBER" --jq '{sha: .head.sha, repo: .head.repo.full_name}')
-          echo "sha=$(echo "$PR_DATA" | jq -r .sha)" >> "$GITHUB_OUTPUT"
+          PR_DATA=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUMBER" --jq '{sha: .head.sha, repo: .head.repo.full_name, base: .base.sha}')
+          HEAD_SHA=$(echo "$PR_DATA" | jq -r .sha)
+          echo "sha=$HEAD_SHA" >> "$GITHUB_OUTPUT"
           echo "repo=$(echo "$PR_DATA" | jq -r .repo)" >> "$GITHUB_OUTPUT"
+          # Errors already present here are reported as pre-existing, not failures.
+          MERGE_BASE=$(gh api "repos/${{ github.repository }}/compare/$(echo "$PR_DATA" | jq -r .base)...$HEAD_SHA" --jq .merge_base_commit.sha)
+          echo "merge_base=$MERGE_BASE" >> "$GITHUB_OUTPUT"
 
       - name: Checkout base repository
         uses: actions/checkout@v6
@@ -62,6 +66,14 @@ jobs:
 
       - name: Restore trusted script
         run: cp /tmp/validate_adapter.py scripts/validate_adapter.py
+
+      - name: Checkout merge base
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ steps.pr.outputs.merge_base }}
+          path: .merge-base
+          sparse-checkout: src
+          persist-credentials: false
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -87,6 +99,7 @@ jobs:
           python scripts/validate_adapter.py \
             --output validation_report.md \
             --json-output validation_results.json \
+            --baseline .merge-base \
             "${adapters[@]}" || echo "VALIDATION_FAILED=true" >> "$GITHUB_ENV"
 
       - name: Post validation results

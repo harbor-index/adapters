@@ -8,6 +8,7 @@ import math
 from pathlib import Path
 import re
 import statistics
+import subprocess
 import sys
 import tempfile
 import tomllib
@@ -199,6 +200,55 @@ class AdapterRequirementsTests(unittest.TestCase):
         for name, pattern in validator._README_SECTIONS:
             with self.subTest(section=name):
                 self.assertRegex(headings, "(?m)" + pattern)
+
+    def test_preexisting_errors_are_matched_by_count_and_ignore_lines(self):
+        def error(check, line=None):
+            return validator.Finding("error", check, "message", "src/example/x", line)
+
+        report = validator.AdapterReport("example", findings=[
+            error("A", 3), error("A", 9), error("B"),
+            validator.Finding("warning", "A", "message", "src/example/x")])
+        baseline = validator.AdapterReport("example", findings=[error("A", 1), error("C")])
+        validator.separate_preexisting(report, baseline)
+        self.assertEqual([(f.check, f.line) for f in report.preexisting], [("A", 3)])
+        self.assertEqual([(f.check, f.line) for f in report.errors], [("A", 9), ("B", None)])
+        self.assertEqual(len(report.warnings), 1)
+
+    def run_cli(self, *args):
+        result = subprocess.run(
+            [sys.executable, str(ROOT / "scripts/validate_adapter.py"),
+             "--output", "report.md", "--json-output", "report.json", *args],
+            cwd=self.temp.name, capture_output=True, text=True, check=False)
+        root = Path(self.temp.name)
+        return result.returncode, json.loads((root / "report.json").read_text())[0], (root / "report.md").read_text()
+
+    def test_baseline_fails_only_on_new_errors(self):
+        head = Path(self.temp.name) / "src/legacy"
+        base = Path(self.temp.name) / "base/src/legacy"
+        head.mkdir(parents=True)
+        base.mkdir(parents=True)
+        (base / "README.md").write_text("# legacy\n")
+
+        code, without_baseline, _ = self.run_cli("legacy")
+        self.assertEqual(code, 1)
+        self.assertEqual(len(without_baseline["errors"]), 5)
+
+        (head / "README.md").write_text("# legacy\n")
+        code, result, markdown = self.run_cli("--baseline", "base", "legacy")
+        self.assertEqual((code, result["errors"]), (0, []))
+        self.assertEqual(len(result["preexisting_errors"]), 4)
+        self.assertIn("Pre-existing errors (4)", markdown)
+
+        (head / "README.md").unlink()
+        code, result, _ = self.run_cli("--baseline", "base", "legacy")
+        self.assertEqual(code, 1)
+        self.assertEqual([e["file"] for e in result["errors"]], ["src/legacy/README.md"])
+
+    def test_baseline_without_the_adapter_counts_every_error(self):
+        (Path(self.temp.name) / "src/fresh").mkdir(parents=True)
+        (Path(self.temp.name) / "base/src").mkdir(parents=True)
+        code, result, _ = self.run_cli("--baseline", "base", "fresh")
+        self.assertEqual((code, len(result["errors"]), result["preexisting_errors"]), (1, 5, []))
 
 
 if __name__ == "__main__":

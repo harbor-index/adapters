@@ -35,7 +35,7 @@ Stable requirement IDs are shared by the guides, skills, validator, and review r
 | ADP-COST | Canonical string costs and compatibility types | [Metadata schema](#adapter_metadatajson-schema) |
 | ADP-README | Local README section and reproduction requirements | [README requirements](#readme-requirements) |
 
-`scripts/validate_adapter.py` performs partial structural checks, not full Harbor runtime validation. Existing compatibility warnings remain non-blocking; the semantic review applies the guide and identifies the requirement ID for each finding. Documentation examples are checked with the same validator functions and arithmetic checks via `python3 -m unittest discover -s scripts/tests` (Python 3.11+).
+`scripts/validate_adapter.py` performs partial structural checks, not full Harbor runtime validation. Existing compatibility warnings remain non-blocking. In `/review-adapter`, errors an adapter already has at the PR's merge base are listed as pre-existing and do not fail the run, so a PR is held only to the errors it introduces; the semantic review applies the guide and identifies the requirement ID for each finding. Documentation examples are checked with the same validator functions and arithmetic checks via `python3 -m unittest discover -s scripts/tests` (Python 3.11+).
 
 ## Quick Start
 
