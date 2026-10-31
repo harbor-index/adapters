@@ -1,0 +1,40 @@
+[
+  {
+    "adapter_name": "deepresearch-bench",
+    "adapter_builders": [
+      "Zhaowei Xu (zhaoweix@outlook.com)"
+    ],
+    "original_benchmark": [
+      {
+        "split": "full",
+        "size": 132,
+        "harness": "None",
+        "supported_agents": [
+          "None"
+        ],
+        "adaptable": true,
+        "notes": "132 deep-research cases (English and Chinese) from imlrz/DeepResearch-Bench-II@ffdff61 (tasks_and_rubrics.jsonl), scored by a gemini-2.5-pro judge against ~9,415 rubric items. Harness-free upstream: systems submit pre-generated reports; there is no agent harness."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "full",
+        "adapted_benchmark_size": 132,
+        "parity_benchmark_size": 5,
+        "parity_sampling_rate": 0.038,
+        "registry_benchmark_size": 132,
+        "added_agents": [
+          "None"
+        ],
+        "parity_matching_agents": [
+          "claude-code@2.1.177+deepseek-v4-pro"
+        ],
+        "parity_unmatching_agents": [
+          "None"
+        ],
+        "parity_costs": "$356",
+        "notes": "Research agent is claude-code (Harbor-native); no custom agent added. Recorded parity is prompt-level only: the same claude-code + deepseek-v4-pro CLI on the raw upstream prompt vs the adapter's instruction.md, in one container, both scored by tests/run_test.py; it did not go through harbor run (see parity_experiment.json notes). 5 of 132 cases (idx 9,13,17,5,1) x 3 runs per side, all overlapping by range. Cost: ~$12 per run (agent rollout + judge pass); ~$356 total for the 5-case experiment including re-rolls. The full 33-case parity subset at 3 runs per side would be ~$2,400, which is why coverage stopped at 5. Oracle: 130/132 via a per-task secret token in solution/ (the judge is not exercised); idx-79 and idx-104 have no upstream reference report."
+      }
+    ]
+  }
+]

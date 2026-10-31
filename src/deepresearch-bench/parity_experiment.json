@@ -1,0 +1,105 @@
+[
+  {
+    "adapter_name": "deepresearch-bench",
+    "agent": "claude-code@2.1.177",
+    "model": "deepseek-v4-pro",
+    "date": "2026-06-15",
+    "adapted_benchmark_size": 132,
+    "parity_benchmark_size": 5,
+    "number_of_runs": 3,
+    "notes": "Prompt-level parity, NOT a harbor run: both sides ran the same claude-code CLI (2.1.177, deepseek-v4-pro via the parity gateway) inside one long-lived container (fork run_parity.py, 1800 s agent cap). The only difference between sides is the instruction text: the raw upstream prompt vs the adapter's instruction.md. The Harbor task environment, test.sh and [verifier.env] were not exercised; a harbor-run Harbor side is still to be done, coordinated with the Harbor team. Both sides were scored by the adapter's tests/run_test.py (gemini-2.5-pro via the gateway's OpenAI-compatible endpoint), not by upstream run_evaluation.py/aggregate_scores.py. Coverage: 5 cases (idx 9,13,17,5,1) of 132, 3 scored runs per side. Attempt ledger (fork artifacts/driver.log): 34 generation attempts, 7 produced an empty report. Two runs were empty on the first attempt and re-rolled once, and the re-roll was kept (idx-9 original r3, idx-13 harbor r3). Three runs stayed empty after re-roll (idx-13 original r1 and harbor r2, two attempts each; idx-5 harbor r3, one attempt); results.json records them as null and the arrays below score them 0.0. Harbor r1 reports for all 5 cases were reused from an earlier run of the same setup that is not in driver.log. Full proof bundle (reports, per-rubric judge logs, results.json, driver.log) at original_parity_repo (pinned commit 9242ac8).",
+    "original_parity_repo": "https://github.com/johnxwork/DeepResearch-Bench-II/tree/9242ac8/parity_harness",
+    "adapter_pr": [
+      "https://github.com/harbor-framework/adapters/pull/51",
+      "https://github.com/harbor-framework/harbor/pull/1662"
+    ],
+    "dataset_pr": [
+      "https://github.com/harbor-framework/harbor-datasets/pull/241"
+    ],
+    "parity_pr": [
+      "https://huggingface.co/datasets/harborframework/parity-experiments/discussions/260"
+    ],
+    "metrics": [
+      {
+        "benchmark_name": "DeepResearch-Bench-II (idx-9)",
+        "metric": "Rubric score (fraction of items satisfied)",
+        "original": "0.751 ± 0.023",
+        "harbor": "0.593 ± 0.169",
+        "original_runs": [
+          0.714,
+          0.794,
+          0.746
+        ],
+        "harbor_runs": [
+          0.762,
+          0.762,
+          0.254
+        ]
+      },
+      {
+        "benchmark_name": "DeepResearch-Bench-II (idx-13)",
+        "metric": "Rubric score (fraction of items satisfied)",
+        "original": "0.433 ± 0.219",
+        "harbor": "0.436 ± 0.218",
+        "original_runs": [
+          0.0,
+          0.598425,
+          0.700787
+        ],
+        "harbor_runs": [
+          0.669291,
+          0.0,
+          0.637795
+        ]
+      },
+      {
+        "benchmark_name": "DeepResearch-Bench-II (idx-17)",
+        "metric": "Rubric score (fraction of items satisfied)",
+        "original": "0.363 ± 0.020",
+        "harbor": "0.341 ± 0.027",
+        "original_runs": [
+          0.333,
+          0.356,
+          0.4
+        ],
+        "harbor_runs": [
+          0.356,
+          0.378,
+          0.289
+        ]
+      },
+      {
+        "benchmark_name": "DeepResearch-Bench-II (idx-5)",
+        "metric": "Rubric score (fraction of items satisfied)",
+        "original": "0.257 ± 0.030",
+        "harbor": "0.174 ± 0.087",
+        "original_runs": [
+          0.25,
+          0.208333,
+          0.3125
+        ],
+        "harbor_runs": [
+          0.25,
+          0.270833,
+          0.0
+        ]
+      },
+      {
+        "benchmark_name": "DeepResearch-Bench-II (idx-1)",
+        "metric": "Rubric score (fraction of items satisfied)",
+        "original": "0.569 ± 0.010",
+        "harbor": "0.460 ± 0.127",
+        "original_runs": [
+          0.586,
+          0.552,
+          0.569
+        ],
+        "harbor_runs": [
+          0.569,
+          0.603,
+          0.207
+        ]
+      }
+    ]
+  }
+]
