@@ -11,6 +11,7 @@ requires recomputation from run data (also covered by documentation tests).
 Usage:
     python scripts/validate_adapter.py src/dabstep src/swebench
     python scripts/validate_adapter.py --output report.md src/dabstep
+    python scripts/validate_adapter.py --baseline ../merge-base src/dabstep
 """
 
 from __future__ import annotations
@@ -19,6 +20,7 @@ import argparse
 import json
 import re
 import sys
+from collections import Counter
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
@@ -42,6 +44,8 @@ class AdapterReport:
     adapter_name: str
     findings: list[Finding] = field(default_factory=list)
     passed: list[str] = field(default_factory=list)
+    # Errors the adapter already has at the baseline; reported, but not failing.
+    preexisting: list[Finding] = field(default_factory=list)
 
     @property
     def errors(self) -> list[Finding]:
@@ -1011,6 +1015,25 @@ def validate_adapter(adapter_dir: Path) -> AdapterReport:
     return report
 
 
+def _finding_key(f: Finding) -> tuple[str, str, str | None]:
+    # Line numbers shift with unrelated edits, so they are not part of the key.
+    return (f.check, f.message, f.file)
+
+
+def separate_preexisting(report: AdapterReport, baseline: AdapterReport) -> None:
+    """Move errors that ``baseline`` also has from ``report.findings`` to ``report.preexisting``."""
+    known = Counter(_finding_key(f) for f in baseline.errors)
+    kept: list[Finding] = []
+    for f in report.findings:
+        key = _finding_key(f)
+        if f.level == "error" and known[key]:
+            known[key] -= 1
+            report.preexisting.append(f)
+        else:
+            kept.append(f)
+    report.findings = kept
+
+
 # --- Formatting ---
 
 
@@ -1025,11 +1048,15 @@ def format_markdown(reports: list[AdapterReport]) -> str:
         n_err = len(report.errors)
         n_warn = len(report.warnings)
         n_pass = len(report.passed)
+        n_pre = len(report.preexisting)
 
         icon = "✅" if n_err == 0 else "❌"
         parts.append(f"## {icon} Adapter Validation: `{report.adapter_name}`")
         parts.append("")
-        parts.append(f"✅ {n_pass} passed | ❌ {n_err} errors | ⚠️ {n_warn} warnings")
+        summary = f"✅ {n_pass} passed | ❌ {n_err} errors | ⚠️ {n_warn} warnings"
+        if n_pre:
+            summary += f" | {n_pre} pre-existing errors"
+        parts.append(summary)
         parts.append("")
 
         if n_err > 0:
@@ -1046,6 +1073,20 @@ def format_markdown(reports: list[AdapterReport]) -> str:
             for f in report.warnings:
                 loc = _format_location(f)
                 parts.append(f"- ⚠️ **{f.check}**: {f.message}{loc}")
+            parts.append("")
+
+        if n_pre > 0:
+            parts.append("<details>")
+            parts.append(
+                f"<summary>Pre-existing errors ({n_pre}): already present at the "
+                "merge base, not introduced by this PR</summary>"
+            )
+            parts.append("")
+            for f in report.preexisting:
+                loc = _format_location(f)
+                parts.append(f"- **{f.check}**: {f.message}{loc}")
+            parts.append("")
+            parts.append("</details>")
             parts.append("")
 
         if n_pass > 0:
@@ -1077,6 +1118,7 @@ def format_json(reports: list[AdapterReport]) -> str:
                 "adapter_name": rpt.adapter_name,
                 "errors": [asdict(f) for f in rpt.errors],
                 "warnings": [asdict(f) for f in rpt.warnings],
+                "preexisting_errors": [asdict(f) for f in rpt.preexisting],
                 "passed": rpt.passed,
             }
             for rpt in reports
@@ -1115,7 +1157,15 @@ def main() -> None:
         "--json-output",
         help="Write JSON results to this file",
     )
+    parser.add_argument(
+        "--baseline",
+        type=Path,
+        help="Repository checkout at the PR's merge base. Errors an adapter "
+        "already has there are listed as pre-existing and do not fail the run.",
+    )
     args = parser.parse_args()
+    if args.baseline and not (args.baseline / "src").is_dir():
+        parser.error(f"--baseline has no src/ directory: {args.baseline}")
 
     reports: list[AdapterReport] = []
     for raw in args.adapters:
@@ -1123,7 +1173,12 @@ def main() -> None:
         if adapter_dir is None:
             print(f"Warning: adapter directory not found: {raw}", file=sys.stderr)
             continue
-        reports.append(validate_adapter(adapter_dir))
+        report = validate_adapter(adapter_dir)
+        if args.baseline:
+            baseline_dir = args.baseline / "src" / adapter_dir.name
+            if baseline_dir.is_dir():
+                separate_preexisting(report, validate_adapter(baseline_dir))
+        reports.append(report)
 
     if not reports:
         print("No valid adapter directories found.", file=sys.stderr)
