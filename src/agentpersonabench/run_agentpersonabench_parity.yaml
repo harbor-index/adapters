@@ -1,0 +1,23 @@
+# Recorded web parity arm (32 tasks, 3 attempts). Generate its input first:
+#   cd src/agentpersonabench
+#   uv run agentpersonabench --source /path/to/AgentPersonaBench --surface web \
+#     --split parity --output-dir ../../datasets/agentpersonabench-parity-web
+# Then, from the repo root:
+#   PYTHONPATH=src/agentpersonabench/src harbor run -c src/agentpersonabench/run_agentpersonabench_parity.yaml
+jobs_dir: jobs
+n_attempts: 3
+timeout_multiplier: 1.0
+orchestrator:
+  type: local
+  n_concurrent_trials: 4
+  quiet: false
+environment:
+  type: docker
+  force_build: true
+  delete: true
+agents:
+  - name: persona-web
+    import_path: agentpersonabench.agents.persona_web:PersonaWeb
+    model_name: anthropic/claude-haiku-5-5
+datasets:
+  - path: datasets/agentpersonabench-parity-web

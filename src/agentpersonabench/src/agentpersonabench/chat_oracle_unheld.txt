@@ -1,0 +1,5 @@
+# Chat slugs that still do not score fully held under glm-4.7.
+# Tasks whose clause restatement was insufficient or unstable now use concrete
+# turns and stay in chat_oracle_calibrated.txt so regeneration keeps that text.
+# debugger-first-chat, instrumentation-first-chat, and risk-seeking-chat are
+# excluded by OracleError (no HELD clause), not by this list.

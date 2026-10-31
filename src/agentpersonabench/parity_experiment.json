@@ -1,0 +1,98 @@
+[
+  {
+    "adapter_name": "agentpersonabench",
+    "agent": "persona-openhands-sdk@1.0.0",
+    "model": "claude-haiku-5-5",
+    "date": "2026-10-31",
+    "adapted_benchmark_size": 2301,
+    "parity_benchmark_size": 25,
+    "number_of_runs": 3,
+    "notes": "Survey slice of the 5% subset in parity_task_ids.json (random.Random(42), stratified by surface). Metric is the verifier point count, not a 0-1 rate. Effort medium. Temperature omitted. Survey checks are rule-based. Harbor 0.18.0. Harbor runs are the three attempts of one job, ordered by trial start time. Upstream runs are seeds 0, 1, 2 from suite apb-parity-5pct-survey-rerun. An earlier upstream pass on the same tasks scored 0.720 because evaluation/src/lib/harbor_solve.sh called bare python3, which had no PyYAML, and the persona prompt was not written. This entry uses the rerun in which that python3 was the eval venv. The profile text matches; the role line is \"a person\" on Harbor and \"a user\" on upstream. Run ranges overlap.",
+    "original_parity_repo": "https://github.com/MatrAIx-ai/AgentPersonaBench",
+    "adapter_pr": ["https://github.com/harbor-framework/adapters/pull/36"],
+    "dataset_pr": ["https://github.com/harbor-framework/harbor-datasets/pull/270"],
+    "parity_pr": ["https://huggingface.co/datasets/harborframework/parity-experiments/discussions/274"],
+    "metrics": [
+      {
+        "benchmark_name": "AgentPersonaBench",
+        "metric": "adherence points",
+        "original": "1.360 ± 0.023",
+        "harbor": "1.467 ± 0.035",
+        "original_runs": [1.36, 1.32, 1.4],
+        "harbor_runs": [1.48, 1.4, 1.52]
+      }
+    ]
+  },
+  {
+    "adapter_name": "agentpersonabench",
+    "agent": "persona-chat@1.0.0",
+    "model": "claude-haiku-5-5",
+    "date": "2026-10-31",
+    "adapted_benchmark_size": 2301,
+    "parity_benchmark_size": 28,
+    "number_of_runs": 3,
+    "notes": "Chat slice of the same 5% subset. Judge on both sides is claude-opus-4-8. Effort medium. Temperature omitted because claude-haiku-5-5 rejects the field. Harbor 0.18.0. Upstream suite apb-parity-5pct, seeds 0, 1, 2. Run ranges overlap.",
+    "original_parity_repo": "https://github.com/MatrAIx-ai/AgentPersonaBench",
+    "adapter_pr": ["https://github.com/harbor-framework/adapters/pull/36"],
+    "dataset_pr": ["https://github.com/harbor-framework/harbor-datasets/pull/270"],
+    "parity_pr": ["https://huggingface.co/datasets/harborframework/parity-experiments/discussions/274"],
+    "metrics": [
+      {
+        "benchmark_name": "AgentPersonaBench",
+        "metric": "adherence points",
+        "original": "1.012 ± 0.031",
+        "harbor": "1.000 ± 0.021",
+        "original_runs": [0.964, 1.0, 1.071],
+        "harbor_runs": [1.036, 1.0, 0.964]
+      }
+    ]
+  },
+  {
+    "adapter_name": "agentpersonabench",
+    "agent": "persona-web@1.0.0",
+    "model": "claude-haiku-5-5",
+    "date": "2026-10-31",
+    "adapted_benchmark_size": 2301,
+    "parity_benchmark_size": 32,
+    "number_of_runs": 3,
+    "notes": "Web slice of the same 5% subset. Effort medium. Temperature omitted. Harbor 0.18.0. Upstream suite apb-parity-5pct, seeds 0, 1, 2. Run ranges overlap.",
+    "original_parity_repo": "https://github.com/MatrAIx-ai/AgentPersonaBench",
+    "adapter_pr": ["https://github.com/harbor-framework/adapters/pull/36"],
+    "dataset_pr": ["https://github.com/harbor-framework/harbor-datasets/pull/270"],
+    "parity_pr": ["https://huggingface.co/datasets/harborframework/parity-experiments/discussions/274"],
+    "metrics": [
+      {
+        "benchmark_name": "AgentPersonaBench",
+        "metric": "adherence points",
+        "original": "1.260 ± 0.021",
+        "harbor": "1.281 ± 0.018",
+        "original_runs": [1.281, 1.219, 1.281],
+        "harbor_runs": [1.312, 1.25, 1.281]
+      }
+    ]
+  },
+  {
+    "adapter_name": "agentpersonabench",
+    "agent": "persona-computer-1@1.0.0",
+    "model": "claude-opus-4-8",
+    "date": "2026-10-31",
+    "adapted_benchmark_size": 2301,
+    "parity_benchmark_size": 30,
+    "number_of_runs": 3,
+    "notes": "Os-app slice of the same 5% subset. persona-computer-1 is Harbor computer-1 with the persona prompt spliced in, not APB's vendored computer-1. Effort medium. Judge claude-opus-4-8 where the verifier calls an LLM. Harbor 0.18.0. Upstream suite apb-parity-5pct, seeds 0, 1, 2. Run ranges overlap.",
+    "original_parity_repo": "https://github.com/MatrAIx-ai/AgentPersonaBench",
+    "adapter_pr": ["https://github.com/harbor-framework/adapters/pull/36"],
+    "dataset_pr": ["https://github.com/harbor-framework/harbor-datasets/pull/270"],
+    "parity_pr": ["https://huggingface.co/datasets/harborframework/parity-experiments/discussions/274"],
+    "metrics": [
+      {
+        "benchmark_name": "AgentPersonaBench",
+        "metric": "adherence points",
+        "original": "1.066 ± 0.033",
+        "harbor": "1.078 ± 0.040",
+        "original_runs": [1.033, 1.133, 1.033],
+        "harbor_runs": [1.133, 1.0, 1.1]
+      }
+    ]
+  }
+]

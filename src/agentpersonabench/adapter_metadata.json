@@ -1,0 +1,49 @@
+[
+  {
+    "adapter_name": "agentpersonabench",
+    "adapter_builders": [
+      "Jaden Hou (36116720+JianhengHou@users.noreply.github.com)"
+    ],
+    "original_benchmark": [
+      {
+        "split": "full",
+        "size": 2460,
+        "harness": "agent",
+        "supported_agents": [
+          "openhands-sdk@1.54.0",
+          "chat-harness@db1b8b4",
+          "web-agent@db1b8b4",
+          "computer-1@db1b8b4"
+        ],
+        "adaptable": true,
+        "notes": "Survey 502, chat 565, web 707, os-app 686. 159 tasks are not emitted because no stable oracle scores fully held on that task's verifier."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "full",
+        "adapted_benchmark_size": 2301,
+        "parity_benchmark_size": 115,
+        "parity_sampling_rate": 0.049978,
+        "registry_benchmark_size": 2301,
+        "added_agents": [
+          "persona-openhands-sdk@1.0.0",
+          "persona-chat@1.0.0",
+          "persona-web@1.0.0",
+          "persona-computer-1@1.0.0"
+        ],
+        "parity_matching_agents": [
+          "persona-openhands-sdk@1.0.0+claude-haiku-5-5",
+          "persona-chat@1.0.0+claude-haiku-5-5",
+          "persona-web@1.0.0+claude-haiku-5-5",
+          "persona-computer-1@1.0.0+claude-opus-4-8"
+        ],
+        "parity_unmatching_agents": [
+          "None"
+        ],
+        "parity_costs": "unmetered",
+        "notes": "Registry count is the adapted set. Dataset PR: https://github.com/harbor-framework/harbor-datasets/pull/270. Parity is 115 tasks (survey 25, chat 28, web 32, os-app 30), drawn with random.Random(42) from emitted tasks and listed in parity_task_ids.json. Each entry in parity_experiment.json is one surface. Upstream db1b8b493009811314421e7a1775c947762dc3b7. Harbor 0.18.0. Survey, chat, and web use claude-haiku-5-5. Os-app uses claude-opus-4-8. Effort medium. Three runs per side. Run ranges overlap on every surface. task.toml still pins claude-opus-4-8 for the judge."
+      }
+    ]
+  }
+]
