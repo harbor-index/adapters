@@ -1,3 +1,15 @@
+[task]
+name = "swe-gym/swe-gym__{instance_id}"
+authors = [
+    { name = "Jiayi Pan", email = "jypan@berkeley.edu" },
+    { name = "Xingyao Wang" },
+    { name = "Graham Neubig" },
+    { name = "Navdeep Jaitly" },
+    { name = "Heng Ji" },
+    { name = "Alane Suhr" },
+    { name = "Yizhe Zhang" },
+]
+
 [metadata]
 benchmark = "SWE-Gym"
 benchmark_url = "https://github.com/SWE-Gym/SWE-Gym"
@@ -16,6 +28,8 @@ timeout_sec = {max_timeout}
 timeout_sec = {max_timeout}
 
 [environment]
+docker_image = "{docker_image}"
+workdir = "/testbed"
 build_timeout_sec = 1800.0
 cpus = 1
 memory_mb = 8192

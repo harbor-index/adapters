@@ -5,8 +5,17 @@ description = "Harbor adapter for swegym"
 requires-python = ">=3.11"
 dependencies = [
     "datasets",
-    "swebench",
+    "swebench>=4.1.0,<5",
 ]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.3",
+]
+
+[tool.pytest.ini_options]
+# Flat layout: tests import adapter.py (which imports utils.py) as top-level modules.
+pythonpath = ["."]
 
 # Flat-layout adapter (run_adapter.py at root); not an installable package —
 # uv provisions the dependencies above and runs the script directly.
