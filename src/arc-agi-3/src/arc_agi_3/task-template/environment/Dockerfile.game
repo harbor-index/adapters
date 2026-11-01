@@ -1,0 +1,9 @@
+FROM python:3.13-slim
+
+WORKDIR /app
+
+RUN pip install --no-cache-dir arcengine==0.9.3 numpy==2.5.4 pydantic==2.14.1
+
+COPY __MODULE__.py game_server.py /app/
+
+CMD ["python3", "/app/game_server.py"]
