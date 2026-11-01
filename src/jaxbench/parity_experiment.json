@@ -1,0 +1,84 @@
+[
+  {
+    "adapter_name": "jaxbench",
+    "agent": "mini-swe-agent@2.4.6",
+    "model": "deepseek-v4-1-flash-260910",
+    "date": "2026-10-26",
+    "adapted_benchmark_size": 49,
+    "parity_benchmark_size": 15,
+    "number_of_runs": 3,
+    "notes": "Agent mini-swe-agent 2.4.6 on both sides, identical prompt (adapter instruction.md, rendered identically), config (step_limit 150, temperature 1.0, top_p 0.95 = DeepSeek's recommended agentic sampling; default reasoning effort), install (uv, Python 3.12, UV_EXCLUDE_NEWER=2026-10-17T00:00:00Z) and request headers (X-Session-ID). Model DeepSeek V4.1 Flash via the PP API OpenAI-compatible endpoint (requested as deepseek-v4.1-flash; served as deepseek-v4-1-flash-260910). Hardware: one TPU v6e chip (GKE ct6e-standard-1t spot, 1x1), 8 CPU / 32 GiB; 3600 s agent limit; jax/jaxlib 0.12.0 and libtpu 0.0.50 on both sides (pinned in the original-side image; the Harbor image resolved the same versions when built and the adapter Dockerfile now pins them). Parity split: 15 of the 49 adapted tasks (--split parity: 7 priority kernels + 8 KernelBench-fused). Reward = max(speedup, 1) if correct else 1 (paper's floored speedup); the final /workspace/kernel.py is graded (the paper reports best-so-far over 144 samples, so absolute numbers are not comparable to the paper). Original side: fork's harbor_parity/ runner grading with upstream `python -m JAXBench evaluate`. Infrastructure failures were rerun and excluded: spot preemptions, Harbor agent exec streams dropped by GKE konnectivity-agent scale-downs (fixed by pinning konnectivity replicas), and grading attempts that found the TPU still held by a just-killed process (fixed by retrying the evaluator); every task has one valid result per run on each side (90 total). All metric run-score ranges overlap; per-task disagreements shuffle across runs (e.g. 3p, 4p, 16p, 22k, 46k flip both ways).",
+    "original_parity_repo": "https://github.com/liulehui/accelerator-agents/tree/harbor-parity/JAXBench/harbor_parity",
+    "adapter_pr": [
+      "https://github.com/harbor-framework/adapters/pull/6"
+    ],
+    "dataset_pr": ["https://github.com/harbor-framework/harbor-datasets/pull/268"],
+    "parity_pr": ["https://huggingface.co/datasets/harborframework/parity-experiments/discussions/273"],
+    "metrics": [
+      {
+        "benchmark_name": "JAXBench",
+        "metric": "geomean_speedup_floored (x)",
+        "original": "1.80 ± 0.16",
+        "harbor": "1.60 ± 0.15",
+        "original_runs": [
+          1.959,
+          1.9577,
+          1.4705
+        ],
+        "harbor_runs": [
+          1.3059,
+          1.8284,
+          1.6638
+        ]
+      },
+      {
+        "benchmark_name": "JAXBench",
+        "metric": "correct_rate (%)",
+        "original": "71.11 ± 12.37",
+        "harbor": "64.44 ± 8.89",
+        "original_runs": [
+          86.6667,
+          80.0,
+          46.6667
+        ],
+        "harbor_runs": [
+          46.6667,
+          73.3333,
+          73.3333
+        ]
+      },
+      {
+        "benchmark_name": "JAXBench",
+        "metric": "fast_1 (%)",
+        "original": "55.56 ± 8.01",
+        "harbor": "53.33 ± 7.70",
+        "original_runs": [
+          60.0,
+          66.6667,
+          40.0
+        ],
+        "harbor_runs": [
+          40.0,
+          53.3333,
+          66.6667
+        ]
+      },
+      {
+        "benchmark_name": "JAXBench",
+        "metric": "mean_reward (x)",
+        "original": "2.74 ± 0.39",
+        "harbor": "2.45 ± 0.34",
+        "original_runs": [
+          3.424,
+          2.7267,
+          2.082
+        ],
+        "harbor_runs": [
+          1.9373,
+          3.098,
+          2.306
+        ]
+      }
+    ]
+  }
+]

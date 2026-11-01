@@ -1,0 +1,55 @@
+# JAXBench — GKE with a single-chip TPU v6e node (all 49 level1 tasks)
+#
+# Every task requests one TPU v6e chip via task.toml ([environment.tpu] type="v6e",
+# topology="1x1"). TPUs are only available through Harbor's GKE environment.
+#
+# Prerequisites: a GKE cluster with a ct6e-standard-1t (v6e 1x1) node pool, an Artifact
+# Registry Docker repo, the Cloud Build API enabled, and gcloud's gke-gcloud-auth-plugin
+# on PATH. Fill in the kwargs below (${VAR} templates are NOT expanded in kwargs).
+#
+# Usage (from the repository root):
+#   uvx --from 'harbor[gke]==0.23.0' harbor jobs start -c src/jaxbench/run_jaxbench_gke_tpu_v6e.yaml
+
+jobs_dir: jobs
+n_attempts: 1
+timeout_multiplier: 1.0
+# One v6e chip: extra concurrent trials would only wait Pending for the TPU.
+n_concurrent_trials: 1
+quiet: false
+
+datasets:
+  - path: datasets/jaxbench
+
+# Default: oracle agent for verification
+agents:
+  - name: oracle
+
+# Uncomment to run with an agent instead (parity agent; see run_jaxbench_gke_tpu_v6e_parity.yaml
+# for the full parity settings, including the LiteLLM pin and API key variables):
+# agents:
+#   - name: mini-swe-agent
+#     model_name: openai/deepseek-v4.1-flash
+#     kwargs:
+#       version: "2.4.6"
+
+environment:
+  type: gke
+  force_build: false
+  delete: true
+  kwargs:
+    project_id: tpu-test-448023
+    cluster_name: lehui-tpu-us-central1
+    region: us-central1
+    namespace: default
+    registry_location: us-central1
+    registry_name: harbor-jaxbench
+  # env:
+  #   ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+
+# JAXBench paper aggregates (arXiv:2607.20466, Table 2): mean of per-task `reward`
+# (built-in) plus the geometric mean of floored speedups.
+metrics:
+  - type: mean
+  - type: uv-script
+    kwargs:
+      script_path: src/jaxbench/metrics/geomean.py

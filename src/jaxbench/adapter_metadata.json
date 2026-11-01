@@ -1,0 +1,40 @@
+[
+  {
+    "adapter_name": "jaxbench",
+    "adapter_builders": [
+      "Lehui Liu (imliulehui@gmail.com)"
+    ],
+    "original_benchmark": [
+      {
+        "split": "full",
+        "size": 50,
+        "harness": "None",
+        "supported_agents": [
+          "None"
+        ],
+        "adaptable": true,
+        "notes": "JAXBench level1 at AI-Hypercomputer/accelerator-agents commit 7afeb78 (17 priority kernels + 33 KernelBench-L2 fused operators). Upstream ships the evaluation harness (python -m JAXBench evaluate) but no agent runner; the paper's methods (best-of-N, iterative refinement, Autocomp) are not released as runnable agents."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "full",
+        "adapted_benchmark_size": 49,
+        "parity_benchmark_size": 15,
+        "parity_sampling_rate": 0.3061,
+        "registry_benchmark_size": 49,
+        "added_agents": [
+          "None"
+        ],
+        "parity_matching_agents": [
+          "mini-swe-agent@2.4.6+deepseek-v4-1-flash-260910"
+        ],
+        "parity_unmatching_agents": [
+          "None"
+        ],
+        "parity_costs": "$120 (≈$40 DeepSeek V4.1 Flash API + ≈$80 GKE spot TPU v6e, ~116 chip-hours; both sides, incl. failed attempts)",
+        "notes": "11p_Megablox_GMM is excluded (its upstream baseline cannot be compiled). Parity uses the 15-task --split parity subset (1p 3p 4p 8p 12p 15p 16p 18k 22k 26k 30k 34k 38k 42k 46k), 3 runs per side, with mini-swe-agent added to a fork of the original benchmark (Scenario 2). Every task needs one TPU v6e chip (GKE environment)."
+      }
+    ]
+  }
+]

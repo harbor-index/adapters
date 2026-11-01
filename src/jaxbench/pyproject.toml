@@ -1,0 +1,20 @@
+[project]
+name = "harbor-jaxbench-adapter"
+version = "0.1.0"
+description = "Harbor adapter for JAXBench: 49 JAX/TPU kernel-optimization workloads (TPU v6e)"
+readme = "README.md"
+authors = [
+    { name = "Lehui Liu", email = "imliulehui@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = []
+
+[project.scripts]
+jaxbench = "jaxbench.main:main"
+
+[build-system]
+requires = ["uv_build>=0.11.6,<0.12.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "jaxbench"

@@ -1,0 +1,64 @@
+# JAXBench — oracle check with upstream hand-written Pallas kernels as the oracle (GKE, TPU v6e 1x1)
+#
+# Runs the 3 tasks whose upstream optimized.py passes the upstream harness (3p, 4p, 8p).
+# A correct run is correct=1 on all 3, with speedup over XLA from the expert kernel
+# (observed ~4.1x, ~2.3x, ~1.0x). The other upstream Pallas kernels (1p, 2p, 6p, 7p) fail the
+# harness at the pinned commit and use the baseline oracle instead (see README Notes & Caveats).
+#
+# Generate the dataset first (from src/jaxbench):
+#   uv run jaxbench --output-dir ../../datasets/jaxbench
+#
+# Usage (from the repository root):
+#   uvx --from 'harbor[gke]==0.23.0' harbor jobs start -c src/jaxbench/run_jaxbench_gke_tpu_v6e_pallas_oracle.yaml
+#
+# See run_jaxbench_gke_tpu_v6e.yaml for GKE prerequisites.
+
+jobs_dir: jobs
+n_attempts: 1
+timeout_multiplier: 1.0
+# One v6e chip: extra concurrent trials would only wait Pending for the TPU.
+n_concurrent_trials: 1
+quiet: false
+
+datasets:
+  - path: datasets/jaxbench
+    # Tasks whose oracle is the upstream hand-written Pallas kernel (optimized.py).
+    task_names:
+      - "*level1-3p-mla-attention"
+      - "*level1-4p-sparse-attention"
+      - "*level1-8p-gemm"
+
+# Default: oracle agent for verification
+agents:
+  - name: oracle
+
+# Uncomment to run with other agents:
+# agents:
+#   - name: claude-code
+#     model_name: anthropic/claude-sonnet-4-5-20250929
+#
+# agents:
+#   - name: codex
+#     model_name: openai/gpt-5-mini
+
+environment:
+  type: gke
+  force_build: false
+  delete: true
+  kwargs:
+    project_id: tpu-test-448023
+    cluster_name: lehui-tpu-us-central1
+    region: us-central1
+    namespace: default
+    registry_location: us-central1
+    registry_name: harbor-jaxbench
+  # env:
+  #   ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+
+# JAXBench paper aggregates (arXiv:2607.20466, Table 2): mean of per-task `reward`
+# (built-in) plus the geometric mean of floored speedups.
+metrics:
+  - type: mean
+  - type: uv-script
+    kwargs:
+      script_path: src/jaxbench/metrics/geomean.py
