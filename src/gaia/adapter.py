@@ -95,8 +95,9 @@ class GAIAAdapter:
         )
         (task_dir / "instruction.md").write_text(instruction)
 
-        # 3. Generate task.toml with level metadata
+        # 3. Generate task.toml with the task name and level metadata
         task_toml = (self.template_dir / "task.toml").read_text()
+        task_toml = task_toml.replace("{task_id}", task.task_id.lower())
         task_toml = task_toml.replace(
             'difficulty = "medium"',
             f'difficulty = "{self._level_to_difficulty(task.level)}"',
@@ -115,10 +116,10 @@ class GAIAAdapter:
         solve_path.write_text(solve_sh)
         solve_path.chmod(0o755)
 
-        # 5. Copy test.sh and create expected_answer.txt
-        shutil.copy2(
-            self.template_dir / "tests" / "test.sh", task_dir / "tests" / "test.sh"
-        )
+        # 5. Copy test.sh, the vendored official scorer it runs, and create
+        # expected_answer.txt
+        for name in ("test.sh", "gaia_scorer.py"):
+            shutil.copy2(self.template_dir / "tests" / name, task_dir / "tests" / name)
         (task_dir / "tests" / "test.sh").chmod(0o755)
 
         # Write expected answer for test verification

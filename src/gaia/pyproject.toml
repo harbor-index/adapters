@@ -8,6 +8,15 @@ dependencies = [
     "huggingface_hub",
 ]
 
+[dependency-groups]
+dev = [
+    "pytest>=9.0.3",
+]
+
+[tool.pytest.ini_options]
+# Flat layout: tests import adapter.py and run_adapter.py as top-level modules.
+pythonpath = ["."]
+
 # Flat-layout adapter (run_adapter.py at root); not an installable package —
 # uv provisions the dependencies above and runs the script directly.
 [tool.uv]

@@ -27,7 +27,7 @@ GAIA is a benchmark for general AI assistants with realistic tasks spanning reas
 ## Modifications from Original Benchmark
 
 - **Instruction wrapping**: The original benchmark passes the task question into its harness directly. This adapter wraps the prompt with Harbor task instructions (including output contract to `/app/answer.txt`).
-- **Verifier implementation**: Original GAIA uses Python scoring code; Harbor uses `tests/test.sh` for answer normalization and comparison. The intent is aligned (exact-answer evaluation), but edge-case behavior can still differ and should be validated in your environment.
+- **Verifier implementation**: `tests/test.sh` scores `/app/answer.txt` with the official GAIA scorer (`question_scorer` from the [GAIA leaderboard's `scorer.py`](https://huggingface.co/spaces/gaia-benchmark/leaderboard/blob/1349a17979f0aca0ee9c46cd7ec26eb2fb41102e/scorer.py)), vendored as `tests/gaia_scorer.py` with only its unused `numpy` import removed. Like the leaderboard, it compares numbers as floats after stripping `$`, `%` and `,`, compares comma- or semicolon-separated lists element by element, and compares strings after removing whitespace and punctuation and lowercasing. The recorded parity runs below predate this and used the previous `test.sh`, which only lowercased and trimmed the answer before an exact comparison.
 - **Environment model**: Original evaluation code uses its own harness/runtime layout; Harbor runs each task in an isolated Docker-based task environment.
 - **Execution budget type**: OpenHands GAIA commonly constrains by step count (`max_iterations`), while Harbor uses time-based timeout control (`timeout_multiplier`). These are different budget mechanisms and require empirical alignment.
 
@@ -43,7 +43,9 @@ datasets/gaia/
 │   ├── solution/
 │   │   └── solve.sh
 │   └── tests/
-│       └── test.sh
+│       ├── test.sh
+│       ├── gaia_scorer.py
+│       └── expected_answer.txt
 ```
 
 The adapter implementation reads templates from `src/gaia/template/` and renders task-specific files when generating task directories.
@@ -162,8 +164,8 @@ We compared Harbor results against the OpenHands GAIA benchmark workflow.
 
 Headline parity metrics:
 
-| Agent | Model | Metric | Number of Trials | Dataset Size | Original Benchmark Performance | Harbor Adapter Performance |
-|-------|-------|--------|------------------|--------------|-------------------------------|---------------------------|
+| Agent | Model | Metric | Number of Runs | Dataset Size | Original Benchmark Performance | Harbor Adapter Performance |
+|-------|-------|--------|----------------|--------------|-------------------------------|---------------------------|
 | openhands | openai/gpt-5-mini | Accuracy | 3 | 165 (validation) | 51.31% ± 0.73% | 50.71% ± 0.53% |
 
 Comparable scores demonstrate equivalence of running GAIA in Harbor and in the original benchmark harness.

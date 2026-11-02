@@ -1,5 +1,16 @@
 version = "1.0"
 
+[task]
+name = "gaia-benchmark/gaia__{task_id}"
+authors = [
+    { name = "Grégoire Mialon", email = "gmialon@meta.com" },
+    { name = "Clémentine Fourrier", email = "clementine@huggingface.co" },
+    { name = "Craig Swift" },
+    { name = "Thomas Wolf" },
+    { name = "Yann LeCun" },
+    { name = "Thomas Scialom", email = "tscialom@meta.com" },
+]
+
 [metadata]
 author_name = "Gregoire Mialon; Clementine Fourrier; Craig Swift; Thomas Wolf; Yann LeCun; Thomas Scialom"
 author_email = "gmialon@meta.com; tscialom@meta.com; clementine@huggingface.co"
