@@ -348,6 +348,14 @@ class AiderPolyglotAdapter:
                 if src.exists():
                     shutil.copytree(src, tests_dir / dir_, dirs_exist_ok=True)
 
+        if task.language == "rust":
+            # Ship the whole tests/ directory, not only the declared test files:
+            # macros' compile-fail tests read fixtures from tests/invalid/, and
+            # they run now that ignored tests are included.
+            src = task.exercise_path / "tests"
+            if src.exists():
+                shutil.copytree(src, tests_dir / "tests", dirs_exist_ok=True)
+
         if task.language == "go":
             solution_basenames = {Path(p).name for p in (task.solution_files or [])}
             for p in task.exercise_path.glob("*.go"):
@@ -392,13 +400,11 @@ class AiderPolyglotAdapter:
         instruction_text = task.instructions.strip()
         file_list = [Path(f).name for f in task.solution_files]
         if file_list:
-            instruction_text += (
-                "\n\n----\n"
-                "Use the instructions above to modify the supplied files: "
-                f"{', '.join(file_list)}\n"
-                "Don't change the names of existing functions or classes, as they may be "
-                "referenced from other code like unit tests.\n"
-                "Only use standard libraries; don't install additional packages."
+            # Substitute the exercise text last so braces in it are left alone.
+            instruction_text = (
+                load_template("instruction.md", self.templates_dir)
+                .replace("{solution_files}", ", ".join(file_list))
+                .replace("{instructions}", instruction_text)
             )
 
         if instruction_text and not instruction_text.endswith("\n"):
@@ -433,7 +439,7 @@ class AiderPolyglotAdapter:
     def _create_test_script(
         self, task: AiderPolyglotTask, tests_dir: Path, script_name: str = "test.sh"
     ) -> None:
-        template = load_template("test.sh", self.templates_dir)
+        template = load_template("tests/test.sh", self.templates_dir)
         content = template.format(
             language=task.language,
             exercise_name=task.exercise_name,
@@ -453,7 +459,7 @@ class AiderPolyglotAdapter:
         workspace_dir: Path,
         tests_dir: Path,
     ) -> None:
-        script_template = load_template("solve.sh", self.templates_dir)
+        script_template = load_template("solution/solve.sh", self.templates_dir)
         script_text = script_template.replace(
             "__DEFAULT_ORACLE_SECRET__", DEFAULT_ORACLE_SECRET
         )
@@ -593,7 +599,7 @@ class AiderPolyglotAdapter:
     def _create_dockerfile(
         self, task: AiderPolyglotTask, environment_dir: Path
     ) -> None:
-        tpl = load_template("Dockerfile", self.templates_dir)
+        tpl = load_template("environment/Dockerfile", self.templates_dir)
         dockerfile_path = environment_dir / "Dockerfile"
         dockerfile_path.write_text(
             get_dockerfile_content(task.language, tpl), encoding="utf-8"

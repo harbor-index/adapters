@@ -150,6 +150,7 @@ For this adapter, parity was validated through a two-step transitive equivalence
 - The upstream Polyglot repository pulls substantial language toolchains (Gradle, npm, Cargo). Harbor jobs may need >12 GB of memory and can exceed 15 minutes for larger Java/C++ builds.
 - Rust parity adds crates (`regex`, `thiserror`, `anyhow`) opportunistically to smooth compilation. This diverges slightly from stock Exercism instructions but keeps tests stable.
 - Oracle payloads embed upstream exemplar implementations; ensure `ORACLE_SECRET` is rotated for production-grade deployments.
+- Verifiers run every Exercism test: disabled JavaScript tests (`xtest(`, `xit(`), ignored Rust tests and the C++ tests behind `EXERCISM_RUN_ALL_TESTS` are enabled, as aider's harness does. aider rewrites only `xtest(`; `xit(` is rewritten too, as Exercism's javascript-test-runner does, which affects only the `grep` exercise. The two `test.skip(` calls upstream marks as too slow stay skipped. The parity results above were measured before this change and need to be re-run for JavaScript, Rust and C++.
 - Some exercises lack explicit tests in `.meta/config.json`; the adapter backfills them by scanning upstream directories, which may surface flaky behaviors if Exercism upstream changes.
 
 ## Installation / Prerequisites

@@ -94,7 +94,12 @@ fi
 
 echo "Running tests for {exercise_name} ({language})"
 set +e
+# Subshell: the per-language commands `exit` on failure (C++ build or test
+# failure, a missing Cargo.toml or Gradle build), which would otherwise end
+# this script before the reward below is written.
+(
 {test_command_with_test_dir}
+)
 exit_code=$?
 set -e
 
