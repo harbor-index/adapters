@@ -6,7 +6,7 @@ The Aider Polyglot Benchmark evaluates multi-language code editing performance. 
 
 **Dataset size**: 225 tasks (active exercises spanning 6 languages: Java, Python, Go, Rust, C++, JavaScript) Exercises trace back to the [Aider Polyglot Benchmark](https://github.com/Aider-AI/polyglot-benchmark) repository (MIT License) and inherit upstream licensing from Exercism (MIT). Compared with other Exercism-derived suites, Polyglot focuses on code-editing workflows rather than greenfield generation. This adapter mirrors all 225 exercises, tagging tasks as `polyglot_<language>_<exercise>` and aligning Harbor metadata with the upstream catalog.
 
-Primary adaptations include homogeneous task structure (instruction + verifier scripts), Harbor-native Dockerfiles per language, encrypted oracle payloads, and mild prompt adjustments (instructions consolidate Exercism “introduction/instructions” materials plus editing guidance). Tests leverage upstream harnesses with shell wrappers that normalize runtime expectations for agents.
+Primary adaptations include homogeneous task structure (instruction + verifier scripts), Harbor-native Dockerfiles per language, oracle reference files kept out of the agent image, and mild prompt adjustments (instructions consolidate Exercism “introduction/instructions” materials plus editing guidance). Tests leverage upstream harnesses with shell wrappers that normalize runtime expectations for agents.
 
 ## What is Aider Polyglot Benchmark?
 
@@ -16,7 +16,7 @@ Aider Polyglot Benchmark targets practitioners who want to evaluate autonomous c
 
 - Config-driven exercise ingestion that reads `.meta/config.json` to map solution, test, example, and editor files without bespoke heuristics.
 - Language-aware workspace preparation (Gradle for Java, CMake for C++, Cargo for Rust, npm/Jest for JavaScript, etc.) with optional helper file backfilling.
-- Encrypted oracle payloads (`.oracle/solution.enc`) generated from example/reference files; `solution/solve.sh` decrypts during verification.
+- Oracle reference files (`solution/oracle/files/` plus `manifest.txt`) copied from the exercise's example/reference implementation; `solution/solve.sh` copies them into `/app` for the oracle run. Harbor uploads `solution/` only for the oracle agent, so the reference never enters the agent's image (it is also in `tests/.meta/`, which the agent does not see).
 - Unified verifier scripts (`tests/test.sh`) that install dependencies and launch the correct test runner for each language.
 - Docker images synthesized from a template with per-language toolchains so Harbor jobs use consistent runtime environments.
 
@@ -32,9 +32,9 @@ aider_polyglot/
 │   ├── environment/
 │   │   ├── Dockerfile            # Language-specific runtime definition
 │   │   └── workspace/            # Editable workspace seeded with starter code
-│   │       └── .oracle/solution.enc
 │   ├── solution/
-│   │   └── solve.sh              # Decrypts oracle payload for parity checks
+│   │   ├── solve.sh              # Copies the reference files into /app (oracle run)
+│   │   └── oracle/               # Reference files + manifest.txt (destination per file)
 │   └── tests/
 │       ├── test.sh               # Language-specific verifier entry point
 │       ├── .meta/                # Exercism metadata and example implementations
@@ -149,7 +149,7 @@ For this adapter, parity was validated through a two-step transitive equivalence
 
 - The upstream Polyglot repository pulls substantial language toolchains (Gradle, npm, Cargo). Harbor jobs may need >12 GB of memory and can exceed 15 minutes for larger Java/C++ builds.
 - Rust parity adds crates (`regex`, `thiserror`, `anyhow`) opportunistically to smooth compilation. This diverges slightly from stock Exercism instructions but keeps tests stable.
-- Oracle payloads embed upstream exemplar implementations; ensure `ORACLE_SECRET` is rotated for production-grade deployments.
+- Oracle files are the upstream exemplar implementations. They live only under `solution/` and `tests/.meta/`, which Harbor uploads for the oracle run and for verification respectively, never during the agent phase.
 - Some exercises lack explicit tests in `.meta/config.json`; the adapter backfills them by scanning upstream directories, which may surface flaky behaviors if Exercism upstream changes.
 
 ## Installation / Prerequisites
@@ -157,13 +157,11 @@ For this adapter, parity was validated through a two-step transitive equivalence
 - Docker installed and running (required for Harbor environments).
 - Adapter dependencies: `uv sync --project src/aider_polyglot` from the adapters repository root; evaluation commands use `uvx --from harbor==0.23.0`.
 - Python 3.11+ available for adapter execution (`aider_polyglot`).
-- Optional: Set `ORACLE_SECRET=<your-secret>` before generation to customize oracle encryption.
 - Access to agents/models (e.g., set `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`) prior to running jobs or runs.
 
 ## Troubleshooting
 
 - **Missing upstream repo:** Use `--clone-polyglot` to fetch a fresh copy if `--polyglot-root` does not exist.
-- **OpenSSL errors while embedding oracle:** Ensure `openssl` is installed on the host; container builds require it for encryption.
 - **Docker build failures:** Clear intermediate images with `docker system prune` and re-run the job; verify that the Harbor base image matches the target architecture.
 - **Language-specific test failures:** Inspect `tests/test.sh` in the generated task to confirm the correct runner, then open an issue if upstream Exercism changed its layout.
 
