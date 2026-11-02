@@ -1,0 +1,30 @@
+[
+  {
+    "adapter_name": "processbench",
+    "adapter_builders": ["Jinyi Bai (baijinyi@ruc.edu.cn)"],
+    "original_benchmark": [
+      {
+        "split": "full",
+        "size": 3400,
+        "harness": "llm",
+        "supported_agents": ["None"],
+        "adaptable": true,
+        "notes": "Four subsets: gsm8k (400), math (1000), olympiadbench (1000), omnimath (1000). Original harness is direct vLLM generation with the critique prompt; the PRM path (run_eval_prm_rlhflow.py) and voting mode are not adapted."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "full",
+        "adapted_benchmark_size": 3400,
+        "parity_benchmark_size": 200,
+        "parity_sampling_rate": 0.0588,
+        "registry_benchmark_size": 3400,
+        "added_agents": ["None"],
+        "parity_matching_agents": [],
+        "parity_unmatching_agents": ["None"],
+        "parity_costs": null,
+        "notes": "Parity subset: 50 items per subset, stratified by error/correct, seed 42 (--split parity). Parity not yet run."
+      }
+    ]
+  }
+]

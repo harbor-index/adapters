@@ -1,0 +1,21 @@
+# Parity subset: generate first with
+#   cd src/processbench && uv run processbench --split parity --output-dir ../../datasets/processbench_parity
+# Then compute per-subset F1 for each job with processbench.aggregate_metrics.
+jobs_dir: jobs
+n_attempts: 1
+timeout_multiplier: 1.0
+orchestrator:
+  type: local
+  n_concurrent_trials: 8
+  quiet: false
+environment:
+  type: docker
+  force_build: false
+  delete: true
+agents:
+  - name: oracle
+  # TODO: pin agent version and dated model ID once agreed with the Harbor team.
+  # - name: codex
+  #   model_name: openai/<model>
+datasets:
+  - path: datasets/processbench_parity

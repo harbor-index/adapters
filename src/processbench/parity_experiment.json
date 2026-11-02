@@ -1,0 +1,26 @@
+[
+  {
+    "adapter_name": "processbench",
+    "agent": "<agent>@<version>",
+    "model": "<model>",
+    "date": "YYYY-MM-DD",
+    "adapted_benchmark_size": 3400,
+    "parity_benchmark_size": 200,
+    "number_of_runs": null,
+    "notes": "Parity not yet run; plan (agent, model, subset, runs) to be agreed with the Harbor team. Planned subset: --split parity (50 per subset, stratified by error/correct, seed 42).",
+    "original_parity_repo": "https://github.com/QwenLM/ProcessBench",
+    "adapter_pr": [],
+    "dataset_pr": [],
+    "parity_pr": [],
+    "metrics": [
+      {
+        "benchmark_name": "ProcessBench",
+        "metric": "avg_f1",
+        "original": "<mean +/- sample_SEM, e.g. 45.2% +/- 1.3%>",
+        "harbor": "<mean +/- sample_SEM, e.g. 44.8% +/- 1.1%>",
+        "original_runs": [],
+        "harbor_runs": []
+      }
+    ]
+  }
+]
