@@ -902,6 +902,7 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "datasets" },
+    { name = "swebench" },
     { name = "swesmith" },
     { name = "toml" },
 ]
@@ -909,6 +910,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "datasets", specifier = "==4.0.0" },
+    { name = "swebench", specifier = ">=4.1.0,<5" },
     { name = "swesmith", specifier = "==0.0.6" },
     { name = "toml", specifier = "==0.10.2" },
 ]

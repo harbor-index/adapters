@@ -7,6 +7,9 @@ requires-python = ">=3.11"
 dependencies = [
   "datasets==4.0.0",
   "swesmith==0.0.6",
+  # swesmith depends on swebench without an upper bound; 5.x removed the
+  # swebench.harness.constants names it imports.
+  "swebench>=4.1.0,<5",
   "toml==0.10.2",
 ]
 

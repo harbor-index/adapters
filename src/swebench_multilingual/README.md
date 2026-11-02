@@ -12,7 +12,7 @@ SWE-bench Multilingual extends the original Python-focused SWE-bench benchmark t
 
 ## Installation
 
-The adapter requires `swebench>=4.1.0` which includes multilingual support. Install the independent adapter project:
+The adapter requires swebench 4.1.0 or a later 4.x (`swebench>=4.1.0,<5`) for multilingual support. Install the independent adapter project:
 
 ```bash
 # From the adapters repository root
@@ -127,7 +127,7 @@ The adapter supports all languages included in SWE-bench Multilingual:
 ## Dependencies
 
 - `datasets` - HuggingFace datasets library
-- `swebench>=4.1.0` - SWE-bench harness with multilingual support
+- `swebench>=4.1.0,<5` - SWE-bench harness with multilingual support
 
 ## Parity Experiments
 

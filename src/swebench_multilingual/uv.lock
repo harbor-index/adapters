@@ -657,7 +657,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "datasets" },
-    { name = "swebench", specifier = ">=4.1.0" },
+    { name = "swebench", specifier = ">=4.1.0,<5" },
 ]
 
 [[package]]

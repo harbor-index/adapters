@@ -10,7 +10,7 @@ authors = [
 requires-python = ">=3.11"
 dependencies = [
     "datasets",
-    "swebench>=4.1.0",
+    "swebench>=4.1.0,<5",
 ]
 
 [project.scripts]

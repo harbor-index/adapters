@@ -38,8 +38,12 @@
     "number_of_runs": null,
     "notes": "Terminal-Bench Adapter <> Harbor Adapter parity results. 100 tasks.",
     "original_parity_repo": null,
-    "adapter_pr": [],
-    "dataset_pr": [],
+    "adapter_pr": [
+      "https://github.com/laude-institute/harbor/pull/115"
+    ],
+    "dataset_pr": [
+      "https://github.com/laude-institute/harbor-datasets/pull/17"
+    ],
     "parity_pr": [],
     "metrics": [
       {
