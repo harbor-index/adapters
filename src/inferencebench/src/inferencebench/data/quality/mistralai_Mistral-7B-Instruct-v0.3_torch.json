@@ -1,0 +1,14 @@
+{
+  "datasets": {
+    "mmlu_pro": [
+      {
+        "dataset": "mmlu_pro",
+        "seed": 248,
+        "n": 500,
+        "accuracy": 0.256,
+        "model_id": "mistralai/Mistral-7B-Instruct-v0.3",
+        "source": "InferenceBench paper, section 5: a baseline score of 128/500"
+      }
+    ]
+  }
+}

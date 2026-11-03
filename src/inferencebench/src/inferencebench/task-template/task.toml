@@ -1,0 +1,69 @@
+schema_version = "1.4"
+
+[task]
+name = "aisa-group/{task_id}"
+description = "InferenceBench scenario {scenario_key}: deploy and optimize an inference server for {base_model}"
+authors = [
+    { name = "Jehyeok Yeon" },
+    { name = "Ben Rank" },
+    { name = "Maksym Andriushchenko" },
+]
+keywords = ["inferencebench", "llm-inference", "serving", "optimization", "gpu"]
+
+[metadata]
+category = "llm-inference"
+difficulty = "hard"
+source = "InferenceBench"
+scenario = "{scenario}"
+base_model = "{base_model}"
+agent_seed = "{agent_seed}"
+eval_seed = "{eval_seed}"
+num_hours = "{num_hours}"
+
+[environment]
+gpus = 1
+# Modal uses the first entry, as upstream does. Daytona does not accept the "!" form.
+gpu_types = ["H100!", "H100"]
+cpus = 16
+memory_mb = 180000
+storage_mb = 409600
+build_timeout_sec = 3600.0
+workdir = "/home/agent/task"
+
+[environment.healthcheck]
+command = "test -f /timer_start || { python3 -c 'import os, huggingface_hub; huggingface_hub.snapshot_download(os.environ[\"INFERENCE_BENCH_BASE_MODEL\"])' && chown -R agent:agent /home/agent/hf_cache && date +%s > /timer_start; }"
+interval_sec = 10
+timeout_sec = 3600
+start_period_sec = 0
+retries = 5
+
+[environment.env]
+HF_TOKEN = "${HF_TOKEN}"
+NUM_HOURS = "{num_hours}"
+INFERENCE_BENCH_SCENARIO = "{scenario}"
+INFERENCE_BENCH_BASE_MODEL = "{base_model}"
+INFERENCE_BENCH_DATASET_SEED = "{agent_seed}"
+{shared_env}
+
+[agent]
+timeout_sec = {agent_timeout_sec}
+user = "agent"
+
+# The final evaluation restarts the agent's own launcher on the agent's GPU, so the
+# verifier shares the sandbox. The collect hook below stops every agent process before
+# Harbor uploads /tests; see "Notes & Caveats" in the README.
+[verifier]
+timeout_sec = 43200.0
+environment_mode = "shared"
+
+[verifier.env]
+CLAUDE_CODE_OAUTH_TOKEN = "${CLAUDE_CODE_OAUTH_TOKEN:-}"
+ANTHROPIC_API_KEY = "${ANTHROPIC_API_KEY:-}"
+ANTHROPIC_BASE_URL = "${ANTHROPIC_BASE_URL:-}"
+INFERENCE_BENCH_DATASET_SEED = "{eval_seed}"
+
+[[verifier.collect]]
+service = "main"
+user = "root"
+timeout_sec = 3600.0
+command = "/bin/bash /usr/local/bin/collect.sh"

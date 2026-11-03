@@ -1,0 +1,25 @@
+# Oracle verification on a host with Docker and NVIDIA H100 GPUs. Each task uses one GPU, so
+# set n_concurrent_trials to the number of GPUs. Keep it at 1 on a single-GPU host.
+# From the repository root:
+#   uv run --project src/inferencebench --with harbor==0.25.0 harbor run -c src/inferencebench/run_inferencebench.yaml
+jobs_dir: jobs
+n_attempts: 1
+timeout_multiplier: 1.0
+orchestrator:
+  type: local
+  n_concurrent_trials: 1
+  quiet: false
+environment:
+  type: docker
+  force_build: false
+  delete: true
+agents:
+  - name: oracle
+  # - name: claude-code
+  #   model_name: anthropic/claude-sonnet-4-6
+  #   kwargs:
+  #     version: 2.1.258
+  #   env:
+  #     BASH_MAX_TIMEOUT_MS: "36000000"
+datasets:
+  - path: datasets/inferencebench

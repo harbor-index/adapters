@@ -1,0 +1,26 @@
+[
+  {
+    "adapter_name": "inferencebench",
+    "agent": "<agent>@<version>",
+    "model": "<model>",
+    "date": "YYYY-MM-DD",
+    "adapted_benchmark_size": 12,
+    "parity_benchmark_size": 12,
+    "number_of_runs": null,
+    "notes": "Parity is pending. The agent, model, and number of runs have not been agreed yet.",
+    "original_parity_repo": null,
+    "adapter_pr": ["https://github.com/harbor-framework/adapters/pull/71"],
+    "dataset_pr": [],
+    "parity_pr": [],
+    "metrics": [
+      {
+        "benchmark_name": "InferenceBench",
+        "metric": "Aggregate speedup",
+        "original": "<mean +/- sample_SEM, e.g. 45.2% +/- 1.3%>",
+        "harbor": "<mean +/- sample_SEM, e.g. 44.8% +/- 1.1%>",
+        "original_runs": [],
+        "harbor_runs": []
+      }
+    ]
+  }
+]

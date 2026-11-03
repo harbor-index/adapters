@@ -1,0 +1,24 @@
+# Harbor side of a parity run. The agent repeats upstream's continuation loop and uses the CLI
+# version that the task image already ships.
+# From the repository root:
+#   uv run --project src/inferencebench --with 'harbor[daytona]==0.25.0' harbor run -c src/inferencebench/inferencebench_parity.yaml
+jobs_dir: jobs
+n_attempts: 1
+timeout_multiplier: 1.0
+orchestrator:
+  type: local
+  n_concurrent_trials: 12
+  quiet: false
+environment:
+  type: daytona
+  delete: true
+agents:
+  - import_path: inferencebench.agents:ClaudeCodeUntilDeadline
+    model_name: anthropic/claude-sonnet-4-6
+    kwargs:
+      version: 2.1.258
+    env:
+      ANTHROPIC_BASE_URL: ${ANTHROPIC_BASE_URL}
+      BASH_MAX_TIMEOUT_MS: "36000000"
+datasets:
+  - path: datasets/inferencebench

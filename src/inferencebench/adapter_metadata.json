@@ -1,0 +1,35 @@
+[
+  {
+    "adapter_name": "inferencebench",
+    "adapter_builders": ["Yuanfan Chen (yuanfan0504@gmail.com)"],
+    "original_benchmark": [
+      {
+        "split": "full",
+        "size": 12,
+        "harness": "agent",
+        "supported_agents": [
+          "claude-code@2.1.258",
+          "codex@0.164.0",
+          "gemini-cli@0.39.1",
+          "opencode@1.14.28"
+        ],
+        "adaptable": true,
+        "notes": "4 scenarios x 3 seed pairs on Mistral-7B-Instruct-v0.3. The paper's other models and budgets are ablations and are not adapted."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "full",
+        "adapted_benchmark_size": 12,
+        "parity_benchmark_size": 12,
+        "parity_sampling_rate": 1.0,
+        "registry_benchmark_size": 12,
+        "added_agents": ["inferencebench.agents:ClaudeCodeUntilDeadline"],
+        "parity_matching_agents": [],
+        "parity_unmatching_agents": ["None"],
+        "parity_costs": null,
+        "notes": "Parity is pending. The agent, model, and number of runs have not been agreed yet."
+      }
+    ]
+  }
+]

@@ -1,0 +1,17 @@
+# Oracle verification on Daytona GPU sandboxes. Set n_concurrent_trials to your H100 quota.
+# From the repository root:
+#   uv run --project src/inferencebench --with 'harbor[daytona]==0.25.0' harbor run -c src/inferencebench/inferencebench_daytona.yaml
+jobs_dir: jobs
+n_attempts: 1
+timeout_multiplier: 1.0
+orchestrator:
+  type: local
+  n_concurrent_trials: 12
+  quiet: false
+environment:
+  type: daytona
+  delete: true
+agents:
+  - name: oracle
+datasets:
+  - path: datasets/inferencebench
