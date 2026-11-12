@@ -3,36 +3,47 @@
 import hashlib
 import importlib.util
 import json
-from pathlib import Path
 import shutil
 import tempfile
 import tomllib
 import unittest
+from copy import deepcopy
+from pathlib import Path
 from unittest.mock import patch
 
 from huggingface_hub import snapshot_download
 
-from genebench_pro.adapter import DATASET_ID, DATASET_REVISION, GeneBenchProAdapter
+from genebench_pro.adapter import (
+    DATASET_ID,
+    DATASET_REVISION,
+    DOWNLOAD_PATTERNS,
+    GeneBenchProAdapter,
+)
 
 
 class AdapterTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.cache = Path(__file__).resolve().parents[3] / "tmp/genebench-pro/huggingface"
-        cls.source = Path(snapshot_download(
-            DATASET_ID, repo_type="dataset", revision=DATASET_REVISION,
-            cache_dir=cls.cache, local_files_only=True,
-            allow_patterns=[
-                "LICENSE", "README.md", "manifest.json", "checksums.sha256",
-                "reference_definitions.md", "reference_grader.py",
-                "problems/*/eval_config.json", "problems/*/data_files/*",
-            ],
-        ))
+        repo_root = Path(__file__).resolve().parents[3]
+        cls.cache = repo_root / "tmp" / "genebench-pro" / "huggingface"
+        cls.source = Path(
+            snapshot_download(
+                DATASET_ID,
+                repo_type="dataset",
+                revision=DATASET_REVISION,
+                cache_dir=cls.cache,
+                local_files_only=True,
+                token=False,
+                allow_patterns=DOWNLOAD_PATTERNS,
+            )
+        )
         cls.manifest = json.loads((cls.source / "manifest.json").read_text())
         cls.temporary = tempfile.TemporaryDirectory(prefix="genebench-pro-tests-")
         cls.output = Path(cls.temporary.name) / "tasks"
         GeneBenchProAdapter(cls.output, cache_dir=cls.cache, offline=True).run()
-        spec = importlib.util.spec_from_file_location("upstream_grader", cls.source / "reference_grader.py")
+        spec = importlib.util.spec_from_file_location(
+            "upstream_grader", cls.source / "reference_grader.py"
+        )
         cls.grader = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(cls.grader)
 
@@ -48,25 +59,45 @@ class AdapterTests(unittest.TestCase):
                 task = self.output / problem["eval_id"]
                 config_path = self.source / problem["eval_config"]
                 config = json.loads(config_path.read_text())
-                self.assertTrue((task / "instruction.md").read_text().startswith(config["task"] + "\n"))
-                self.assertEqual(config_path.read_bytes(), (task / "tests/eval_config.json").read_bytes())
-                self.assertEqual((self.source / "reference_grader.py").read_bytes(), (task / "tests/reference_grader.py").read_bytes())
+                instruction = (task / "instruction.md").read_text()
+                self.assertTrue(instruction.startswith(config["task"] + "\n"))
+                self.assertEqual(
+                    config_path.read_bytes(),
+                    (task / "tests/eval_config.json").read_bytes(),
+                )
+                self.assertEqual(
+                    (self.source / "reference_grader.py").read_bytes(),
+                    (task / "tests/reference_grader.py").read_bytes(),
+                )
                 for relative in config["data_files"]:
-                    expected = hashlib.sha256((config_path.parent / relative).read_bytes()).digest()
-                    actual = hashlib.sha256((task / "environment" / relative).read_bytes()).digest()
-                    self.assertEqual(expected, actual)
+                    source_file = config_path.parent / relative
+                    task_file = task / "environment" / relative
+                    self.assertEqual(source_file.read_bytes(), task_file.read_bytes())
                     input_count += 1
                 metadata = tomllib.loads((task / "task.toml").read_text())
                 task_names.add(metadata["task"]["name"])
         self.assertEqual(len(task_names), len(self.manifest["problems"]))
-        self.assertEqual(input_count, sum(len(p["data_files"]) for p in self.manifest["problems"]))
+        expected_inputs = sum(
+            len(problem["data_files"]) for problem in self.manifest["problems"]
+        )
+        self.assertEqual(input_count, expected_inputs)
 
     def test_image_context_contains_only_tools_and_permitted_inputs(self):
         for problem in self.manifest["problems"]:
             config = json.loads((self.source / problem["eval_config"]).read_text())
             environment = self.output / problem["eval_id"] / "environment"
-            actual = {p.relative_to(environment).as_posix() for p in environment.rglob("*") if p.is_file()}
-            expected = {"Dockerfile", "requirements.in", "requirements.txt", "LICENSE.dataset", *config["data_files"]}
+            actual = {
+                path.relative_to(environment).as_posix()
+                for path in environment.rglob("*")
+                if path.is_file()
+            }
+            expected = {
+                "Dockerfile",
+                "requirements.in",
+                "requirements.txt",
+                "LICENSE.dataset",
+                *config["data_files"],
+            }
             self.assertEqual(actual, expected)
 
     def test_all_oracle_answers_pass_the_original_grader(self):
@@ -74,22 +105,30 @@ class AdapterTests(unittest.TestCase):
             task = self.output / problem["eval_id"]
             config = json.loads((task / "tests/eval_config.json").read_text())
             answer = json.loads((task / "solution/eval_answer.json").read_text())
-            self.assertTrue(self.grader.evaluate(config, answer)["passed"], problem["eval_id"])
+            result = self.grader.evaluate(config, answer)
+            self.assertTrue(result["passed"], problem["eval_id"])
 
     def test_task_selection_limit_and_overwrite(self):
         output = Path(self.temporary.name) / "selection"
         task_id = "wf_selection"
-        adapter = GeneBenchProAdapter(output, task_ids=[task_id], limit=1, cache_dir=self.cache, offline=True)
+        adapter = GeneBenchProAdapter(
+            output, task_ids=[task_id], limit=1, cache_dir=self.cache, offline=True
+        )
         adapter.run()
         self.assertEqual([p.name for p in output.iterdir()], [task_id])
         marker = output / task_id / "old-generated-file"
         marker.write_text("old")
         adapter.run()
         self.assertTrue(marker.exists())
-        GeneBenchProAdapter(output, task_ids=[task_id], overwrite=True, cache_dir=self.cache, offline=True).run()
+        GeneBenchProAdapter(
+            output, task_ids=[task_id], overwrite=True,
+            cache_dir=self.cache, offline=True,
+        ).run()
         self.assertFalse(marker.exists())
         with self.assertRaisesRegex(ValueError, "Unknown task IDs"):
-            GeneBenchProAdapter(output, task_ids=["unknown"], cache_dir=self.cache, offline=True).run()
+            GeneBenchProAdapter(
+                output, task_ids=["unknown"], cache_dir=self.cache, offline=True
+            ).run()
 
     def test_changed_scientific_input_is_rejected(self):
         damaged = Path(self.temporary.name) / "damaged-source"
@@ -99,7 +138,12 @@ class AdapterTests(unittest.TestCase):
         path.chmod(0o644)
         path.write_bytes(path.read_bytes() + b"changed")
         with self.assertRaisesRegex(ValueError, relative):
-            GeneBenchProAdapter._verify_checksums(damaged)
+            self._run_with_source(damaged, self.output)
+
+    @staticmethod
+    def _run_with_source(source, output):
+        with patch("genebench_pro.adapter.snapshot_download", return_value=str(source)):
+            GeneBenchProAdapter(output).run()
 
     def _copy_source(self):
         source = Path(self.temporary.name) / self.id().split(".")[-1]
@@ -125,25 +169,38 @@ class AdapterTests(unittest.TestCase):
         checksums = source / "checksums.sha256"
         lines = checksums.read_text().splitlines()
         checksums.chmod(0o644)
-        checksums.write_text("\n".join(
-            f"{digest}  manifest.json" if line.split(maxsplit=1)[1] == "manifest.json" else line
-            for line in lines
-        ) + "\n")
+        updated = []
+        for line in lines:
+            checksum, relative = line.split(maxsplit=1)
+            if relative == "manifest.json":
+                checksum = digest
+            updated.append(f"{checksum}  {relative}")
+        checksums.write_text("\n".join(updated) + "\n")
 
     def _add_problem(self, source, manifest, upstream_id):
-        problem = json.loads(json.dumps(manifest["problems"][0]))
+        problem = deepcopy(manifest["problems"][0])
         old_directory = problem["problem_dir"]
         new_directory = "problems/future_case"
         shutil.copytree(source / old_directory, source / new_directory)
-        problem.update(eval_id=upstream_id, release_order=len(manifest["problems"]), problem_dir=new_directory)
-        problem["eval_config"] = problem["eval_config"].replace(old_directory, new_directory)
-        problem["data_files"] = [p.replace(old_directory, new_directory) for p in problem["data_files"]]
+        problem.update(
+            eval_id=upstream_id,
+            release_order=len(manifest["problems"]),
+            problem_dir=new_directory,
+        )
+        problem["eval_config"] = problem["eval_config"].replace(
+            old_directory, new_directory
+        )
+        problem["data_files"] = [
+            path.replace(old_directory, new_directory) for path in problem["data_files"]
+        ]
         for entry in problem["files"]:
             entry["path"] = entry["path"].replace(old_directory, new_directory)
         config_path = source / problem["eval_config"]
         config = json.loads(config_path.read_text())
         config["id"] = upstream_id
-        config["task"] += "\nPreserve literal {task}, {input_files}, and {source_revision}."
+        config["task"] += (
+            "\nPreserve literal {task}, {input_files}, and {source_revision}."
+        )
         self._write_json(config_path, config)
         manifest["problems"].append(problem)
         manifest["problem_count"] = len(manifest["problems"])
@@ -156,7 +213,9 @@ class AdapterTests(unittest.TestCase):
         self._seal_source(source, manifest)
         output = source.parent / "future-output"
         revision = "1" * 40
-        with patch("genebench_pro.adapter.snapshot_download", return_value=str(source)) as download:
+        with patch(
+            "genebench_pro.adapter.snapshot_download", return_value=str(source)
+        ) as download:
             GeneBenchProAdapter(output, revision=revision).run()
         self.assertEqual(download.call_args.kwargs["revision"], revision)
         self.assertEqual(download.call_args.kwargs["repo_id"], DATASET_ID)
@@ -170,70 +229,87 @@ class AdapterTests(unittest.TestCase):
             names.add(name)
             self.assertEqual(metadata["metadata"]["source_revision"], revision)
             if metadata["metadata"]["upstream_id"] == upstream_id:
-                self.assertTrue((task / "instruction.md").read_text().startswith(config["task"] + "\n"))
-                submission = json.loads((task / "solution/eval_answer.json").read_text())
+                instruction = (task / "instruction.md").read_text()
+                self.assertTrue(instruction.startswith(config["task"] + "\n"))
+                answer_path = task / "solution/eval_answer.json"
+                submission = json.loads(answer_path.read_text())
                 self.assertTrue(self.grader.evaluate(config, submission)["passed"])
         self.assertEqual(len(names), len(tasks))
         self.assertTrue((output / "future-case-source-revision").is_dir())
 
     def test_colliding_task_names_are_rejected_before_writing(self):
         source, manifest = self._copy_source()
-        self._add_problem(source, manifest, manifest["problems"][0]["eval_id"].replace("_", "-"))
+        colliding_id = manifest["problems"][0]["eval_id"].replace("_", "-")
+        self._add_problem(source, manifest, colliding_id)
         self._seal_source(source, manifest)
         output = source.parent / "collision-output"
-        with patch("genebench_pro.adapter.snapshot_download", return_value=str(source)):
-            with self.assertRaisesRegex(ValueError, "Duplicate registry task name"):
-                GeneBenchProAdapter(output).run()
+        with self.assertRaisesRegex(ValueError, "Duplicate registry task name"):
+            self._run_with_source(source, output)
         self.assertFalse(output.exists())
 
     def test_missing_checksum_coverage_is_rejected(self):
         source, manifest = self._copy_source()
         problem = manifest["problems"][0]
         missing = problem["data_files"][0]
-        problem["files"] = [entry for entry in problem["files"] if entry["path"] != missing]
+        problem["files"] = [
+            entry for entry in problem["files"] if entry["path"] != missing
+        ]
         self._seal_source(source, manifest)
         with self.assertRaisesRegex(ValueError, "Missing upstream checksums"):
-            GeneBenchProAdapter._verify_checksums(source)
+            self._run_with_source(source, self.output)
         checksums = source / "checksums.sha256"
-        checksums.write_text("\n".join(
-            line for line in checksums.read_text().splitlines()
+        lines = [
+            line
+            for line in checksums.read_text().splitlines()
             if line.split(maxsplit=1)[1] != "reference_grader.py"
-        ) + "\n")
-        with self.assertRaisesRegex(ValueError, "Missing upstream checksum: reference_grader.py"):
-            GeneBenchProAdapter._verify_checksums(source)
+        ]
+        checksums.write_text("\n".join(lines) + "\n")
+        with self.assertRaisesRegex(ValueError, "Missing upstream checksum: reference"):
+            self._run_with_source(source, self.output)
 
     def test_unsafe_and_unlisted_inputs_are_rejected_before_writing(self):
         source, manifest = self._copy_source()
         config_path = source / manifest["problems"][0]["eval_config"]
         config = json.loads(config_path.read_text())
         output = source.parent / "unsafe-output"
-        for relative in ("../escape", "/tmp/escape", "data_files/../../escape", "data_files/unlisted.txt"):
+        invalid_paths = (
+            ".",
+            "../escape",
+            "/tmp/escape",
+            "data_files/../../escape",
+            "data_files/unlisted.txt",
+        )
+        for relative in invalid_paths:
             with self.subTest(path=relative):
                 config["data_files"] = [relative]
                 self._write_json(config_path, config)
                 self._seal_source(source, manifest)
-                with patch("genebench_pro.adapter.snapshot_download", return_value=str(source)):
-                    with self.assertRaises(ValueError):
-                        GeneBenchProAdapter(output, overwrite=True).run()
+                with self.assertRaises(ValueError):
+                    self._run_with_source(source, output)
                 self.assertFalse(output.exists())
 
     def test_failed_overwrite_preserves_existing_task(self):
         output = Path(self.temporary.name) / "failed-overwrite-output"
         task_id = "wf_selection"
-        adapter = GeneBenchProAdapter(output, task_ids=[task_id], overwrite=True, cache_dir=self.cache, offline=True)
+        adapter = GeneBenchProAdapter(
+            output, task_ids=[task_id], overwrite=True,
+            cache_dir=self.cache, offline=True,
+        )
         adapter.run()
         task = output / task_id
         marker = task / "preserve-on-failure"
         marker.write_text("keep")
-        with patch.object(adapter, "_write_task", side_effect=OSError("copy failed")):
+        with patch.object(adapter, "_prepare_task", side_effect=OSError("copy failed")):
             with self.assertRaisesRegex(OSError, "copy failed"):
                 adapter.run()
         self.assertEqual(marker.read_text(), "keep")
         original_replace = Path.replace
+
         def fail_install(path, target):
             if path.name == "task":
                 raise OSError("install failed")
             return original_replace(path, target)
+
         with patch.object(Path, "replace", fail_install):
             with self.assertRaisesRegex(OSError, "install failed"):
                 adapter.run()
@@ -249,13 +325,17 @@ class AdapterTests(unittest.TestCase):
         marker.write_text("keep")
         (output / "wf_selection").symlink_to(target, target_is_directory=True)
         with self.assertRaisesRegex(ValueError, "symlink"):
-            GeneBenchProAdapter(output, task_ids=["wf_selection"], overwrite=True, cache_dir=self.cache, offline=True).run()
+            GeneBenchProAdapter(
+                output, task_ids=["wf_selection"], overwrite=True,
+                cache_dir=self.cache, offline=True,
+            ).run()
         self.assertEqual(marker.read_text(), "keep")
 
     def test_revision_must_be_an_immutable_commit(self):
         for revision in ("main", "latest", "abc123"):
-            with self.subTest(revision=revision), self.assertRaisesRegex(ValueError, "full lowercase"):
-                GeneBenchProAdapter(Path("unused"), revision=revision)
+            with self.subTest(revision=revision):
+                with self.assertRaisesRegex(ValueError, "full lowercase"):
+                    GeneBenchProAdapter(Path("unused"), revision=revision)
 
 
 if __name__ == "__main__":

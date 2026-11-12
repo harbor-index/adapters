@@ -1,16 +1,20 @@
 """Generate Harbor tasks from the pinned GeneBench-Pro public package."""
 
 import argparse
+import logging
 from pathlib import Path
 
 from .adapter import DATASET_REVISION, GeneBenchProAdapter
 
-# Default output dir: <repo>/datasets/<adapter_id>
-DEFAULT_OUTPUT_DIR = Path(__file__).resolve().parents[4] / "datasets" / "genebench-pro"
+REPO_ROOT = Path(__file__).resolve().parents[4]
+DEFAULT_OUTPUT_DIR = REPO_ROOT / "datasets" / "genebench-pro"
+DEFAULT_CACHE_DIR = REPO_ROOT / "tmp" / "genebench-pro" / "huggingface"
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser()
+def _parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Generate Harbor tasks from the OpenAI GeneBench-Pro public package"
+    )
     parser.add_argument(
         "--output-dir",
         type=Path,
@@ -20,7 +24,6 @@ def main() -> None:
     parser.add_argument(
         "--limit",
         type=int,
-        default=None,
         help="Generate only the first N tasks",
     )
     parser.add_argument(
@@ -31,13 +34,12 @@ def main() -> None:
     parser.add_argument(
         "--task-ids",
         nargs="+",
-        default=None,
         help="Only generate these task IDs",
     )
     parser.add_argument(
         "--cache-dir",
         type=Path,
-        default=DEFAULT_OUTPUT_DIR.parents[1] / "tmp" / "genebench-pro" / "huggingface",
+        default=DEFAULT_CACHE_DIR,
         help="Hugging Face download cache",
     )
     parser.add_argument(
@@ -50,10 +52,15 @@ def main() -> None:
         action="store_true",
         help="Generate from the selected snapshot already in the cache",
     )
-    args = parser.parse_args()
+    return parser.parse_args()
+
+
+def main() -> None:
+    args = _parse_args()
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
     adapter = GeneBenchProAdapter(
-        args.output_dir,
+        output_dir=args.output_dir,
         overwrite=args.overwrite,
         limit=args.limit,
         task_ids=args.task_ids,
