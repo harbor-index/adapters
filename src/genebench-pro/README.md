@@ -26,8 +26,8 @@ and are excluded. Results on this adapter describe the public cases only.
 
 - Generates one task per upstream evaluation ID, in manifest release order.
 - Downloads through `huggingface_hub.snapshot_download` at the pinned revision.
-- Verifies all task configurations and inputs against `manifest.json`, and the
-  manifest, grading definitions and grader against the published SHA-256 list.
+- Verifies the manifest, grader, task configurations and input data against
+  the published SHA-256 checksums. Each config defines its permitted input files.
 - Preserves the scientific prompt, input filenames, original evaluation config,
   and reference grader. No numerical grading rules are reimplemented.
 - Uses the upstream `passed` boolean for binary Harbor reward. The upstream
@@ -37,8 +37,8 @@ and are excluded. Results on this adapter describe the public cases only.
 - Provides the released reference answers as oracle submissions.
 - Accepts another commit of the same public package through `--revision`,
   discovering tasks from its manifest and recording that commit in every task.
-- Validates source paths, complete scientific-file checksum coverage and unique
-  registry names before generation; failed overwrites preserve the existing task.
+- Checks source paths, required file checksums and unique registry names.
+  Prepares replacement tasks before removing existing output.
 - Runs the agent as an unprivileged user and verification as root, with a
   protected interpreter, isolated Python imports and fresh reward files.
 
@@ -161,8 +161,8 @@ belong to the next step of the contribution guide.
   The original scientific prompt remains intact.
 - **Published documentation checksums:** `checksums.sha256` contains stale
   hashes for the README and MIT license at this revision. All ten configs, all
-  50 inputs, the manifest, grader and grading definitions match their published
-  hashes. The README and license are taken unchanged from the pinned commit.
+  50 inputs, the manifest and grader match their published hashes. The license
+  is copied unchanged from the pinned commit.
 - **Oracle scope:** `solve.sh` copies the released gold answer into the output
   file. This validates conversion and grading; it does not compute a scientific
   solution from the inputs.

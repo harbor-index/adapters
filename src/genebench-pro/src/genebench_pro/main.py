@@ -11,7 +11,7 @@ DEFAULT_OUTPUT_DIR = REPO_ROOT / "datasets" / "genebench-pro"
 DEFAULT_CACHE_DIR = REPO_ROOT / "tmp" / "genebench-pro" / "huggingface"
 
 
-def _parse_args() -> argparse.Namespace:
+def main() -> None:
     parser = argparse.ArgumentParser(
         description="Generate Harbor tasks from the OpenAI GeneBench-Pro public package"
     )
@@ -21,21 +21,11 @@ def _parse_args() -> argparse.Namespace:
         default=DEFAULT_OUTPUT_DIR,
         help="Directory to write generated tasks",
     )
+    parser.add_argument("--limit", type=int, help="Generate only the first N tasks")
     parser.add_argument(
-        "--limit",
-        type=int,
-        help="Generate only the first N tasks",
+        "--overwrite", action="store_true", help="Overwrite existing tasks"
     )
-    parser.add_argument(
-        "--overwrite",
-        action="store_true",
-        help="Overwrite existing tasks",
-    )
-    parser.add_argument(
-        "--task-ids",
-        nargs="+",
-        help="Only generate these task IDs",
-    )
+    parser.add_argument("--task-ids", nargs="+", help="Only generate these task IDs")
     parser.add_argument(
         "--cache-dir",
         type=Path,
@@ -52,11 +42,7 @@ def _parse_args() -> argparse.Namespace:
         action="store_true",
         help="Generate from the selected snapshot already in the cache",
     )
-    return parser.parse_args()
-
-
-def main() -> None:
-    args = _parse_args()
+    args = parser.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
     adapter = GeneBenchProAdapter(

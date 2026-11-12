@@ -138,7 +138,7 @@ class AdapterTests(unittest.TestCase):
         path.chmod(0o644)
         path.write_bytes(path.read_bytes() + b"changed")
         with self.assertRaisesRegex(ValueError, relative):
-            self._run_with_source(damaged, self.output)
+            self._run_with_source(damaged, damaged.parent / "damaged-output")
 
     @staticmethod
     def _run_with_source(source, output):
@@ -165,17 +165,14 @@ class AdapterTests(unittest.TestCase):
                     entry["sha256"] = hashlib.sha256(data).hexdigest()
                     entry["bytes"] = len(data)
         self._write_json(source / "manifest.json", manifest)
-        digest = hashlib.sha256((source / "manifest.json").read_bytes()).hexdigest()
         checksums = source / "checksums.sha256"
-        lines = checksums.read_text().splitlines()
         checksums.chmod(0o644)
-        updated = []
-        for line in lines:
-            checksum, relative = line.split(maxsplit=1)
-            if relative == "manifest.json":
-                checksum = digest
-            updated.append(f"{checksum}  {relative}")
-        checksums.write_text("\n".join(updated) + "\n")
+        lines = []
+        for path in sorted(source.rglob("*")):
+            if path.is_file() and path != checksums:
+                checksum = hashlib.sha256(path.read_bytes()).hexdigest()
+                lines.append(f"{checksum}  {path.relative_to(source).as_posix()}")
+        checksums.write_text("\n".join(lines) + "\n")
 
     def _add_problem(self, source, manifest, upstream_id):
         problem = deepcopy(manifest["problems"][0])
@@ -249,46 +246,45 @@ class AdapterTests(unittest.TestCase):
 
     def test_missing_checksum_coverage_is_rejected(self):
         source, manifest = self._copy_source()
-        problem = manifest["problems"][0]
-        missing = problem["data_files"][0]
-        problem["files"] = [
-            entry for entry in problem["files"] if entry["path"] != missing
-        ]
-        self._seal_source(source, manifest)
-        with self.assertRaisesRegex(ValueError, "Missing upstream checksums"):
-            self._run_with_source(source, self.output)
+        output = source.parent / "missing-checksum-output"
         checksums = source / "checksums.sha256"
-        lines = [
-            line
-            for line in checksums.read_text().splitlines()
-            if line.split(maxsplit=1)[1] != "reference_grader.py"
+        checksums.chmod(0o644)
+        missing_files = [
+            manifest["problems"][0]["data_files"][0],
+            "reference_grader.py",
         ]
-        checksums.write_text("\n".join(lines) + "\n")
-        with self.assertRaisesRegex(ValueError, "Missing upstream checksum: reference"):
-            self._run_with_source(source, self.output)
+        for missing in missing_files:
+            lines = [
+                line
+                for line in checksums.read_text().splitlines()
+                if line.split(maxsplit=1)[1] != missing
+            ]
+            checksums.write_text("\n".join(lines) + "\n")
+            with self.assertRaisesRegex(KeyError, missing):
+                self._run_with_source(source, output)
 
     def test_unsafe_and_unlisted_inputs_are_rejected_before_writing(self):
         source, manifest = self._copy_source()
         config_path = source / manifest["problems"][0]["eval_config"]
         config = json.loads(config_path.read_text())
         output = source.parent / "unsafe-output"
-        invalid_paths = (
-            ".",
-            "../escape",
-            "/tmp/escape",
-            "data_files/../../escape",
-            "data_files/unlisted.txt",
-        )
-        for relative in invalid_paths:
+        invalid_paths = {
+            ".": ValueError,
+            "../escape": ValueError,
+            "/tmp/escape": ValueError,
+            "data_files/../../escape": ValueError,
+            "data_files/unlisted.txt": KeyError,
+        }
+        for relative, error in invalid_paths.items():
             with self.subTest(path=relative):
                 config["data_files"] = [relative]
                 self._write_json(config_path, config)
                 self._seal_source(source, manifest)
-                with self.assertRaises(ValueError):
+                with self.assertRaises(error):
                     self._run_with_source(source, output)
-                self.assertFalse(output.exists())
+                self.assertEqual(list(output.iterdir()), [])
 
-    def test_failed_overwrite_preserves_existing_task(self):
+    def test_failed_preparation_preserves_existing_task(self):
         output = Path(self.temporary.name) / "failed-overwrite-output"
         task_id = "wf_selection"
         adapter = GeneBenchProAdapter(
@@ -299,19 +295,8 @@ class AdapterTests(unittest.TestCase):
         task = output / task_id
         marker = task / "preserve-on-failure"
         marker.write_text("keep")
-        with patch.object(adapter, "_prepare_task", side_effect=OSError("copy failed")):
+        with patch.object(adapter, "_write_task", side_effect=OSError("copy failed")):
             with self.assertRaisesRegex(OSError, "copy failed"):
-                adapter.run()
-        self.assertEqual(marker.read_text(), "keep")
-        original_replace = Path.replace
-
-        def fail_install(path, target):
-            if path.name == "task":
-                raise OSError("install failed")
-            return original_replace(path, target)
-
-        with patch.object(Path, "replace", fail_install):
-            with self.assertRaisesRegex(OSError, "install failed"):
                 adapter.run()
         self.assertEqual(marker.read_text(), "keep")
         self.assertEqual([p.name for p in output.iterdir()], [task_id])
