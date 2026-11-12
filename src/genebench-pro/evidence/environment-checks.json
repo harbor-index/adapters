@@ -1,0 +1,19 @@
+{
+  "python": "3.12.16",
+  "r": "4.2.2",
+  "packages": {
+    "numpy": "2.5.4",
+    "pandas": "2.3.3",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "statsmodels": "0.15.0",
+    "lifelines": "0.30.3",
+    "matplotlib": "3.11.2",
+    "seaborn": "0.13.2",
+    "openpyxl": "3.1.5",
+    "pysam": "0.24.1",
+    "bed-reader": "1.1.0"
+  },
+  "input_files_read": 50,
+  "hidden_payloads_absent": true
+}

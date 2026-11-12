@@ -1,0 +1,62 @@
+[
+  {
+    "case": "gold",
+    "expected_passed": true,
+    "reward": 1,
+    "exit_code": 0
+  },
+  {
+    "case": "missing",
+    "expected_passed": false,
+    "reward": 0,
+    "exit_code": 1
+  },
+  {
+    "case": "malformed_json",
+    "expected_passed": false,
+    "reward": 0,
+    "exit_code": 1
+  },
+  {
+    "case": "non_object",
+    "expected_passed": false,
+    "reward": 0,
+    "exit_code": 1
+  },
+  {
+    "case": "wrong_exact_value",
+    "expected_passed": false,
+    "reward": 0,
+    "exit_code": 1
+  },
+  {
+    "case": "inside_numeric_tolerance",
+    "expected_passed": true,
+    "reward": 1,
+    "exit_code": 0
+  },
+  {
+    "case": "outside_numeric_tolerance",
+    "expected_passed": false,
+    "reward": 0,
+    "exit_code": 1
+  },
+  {
+    "case": "extra_key_permitted",
+    "expected_passed": true,
+    "reward": 1,
+    "exit_code": 0
+  },
+  {
+    "case": "strict_extra_key",
+    "expected_passed": false,
+    "reward": 0,
+    "exit_code": 1
+  },
+  {
+    "case": "boolean_as_integer",
+    "expected_passed": false,
+    "reward": 0,
+    "exit_code": 1
+  }
+]

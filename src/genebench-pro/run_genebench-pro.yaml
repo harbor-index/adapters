@@ -1,0 +1,15 @@
+jobs_dir: jobs/genebench-pro
+n_attempts: 1
+orchestrator:
+  type: local
+  n_concurrent_trials: 1
+environment:
+  type: docker
+  force_build: false
+  delete: true
+agents:
+  - name: oracle
+  # - name: codex
+  #   model_name: <team-approved-model>
+datasets:
+  - path: datasets/genebench-pro

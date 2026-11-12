@@ -1,0 +1,11 @@
+numpy
+pandas
+scipy
+scikit-learn
+statsmodels
+lifelines
+matplotlib
+seaborn
+openpyxl
+pysam
+bed-reader
