@@ -35,6 +35,12 @@ and are excluded. Results on this adapter describe the public cases only.
 - Keeps full configs, answers, tolerances, grader and reports out of the agent
   image. Harbor uploads verification files after the agent completes.
 - Provides the released reference answers as oracle submissions.
+- Accepts another commit of the same public package through `--revision`,
+  discovering tasks from its manifest and recording that commit in every task.
+- Validates source paths, complete scientific-file checksum coverage and unique
+  registry names before generation; failed overwrites preserve the existing task.
+- Runs the agent as an unprivileged user and verification as root, with a
+  protected interpreter, isolated Python imports and fresh reward files.
 
 ## Generated Task Structure
 
@@ -45,7 +51,7 @@ datasets/genebench-pro/<upstream_eval_id>/
 ├── task.toml
 ├── environment/
 │   ├── Dockerfile
-│   ├── LICENSE.genebench-pro
+│   ├── LICENSE.dataset
 │   ├── requirements.in
 │   ├── requirements.txt
 │   └── data_files/
@@ -61,7 +67,9 @@ datasets/genebench-pro/<upstream_eval_id>/
 ```
 
 Task names follow `openai/genebench-pro-<sanitized-eval-id>` and remain stable
-across generation. Directory names preserve upstream IDs. The agent writes its
+across generation. Names are lowercase with hyphen separators; colliding names
+are rejected. Directory names preserve upstream IDs containing only letters,
+digits, underscores and hyphens; other IDs use the sanitized name. The agent writes its
 submission to `/workspace/eval_answer.json`.
 
 ## Run Evaluation / Harness
@@ -83,14 +91,23 @@ scientific Python stack, bedtools and tabix. Base Python and uv images are pinne
 by digest. The task requests 1 CPU, 2 GiB RAM, a 120-second verifier limit and a
 3,600-second agent limit. The latter is an adapter execution limit, not a limit
 specified by the original benchmark. Runtime internet access is disabled.
+Harbor's native `[agent].user = "analyst"` and `[verifier].user = "root"`
+settings separate analysis permissions from grading permissions. The workspace
+is writable by the agent; system tools and the initially empty `/tests` directory
+are owned by root.
 
 Oracle verification with Harbor 0.5.0 on 2026-11-12: **10/10 tasks passed,
-zero exceptions, mean reward 1.000**. The original Harbor result is retained in
-[`evidence/oracle-result.json`](evidence/oracle-result.json). Conversion checks
-cover all prompts and 50 inputs; ten Docker verifier checks cover valid, missing,
-malformed, wrong, tolerance-boundary and strict-schema submissions. The built
-environment also reads all 50 inputs successfully and contains no verification
-or oracle payload before Harbor uploads them. Detailed receipts are in
+zero exceptions, mean reward 1.000**, including the full rerun after review and
+hardening. The fresh Harbor result is retained in
+[`evidence/oracle-review-result.json`](evidence/oracle-review-result.json).
+The initial run's [`result`](evidence/oracle-result.json) and
+[`terminal screenshot`](evidence/oracle-terminal.png) are retained separately.
+Twelve conversion tests cover all prompts and 50 inputs, a simulated additional
+task/revision, and invalid-source/overwrite failures. Ten Docker verifier checks
+cover valid, missing, malformed, wrong, tolerance-boundary and strict-schema
+submissions. Permission and tampering checks validate the protected interpreter,
+late-uploaded configs, import paths and reward files. The built environment also
+reads all 50 inputs as the unprivileged agent. Detailed receipts are in
 [`evidence/`](evidence/).
 
 ## Usage: Create Task Directories
@@ -108,13 +125,28 @@ uv run genebench-pro --offline --limit 2 --overwrite --output-dir ../../datasets
 
 # Run conversion checks after the pinned snapshot has been downloaded.
 uv run python -m unittest discover -s tests -v
+
+# Opt into a newer public-package commit without editing adapter code.
+# Supply its full, lowercase 40-character Hugging Face commit SHA.
+uv run genebench-pro --revision <commit-sha> --output-dir ../../datasets/genebench-pro-new
+
+# Explicit container checks after generation and an image build.
+docker build -t genebench-pro-verification ../../datasets/genebench-pro/wf_selection/environment
+uv run python tests/check_container.py --image genebench-pro-verification \
+  --tasks ../../datasets/genebench-pro --output-dir ../../tmp/genebench-pro/checks
 ```
 
 Required CLI flags are `--output-dir`, `--limit`, `--overwrite`, and `--task-ids`.
 An existing task is skipped unless `--overwrite` is supplied. Unknown IDs and
 non-positive limits fail. The optional `--cache-dir` selects the Hugging Face
 cache; its default is the repository's ignored `tmp/genebench-pro/huggingface`.
-`--offline` requires that cache to contain the pinned snapshot's required files.
+`--offline` requires that cache to contain the selected snapshot's required files.
+The default revision remains the verified ten-case release. `--revision` accepts
+only an immutable commit SHA from the same OpenAI dataset. New tasks must retain
+the public manifest/config/data-files contract and use the supplied reference
+grader. A new input format or tool requirement may require an environment update;
+new scientific task IDs, answer fields and grader rules require no task-specific
+adapter branches. Validate a new revision before publishing its generated tasks.
 
 ## Comparison with Original Benchmark (Parity)
 

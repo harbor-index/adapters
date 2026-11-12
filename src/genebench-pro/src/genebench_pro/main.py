@@ -3,7 +3,7 @@
 import argparse
 from pathlib import Path
 
-from .adapter import GeneBenchProAdapter
+from .adapter import DATASET_REVISION, GeneBenchProAdapter
 
 # Default output dir: <repo>/datasets/<adapter_id>
 DEFAULT_OUTPUT_DIR = Path(__file__).resolve().parents[4] / "datasets" / "genebench-pro"
@@ -41,9 +41,14 @@ def main() -> None:
         help="Hugging Face download cache",
     )
     parser.add_argument(
+        "--revision",
+        default=DATASET_REVISION,
+        help="Full commit SHA of the OpenAI public package (default: verified release)",
+    )
+    parser.add_argument(
         "--offline",
         action="store_true",
-        help="Generate from the pinned snapshot already in the cache",
+        help="Generate from the selected snapshot already in the cache",
     )
     args = parser.parse_args()
 
@@ -54,6 +59,7 @@ def main() -> None:
         task_ids=args.task_ids,
         cache_dir=args.cache_dir,
         offline=args.offline,
+        revision=args.revision,
     )
 
     adapter.run()

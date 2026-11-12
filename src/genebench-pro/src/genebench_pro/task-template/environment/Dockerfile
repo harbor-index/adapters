@@ -9,6 +9,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY requirements.txt /tmp/requirements.txt
 RUN uv pip install --system --no-cache --require-hashes -r /tmp/requirements.txt
 
+RUN useradd --create-home --shell /bin/bash analyst \
+    && install -d -o analyst -g analyst /workspace \
+    && install -d -m 0700 /tests
+
 WORKDIR /workspace
-COPY LICENSE.genebench-pro /usr/share/licenses/genebench-pro/LICENSE
-COPY data_files/ /workspace/data_files/
+COPY LICENSE.dataset /usr/share/licenses/dataset/LICENSE
+COPY --chown=analyst:analyst data_files/ /workspace/data_files/

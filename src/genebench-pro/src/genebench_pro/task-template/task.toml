@@ -9,15 +9,17 @@ keywords = ["genomics", "statistical-reasoning", "python", "r"]
 difficulty = "hard"
 category = "data-science"
 tags = ["genomics", "synthetic-data", "scientific-analysis"]
-upstream_id = "{upstream_id}"
+upstream_id = {upstream_id}
 source_dataset = "openai/genebench-pro-public-package"
-source_revision = "eb75a3c0996b3cedcc9af685bad02fd166848fa2"
+source_revision = "{source_revision}"
 
 [verifier]
 timeout_sec = 120.0
+user = "root"
 
 [agent]
 timeout_sec = 3600.0
+user = "analyst"
 
 [environment]
 build_timeout_sec = 1800.0

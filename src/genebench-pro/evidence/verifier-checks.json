@@ -2,61 +2,236 @@
   {
     "case": "gold",
     "expected_passed": true,
+    "exit_code": 0,
     "reward": 1,
-    "exit_code": 0
+    "diagnostic": {
+      "eval_id": "wf_selection",
+      "grader_type": "composite",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        {
+          "key": "selected_locus",
+          "kind": "exact",
+          "status": "pass"
+        },
+        {
+          "key": "s",
+          "kind": "numeric",
+          "status": "pass",
+          "agent": 0.101256,
+          "truth": 0.101256,
+          "absolute_error": 0.0,
+          "relative_error": 0.0
+        }
+      ]
+    }
   },
   {
     "case": "missing",
     "expected_passed": false,
+    "exit_code": 1,
     "reward": 0,
-    "exit_code": 1
+    "diagnostic": {
+      "passed": false,
+      "submission_error": "[Errno 2] No such file or directory: '/workspace/eval_answer.json'"
+    }
   },
   {
     "case": "malformed_json",
     "expected_passed": false,
+    "exit_code": 1,
     "reward": 0,
-    "exit_code": 1
+    "diagnostic": {
+      "passed": false,
+      "submission_error": "Expecting property name enclosed in double quotes: line 1 column 2 (char 1)"
+    }
   },
   {
     "case": "non_object",
     "expected_passed": false,
+    "exit_code": 1,
     "reward": 0,
-    "exit_code": 1
+    "diagnostic": {
+      "passed": false,
+      "submission_error": "Expected a JSON object"
+    }
   },
   {
     "case": "wrong_exact_value",
     "expected_passed": false,
+    "exit_code": 1,
     "reward": 0,
-    "exit_code": 1
+    "diagnostic": {
+      "eval_id": "wf_selection",
+      "grader_type": "composite",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        {
+          "key": "selected_locus",
+          "kind": "exact",
+          "status": "fail"
+        },
+        {
+          "key": "s",
+          "kind": "numeric",
+          "status": "pass",
+          "agent": 0.101256,
+          "truth": 0.101256,
+          "absolute_error": 0.0,
+          "relative_error": 0.0
+        }
+      ]
+    }
   },
   {
     "case": "inside_numeric_tolerance",
     "expected_passed": true,
+    "exit_code": 0,
     "reward": 1,
-    "exit_code": 0
+    "diagnostic": {
+      "eval_id": "wf_selection",
+      "grader_type": "composite",
+      "passed": true,
+      "score": 0.7500000000000001,
+      "details": [
+        {
+          "key": "selected_locus",
+          "kind": "exact",
+          "status": "pass"
+        },
+        {
+          "key": "s",
+          "kind": "numeric",
+          "status": "pass",
+          "agent": 0.111256,
+          "truth": 0.101256,
+          "absolute_error": 0.009999999999999995,
+          "relative_error": 0.09875957967922884
+        }
+      ]
+    }
   },
   {
     "case": "outside_numeric_tolerance",
     "expected_passed": false,
+    "exit_code": 1,
     "reward": 0,
-    "exit_code": 1
+    "diagnostic": {
+      "eval_id": "wf_selection",
+      "grader_type": "composite",
+      "passed": false,
+      "score": 0.5,
+      "details": [
+        {
+          "key": "selected_locus",
+          "kind": "exact",
+          "status": "pass"
+        },
+        {
+          "key": "s",
+          "kind": "numeric",
+          "status": "fail",
+          "agent": 0.13125599999999998,
+          "truth": 0.101256,
+          "absolute_error": 0.029999999999999985,
+          "relative_error": 0.29627873903768653
+        }
+      ]
+    }
   },
   {
     "case": "extra_key_permitted",
     "expected_passed": true,
+    "exit_code": 0,
     "reward": 1,
-    "exit_code": 0
+    "diagnostic": {
+      "eval_id": "wf_selection",
+      "grader_type": "composite",
+      "passed": true,
+      "score": 1.0,
+      "details": [
+        {
+          "key": "selected_locus",
+          "kind": "exact",
+          "status": "pass"
+        },
+        {
+          "key": "s",
+          "kind": "numeric",
+          "status": "pass",
+          "agent": 0.101256,
+          "truth": 0.101256,
+          "absolute_error": 0.0,
+          "relative_error": 0.0
+        }
+      ]
+    }
   },
   {
     "case": "strict_extra_key",
     "expected_passed": false,
+    "exit_code": 1,
     "reward": 0,
-    "exit_code": 1
+    "diagnostic": {
+      "eval_id": "structural_inversion_subhap_expression_risk",
+      "grader_type": "composite",
+      "passed": false,
+      "score": 0.0,
+      "details": [
+        {
+          "status": "strict_schema_failed",
+          "errors": [
+            "extra answer keys: extra"
+          ]
+        }
+      ]
+    }
   },
   {
     "case": "boolean_as_integer",
     "expected_passed": false,
+    "exit_code": 1,
     "reward": 0,
-    "exit_code": 1
+    "diagnostic": {
+      "eval_id": "structural_inversion_subhap_expression_risk",
+      "grader_type": "composite",
+      "passed": false,
+      "score": 1.0,
+      "details": [
+        {
+          "key": "n_calibrated_carriers",
+          "kind": "integer",
+          "status": "pass",
+          "agent": 195,
+          "truth": 195
+        },
+        {
+          "key": "target_support_code",
+          "kind": "integer",
+          "status": "invalid_integer",
+          "error": "boolean is not a valid integer"
+        },
+        {
+          "key": "expression_log_fc",
+          "kind": "numeric",
+          "status": "pass",
+          "agent": 0.333341,
+          "truth": 0.333341,
+          "absolute_error": 0.0,
+          "relative_error": 0.0
+        },
+        {
+          "key": "subhap_log_or",
+          "kind": "numeric",
+          "status": "pass",
+          "agent": -0.400921,
+          "truth": -0.400921,
+          "absolute_error": 0.0,
+          "relative_error": 0.0
+        }
+      ]
+    }
   }
 ]

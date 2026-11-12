@@ -2,8 +2,10 @@
 
 import json
 from pathlib import Path
+from runpy import run_path
 
-from reference_grader import evaluate
+# Isolated Python ignores agent-controlled environment and import directories.
+evaluate = run_path(str(Path(__file__).with_name("reference_grader.py")))["evaluate"]
 
 
 def main() -> int:
