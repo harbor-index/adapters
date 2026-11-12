@@ -1,4 +1,4 @@
-"""Adapt the upstream grading decision to Harbor's reward-file interface."""
+"""Evaluate the submitted answer with the upstream reference grader."""
 
 import json
 from pathlib import Path

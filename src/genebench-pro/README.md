@@ -97,18 +97,13 @@ is writable by the agent; system tools and the initially empty `/tests` director
 are owned by root.
 
 Oracle verification with Harbor 0.5.0 on 2026-11-12: **10/10 tasks passed,
-zero exceptions, mean reward 1.000**, including the full rerun after review and
-hardening. The fresh Harbor result is retained in
-[`evidence/oracle-review-result.json`](evidence/oracle-review-result.json).
-The initial run's [`result`](evidence/oracle-result.json) and
-[`terminal screenshot`](evidence/oracle-terminal.png) are retained separately.
-Twelve conversion tests cover all prompts and 50 inputs, a simulated additional
-task/revision, and invalid-source/overwrite failures. Ten Docker verifier checks
-cover valid, missing, malformed, wrong, tolerance-boundary and strict-schema
-submissions. Permission and tampering checks validate the protected interpreter,
-late-uploaded configs, import paths and reward files. The built environment also
-reads all 50 inputs as the unprivileged agent. Detailed receipts are in
-[`evidence/`](evidence/).
+zero exceptions, mean reward 1.000**. The WIP PR includes the required terminal
+screenshot. Harbor writes local run results under `jobs/genebench-pro/`.
+
+Twelve conversion tests cover the prompts, 50 inputs, an additional task/revision,
+and invalid-source/overwrite failures. Ten Docker checks cover submission errors,
+numeric tolerances and schema rules. Container checks also verified grading
+permissions, import isolation, fresh rewards and access to all 50 inputs.
 
 ## Usage: Create Task Directories
 
@@ -129,11 +124,6 @@ uv run python -m unittest discover -s tests -v
 # Opt into a newer public-package commit without editing adapter code.
 # Supply its full, lowercase 40-character Hugging Face commit SHA.
 uv run genebench-pro --revision <commit-sha> --output-dir ../../datasets/genebench-pro-new
-
-# Explicit container checks after generation and an image build.
-docker build -t genebench-pro-verification ../../datasets/genebench-pro/wf_selection/environment
-uv run python tests/check_container.py --image genebench-pro-verification \
-  --tasks ../../datasets/genebench-pro --output-dir ../../tmp/genebench-pro/checks
 ```
 
 Required CLI flags are `--output-dir`, `--limit`, `--overwrite`, and `--task-ids`.
