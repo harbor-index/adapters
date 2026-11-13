@@ -1,0 +1,23 @@
+datasets:
+  - path: datasets/deepplanning-shopping
+
+agents:
+  - name: oracle
+
+# After coordinating parity settings, override with -a codex -m <model>.
+# agents:
+#   - name: codex
+#     model_name: <agreed-model>
+
+environment:
+  type: smol
+  delete: true
+  kwargs:
+    target: local
+    auto_checkpoint: false
+
+orchestrator:
+  type: local
+  n_concurrent_trials: 4
+
+jobs_dir: jobs

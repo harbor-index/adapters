@@ -1,0 +1,31 @@
+version = "1.0"
+artifacts = ["/workspace/state/cart.json", "/workspace/state/messages.json"]
+
+[task]
+name = "qwen/deepplanning-{{ task_id }}"
+authors = [{ name = "Yinger Zhang" }, { name = "Shutong Jiang" }, { name = "Renhao Li" }, { name = "Jianhong Tu" }, { name = "Yang Su" }, { name = "Lianghao Deng" }, { name = "Xudong Guo" }, { name = "Chenxu Lv" }, { name = "Junyang Lin" }]
+
+[metadata]
+difficulty = "medium"
+category = "planning"
+tags = ["shopping", "tool-use", "constraints", "level-{{ level }}"]
+
+[agent]
+timeout_sec = 1800.0
+
+[verifier]
+timeout_sec = 60.0
+environment_mode = "separate"
+
+[verifier.environment]
+cpus = 1
+memory_mb = 512
+storage_mb = 1024
+
+[environment]
+{% if smol %}docker_image = "{{ base_image }}"
+{% endif %}workdir = "/workspace"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 512
+storage_mb = 1024

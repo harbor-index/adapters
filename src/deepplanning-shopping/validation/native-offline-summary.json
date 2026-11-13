@@ -1,0 +1,28 @@
+{
+  "test": "offline native integration; model parity pending",
+  "paid_api_calls": 0,
+  "trials": [
+    {
+      "test": "scripted native-agent integration; no model parity claim",
+      "task": "qwen/deepplanning-shopping-level1-case-001",
+      "reward": 1.0,
+      "exceptions": 0,
+      "native_client_requests": 4,
+      "inference_endpoint": "loopback only",
+      "external_connections": "blocked by fixture",
+      "paid_api_calls": 0,
+      "verifier_environment_mode": "separate"
+    },
+    {
+      "test": "scripted native-agent integration; no model parity claim",
+      "task": "qwen/deepplanning-shopping-level2-case-001",
+      "reward": 1.0,
+      "exceptions": 0,
+      "native_client_requests": 4,
+      "inference_endpoint": "loopback only",
+      "external_connections": "blocked by fixture",
+      "paid_api_calls": 0,
+      "verifier_environment_mode": "separate"
+    }
+  ]
+}
