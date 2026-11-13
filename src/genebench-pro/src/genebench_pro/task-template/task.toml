@@ -1,0 +1,29 @@
+version = "1.0"
+
+[task]
+name = "{task_name}"
+authors = [{ name = "Jeremy Li" }, { name = "Andrew Ho" }]
+keywords = ["genomics", "statistical-reasoning", "python", "r"]
+
+[metadata]
+difficulty = "hard"
+category = "data-science"
+tags = ["genomics", "synthetic-data", "scientific-analysis"]
+upstream_id = {upstream_id}
+source_dataset = "openai/genebench-pro-public-package"
+source_revision = "{source_revision}"
+
+[verifier]
+timeout_sec = 120.0
+user = "root"
+
+[agent]
+timeout_sec = 3600.0
+user = "analyst"
+
+[environment]
+build_timeout_sec = 1800.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 2048
+allow_internet = false

@@ -1,0 +1,30 @@
+[
+  {
+    "adapter_name": "genebench-pro",
+    "adapter_builders": ["Yang Zhou (nbzy1995@gmail.com)"],
+    "original_benchmark": [
+      {
+        "split": "release",
+        "size": 10,
+        "harness": "agent",
+        "supported_agents": ["None"],
+        "adaptable": true,
+        "notes": "Only the ten public case studies in openai/genebench-pro-public-package. The public package supplies inputs and grading, without a packaged agent integration."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "release",
+        "adapted_benchmark_size": 10,
+        "parity_benchmark_size": 0,
+        "parity_sampling_rate": 0.0,
+        "registry_benchmark_size": 0,
+        "added_agents": ["None"],
+        "parity_matching_agents": ["None"],
+        "parity_unmatching_agents": ["None"],
+        "parity_costs": "$0",
+        "notes": "WIP through oracle verification. Parity and registry publication are pending; zero counts indicate work not yet performed."
+      }
+    ]
+  }
+]
