@@ -141,7 +141,7 @@ adapter branches. Validate a new revision before publishing its generated tasks.
 
 ## Comparison with Original Benchmark (Parity)
 
-The [original-benchmark fork](https://github.com/nbzy1995/genebench-pro/tree/codex-integration)
+The [original-benchmark fork](https://github.com/nbzy1995/genebench-pro)
 provides a Codex CLI integration over the released configs and permitted inputs,
 using the unchanged reference grader. Its README contains setup and reproduction
 commands, following Agent Guide Scenario 2.
