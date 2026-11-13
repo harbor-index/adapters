@@ -7,8 +7,9 @@ This adapter converts the **ten public GeneBench-Pro case studies** from
 into Harbor tasks. The upstream release is pinned to
 `eb75a3c0996b3cedcc9af685bad02fd166848fa2`.
 
-The current contribution covers implementation and oracle verification (Agent
-Guide Steps 1–3). Parity experiments and registry publication are pending.
+Adapter implementation and oracle verification are complete. The original-side
+Codex integration is linked below. Parity experiments and registry publication
+are pending.
 
 ## What is GeneBench-Pro?
 
@@ -139,6 +140,11 @@ new scientific task IDs, answer fields and grader rules require no task-specific
 adapter branches. Validate a new revision before publishing its generated tasks.
 
 ## Comparison with Original Benchmark (Parity)
+
+The [original-benchmark fork](https://github.com/nbzy1995/genebench-pro/tree/codex-integration)
+provides a Codex CLI integration over the released configs and permitted inputs,
+using the unchanged reference grader. Its README contains setup and reproduction
+commands, following Agent Guide Scenario 2.
 
 Parity has not been run. `parity_experiment.json` is an empty array, and metadata
 records zero parity tasks and zero published registry tasks. These are pending
