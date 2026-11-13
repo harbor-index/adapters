@@ -1,0 +1,25 @@
+[project]
+name = "harbor-deepplanning-shopping-adapter"
+version = "0.1.0"
+description = "Harbor adapter for DeepPlanning Shopping levels 1 and 2"
+readme = "README.md"
+authors = [
+    { name = "Leonardo Gonzalez", email = "leonardo@kumandayintelligence.com" }
+]
+requires-python = ">=3.12"
+dependencies = ["jinja2>=3.1.6,<4"]
+
+[dependency-groups]
+dev = ["harbor[smol]==0.25.0", "smolmachines==1.32.4", "numpy==2.2.6", "rank-bm25==0.2.2", "pytest>=8,<10", "ruff>=0.14,<1"]
+
+[project.scripts]
+deepplanning-shopping = "deepplanning_shopping.main:main"
+deepplanning-shopping-oracle = "deepplanning_shopping.smol_oracle:main"
+deepplanning-shopping-check-oracle = "deepplanning_shopping.results:main"
+
+[build-system]
+requires = ["uv_build>=0.10.4,<0.11.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "deepplanning_shopping"

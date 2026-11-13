@@ -1,0 +1,40 @@
+[
+  {
+    "adapter_name": "deepplanning-shopping",
+    "adapter_builders": [
+      "Leonardo Gonzalez (leonardo@kumandayintelligence.com)"
+    ],
+    "original_benchmark": [
+      {
+        "split": "full",
+        "size": 100,
+        "harness": "agent",
+        "supported_agents": [
+          "ShoppingFnAgent@31a4d36d123688581a9e9744427272b33ce940e0"
+        ],
+        "adaptable": true,
+        "notes": "Shopping levels 1 and 2 only: 50 cases each. Travel and Shopping level 3 are outside this adapter scope."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "full",
+        "adapted_benchmark_size": 100,
+        "parity_benchmark_size": 0,
+        "parity_sampling_rate": 0.0,
+        "registry_benchmark_size": 0,
+        "added_agents": [
+          "None"
+        ],
+        "parity_matching_agents": [
+          "None"
+        ],
+        "parity_unmatching_agents": [
+          "None"
+        ],
+        "parity_costs": "$0",
+        "notes": "Draft adapter. All 100 oracle trials passed on Harbor 0.25.0 with local Smol 1.32.4 and separate verifiers. Model parity and registration are pending. Terminal transport delegates to unchanged upstream tools. Level 1 case 36 uses the released dataset size-44 query."
+      }
+    ]
+  }
+]
