@@ -2,35 +2,14 @@
 
 import importlib.util
 import json
-import os
 import subprocess
 import sys
-from pathlib import Path
 
 import pytest
 from harbor.models.task.task import Task
 from harbor.models.task.verifier_mode import resolve_verifier_environment_definition
 
 from deepplanning_shopping.adapter import DOMAIN, TASKS, DeepPlanningShoppingAdapter
-
-
-@pytest.fixture(scope="module")
-def inputs():
-    source = os.environ.get("DEEPPLANNING_SOURCE_DIR")
-    data = os.environ.get("DEEPPLANNING_DATA_DIR")
-    if not source or not data:
-        pytest.skip(
-            "Set DEEPPLANNING_SOURCE_DIR and DEEPPLANNING_DATA_DIR for pinned-source integration tests"
-        )
-    return {"source_dir": Path(source), "data_dir": Path(data)}
-
-
-@pytest.fixture(scope="module")
-def generated(tmp_path_factory, inputs):
-    output = tmp_path_factory.mktemp("generated") / "tasks"
-    paths = DeepPlanningShoppingAdapter(output, **inputs).run()
-    assert len(paths) == 100
-    return output
 
 
 def test_every_task_loads_with_isolated_verification(generated):
@@ -69,6 +48,10 @@ def test_upstream_tools_and_grader_are_byte_identical(generated, inputs):
                 assert (
                     task / "environment/tools" / source.name
                 ).read_bytes() == source.read_bytes()
+        for name in ("shopping_agent.py", "call_llm.py"):
+            assert (task / "environment/native_agent/agent" / name).read_bytes() == (
+                domain / "agent" / name
+            ).read_bytes()
 
 
 def test_prompts_match_released_dataset_and_correction_is_explicit(generated):

@@ -236,6 +236,10 @@ class DeepPlanningShoppingAdapter:
             target / "environment/tools",
             ignore=shutil.ignore_patterns("__pycache__", "*.pyc"),
         )
+        native = target / "environment/native_agent/agent"
+        native.mkdir(parents=True)
+        for filename in ("shopping_agent.py", "call_llm.py"):
+            shutil.copy2(domain / "agent" / filename, native / filename)
         (target / "environment/prompt.json").write_text(
             json.dumps(
                 {"system": context["system_prompt"], "query": query}, ensure_ascii=False
@@ -259,6 +263,15 @@ class DeepPlanningShoppingAdapter:
         }
         hashes["evaluation/evaluation_pipeline.py"] = sha256(
             domain / "evaluation/evaluation_pipeline.py"
+        )
+        native_hashes = {
+            f"agent/{filename}": sha256(domain / "agent" / filename)
+            for filename in ("shopping_agent.py", "call_llm.py")
+        }
+        hashes.update(native_hashes)
+        (native.parent / "source.json").write_text(
+            json.dumps({"revision": CODE_REVISION, "sha256": native_hashes}, indent=2)
+            + "\n"
         )
         (target / "provenance.json").write_text(
             json.dumps(

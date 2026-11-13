@@ -18,3 +18,7 @@ The negative control leaves the cart empty, writes a final message, asserts hidd
 `upstream-case36.patch` changes one phrase in the pinned Qwen-Agent metadata to match the released dataset query and size-44 reference products. Apply with `git apply` from the Qwen-Agent repository root for original-side comparisons.
 
 Model parity is pending. These artifacts document oracle execution and verifier isolation.
+
+`native-offline-summary.json` and `native-offline-evidence.zip` record two scripted native-agent checks on local Smol, one task per level. The unchanged native `ShoppingFnAgent` and OpenAI SDK 3.50.0 made four requests per task to a loopback HTTP fixture. External network connections were blocked inside the model process. Both trials received reward 1.0 from separate verifiers, with zero exceptions and zero paid API calls. Scripted responses deliberately replay reference products; these tests validate integration and do not measure model parity.
+
+The pytest suite also blocks external network connections and covers source identity, native prompts/schemas, multi-tool responses, tool errors, reasoning content, both stages, per-stage exhaustion, upstream retries and zero-temperature behavior, credential transport, partial logs and execution failures. Reproduction commands are in the adapter README. Native test sources are under `tests/`; they are excluded from generated production tasks.
