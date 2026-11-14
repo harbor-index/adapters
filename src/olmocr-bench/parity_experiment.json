@@ -1,0 +1,26 @@
+[
+  {
+    "adapter_name": "olmocr-bench",
+    "agent": null,
+    "model": null,
+    "date": null,
+    "adapted_benchmark_size": 1403,
+    "parity_benchmark_size": 140,
+    "number_of_runs": null,
+    "notes": "PARITY PENDING: no parity experiment has been run. Every null in this entry is a placeholder, not a result. Planned (to be agreed with the Harbor team): claude-code at a pinned version with claude-haiku-4-5-20251001, 3 runs per side on the 140-task parity subset (--split parity, 20 PDFs per category), metric = original Overall score in percent (unweighted mean of the eight per-source pass rates), computed by olmocr.bench.benchmark on the original side and by olmocr-bench-score on the Harbor side. Both sides must run the agent in the task image without internet access other than the model endpoint and score in that image. The original side needs a fork of allenai/olmocr at commit f7cfe4c22098b154c76b6ec950d1c0a464eecf8d with an agent runner; see the parity plan in README.md.",
+    "original_parity_repo": null,
+    "adapter_pr": null,
+    "dataset_pr": null,
+    "parity_pr": null,
+    "metrics": [
+      {
+        "benchmark_name": "olmOCR-Bench",
+        "metric": "Overall (mean of per-source pass rates, %)",
+        "original": null,
+        "harbor": null,
+        "original_runs": null,
+        "harbor_runs": null
+      }
+    ]
+  }
+]

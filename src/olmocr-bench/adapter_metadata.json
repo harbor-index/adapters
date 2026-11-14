@@ -1,0 +1,36 @@
+[
+  {
+    "adapter_name": "olmocr-bench",
+    "adapter_builders": [
+      "Himanshu Gupta (him141195@gmail.com)"
+    ],
+    "original_benchmark": [
+      {
+        "split": "full",
+        "size": 1403,
+        "harness": "llm",
+        "supported_agents": [
+          "None"
+        ],
+        "adaptable": true,
+        "notes": "1,403 single-page PDFs with 7,010 pass/fail unit tests (plus one baseline test per PDF, 8,413 graded tests). Dataset allenai/olmOCR-bench at revision 54a96a6fb6a2bd3b297e59869491db4d3625b711; harness allenai/olmocr (olmocr/bench) at commit f7cfe4c22098b154c76b6ec950d1c0a464eecf8d. The original harness scores Markdown files produced by any OCR system; its bundled runners call OCR tools or make one LLM API call per page. It has no agent support."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "full",
+        "adapted_benchmark_size": 1403,
+        "parity_benchmark_size": 140,
+        "parity_sampling_rate": 0.0998,
+        "registry_benchmark_size": 1403,
+        "added_agents": [
+          "None"
+        ],
+        "parity_matching_agents": [],
+        "parity_unmatching_agents": [],
+        "parity_costs": null,
+        "notes": "PARITY PENDING: no parity experiment has been run, so parity_matching_agents and parity_unmatching_agents are intentionally empty and parity_costs is null. parity_benchmark_size is the planned subset (--split parity: 20 PDFs per category, 140 tasks); registry_benchmark_size is the planned full registration, the dataset is not registered yet. Task reward is the fraction of a PDF's tests that pass; the original Overall score (mean of per-source pass rates) is recomputed with olmocr-bench-score. Scoring runs in a separate verifier container and the agent phase has no network access other than the model endpoint. Oracle outputs are synthesized from the unit tests because the benchmark has no reference transcriptions."
+      }
+    ]
+  }
+]

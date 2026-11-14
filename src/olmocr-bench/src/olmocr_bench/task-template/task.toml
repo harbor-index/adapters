@@ -1,0 +1,46 @@
+schema_version = "1.0"
+
+# The converted page is the only file handed from the container the agent works
+# in to the container that scores it.
+artifacts = ["/workspace/output.md"]
+
+[task]
+name = "allenai/olmocr-bench__{task_id}"
+authors = [
+    { name = "Jake Poznanski", email = "jakep@allenai.org" },
+    { name = "Jon Borchardt" },
+    { name = "Jason Dunkelberger" },
+    { name = "Regan Huff" },
+    { name = "Daniel Lin" },
+    { name = "Aman Rangapur" },
+    { name = "Christopher Wilhelm" },
+    { name = "Kyle Lo", email = "kylel@allenai.org" },
+    { name = "Luca Soldaini", email = "lucas@allenai.org" },
+]
+keywords = ["ocr", "pdf", "document-parsing", "{category}"]
+
+[metadata]
+difficulty = "medium"
+category = "document-ocr"
+document_type = "{category}"
+source_pdf = "{source_pdf}"
+
+[verifier]
+# Scoring runs in a fresh container built from the same image, so nothing done
+# in the agent's container can change the scoring tools.
+environment_mode = "separate"
+timeout_sec = 1200.0
+
+[agent]
+# No network access while the agent works, apart from its own model endpoint.
+# The pages are public documents (LaTeX sources of the arXiv papers, human
+# transcriptions of the scans), so with open internet access the text could be
+# looked up instead of read from the page.
+network_mode = "no-network"
+timeout_sec = 1800.0
+
+[environment]
+build_timeout_sec = 1800.0
+cpus = 2
+memory_mb = 4096
+storage_mb = 10240
