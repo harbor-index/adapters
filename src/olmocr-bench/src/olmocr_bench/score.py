@@ -16,6 +16,12 @@ This script rebuilds those numbers from the per-test records that each task's
 verifier writes to ``verifier/olmocr_bench_results.json``.
 
     uv run olmocr-bench-score jobs/<job-name>
+
+A trial without such records (the environment did not start, the verifier
+crashed or timed out, Harbor could not hand over the output file) has no score.
+Leaving it out would make a job look better than it is, so, like the original
+harness when a candidate has errors, the script then reports FAILED instead of a
+score and exits with status 1. ``--allow-unscored`` prints the partial numbers.
 """
 
 from __future__ import annotations
@@ -58,6 +64,12 @@ class GroupScores:
     tests: dict[tuple[str, str], UnitTestOutcome] = field(default_factory=dict)
     rewards: list[float] = field(default_factory=list)
     unscored_trials: list[str] = field(default_factory=list)
+    # Outputs that were scored as an empty document, by reason.
+    empty_outputs: dict[str, int] = field(default_factory=dict)
+    test_errors: int = 0
+    trials_per_pdf: dict[str, int] = field(default_factory=dict)
+    # Scored trials that Harbor nevertheless recorded with an exception, by type.
+    scored_with_exception: dict[str, int] = field(default_factory=dict)
 
     def by_source(self) -> dict[str, list[UnitTestOutcome]]:
         grouped: dict[str, list[UnitTestOutcome]] = defaultdict(list)
@@ -82,18 +94,38 @@ def load_job(job_dir: Path) -> dict[str, GroupScores]:
     for result_path in trial_results:
         trial_dir = result_path.parent
         trial = json.loads(result_path.read_text(encoding="utf-8"))
+        if "trial_name" not in trial:
+            raise ValueError(
+                f"{result_path} is not a trial result; pass one job directory "
+                "(jobs/<job-name>), not the directory that holds several jobs"
+            )
         group = groups[_group_label(trial)]
 
+        exception = (trial.get("exception_info") or {}).get("exception_type")
         results_path = trial_dir / "verifier" / RESULTS_FILENAME
         if not results_path.is_file():
             # The verifier did not run to completion (build failure, crash,
             # timeout). There is no score for this trial; report it separately.
-            group.unscored_trials.append(trial_dir.name)
+            reason = exception or "no exception recorded"
+            group.unscored_trials.append(f"{trial_dir.name} ({reason})")
             continue
+        if exception:
+            group.scored_with_exception[exception] = (
+                group.scored_with_exception.get(exception, 0) + 1
+            )
 
         results = json.loads(results_path.read_text(encoding="utf-8"))
         group.rewards.append(results["reward"])
+        pdf = results["pdf"]
+        group.trials_per_pdf[pdf] = group.trials_per_pdf.get(pdf, 0) + 1
+        # Records written before output_status existed only say whether a file was found.
+        status = results.get("output_status") or (
+            "ok" if results.get("output_found", True) else "missing"
+        )
+        if status != "ok":
+            group.empty_outputs[status] = group.empty_outputs.get(status, 0) + 1
         for record in results["tests"]:
+            group.test_errors += bool(record.get("error"))
             key = (results["pdf"], record["id"])
             outcome = group.tests.setdefault(
                 key, UnitTestOutcome(test_type=record["type"], source=record["source"])
@@ -190,11 +222,31 @@ def summarize(
         "by_source": sources,
         "by_type": types,
         "unscored_trials": group.unscored_trials,
+        "complete": not group.unscored_trials,
+        "empty_outputs": dict(sorted(group.empty_outputs.items())),
+        "test_errors": group.test_errors,
+        "scored_with_exception": dict(sorted(group.scored_with_exception.items())),
+        "tasks_with_several_trials": sum(
+            count > 1 for count in group.trials_per_pdf.values()
+        ),
     }
 
 
-def format_summary(label: str, summary: dict) -> str:
+def format_summary(label: str, summary: dict, allow_unscored: bool) -> str:
     """Render one group in the layout of benchmark.py's final summary."""
+    unscored = summary["unscored_trials"]
+    if unscored and not allow_unscored:
+        total = len(unscored) + summary["num_scored_trials"]
+        lines = [
+            (
+                f"{label:20s} : Average Score: FAILED ({len(unscored)} of {total} "
+                "trial(s) have no verifier result)"
+            ),
+            "    Run these trials again (harbor job resume with -f <ErrorType>), or pass",
+            "    --allow-unscored to print the numbers without them:",
+        ]
+        return "\n".join(lines + [f"        {name}" for name in unscored])
+
     lines = [
         (
             f"{label:20s} : Average Score: {summary['overall'] * 100:0.1f}% "
@@ -221,12 +273,39 @@ def format_summary(label: str, summary: dict) -> str:
             f"{summary['num_scored_trials']} scored trial(s)"
         ),
     ]
-    if summary["unscored_trials"]:
-        lines.append(
-            f"    WARNING: {len(summary['unscored_trials'])} trial(s) have no "
-            "verifier results and are excluded from every number above:"
+    if summary["empty_outputs"]:
+        reasons = ", ".join(
+            f"{count} {reason}" for reason, count in summary["empty_outputs"].items()
         )
-        lines += [f"        {name}" for name in summary["unscored_trials"]]
+        lines.append(f"    Outputs scored as an empty document: {reasons}")
+    if summary["test_errors"]:
+        lines.append(
+            f"    WARNING: {summary['test_errors']} test(s) raised an error and were "
+            "counted as failed; the original harness reports FAILED (errors) for "
+            "such a candidate."
+        )
+    if summary["scored_with_exception"]:
+        kinds = ", ".join(
+            f"{count} {kind}"
+            for kind, count in summary["scored_with_exception"].items()
+        )
+        lines.append(
+            f"    Note: Harbor recorded an exception for some scored trials ({kinds}); "
+            "they are scored on the output the agent left."
+        )
+    if summary["tasks_with_several_trials"]:
+        lines.append(
+            f"    Note: {summary['tasks_with_several_trials']} task(s) have several "
+            "trials in this job; each test passes if most of its trials pass, as "
+            "the original harness treats repeats. Use one job per run for one "
+            "score per run."
+        )
+    if unscored:
+        lines.append(
+            f"    WARNING: PARTIAL RESULT. {len(unscored)} trial(s) have no verifier "
+            "result and are excluded from every number above:"
+        )
+        lines += [f"        {name}" for name in unscored]
     return "\n".join(lines)
 
 
@@ -253,6 +332,12 @@ def main() -> None:
     parser.add_argument(
         "--json", type=Path, default=None, help="Also write the summary to this file"
     )
+    parser.add_argument(
+        "--allow-unscored",
+        action="store_true",
+        help="Print partial numbers when some trials have no verifier result "
+        "(default: report FAILED and exit with status 1)",
+    )
     args = parser.parse_args()
 
     try:
@@ -268,10 +353,12 @@ def main() -> None:
     }
     print(f"Final Summary with {args.confidence_level * 100:g}% Confidence Intervals:")
     for label, summary in summaries.items():
-        print(format_summary(label, summary))
+        print(format_summary(label, summary, args.allow_unscored))
         print()
     if args.json is not None:
         args.json.write_text(json.dumps(summaries, indent=2) + "\n", encoding="utf-8")
+    if not args.allow_unscored and not all(s["complete"] for s in summaries.values()):
+        sys.exit(1)
 
 
 if __name__ == "__main__":

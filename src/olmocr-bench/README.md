@@ -9,11 +9,11 @@ olmOCR-Bench measures how well a system converts PDF pages into clean, linearize
 - **Dataset size**: 1,403 tasks, one per PDF, covering the whole benchmark. No PDFs or tests are excluded
 - **Tests**: 7,010 unit tests in the dataset files (the number quoted by the paper and the dataset card), plus the per-PDF baseline test that the original harness adds, for 8,413 graded tests in total (see the table below)
 - **Provenance**: [paper](https://arxiv.org/abs/2502.18443) | [dataset](https://huggingface.co/datasets/allenai/olmOCR-bench) (pinned to revision `54a96a6fb6a2bd3b297e59869491db4d3625b711`) | [original harness](https://github.com/allenai/olmocr/tree/f7cfe4c22098b154c76b6ec950d1c0a464eecf8d/olmocr/bench) (pinned to commit `f7cfe4c22098b154c76b6ec950d1c0a464eecf8d`)
-- **License**: dataset ODC-BY 1.0; harness code Apache-2.0
+- **License**: dataset ODC-BY 1.0 (its card adds that it is intended for research and educational use in accordance with AI2's [Responsible Use Guidelines](https://allenai.org/responsible-use)); harness code Apache-2.0
 - **Main modifications for Harbor**:
-  - The original harness scores a folder of Markdown files produced by an OCR system. Here an agent gets the PDF at `/workspace/document.pdf` and writes `/workspace/output.md`; the instruction wraps the original API-model prompt and only adds the file locations and the fact that there is no internet access.
+  - The original harness scores a folder of Markdown files produced by an OCR system. Here an agent gets the PDF at `/workspace/document.pdf` and writes `/workspace/output.md`; the instruction quotes the original API-model prompt and adds only what is needed to apply it to files: where the PDF is and which installed tools can read it, where to write the result (the text only, without explanations, code fences or a JSON wrapper), that "output null" means an empty file, and that there is no internet access.
   - Each task's reward is the fraction of that PDF's tests that pass. The original headline score aggregates differently (mean of per-category pass rates); `olmocr-bench-score` recomputes it from a Harbor job.
-  - Grading runs the original test classes, vendored unmodified, in a fresh container that only receives the agent's output file.
+  - Grading runs the original test classes, vendored unmodified, in a fresh container; the agent's output file is the only thing the task hands over to it.
   - The agent works without network access apart from its own model endpoint, because the pages and their source texts are public.
   - The benchmark has no reference transcriptions, so the oracle solution is synthesized from each PDF's tests (see Notes & Caveats).
 
@@ -52,12 +52,14 @@ The original score is the percentage of tests passed per document source, with t
 - `tests/evaluate.py` reproduces what the original `benchmark.py` does for one PDF: loading through `load_tests`, the automatically added baseline test, pass/fail per test
 - Reward is the fraction of the PDF's tests that pass; per-test results are saved as `olmocr_bench_results.json` in the verifier logs
 - `olmocr-bench-score` rebuilds the original "Overall" score, per-category pass rates and bootstrap interval from a Harbor job directory
-- The instruction contains the original "no document anchoring" API prompt verbatim, plus where to read the PDF and where to write the result
-- Separate verifier: scoring runs in a fresh container, and `/workspace/output.md` is the only file carried over from the agent's container
+- The instruction contains the original "no document anchoring" API prompt verbatim, plus where to read the PDF and where and in which form to write the result
+- Separate verifier: scoring runs in a fresh container without network access, and `/workspace/output.md` is the only artifact the task declares (Harbor also copies its own artifact directory `/logs/artifacts`, which the scoring code never reads)
+- An output that is missing, is not a regular file or is not UTF-8 text is scored as an empty document, which is what the original pipeline scores when a system returns nothing for a page; the per-test results record which case it was
 - No network during the agent phase other than the agent's model endpoint
 - One Docker image definition for all tasks (digest-pinned Python 3.11 base, poppler-utils, pinned scoring dependencies, headless Chromium installed at build time); tasks differ only in the final `COPY` of the PDF, so image builds are cache hits and scoring needs no network
 - Oracle solutions synthesized from the unit tests
 - `--split parity` generates a deterministic 140-task subset with 20 PDFs per category
+- Each task directory is built in a hidden staging directory inside the output directory and moved into place complete, so an interrupted run leaves no partial task. Only one run at a time writes to an output directory (file lock); file modes do not depend on the umask
 
 ## Generated Task Structure
 
@@ -116,7 +118,7 @@ src/olmocr-bench/
 
 ## Run Evaluation / Harness
 
-Commands below were verified with Harbor 0.25.0.
+The syntax of the commands below was checked against Harbor 0.25.0. The local-dataset commands were run with the oracle and `nop` agents. The registry commands cannot be run until the dataset is registered, and no model-backed agent has been run yet.
 
 ### Running with Datasets Registry
 
@@ -162,14 +164,14 @@ uvx --from harbor==0.25.0 harbor trial start -p datasets/olmocr-bench/<task_id> 
 
 ### Network Access for Agents
 
-Each task sets `network_mode = "no-network"` for the agent phase. Harbor adds the model endpoint of the agent it installed and switches off the agent's own web search and fetch tools, so an agent can call its model and nothing else. The agent is installed before this restriction applies. If Harbor reports that it cannot determine an agent's model endpoint, pass it explicitly:
+Each task sets `network_mode = "no-network"` for the agent phase and for scoring. For the agent phase Harbor adds the model endpoint of the agent it installed and switches off the agent's own web search and fetch tools, so that the agent can call its model and nothing else. The agent is installed before this restriction applies. If Harbor reports that it cannot determine an agent's model endpoint, pass it explicitly:
 
 ```bash
 uvx --from harbor==0.25.0 harbor run -p datasets/olmocr-bench -a <agent_name> -m "<model_name>" \
   --allow-agent-host <model-api-hostname>
 ```
 
-The environment must be able to change the network policy between phases. With Docker, Harbor does this through an egress-control sidecar container, which needs nftables support in the host kernel.
+The environment must be able to change the network policy between phases. With Docker, Harbor does this through an egress-control sidecar container, which needs nftables support in the host kernel. Two things can stop an agent from reaching its model although the endpoint is allowed; both are described under [Troubleshooting](#troubleshooting): a Docker daemon configured with its own DNS server, and provider-selection variables in the shell that starts Harbor.
 
 ### Computing the Original Scores
 
@@ -180,7 +182,7 @@ cd src/olmocr-bench
 uv run olmocr-bench-score ../../jobs/<job_name>
 ```
 
-See [How to interpret the scores](#how-to-interpret-the-scores) for the relationship between the two. Each trial directory also keeps the agent's output at `artifacts/workspace/output.md` and the per-test results at `verifier/olmocr_bench_results.json`.
+Pass one job directory. If a job holds several trials of the same task (`-k`), the script combines them by majority vote per test, as the original harness does for repeats, so use one job per run when you want one score per run. If any trial has no verifier result, the script prints `Average Score: FAILED (...)`, lists those trials and exits with status 1, because leaving them out would raise the score; run them again with `harbor job resume -p jobs/<job_name> -f <ErrorType>`, or pass `--allow-unscored` to see the partial numbers. See [How to interpret the scores](#how-to-interpret-the-scores) for the relationship between the two scores. Each trial directory also keeps the agent's output at `artifacts/workspace/output.md` and the per-test results at `verifier/olmocr_bench_results.json`.
 
 ## Usage: Create Task Directories
 
@@ -191,30 +193,31 @@ uv run olmocr-bench --output-dir ../../datasets/olmocr-bench
 
 Available flags:
 - `--output-dir`: directory to write generated tasks (defaults to `datasets/olmocr-bench` at the repository root)
-- `--limit`: generate only the first N tasks, after `--split` and `--task-ids` are applied
-- `--overwrite`: regenerate task directories that already exist (existing ones are skipped otherwise)
-- `--task-ids`: only generate these tasks; accepts Harbor task IDs (`arxiv-math-2503-04048-pg46`) or original PDF paths (`arxiv_math/2503.04048_pg46.pdf`)
+- `--limit`: generate only the first N tasks, after `--split` and `--task-ids` are applied (a negative value is an error)
+- `--overwrite`: regenerate task directories that already exist (existing ones are skipped otherwise; an existing directory that lacks required files stops the run instead of being skipped)
+- `--task-ids`: only generate these tasks; accepts Harbor task IDs (`arxiv-math-2503-04048-pg46`) or original PDF paths (`arxiv_math/2503.04048_pg46.pdf`). An ID that matches no task is an error
 - `--split`: `full` (default, 1,403 tasks) or `parity` (140 tasks)
 - `--source-dir`: use a local copy of the dataset (the directory containing `bench_data/`) instead of downloading it
 
-The first run downloads about 0.36 GB into the Hugging Face cache. Generation takes about 10 seconds and is deterministic: repeated runs produce byte-identical task directories. The generated dataset is about 760 MB (the PDFs plus a copy of the grading code in each task).
+The first run downloads about 0.36 GB into the Hugging Face cache. Generation takes about 15 seconds and is deterministic: repeated runs produce byte-identical task directories with the same file modes. A run that is interrupted leaves only complete task directories; run the same command again to add the rest. The generated dataset is about 760 MB (the PDFs plus a copy of the grading code in each task).
 
 ## Comparison with Original Benchmark (Parity)
 
 **Parity is pending.** No parity experiment has been run yet, so the table and `parity_experiment.json` contain no scores.
 
-| Agent | Model | Metric | Number of Runs | Dataset Size | Original Benchmark Performance | Harbor Adapter Performance |
-|-------|-------|--------|----------------|--------------|--------------------------------|----------------------------|
+| Agent | Model | Metric | Runs | Dataset Size | Original (mean ± SEM) | Harbor (mean ± SEM) |
+|-------|-------|--------|------|--------------|-----------------------|---------------------|
 | pending | pending | Overall (mean of per-source pass rates, %) | pending | 140 of 1,403 planned (10%) | pending | pending |
 
 ### Oracle verification
 
-The oracle was run on the full benchmark with Harbor 0.25.0 on Docker (`run_olmocr-bench.yaml`, with `-n 6` for six concurrent trials):
+The oracle was run on the full benchmark with Harbor 0.25.0 on Docker (`run_olmocr-bench.yaml`, with `-n 6` for six concurrent trials). The table shows the run made with the final task files:
 
 | Tasks | Trials with reward 1.0 | Exceptions | Mean reward | Runtime |
 |-------|------------------------|------------|-------------|---------|
-| 1,403 | 1,403 | 0 | 1.000 | 1 h 12 min |
+| 1,403 | 1,403 | 0 | 1.000 | 1 h 36 min |
 
+- An earlier full run, made before scoring was taken off the network and before the last revision of `evaluate.py`, gave the same result (1,403 of 1,403, no exceptions) in 1 h 12 min; the later run shared the machine with other jobs.
 - `olmocr-bench-score` on that job reports "Average Score: 100.0% ± 0.0% (average of per-JSONL scores) over 8413 tests", with all eight sources at 100%.
 - Independently of Harbor, the same oracle outputs pass every test, 8,413 of 8,413, under the original harness (`python -m olmocr.bench.benchmark` at the pinned commit: "Average Score: 100.0% ± 0.0%").
 
@@ -224,9 +227,9 @@ No task is excluded and no oracle fails.
 
 To check that the adapter grades exactly like the original harness, the same Markdown files were scored on both sides without any model in the loop. These are evaluator replays and negative controls, not parity results.
 
-- **Local replay, all 1,403 PDFs**: `pdftotext` output for every PDF was scored by the original `python -m olmocr.bench.benchmark` at the pinned commit and by each generated task's `tests/evaluate.py`, both inside the task image. The results are identical: 8,413 tests, the same 5,711 failing test IDs, and the same pass counts for all eight sources (original harness: "Average Score: 40.9% ± 0.9%"). `olmocr-bench-score` prints the same summary lines as the original harness for these results.
+- **Local replay, all 1,403 PDFs**: `pdftotext` output for every PDF was scored by the original `python -m olmocr.bench.benchmark` at the pinned commit and by each generated task's `tests/evaluate.py`. `evaluate.py` ran in the task image. The original harness ran in the same image with three extra packages that it imports at start-up and that the task image does not need (`pypdf`, `numpy`, `Pillow`; they serve the page-count check, the bootstrap interval and the optional HTML report, not the grading). The results are identical: 8,413 tests, the same 5,711 failing test IDs, and the same pass counts for all eight sources (original harness: "Average Score: 40.9% ± 0.9%"). `olmocr-bench-score` prints the same pass counts and the same Overall as the original harness for these results; its headline adds "over N tests", and the `±` digit can differ by 0.1 because the original bootstrap is unseeded.
 - **Through Harbor, 36-task sample**: five jobs were run on the same 36 tasks and compared test by test with the original harness scoring the same files. All five agree exactly (278 graded tests each): the oracle (100.0%), no output file (the `nop` agent, 13.0%), an empty file (13.0%), an unrelated paragraph of filler text (29.2%) and `pdftotext` output (39.8%).
-- **Through Harbor, 140-task parity subset**: five more jobs were run on the 140 parity tasks (942 graded tests) and compared in the same way. All five agree exactly with the original harness. The first job runs Harbor's `nop` agent, which writes nothing, on the unchanged tasks. For the other four, each task's `solve.sh` was replaced by a script that writes the output named in the table.
+- **Through Harbor, 140-task parity subset**: five more jobs were run on the 140 parity tasks (942 graded tests) and compared in the same way. All five agree exactly with the original harness. The first job runs Harbor's `nop` agent, which writes nothing, on the unchanged tasks; the original harness cannot score a missing file, so its column for that row comes from empty files. For the other four, each task's `solve.sh` was replaced by a script that writes the output named in the table.
 
 | Output in `/workspace/output.md` | Overall, original harness | Overall, `olmocr-bench-score` | Mean reward | Tasks at reward 1.0 |
 |---|---:|---:|---:|---:|
@@ -236,6 +239,8 @@ To check that the adapter grades exactly like the original harness, the same Mar
 | The single letter `e` | 36.5% | 36.5% | 0.416 | 24 of 140 |
 | `pdftotext` output | 40.7% | 40.7% | 0.427 | 17 of 140 |
 
+These replays were made before the last revision of `evaluate.py`. That revision changed only how an unreadable output is scored and added bookkeeping fields, which none of the replayed outputs touches; the full oracle run above was repeated with the final version, and so was a seven-task check through Harbor in which a missing file, an empty file, a file that is not UTF-8 and a directory at the output path all received the same reward on every task.
+
 None of the controls comes close to the oracle's 100%. The filler text and the single letter still get full reward on some tasks; the reason is given under "Known weaknesses inherited from the original tests" in [Notes & Caveats](#notes--caveats).
 
 ### Parity plan
@@ -243,13 +248,15 @@ None of the controls comes close to the oracle's 100%. The filler text and the s
 The original harness has no agent support: it scores Markdown files produced by OCR tools or by one API call per page. Parity therefore needs a fork of the original repository that runs a Harbor-compatible agent (scenario 2 of the adapter guide). The agent, model and number of runs must be agreed with the Harbor team before anything is run; the proposal is:
 
 - **Agent and model**: `claude-code` at a pinned version with `claude-haiku-4-5-20251001`. The agent must be able to look at the page, and Claude Code can read PDFs and images directly. A second standard agent (`codex` with `gpt-5-mini-2025-08-07`) is an optional generalization check.
-- **Subset**: `--split parity`, 140 tasks. For each of the 7 categories, tasks are ranked by `sha256("42:<task_id>")` and the first 20 are taken. Equal allocation is used because the headline metric weights categories equally. The subset has 942 graded tests.
-- **Runs**: 3 per side, in the order required by the guide: 5 to 10 tasks on both sides, then one full subset run on both sides, then three.
+- **Subset**: `--split parity`, 140 tasks. For each of the 7 categories, tasks are ranked by `sha256("42:<task_id>")` and the first 20 are taken. Equal allocation is used because the headline metric weights categories equally. The subset has 942 graded tests. None of the 9 PDFs with an explicit baseline record is in it; that path is covered by the full oracle run and the full replay.
+- **Runs**: 3 per side, in the order required by the guide: 5 to 10 tasks on both sides, then one full subset run on both sides, then three. Each run is its own Harbor job, because `olmocr-bench-score` combines several trials of a task inside one job.
 - **Metric**: Overall = unweighted mean of the eight per-source pass rates, in percent, as printed by `benchmark.py` on the original side and by `olmocr-bench-score` on the Harbor side.
-- **Original side, to be built in a fork of `allenai/olmocr` at commit `f7cfe4c`**:
-  1. A script that materializes a `bench_data` directory with only the 140 parity PDFs and their test records (the original harness requires an output file for every PDF it finds).
-  2. A runner that, for each PDF, starts the same container image as the Harbor task (this adapter's `Dockerfile`, PDF at `/workspace/document.pdf`), installs the same agent version, then cuts network access down to the model endpoint and runs the agent headless with the text of this adapter's `instruction.md`, the same model and the same 1,800 s limit. Afterwards it copies `/workspace/output.md` byte for byte to `<bench_data>/<candidate>/<category>/<name>_pg1_repeat1.md`. If the agent wrote no file, the runner writes an empty file, as `convert.py` does for a failed conversion.
-  3. Scoring with the unmodified `python -m olmocr.bench.benchmark --dir <bench_data> --candidate <candidate>`, executed inside the same image so that both sides use the same Chromium and fonts for math tests.
+- **Original side**: a runner has been written on top of `allenai/olmocr` at commit `f7cfe4c` (a new directory `harbor_parity/`; nothing under `olmocr/` is changed). It is not published yet; the fork URL will be added here and to `parity_experiment.json` once it is. It works in three steps:
+  1. `prepare.py` takes the pages, the instruction text, the image build context and the limits from the generated Harbor tasks of the parity split, checks every PDF and every test record against the pinned dataset snapshot, and materializes a `bench_data` directory with only those 140 PDFs (the original harness requires an output file for every PDF it finds).
+  2. `run_agent.py` runs one page at a time in the task's own image with the task's limits (2 CPUs, 4 GB, 1,800 s). It installs the agent while the network is open, then restricts the network to the model endpoint with a copy of Harbor's egress sidecar, and starts the agent with the command line, tool restrictions and environment variable names that Harbor 0.25.0 uses for `claude-code` (recorded from a Harbor trial and compared). Afterwards it copies `/workspace/output.md` to `<bench_data>/<candidate>/<category>/<name>_pg1_repeat1.md`. An output that is missing, is not a regular file or is not UTF-8 becomes an empty file, the same rule as in this adapter.
+  3. `score.py` runs the unmodified `python -m olmocr.bench.benchmark --dir <bench_data> --candidate <candidate>`. The original harness cannot start in the task image, because `benchmark.py` imports `pypdf`, `numpy` and `pillow`; it runs in the task image with exactly these three pinned packages added (`pypdf==7.1.0`, `numpy==2.4.6`, `pillow==13.0.0`). Chromium, the fonts and all packages used by the test classes are the same as in the verifier.
+- **Checked without a model**: stand-in "agents" that write `pdftotext` output, an empty file, no file and the oracle document were run through the whole original-side runner on the 140 parity pages and compared with Harbor jobs for the same outputs. Failing tests and Overall are identical on both sides (40.7%, 13.8%, 13.8% and 100.0%). No model run has been made on either side, so agent behaviour, token use and cost are still unmeasured.
+- **Open points for the Harbor team**: the pinned agent version and dated model ID, the number of runs, whether a page whose agent command failed is run again on both sides or scored as it is, and how the agent reaches its model on hosts that need the DNS remedy described under [Troubleshooting](#troubleshooting).
 
 ### Reproduction
 
@@ -265,18 +272,19 @@ cd src/olmocr-bench
 uv run olmocr-bench-score ../../jobs/<job_name>
 ```
 
-Original side (scoring part, already usable; the agent runner is still to be written):
+Original side (from the parity fork of `allenai/olmocr`, which is not published yet; Python 3.11 or newer and Docker):
 
 ```bash
-git clone https://github.com/allenai/olmocr.git && cd olmocr
-git checkout f7cfe4c22098b154c76b6ec950d1c0a464eecf8d
-pip install -e ".[bench]" && playwright install chromium
 hf download allenai/olmOCR-bench --repo-type dataset \
   --revision 54a96a6fb6a2bd3b297e59869491db4d3625b711 --local-dir ./olmOCR-bench
-# put one Markdown file per PDF at
-#   ./olmOCR-bench/bench_data/<candidate>/<category>/<pdf name without .pdf>_pg1_repeat1.md
-python -m olmocr.bench.benchmark --dir ./olmOCR-bench/bench_data --candidate <candidate>
+python3 harbor_parity/prepare.py --harbor-dataset <adapters repo>/datasets/olmocr-bench-parity \
+  --dataset-snapshot ./olmOCR-bench --work-dir <work>
+python3 harbor_parity/run_agent.py --work-dir <work> --candidate <run name> \
+  --agent claude-code --model <model> --agent-version <version> --concurrency 4
+python3 harbor_parity/score.py --work-dir <work> --candidate <run name>
 ```
+
+`score.py` runs the unmodified `python -m olmocr.bench.benchmark` on the candidate folder in the scoring image described in the parity plan.
 
 ### How to interpret the scores
 
@@ -284,13 +292,16 @@ python -m olmocr.bench.benchmark --dir ./olmOCR-bench/bench_data --candidate <ca
 - **Harbor's dataset metric**: the mean of the task rewards, i.e. an average over PDFs.
 - **Original "Overall"**: tests are grouped by the file they come from (`arxiv_math.jsonl`, `headers_footers.jsonl`, `long_tiny_text.jsonl`, `multi_column.jsonl`, `old_scans.jsonl`, `old_scans_math.jsonl`, `table_tests.jsonl`), and the added baseline tests form an eighth group `baseline`. Each group's pass rate is passed tests / tests in the group, and Overall is the unweighted mean of the eight rates. The 9 explicit baseline records count towards their own file, not towards `baseline`. The `±` value is half the width of a 95% bootstrap interval that resamples tests within each group.
 
-The two numbers are different aggregates of the same pass/fail outcomes and generally differ (for the `pdftotext` replay: Overall 40.9%, mean reward 0.385). Use `olmocr-bench-score` for anything that is compared with published olmOCR-Bench results. It reads the per-test records in each trial's `verifier/olmocr_bench_results.json`. Trials without such a file (the scoring harness did not complete) are listed separately and left out of the totals.
+The two numbers are different aggregates of the same pass/fail outcomes and generally differ (for the `pdftotext` replay: Overall 40.9%, mean reward 0.385). Use `olmocr-bench-score` for anything that is compared with published olmOCR-Bench results. It reads the per-test records in each trial's `verifier/olmocr_bench_results.json`. If a trial has no such file (the environment did not start, the scoring harness did not complete, or Harbor could not hand over the output file), the script reports FAILED instead of a score, as the original harness does for a candidate with errors; otherwise an agent could raise its score by making outputs unusable on pages it does badly on.
+
+Scores of agents are not directly comparable with the published olmOCR-Bench rows for API models: those are single model calls on a rendered page image, whereas an agent can read the PDF's text layer and use tools over many turns (`pdftotext` alone reaches 40.9% Overall). The interval uses 1,000 bootstrap samples, the default of the pinned code; the paper's table caption mentions 10,000.
 
 ### Links
 
 - Original benchmark: https://github.com/allenai/olmocr (`olmocr/bench/`), dataset https://huggingface.co/datasets/allenai/olmOCR-bench
 - Parity fork: not created yet
-- Adapter PR, dataset PR, parity results PR: not opened yet
+- Adapter PR: https://github.com/harbor-index/adapters/pull/3
+- Dataset PR, parity results PR: not opened yet
 
 ## Notes & Caveats
 
@@ -300,13 +311,13 @@ The two numbers are different aggregates of the same pass/fail outcomes and gene
 
 **Grading logic is unchanged.** No test, threshold or normalization was modified, and no test record was edited or dropped. The original loader does not filter on the `checked` field (2,810 records have no `checked` value; none are marked rejected), and neither does the adapter.
 
-**Scoring happens in a separate container.** `task.toml` sets `environment_mode = "separate"` for the verifier and declares `/workspace/output.md` as the only artifact. After the agent finishes, Harbor copies that one file into a fresh container built from the same image and runs the tests there. Nothing else from the agent's container survives, so an agent with root access cannot alter Chromium, the Python packages or any other scoring tool. A control run confirmed this: a script that wrote an empty output and then, as root, replaced the Python interpreter, patched the fuzzy-matching library and planted reward files received exactly the reward of an honest empty output. A symbolic link in place of the output file gains nothing either: Harbor 0.25.0 does not carry links over, so the page is scored as if no file had been written, and `evaluate.py` additionally fails every test if the output path resolves into the tests directory. This was checked with links pointing at the tests and at the oracle file. The tests, the grading code and the oracle are never present in the agent's container.
+**Scoring happens in a separate container.** `task.toml` sets `environment_mode = "separate"` for the verifier and declares `/workspace/output.md` as the only artifact. After the agent finishes, Harbor copies that file into a fresh container built from the same image and runs the tests there, without network access. Harbor 0.25.0 also copies its own artifact directory `/logs/artifacts`, which is empty unless the agent writes to it; the scoring code never reads it. No other change made in the agent's container reaches the scoring container, so an agent with root access cannot alter Chromium, the Python packages or any other scoring tool. A control run confirmed this: a script that wrote an empty output and then, as root, replaced the Python interpreter, patched the fuzzy-matching library and planted reward files received exactly the reward of an honest empty output. A symbolic link in place of the output file gains nothing either: Harbor 0.25.0 does not carry links over, so the page is scored as if no file had been written, and `evaluate.py` reads the output only if it is a regular file. This was checked with links pointing at the tests and at the oracle file. The tests, the test classes and the oracle are never present in the agent's container (its image does contain the Python packages and the browser that scoring uses, because both phases share one image).
 
-**No internet for the agent.** The pages are public documents. The LaTeX sources of the arXiv papers and human transcriptions of the Library of Congress scans can be found online, and some test strings were derived from them. With open internet access an agent could look the text up instead of reading the page. The agent phase therefore runs with `network_mode = "no-network"`; Harbor still lets the agent reach its own model endpoint and disables the agent's web search and fetch tools. This also rules out calling third-party OCR services or downloading OCR models, so results reflect what the agent can do with its model and the tools in the image. The original API runners make one model call per page and give the model no tools, so they could not look anything up either. The restriction was checked with a probe script run in place of the oracle, which could not resolve or reach any outside host. How Harbor 0.25.0 opens the model endpoint and disables web tools for an installed agent is taken from its source code and has not been exercised here, because no model-backed agent was run. Two things are outside the task's control: what a model remembers about a public document, and web tools that a model provider runs on its own servers if an agent does not let Harbor disable them.
+**No internet for the agent.** The pages are public documents. The LaTeX sources of the arXiv papers and human transcriptions of the Library of Congress scans can be found online, and some test strings were derived from them. With open internet access an agent could look the text up instead of reading the page. The agent phase therefore runs with `network_mode = "no-network"`; Harbor still lets the agent reach its own model endpoint and disables the agent's web search and fetch tools. This also rules out calling third-party OCR services or downloading OCR models, so results reflect what the agent can do with its model and the tools in the image. The original API runners make one model call per page and give the model no tools, so they could not look anything up either. The restriction was checked with a probe script run in place of the oracle: no outside name could be resolved and no TCP or UDP payload could be exchanged with an outside host (ICMP echo is not blocked by Harbor's sidecar). A probe in the scoring container, which runs with the same setting, could not resolve a name either and received no data for an HTTP request to an outside address. How Harbor 0.25.0 opens the model endpoint and disables web tools for an installed agent is taken from its source code and has not been exercised here, because no model-backed agent was run. Two things are outside the task's control: what a model remembers about a public document, and web tools that a model provider runs on its own servers if an agent does not let Harbor disable them.
 
-**Missing and unreadable outputs.** If `/workspace/output.md` does not exist, the page is scored as an empty document. This follows the original conversion driver, which writes an empty file when a system returns nothing for a page; absent tests then pass and everything else fails. A file that cannot be read as UTF-8 text fails every test, as in the original `benchmark.py`; so does a directory at that path.
+**Missing and unusable outputs.** If `/workspace/output.md` does not exist, is not a regular file (a directory, a link, a special file) or cannot be read as UTF-8 text, the page is scored as an empty document, and `olmocr_bench_results.json` records which case it was (`output_status`). This follows the original conversion driver, which writes an empty file when a system returns nothing for a page; absent tests then pass and everything else fails. The original `benchmark.py` has no score for a file it cannot read: it reports `FAILED (errors)` for the whole candidate. Scoring such a page as empty keeps the two sides comparable, because an empty file is something the unmodified original harness can score; the parity runner has to apply the same rule. A test that raises an error counts as failed and is flagged in the results (`error`), and `olmocr-bench-score` warns about it; the original harness would again report `FAILED (errors)`. One case never reaches scoring: if the agent makes the file unreadable for Harbor itself (mode 000), Harbor 0.25.0 fails the trial with a `PermissionError` while copying it, and the trial has no verifier result (see the next paragraph).
 
-**If the scoring harness itself fails**, for example because Chromium cannot start, `test.sh` writes a reward of 0, exits with an error and keeps no per-test results. `olmocr-bench-score` lists such trials as unscored instead of counting their tests as failed.
+**If the scoring harness itself fails**, for example because Chromium cannot start or the scoring process is killed for using too much memory, `test.sh` writes a reward of 0, exits with an error and keeps no per-test results. Harbor 0.25.0 ignores the exit status and records an ordinary trial with reward 0. `olmocr-bench-score` treats every trial without per-test results (this case, a verifier timeout, a trial that Harbor could not complete) as unscored and then reports FAILED instead of a score, so that such trials are run again rather than silently dropped.
 
 **Known weaknesses inherited from the original tests.** These were measured with the original test classes and are reported here so that rewards are read correctly. They are not changed, because that would break comparability with the original benchmark.
 
@@ -314,19 +325,20 @@ The two numbers are different aggregates of the same pass/fail outcomes and gene
 - Present tests use `rapidfuzz.fuzz.partial_ratio`, which aligns the shorter string inside the longer one. An output that is shorter than the expected text and occurs inside it passes: the one-letter output `e` passes 437 of 442 `long_tiny_text` tests and gets full reward on 114 tasks, and an output containing only whitespace passes 441 of them (but fails the baseline test).
 - An empty or missing output still passes every absent test (original Overall 14.0%, mean reward 0.139). The baseline test is what penalizes it, on every task.
 
-**What an agent can see about the origin of a page.** The instruction, the file name `document.pdf`, the image and its environment variables do not name the benchmark or carry identifiers from the original dataset, and the PDFs' metadata only records the tool that wrote the file. The instruction does quote the original prompt word for word, and that wording is public, so a model could recognise where it comes from; without internet access it cannot use that to look anything up. Task IDs keep the original file names for traceability (for `arxiv_math` they contain the arXiv identifier), but they are not visible to the agent: in a probe of the agent phase with Harbor 0.25.0 on Docker, the host name was a random container ID, no host path appeared in the mount table, a reverse DNS lookup of the container's own address returned nothing, and no outside host could be resolved or reached. Other environment providers were not checked. The page content itself is unchanged, so a page may show a journal header, a DOI or an arXiv stamp.
+**What an agent can see about the origin of a page.** The instruction, the file name `document.pdf`, the image and its environment variables do not name the benchmark or carry identifiers from the original dataset, and the PDFs' metadata only records the tool that wrote the file. The instruction does quote the original prompt word for word, and that wording is public, so a model could recognise where it comes from; without internet access it cannot use that to look anything up. Task IDs keep the original file names for traceability (for `arxiv_math` they contain the arXiv identifier), but they are not visible to the agent with Harbor's default settings: in a probe of the agent phase with Harbor 0.25.0 on Docker, the host name was a random container ID and no host path appeared in the mount table. This is not guaranteed for every configuration (with Harbor's optional `auto_mounting` environment setting the mount table shows the host's trial path, which starts with the task ID), and other environment providers were not checked. The page content itself is unchanged, so a page may show a journal header, a DOI or an arXiv stamp, and at least 178 of the 1,403 PDFs carry link annotations.
 
 **Math tests depend on the rendering environment.** Formulas are compared through bounding boxes measured in headless Chromium. The bundled KaTeX style sheet refers to font files that the original repository does not ship, so glyphs come from system fonts. The image pins the base image by digest, Playwright 1.65.1 (Chromium 158) and all Python packages; system libraries and fonts come from Debian bookworm. Results for borderline formulas may differ on other setups, so parity runs should score both sides in this image.
 
 **Environment additions.** The image contains `poppler-utils` so that an agent can rasterize or inspect the PDF without downloading anything, and `STOPSIGNAL SIGKILL` so that containers stop without the 10 s grace period. Neither affects grading. The agent runs as root in its own container. `harbor lint` (Harbor 0.25.0) reports nothing for the generated tasks with its default rules; with every rule enabled it reports only `root-agent`.
 
-**Resources.** Tasks request 2 CPUs and 4 GB of memory. Loading math tests starts up to 8 headless Chromium instances; scoring the page with the most formulas (30) peaked at 1.3 GB. In the full oracle run the scoring phase, which starts the second container and runs the tests, took 7 seconds for the median task and 18 seconds at most.
+**Resources.** Tasks request 2 CPUs and 4 GB of memory. Loading math tests starts up to 8 headless Chromium instances; scoring the page with the most formulas (30) peaked at 1.3 GB. In the full oracle run the scoring phase, which starts the second container, sets up its network policy and runs the tests, took 12 seconds for the median task and 54 seconds at most, on a machine that was running other jobs. Scoring time grows with the number of formulas in the output that cannot be rendered, because the original code tries each of them again for every formula test of the page: in a test, an output with 300 unparseable formulas on the page with the most formula tests (30) did not finish within 1,200 s. The verifier's time limit is therefore 3,600 s; an output that still exceeds it leaves the trial without a verifier result.
 
 **Explicit baseline tests.** Nine PDFs carry their own baseline record, which switches off the CJK/emoji character check (`check_disallowed_characters: false`). They get no additional baseline test, as in the original harness.
 
 ## Installation / Prerequisites
 
-- Docker installed and running. The kernel that the Docker engine runs on must support nftables, which Harbor needs to restrict the network during the agent phase
+- Linux or macOS. The adapter uses Unix file locking (`flock`) and has not been run on Windows
+- Docker installed and running. The kernel that the Docker engine runs on must support nftables, which Harbor needs to restrict the network during the agent phase and during scoring
 - [uv](https://docs.astral.sh/uv/) and Python 3.12 or newer for the adapter
 - Harbor CLI; the commands in this README use `uvx --from harbor==0.25.0 harbor`
 - Adapter dependencies:
@@ -336,19 +348,22 @@ The two numbers are different aggregates of the same pass/fail outcomes and gene
   ```
 - Network access to Hugging Face for the first task generation (not needed with `--source-dir`)
 - Disk: 0.36 GB for the dataset download, about 760 MB for the generated tasks, about 1 GB for the Docker image and about 100 MB for the job directory of a full oracle run. The first image build downloads Chromium and system libraries; later builds reuse the cached layers, and Harbor removes each task's image after its trial
-- Time: a trial with the oracle takes about 18 seconds (two container start-ups and scoring). The full oracle run over 1,403 tasks took 1 h 12 min with six concurrent trials on a machine with 16 CPUs and 30 GB of memory, after the shared image layers had been built once
+- Time: a trial with the oracle takes about 23 seconds (two container start-ups, each with its network policy, and scoring). The full oracle run over 1,403 tasks took 1 h 36 min with six concurrent trials on a machine with 16 CPUs and 30 GB of memory that was running other jobs at the same time, after the shared image layers had been built once
 - API keys for the agent and model you want to run. The oracle needs none
 
 ## Troubleshooting
 
 - **Download fails or is rate limited**: set `HF_TOKEN`, or download the dataset once and pass `--source-dir`.
 - **Regenerated tasks look unchanged**: existing task directories are skipped unless `--overwrite` is given.
+- **`... existing task director(ies) ... are incomplete`**: a task directory lacks required files, for example after an interrupted run of an earlier version of the adapter or after manual changes. Run again with `--overwrite`.
+- **`Another olmocr-bench run is writing to ...`**: only one run at a time may write to an output directory. A hidden `.staging-*` directory left there by a killed run is removed by the next run.
 - **First trial is slow**: the first build installs Chromium. Keep `force_build: true`; later builds only add the PDF layer.
 - **Job aborts with "cannot change network policy after start"**: Harbor's check for kernel support of its egress-control sidecar timed out, usually because Docker was busy when the job started. Start the job again when Docker is idle.
-- **Agent cannot reach its model**: Harbor could not work out the agent's model endpoint. Pass `--allow-agent-host <hostname>`.
-- **A trial has reward 0 and `verifier/olmocr_bench_results.json` is missing**: the scoring harness failed. Check `verifier/test-stdout.txt` in the trial directory. The most likely cause is Chromium failing to start, for example under memory pressure; lower the number of concurrent trials or raise `memory_mb`. It did not happen in any of the runs reported in this README.
+- **Agent cannot reach its model**: three causes are known. (1) Harbor could not work out the agent's model endpoint: pass `--allow-agent-host <hostname>`. (2) The shell that starts Harbor exports provider-selection variables for the agent (for example `CLAUDE_CODE_USE_BEDROCK`), so the agent uses another backend than the one Harbor allows; in a test Harbor then logged that it could not determine the endpoint and allowed nothing. Start Harbor from a clean environment or pass `--allow-agent-host`. (3) The agent retries its API calls without getting an HTTP status and then times out, although Harbor logged that it allowed the model host. This was seen on a host whose Docker daemon is configured with its own DNS server: names cannot be resolved while the egress sidecar is active. Run with `--extra-docker-compose <file>`, where the file sets `network_mode: bridge` for the `harbor-docker-egress-control-sidecar` service.
+- **A trial has reward 0 and `verifier/olmocr_bench_results.json` is missing**: the scoring harness failed. Check `verifier/test-stdout.txt` in the trial directory. The most likely cause is Chromium failing to start or the scoring process being killed under memory pressure; lower the number of concurrent trials or raise `memory_mb`. It did not happen in any of the runs reported in this README. `olmocr-bench-score` reports FAILED for the job until the trial has been run again.
+- **`VerifierTimeoutError`**: scoring did not finish within its limit of 3,600 s. This can happen when an output contains hundreds of formulas that cannot be rendered on a page with many formula tests. The trial has no verifier result; raise the limit with `--verifier-timeout-multiplier` and run it again.
 - **Score differs from published numbers**: Harbor's mean reward is not the original Overall score; run `olmocr-bench-score` on the job directory.
-- **Containers left behind after an interrupted run**: remove the containers and images whose names start with the affected task IDs.
+- **Containers left behind after an interrupted run**: remove the containers and images that Harbor named after the trials (the first 32 characters of the task name in lower case, followed by a random suffix).
 
 ## Citation
 

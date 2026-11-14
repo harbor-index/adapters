@@ -11,11 +11,16 @@ candidate ("one repeat"):
 * a default ``BaselineTest`` is added when the PDF has no explicit baseline
   test, and is attributed to the pseudo source ``baseline``
   (benchmark.py: ``for pdf in pdf_basenames: ... BaselineTest(...)``);
-* each test is run on the Markdown; an exception counts as a failure and an
-  unreadable Markdown file fails every test (benchmark.py: ``process_test``);
-* a missing Markdown file is scored as an empty document, because the upstream
-  conversion driver writes an empty file whenever a system produces no output
-  for a page (``olmocr/bench/convert.py``: ``process_pdf``).
+* each test is run on the Markdown. A test that raises counts as failed and is
+  flagged in the results (benchmark.py ``process_test`` also fails that test,
+  but then reports "FAILED (errors)" for the whole candidate instead of a
+  score);
+* a missing output, or one that is not a regular UTF-8 text file, is scored as
+  an empty document and flagged in the results. The upstream conversion driver
+  writes an empty file whenever a system produces no output for a page
+  (``olmocr/bench/convert.py``: ``process_pdf``), so an empty document is what
+  the original harness scores in that case; it has no score for a file it
+  cannot read.
 
 Outputs, written to the verifier log directory:
 
@@ -29,6 +34,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -40,6 +46,11 @@ from olmocr.bench.tests import BaselineTest, BasePDFTest, load_tests
 TESTS_DIR = Path(__file__).resolve().parent
 RESULTS_FILENAME = "olmocr_bench_results.json"
 BASELINE_SOURCE = "baseline"
+
+# How the submitted document was found (``output_status`` in the results).
+OUTPUT_OK = "ok"
+OUTPUT_MISSING = "missing"
+OUTPUT_UNREADABLE = "unreadable"
 
 
 def load_page_tests(
@@ -72,45 +83,47 @@ def load_page_tests(
     return tests, sources
 
 
-def read_markdown(markdown_path: Path) -> tuple[str | None, str]:
-    """Return ``(content, problem)``; ``content`` is None when every test must fail."""
-    if not markdown_path.exists():
+def read_markdown(markdown_path: Path) -> tuple[str, str]:
+    """Return ``(content, output_status)`` for the submitted document.
+
+    Only a regular file that decodes as UTF-8 is read. Anything else (no file, a
+    directory, a link, a special file, bytes that are not UTF-8) is scored as an
+    empty document.
+    """
+    if not os.path.lexists(markdown_path):
         print(f"{markdown_path} does not exist: scoring an empty document")
-        return "", ""
-    resolved = markdown_path.resolve()
-    if resolved == TESTS_DIR or TESTS_DIR in resolved.parents:
-        return None, "Output path resolves into the tests directory"
+        return "", OUTPUT_MISSING
+    if markdown_path.is_symlink() or not markdown_path.is_file():
+        print(f"{markdown_path} is not a regular file: scoring an empty document")
+        return "", OUTPUT_UNREADABLE
     try:
         with markdown_path.open("r", encoding="utf-8") as handle:
-            return handle.read(), ""
-    except Exception as exc:  # noqa: BLE001 - upstream fails every test on any read error
-        return None, f"Error reading {markdown_path}: {exc}"
+            return handle.read(), OUTPUT_OK
+    except (OSError, ValueError) as exc:
+        print(
+            f"Cannot read {markdown_path} as UTF-8 text ({exc}): scoring an empty document"
+        )
+        return "", OUTPUT_UNREADABLE
 
 
 def run_tests(
-    tests: list[BasePDFTest],
-    sources: dict[str, str],
-    markdown: str | None,
-    problem: str,
+    tests: list[BasePDFTest], sources: dict[str, str], markdown: str
 ) -> list[dict[str, object]]:
     records = []
     for test in tests:
-        if markdown is None:
-            passed, explanation = False, problem
-        else:
-            try:
-                passed, explanation = test.run(markdown)
-            except Exception as exc:  # noqa: BLE001 - upstream counts any error as a failure
-                passed, explanation = False, str(exc)
-        records.append(
-            {
-                "id": test.id,
-                "type": test.type,
-                "source": sources[test.id],
-                "passed": bool(passed),
-                "explanation": explanation,
-            }
-        )
+        record: dict[str, object] = {
+            "id": test.id,
+            "type": test.type,
+            "source": sources[test.id],
+        }
+        try:
+            passed, explanation = test.run(markdown)
+        except Exception as exc:  # noqa: BLE001 - as upstream: any error fails the test
+            passed, explanation = False, f"{type(exc).__name__}: {exc}"
+            record["error"] = True
+        record["passed"] = bool(passed)
+        record["explanation"] = explanation
+        records.append(record)
     return records
 
 
@@ -122,8 +135,8 @@ def main() -> int:
 
     task = json.loads((TESTS_DIR / "task.json").read_text(encoding="utf-8"))
     tests, sources = load_page_tests(TESTS_DIR / "bench_data", task["pdf"])
-    markdown, problem = read_markdown(args.markdown)
-    records = run_tests(tests, sources, markdown, problem)
+    markdown, output_status = read_markdown(args.markdown)
+    records = run_tests(tests, sources, markdown)
 
     num_passed = sum(1 for record in records if record["passed"])
     reward = num_passed / len(records)
@@ -137,9 +150,10 @@ def main() -> int:
     args.output_dir.mkdir(parents=True, exist_ok=True)
     results = {
         "pdf": task["pdf"],
-        "output_found": args.markdown.exists(),
+        "output_status": output_status,
         "num_tests": len(records),
         "num_passed": num_passed,
+        "num_errors": sum(1 for record in records if record.get("error")),
         "reward": reward,
         "tests": records,
     }

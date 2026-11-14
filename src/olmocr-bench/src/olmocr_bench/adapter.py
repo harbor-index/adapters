@@ -13,10 +13,14 @@ tests that pass.
 
 from __future__ import annotations
 
+import errno
+import fcntl
 import hashlib
 import json
 import logging
+import os
 import re
+import secrets
 import shutil
 import tomllib
 from collections import defaultdict
@@ -38,6 +42,25 @@ PARITY_TASKS_PER_CATEGORY = 20
 
 # KaTeX files are only needed to render equations, i.e. by ``math`` tests.
 _KATEX_FILES = {"katex.min.js", "katex.min.css", "LICENSE-KaTeX"}
+
+# Files every generated task must hold; an existing directory without them is
+# not skipped silently.
+_REQUIRED_TASK_FILES = (
+    "task.toml",
+    "instruction.md",
+    "environment/Dockerfile",
+    "environment/document.pdf",
+    "solution/solve.sh",
+    "solution/oracle.md",
+    "tests/test.sh",
+    "tests/evaluate.py",
+    "tests/task.json",
+)
+
+# Tasks are built below a hidden directory inside the output directory, named
+# ".staging-" plus eight hex digits, and moved into place with a rename.
+_STAGING_PREFIX = ".staging-"
+_STAGING_NAME_RE = re.compile(re.escape(_STAGING_PREFIX) + r"[0-9a-f]{8}")
 
 
 @dataclass(frozen=True)
@@ -71,8 +94,8 @@ def select_parity_subset(tasks: list[OlmOCRBenchTask]) -> list[OlmOCRBenchTask]:
 
     Within each category, tasks are ranked by ``sha256("<seed>:<task_id>")`` and
     the first ``PARITY_TASKS_PER_CATEGORY`` are kept. Ranking by a keyed hash
-    (instead of drawing from a PRNG) keeps the selection independent of the
-    Python version and of which other tasks exist.
+    (instead of drawing from a PRNG) makes the selection independent of the
+    Python version, and a task's rank independent of the other tasks.
     """
     by_category: dict[str, list[OlmOCRBenchTask]] = defaultdict(list)
     for task in tasks:
@@ -126,23 +149,104 @@ class OlmOCRBenchAdapter:
         tasks = self._select_tasks(self._load_tasks(bench_dir))
 
         self.output_dir.mkdir(parents=True, exist_ok=True)
-        generated = skipped = 0
-        for task in tasks:
-            task_dir = self.output_dir / task.task_id
-            if task_dir.exists():
-                if not self.overwrite:
-                    skipped += 1
-                    continue
-                shutil.rmtree(task_dir)
-            self._write_task(task, bench_dir, task_dir)
-            generated += 1
+        lock, locked = self._lock_output_dir()
+        staging_root = None
+        try:
+            pending = self._pending_tasks(tasks)
+            if locked:
+                # Only the lock holder knows that a leftover is not in use.
+                for entry in os.scandir(self.output_dir):
+                    if _STAGING_NAME_RE.fullmatch(entry.name) and entry.is_dir(
+                        follow_symlinks=False
+                    ):
+                        shutil.rmtree(entry.path)
+            staging_root = self.output_dir / f"{_STAGING_PREFIX}{secrets.token_hex(4)}"
+            staging_root.mkdir()
+            for task in pending:
+                # Build the task aside and move it into place only when it is
+                # complete, so an interrupted run never leaves a partial task.
+                staged = staging_root / task.task_id
+                self._write_task(task, bench_dir, staged)
+                self._move_into_place(staged, self.output_dir / task.task_id)
+        finally:
+            if staging_root is not None:
+                shutil.rmtree(staging_root, ignore_errors=True)
+            os.close(lock)
 
         logger.info(
             "Generated %d task(s), skipped %d existing, in %s",
-            generated,
-            skipped,
+            len(pending),
+            len(tasks) - len(pending),
             self.output_dir,
         )
+
+    def _lock_output_dir(self) -> tuple[int, bool]:
+        """Take an exclusive lock on the output directory for the rest of the run.
+
+        Returns the open descriptor and whether the lock is held (some file
+        systems do not support locks).
+        """
+        descriptor = os.open(self.output_dir, os.O_RDONLY)
+        try:
+            fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            os.close(descriptor)
+            raise ValueError(
+                f"Another olmocr-bench run is writing to {self.output_dir}; wait for "
+                "it to finish and run the adapter again."
+            ) from None
+        except OSError as exc:
+            logger.warning(
+                "Could not lock %s (%s); make sure no other olmocr-bench run writes "
+                "to it at the same time.",
+                self.output_dir,
+                exc,
+            )
+            return descriptor, False
+        return descriptor, True
+
+    def _pending_tasks(self, tasks: list[OlmOCRBenchTask]) -> list[OlmOCRBenchTask]:
+        """Return the tasks to write; existing ones are kept unless overwriting."""
+        if self.overwrite:
+            return tasks
+        pending, incomplete = [], []
+        for task in tasks:
+            task_dir = self.output_dir / task.task_id
+            if not os.path.lexists(task_dir):
+                pending.append(task)
+            elif not all((task_dir / name).is_file() for name in _REQUIRED_TASK_FILES):
+                incomplete.append(task.task_id)
+        if incomplete:
+            raise ValueError(
+                f"{len(incomplete)} existing task director(ies) in {self.output_dir} "
+                f"are incomplete (for example {incomplete[0]}), probably left by an "
+                "interrupted run of an earlier version. Run again with --overwrite "
+                "to regenerate them."
+            )
+        return pending
+
+    @staticmethod
+    def _move_into_place(staged: Path, task_dir: Path) -> None:
+        """Rename a finished task into the dataset, replacing an existing copy."""
+        previous = staged.with_name(staged.name + ".previous")
+        if os.path.lexists(task_dir):
+            try:
+                task_dir.rename(previous)
+            except OSError as exc:
+                if exc.errno != errno.EXDEV:
+                    raise
+                # A directory from a lower overlayfs layer cannot be renamed.
+                shutil.rmtree(task_dir)
+        try:
+            staged.rename(task_dir)
+        except BaseException:
+            if os.path.lexists(previous) and not os.path.lexists(task_dir):
+                previous.rename(task_dir)
+            raise
+        if previous.is_symlink() or previous.is_file():
+            previous.unlink()
+        elif previous.is_dir():
+            shutil.rmtree(previous)
 
     def _resolve_bench_data_dir(self) -> Path:
         """Return the ``bench_data`` directory, downloading the dataset if needed."""
@@ -167,8 +271,9 @@ class OlmOCRBenchAdapter:
             except Exception as exc:
                 raise RuntimeError(
                     f"Could not download {DATASET_REPO_ID}@{DATASET_REVISION} from "
-                    "Hugging Face. Check network access, or pass --source-dir with "
-                    "a local copy of the dataset."
+                    f"Hugging Face ({type(exc).__name__}: {exc}). Check network "
+                    "access and the Hugging Face cache directory, or pass "
+                    "--source-dir with a local copy of the dataset."
                 ) from exc
 
         for candidate in (root / "bench_data", root):
@@ -195,29 +300,38 @@ class OlmOCRBenchAdapter:
         lines_by_pdf: dict[str, dict[str, list[str]]] = {pdf: {} for pdf in pdfs}
         num_tests = 0
         for jsonl_path in sorted(bench_dir.glob("*.jsonl")):
-            with jsonl_path.open(encoding="utf-8") as handle:
-                for line_number, line in enumerate(handle, start=1):
-                    line = line.strip()
-                    if not line:
-                        continue
-                    where = f"{jsonl_path.name}:{line_number}"
-                    try:
-                        test = json.loads(line)
-                        pdf, page = test["pdf"], test["page"]
-                    except (json.JSONDecodeError, KeyError, TypeError) as exc:
-                        raise ValueError(f"{where}: malformed test: {exc}") from exc
-                    if pdf not in lines_by_pdf:
-                        raise ValueError(
-                            f"{where}: test refers to {pdf!r}, which does not "
-                            f"exist under {pdf_root}"
-                        )
-                    if page != 1:
-                        raise ValueError(
-                            f"{where}: test targets page {page!r}; every task "
-                            "is built around a single-page PDF"
-                        )
-                    lines_by_pdf[pdf].setdefault(jsonl_path.name, []).append(line)
-                    num_tests += 1
+            seen_ids: set[str] = set()
+            try:
+                lines = jsonl_path.read_text(encoding="utf-8").splitlines()
+            except UnicodeDecodeError as exc:
+                raise ValueError(f"{jsonl_path.name}: not UTF-8 text: {exc}") from exc
+            for line_number, line in enumerate(lines, start=1):
+                line = line.strip()
+                if not line:
+                    continue
+                where = f"{jsonl_path.name}:{line_number}"
+                try:
+                    test = json.loads(line)
+                    pdf, page, test_id = test["pdf"], test["page"], test["id"]
+                    test["type"]
+                except (json.JSONDecodeError, KeyError, TypeError) as exc:
+                    raise ValueError(f"{where}: malformed test: {exc!r}") from exc
+                if test_id in seen_ids:
+                    # The upstream loader rejects a file with a repeated id.
+                    raise ValueError(f"{where}: duplicate test id {test_id!r}")
+                seen_ids.add(test_id)
+                if pdf not in lines_by_pdf:
+                    raise ValueError(
+                        f"{where}: test refers to {pdf!r}, which does not "
+                        f"exist under {pdf_root}"
+                    )
+                if page != 1:
+                    raise ValueError(
+                        f"{where}: test targets page {page!r}; every task "
+                        "is built around a single-page PDF"
+                    )
+                lines_by_pdf[pdf].setdefault(jsonl_path.name, []).append(line)
+                num_tests += 1
 
         tasks: dict[str, OlmOCRBenchTask] = {}
         for pdf in pdfs:
@@ -238,7 +352,7 @@ class OlmOCRBenchAdapter:
                 },
             )
 
-        logger.info("Loaded %d PDFs with %d unit tests", len(tasks), num_tests)
+        logger.info("Loaded %d PDFs with %d test records", len(tasks), num_tests)
         return [tasks[task_id] for task_id in sorted(tasks)]
 
     def _select_tasks(self, tasks: list[OlmOCRBenchTask]) -> list[OlmOCRBenchTask]:
@@ -252,10 +366,15 @@ class OlmOCRBenchAdapter:
                 if task.task_id in requested or task.pdf in requested
             ]
             matched = {task.task_id for task in tasks} | {task.pdf for task in tasks}
-            for unknown in sorted(requested - matched):
-                logger.warning("No task matches %r in split %r", unknown, self.split)
+            unknown = sorted(requested - matched)
+            if unknown:
+                raise ValueError(
+                    f"No task in split {self.split!r} matches: {', '.join(unknown)}"
+                )
         if self.limit is not None:
-            tasks = tasks[: max(self.limit, 0)]
+            if self.limit < 0:
+                raise ValueError("--limit must not be negative.")
+            tasks = tasks[: self.limit]
         return tasks
 
     def _write_task(
@@ -280,9 +399,13 @@ class OlmOCRBenchAdapter:
         solution_dir = task_dir / "solution"
         solution_dir.mkdir()
         _copy_script(TEMPLATE_DIR / "solution" / "solve.sh", solution_dir / "solve.sh")
-        (solution_dir / "oracle.md").write_text(
-            build_oracle_markdown(tests), encoding="utf-8", newline="\n"
-        )
+        try:
+            oracle = build_oracle_markdown(tests)
+        except (KeyError, TypeError) as exc:
+            raise ValueError(
+                f"{task.pdf}: a test record lacks a field its type needs: {exc!r}"
+            ) from exc
+        (solution_dir / "oracle.md").write_text(oracle, encoding="utf-8", newline="\n")
 
         tests_dir = task_dir / "tests"
         tests_dir.mkdir()
@@ -309,6 +432,15 @@ class OlmOCRBenchAdapter:
         shutil.copytree(
             TEMPLATE_DIR / "tests" / "upstream", tests_dir / "upstream", ignore=ignore
         )
+
+        # The same modes whatever the umask and the checkout: directories 0755,
+        # files 0644, the two entry scripts 0755.
+        task_dir.chmod(0o755)
+        for path in task_dir.rglob("*"):
+            if path.is_dir():
+                path.chmod(0o755)
+            else:
+                path.chmod(0o755 if path.name in ("solve.sh", "test.sh") else 0o644)
 
     @staticmethod
     def _render_task_toml(task: OlmOCRBenchTask) -> str:

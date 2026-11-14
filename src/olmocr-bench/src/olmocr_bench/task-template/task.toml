@@ -1,7 +1,6 @@
 schema_version = "1.0"
 
-# The converted page is the only file handed from the container the agent works
-# in to the container that scores it.
+# The converted page is the only artifact this task declares for scoring.
 artifacts = ["/workspace/output.md"]
 
 [task]
@@ -27,9 +26,12 @@ source_pdf = "{source_pdf}"
 
 [verifier]
 # Scoring runs in a fresh container built from the same image, so nothing done
-# in the agent's container can change the scoring tools.
+# in the agent's container can change the scoring tools. It needs no network.
+# The time limit is generous because every formula in the output that cannot be
+# rendered is retried by each formula test of the page.
 environment_mode = "separate"
-timeout_sec = 1200.0
+network_mode = "no-network"
+timeout_sec = 3600.0
 
 [agent]
 # No network access while the agent works, apart from its own model endpoint.

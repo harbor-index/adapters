@@ -65,8 +65,10 @@ def main() -> None:
     args = parser.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
-    # The dataset download issues one request per PDF; keep that out of the log.
-    logging.getLogger("httpx").setLevel(logging.WARNING)
+    # huggingface_hub's HTTP client (httpx, or httpx2 in huggingface-hub 2.x) logs
+    # every request at INFO; keep that out of the log.
+    for name in ("httpx", "httpx2"):
+        logging.getLogger(name).setLevel(logging.WARNING)
 
     adapter = OlmOCRBenchAdapter(
         args.output_dir,
