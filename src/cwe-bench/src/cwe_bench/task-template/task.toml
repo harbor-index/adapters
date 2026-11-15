@@ -1,0 +1,25 @@
+# CWE-bench ships complete task packages, so the adapter copies each upstream
+# task.toml as-is and then applies only the identity fields of the task table below:
+#   - `name` replaces the upstream name (`collinear-ai/<id>`);
+#   - the `authors` below are appended to the upstream `authors` list;
+#   - `keywords` is used only when upstream sets none.
+# Every other key and table (metadata, agent, verifier, environment) is kept exactly
+# as upstream wrote it.
+#
+# Placeholders filled per task: {task_id}, {language}, {cwe_id}.
+
+[task]
+name = "collinear-ai/cwe-bench__{task_id}"
+
+# Authors of "CWE-bench: Refocusing Agentic Security from Exploitation to Defense"
+# (arXiv:2610.17020), in paper order.
+authors = [
+    { name = "Gonzalo Gonzalez-Pumariega" },
+    { name = "Ajay Jagannath" },
+    { name = "Adit Jain" },
+    { name = "Guram Gogia" },
+    { name = "Soumyadeep Bakshi" },
+    { name = "Nazneen Rajani" },
+]
+
+keywords = ["{language}", "security", "audit-and-patch", "cwe-{cwe_id}"]

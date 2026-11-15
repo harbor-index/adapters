@@ -1,0 +1,28 @@
+[
+  {
+    "adapter_name": "cwe-bench",
+    "agent": "pending",
+    "model": "pending",
+    "date": "pending",
+    "adapted_benchmark_size": 100,
+    "parity_benchmark_size": null,
+    "number_of_runs": null,
+    "notes": "Parity experiments have not been run yet. The agent, model, number of runs and task set are to be agreed with the Harbor team before any paid run. The original harness is Harbor: the original side loads the upstream task packages from the upstream registry (harbor run --repo https://huggingface.co/datasets/collinear-ai/cwe-bench -d cwe-bench@2.0.1) and the Harbor side runs the tasks this adapter generates from the same release.",
+    "original_parity_repo": "https://huggingface.co/datasets/collinear-ai/cwe-bench",
+    "adapter_pr": [
+      "https://github.com/harbor-index/adapters/pull/5"
+    ],
+    "dataset_pr": null,
+    "parity_pr": null,
+    "metrics": [
+      {
+        "benchmark_name": "CWE-bench",
+        "metric": "pass@1 (mean reward)",
+        "original": null,
+        "harbor": null,
+        "original_runs": [],
+        "harbor_runs": []
+      }
+    ]
+  }
+]
