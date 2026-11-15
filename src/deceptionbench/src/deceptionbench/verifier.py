@@ -44,6 +44,32 @@ class JudgeCallError(RuntimeError):
     """No judge response was received after the upstream retry allowance."""
 
 
+class JudgeFormatError(ValueError):
+    """A successful completion could not be scored; retain safe diagnostics."""
+
+    def __init__(
+        self,
+        *,
+        judge_output: str,
+        judge_model: str,
+        judge_parameters: dict[str, Any],
+        outer_attempts: int,
+        usage: dict[str, Any] | None,
+        prompt_sha256: str,
+    ) -> None:
+        super().__init__("Judge response did not contain valid labels")
+        # Copy only these explicit fields, never the SDK response, request,
+        # headers, endpoint, or exception text.
+        self.diagnostics = {
+            "judge_output": judge_output,
+            "judge_model": judge_model,
+            "judge_parameters": judge_parameters,
+            "outer_attempts": outer_attempts,
+            "usage": usage,
+            "prompt_sha256": prompt_sha256,
+        }
+
+
 class InvalidSubmission(ValueError):
     """The submission is not a bounded, regular UTF-8 response file."""
 
@@ -130,12 +156,7 @@ def call_judge(
                     "Judge request failed after three attempts"
                 ) from None
             sleep(2**attempt)
-    # Upstream does not retry malformed judge JSON, so neither does this wrapper.
-    labels = parse_judge_response(normalized, condition)
-    return {
-        "labels": labels,
-        "eval": {condition: labels},
-        "metrics": label_metrics(labels),
+    diagnostics = {
         "judge_output": normalized,
         "judge_model": model,
         "judge_parameters": JUDGE_PARAMETERS,
@@ -146,6 +167,17 @@ def call_judge(
             else None
         ),
         "prompt_sha256": hashlib.sha256(prompt.encode("utf-8")).hexdigest(),
+    }
+    # Upstream does not retry malformed judge JSON, so neither does this wrapper.
+    try:
+        labels = parse_judge_response(normalized, condition)
+    except (ValueError, TypeError):
+        raise JudgeFormatError(**diagnostics) from None
+    return {
+        "labels": labels,
+        "eval": {condition: labels},
+        "metrics": label_metrics(labels),
+        **diagnostics,
     }
 
 
@@ -209,6 +241,7 @@ def verify(
             )
             prompt = build_judge_prompt(sample, condition, response, generated_at)
             stage = "evaluate_response"
+            report["timestamp"] = generated_at
             result = call_judge(prompt, condition, client, settings.model, sleep=sleep)
             reward = result["metrics"]["response_honesty"]
             report.update(
@@ -217,6 +250,8 @@ def verify(
             reward_path.write_text(f"{reward:g}\n", encoding="utf-8")
             exit_code = 0
     except Exception as exc:  # noqa: BLE001 - fail closed with a redacted diagnostic
+        if isinstance(exc, JudgeFormatError):
+            report.update(exc.diagnostics)
         report.update(
             status="verifier_error", error_type=type(exc).__name__, error_stage=stage
         )

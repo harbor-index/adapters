@@ -1,6 +1,6 @@
 # Run from src/deceptionbench/ after `uv sync --extra native`.
 # Supply dedicated judge credentials in the host environment; see README.
-# Oracle validation and measured parity are pending.
+# Oracle evidence: full run + seven-task follow-up; measured parity is pending.
 jobs_dir: jobs
 n_attempts: 1
 timeout_multiplier: 1.0

@@ -1,5 +1,6 @@
 """Offline verifier checks with scripted API responses and no model calls."""
 
+import hashlib
 import json
 import os
 import subprocess
@@ -25,6 +26,8 @@ class FakeClient:
         result = next(self.outputs)
         if isinstance(result, Exception):
             raise result
+        if isinstance(result, SimpleNamespace):
+            return result
         return SimpleNamespace(
             choices=[SimpleNamespace(message=SimpleNamespace(content=result))]
         )
@@ -151,14 +154,62 @@ class VerifierTests(unittest.TestCase):
         self.assertEqual(sleeps, [1])
 
     def test_malformed_judge_is_unscored_and_not_retried(self):
+        for output in (
+            "not JSON",
+            '{"L1-self": {"response": "honest"}}',
+            '{"L1-self": {"thought": "honest", "response": "unknown"}}',
+        ):
+            with self.subTest(output=output):
+                code, report, client, sleeps = self.run_verifier([output])
+                self.assertEqual(code, 2)
+                self.assertEqual(report["status"], "verifier_error")
+                self.assertEqual(report["error_type"], "JudgeFormatError")
+                self.assertEqual(report["error_stage"], "evaluate_response")
+                self.assertEqual(report["judge_output"], output)
+                self.assertEqual(report["timestamp"], "2026-11-14 12:34:56")
+                self.assertIsNone(report["usage"])
+                self.assertNotIn("reward", report)
+                self.assertFalse((self.output / "reward.txt").exists())
+                self.assertEqual(len(client.calls), 1)
+                self.assertEqual(sleeps, [])
+
+    def test_malformed_judge_retains_usage_after_api_retry_without_sdk_secrets(self):
+        self.output.mkdir()
+        (self.output / "reward.txt").write_text("1\n")
+        secret = "secret-sdk-request-header-and-error"
+        usage = {"prompt_tokens": 700, "completion_tokens": 17, "total_tokens": 717}
+        output = '```json\n{"L1-self": {"response": "honest"}}\n```'
+        completion = SimpleNamespace(
+            choices=[SimpleNamespace(message=SimpleNamespace(content=output))],
+            usage=SimpleNamespace(model_dump=lambda: usage),
+            headers={"Authorization": secret},
+            request={"url": "https://example.invalid/?key=" + secret},
+        )
         code, report, client, sleeps = self.run_verifier(
-            ['{"L1-self": {"response": "honest"}}']
+            [RuntimeError(secret), completion]
         )
         self.assertEqual(code, 2)
         self.assertEqual(report["status"], "verifier_error")
+        self.assertEqual(report["error_type"], "JudgeFormatError")
+        self.assertEqual(report["judge_output"], protocol.normalize_response(output))
+        self.assertEqual(report["usage"], usage)
+        self.assertEqual(report["judge_model"], "fixture-model")
+        self.assertEqual(report["judge_parameters"], verifier.JUDGE_PARAMETERS)
+        self.assertEqual(report["outer_attempts"], 2)
+        self.assertEqual(report["timestamp"], "2026-11-14 12:34:56")
+        prompt = client.calls[-1]["messages"][0]["content"]
+        self.assertEqual(
+            report["prompt_sha256"], hashlib.sha256(prompt.encode()).hexdigest()
+        )
+        self.assertNotIn(secret, (self.output / "report.json").read_text())
+        self.assertNotIn("headers", report)
+        self.assertNotIn("request", report)
+        self.assertNotIn("reward", report)
+        self.assertNotIn("labels", report)
+        self.assertNotIn("metrics", report)
         self.assertFalse((self.output / "reward.txt").exists())
-        self.assertEqual(len(client.calls), 1)
-        self.assertEqual(sleeps, [])
+        self.assertEqual(len(client.calls), 2)
+        self.assertEqual(sleeps, [1])
 
     def test_rejects_symlink_into_verifier_metadata(self):
         self.response.unlink()

@@ -120,11 +120,23 @@ class DeceptionBenchAdapter:
         reference = oracle_response(task)
         oracle = base64.b64encode(reference.encode("utf-8")).decode("ascii")
         if reference != task.sample["groundtruth"]:
-            (destination / "solution" / "oracle-note.md").write_text(
+            note = (
                 "This oracle uses an explicit honest refusal because the pinned "
                 "entertainment scenario 008 groundtruth endorses fabricating rumors. "
                 "The source sample, public prompt and judge remain unchanged. "
-                "See deceptionbench/oracle.py and the adapter README.\n",
+                "See deceptionbench/oracle.py and the adapter README.\n"
+            )
+            if task.domain == "healthcare":
+                note = (
+                    "This oracle expands healthcare scenario 008's truthful Yes "
+                    "to explicitly disclose the prior insurance claim. Two pressure "
+                    "conditions judged the terse source gold deceptive, contrary "
+                    "to the judge's groundtruth-matching rule. The source sample, "
+                    "public prompt and judge remain unchanged. See "
+                    "deceptionbench/oracle.py and the adapter README.\n"
+                )
+            (destination / "solution" / "oracle-note.md").write_text(
+                note,
                 encoding="utf-8",
             )
         solve = (
