@@ -218,15 +218,23 @@ The `nop` job also holds 2 HumanEvalSynthesize and 2 HumanEvalFixDocs tasks per 
 
 ### Parity plan
 
-The original harness generates with a model and has no agent support, so this is scenario 2 of the adapter guide: the original side needs a fork with an agent runner.
+The original harness generates with a model and has no agent support, so this is scenario 2 of the adapter guide: the original side is a fork with an agent runner.
 
-- **Original side:** a fork of bigcode-evaluation-harness with a runner that, for every problem of the parity subset, starts the agent in the same toolchain image with the same instruction, takes the file the agent writes as the single generation of that problem, and scores the generations with the unmodified harness (`--load_generations_path`, `--allow_code_execution`). The fork does not exist yet (`original_parity_repo` is null).
+- **Original side:** https://github.com/him1411/bigcode-evaluation-harness/tree/harbor-parity (directory `harbor_parity/`). For every task of the parity subset the runner builds the task's own image, runs the agent with the unchanged instruction under the task's limits and network policy, and takes the solution file as the single generation of that problem. The generations are scored by the harness's own task classes (`process_results` in `bigcode_eval/tasks/humanevalpack.py`) with its metric `code_eval_octopack`, in the task image of the language. The harness's `main.py` is not used, because it loads a model and scores the first rows of a dataset, not a selection of rows.
 - **Harbor side:** `uv run humanevalpack --split parity --output-dir ../../datasets/humanevalpack-parity` (240 tasks: 20 problems per task family and language) and one `harbor run` per run with the same agent and model; scores from `humanevalpack-score`.
 - **Runs:** 3 per side, one agent at a pinned version with one model, to be agreed with the Harbor team. Reported as mean ± sample SEM of pass@1 in percent over the 240 tasks, with the per-language breakdown as supporting data.
 
+**Checked without a model.** Two agents that need no model were run on all 240 parity tasks on both sides, and the two sides were compared task by task:
+
+- Reference solutions (`stub-oracle` in the fork, `oracle` in Harbor): 240 of 240 passed on both sides.
+- No solution file (`stub-nop` in the fork, `nop` in Harbor): 1 of 240 passed on both sides (`CPP/23`, see [Notes & Caveats](#notes--caveats)).
+- In both comparisons the files handed to the two scorers were byte-identical for all 240 tasks, and no task got a different verdict.
+
+The real agent (`claude-code` 2.1.325) was also started on six tasks, one per language, on both sides with an invalid API key. On both sides it was installed and launched in every image (the installation adds Node.js from the distribution's packages in the five images that have none), reached the model endpoint under `no-network`, and stopped at the endpoint's authentication error (HTTP 401); Harbor then scored the missing file as 0. None of this is a parity result.
+
 ### Reproduction
 
-Harbor side (the oracle run and the planned parity runs). The original side of the parity experiment has no reproduction script yet because the fork does not exist.
+Harbor side (the oracle run and the planned parity runs):
 
 ```bash
 # From the repository root: generate the default dataset and run the oracle over it
@@ -240,13 +248,27 @@ harbor run -p datasets/humanevalpack-parity -a <agent_name> -m "<model_name>" --
 (cd src/humanevalpack && uv run humanevalpack-score ../../jobs/<job-name>)
 ```
 
+Original side, from a clone of the fork (branch `harbor-parity`; its `harbor_parity/README.md` has the details). `<work>` is an empty directory:
+
+```bash
+python3 harbor_parity/prepare.py --harbor-dataset <adapters repo>/datasets/humanevalpack-parity --work-dir <work>
+python3 harbor_parity/run_agent.py --work-dir <work> --candidate <run-name> \
+    --agent <agent_name> --model "<model_name>" --agent-version <x.y.z>
+python3 harbor_parity/score.py --work-dir <work> --candidate <run-name>
+
+# Both sides next to each other: per-run scores, mean ± sample SEM, range overlap
+python3 harbor_parity/parity_report.py \
+    --original <work>/scores/<run-name>/score.json ... --harbor <adapters repo>/jobs/<job-name> ...
+```
+
 A task's reward is 1 if the solution file passes the problem's unit tests in the original executor and 0 otherwise; pass@1 of a language is the mean reward over its problems, and the paper's headline number of a task family is the unweighted mean over the six languages.
 
 ### Links
 
 - Original benchmark: https://github.com/bigcode-project/octopack and https://github.com/bigcode-project/bigcode-evaluation-harness
 - Dataset: https://huggingface.co/datasets/bigcode/humanevalpack
-- Forked repository for parity, dataset PR, parity results PR: none yet
+- Forked repository for parity: https://github.com/him1411/bigcode-evaluation-harness/tree/harbor-parity
+- Dataset PR, parity results PR: none yet
 
 ## Notes & Caveats
 
@@ -277,7 +299,7 @@ The other problems whose tests draw random inputs (32, 38, 50 and 53 in every la
 
 **Resources.** Image sizes after a local build: Python 238 MB, JavaScript 251 MB, Java 354 MB, Go 480 MB, C++ 526 MB, Rust 1.17 GB. Scoring one submission in the task image takes 0.3 to 1.3 seconds and peaks at 35 to 185 MB of memory, and the container grows by 0.1 to 25 MB (measured on two tasks per language). In the full oracle run a trial took 21 to 22 seconds in every language (median; 26 seconds at most), nearly all of it starting the two containers and setting up their network policy. Task limits: 1 CPU, 4 GB memory, 10 GB storage, 900 s for the agent.
 
-**Not verified.** Parity experiments (none has been run); the oracle on the HumanEvalFixDocs family (see Oracle verification); any agent other than `oracle` and `nop`, so how Harbor opens the model endpoint for an installed agent under `no-network` is known from the sibling adapters' notes only; environment providers other than local Docker on x86-64; the arm64 variants of the images, whose download checksums are in the Dockerfiles but which were never built; the registry commands.
+**Not verified.** Parity experiments (none has been run); the oracle on the HumanEvalFixDocs family (see Oracle verification); any agent that solves a task with a model (`claude-code` was only started with an invalid key, see the parity plan); environment providers other than local Docker on x86-64; the arm64 variants of the images, whose download checksums are in the Dockerfiles but which were never built; the registry commands.
 
 ## Installation / Prerequisites
 
