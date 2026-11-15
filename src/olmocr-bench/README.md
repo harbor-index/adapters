@@ -251,7 +251,7 @@ The original harness has no agent support: it scores Markdown files produced by 
 - **Subset**: `--split parity`, 140 tasks. For each of the 7 categories, tasks are ranked by `sha256("42:<task_id>")` and the first 20 are taken. Equal allocation is used because the headline metric weights categories equally. The subset has 942 graded tests. None of the 9 PDFs with an explicit baseline record is in it; that path is covered by the full oracle run and the full replay.
 - **Runs**: 3 per side, in the order required by the guide: 5 to 10 tasks on both sides, then one full subset run on both sides, then three. Each run is its own Harbor job, because `olmocr-bench-score` combines several trials of a task inside one job.
 - **Metric**: Overall = unweighted mean of the eight per-source pass rates, in percent, as printed by `benchmark.py` on the original side and by `olmocr-bench-score` on the Harbor side.
-- **Original side**: a runner has been written on top of `allenai/olmocr` at commit `f7cfe4c` (a new directory `harbor_parity/`; nothing under `olmocr/` is changed). It is not published yet; the fork URL will be added here and to `parity_experiment.json` once it is. It works in three steps:
+- **Original side**: a runner has been written on top of `allenai/olmocr` at commit `f7cfe4c` (a new directory `harbor_parity/`; nothing under `olmocr/` is changed). It is published as branch `harbor-parity` of the fork https://github.com/him1411/olmocr, with its own [README](https://github.com/him1411/olmocr/blob/harbor-parity/harbor_parity/README.md). It works in three steps:
   1. `prepare.py` takes the pages, the instruction text, the image build context and the limits from the generated Harbor tasks of the parity split, checks every PDF and every test record against the pinned dataset snapshot, and materializes a `bench_data` directory with only those 140 PDFs (the original harness requires an output file for every PDF it finds).
   2. `run_agent.py` runs one page at a time in the task's own image with the task's limits (2 CPUs, 4 GB, 1,800 s). It installs the agent while the network is open, then restricts the network to the model endpoint with a copy of Harbor's egress sidecar, and starts the agent with the command line, tool restrictions and environment variable names that Harbor 0.25.0 uses for `claude-code` (recorded from a Harbor trial and compared). Afterwards it copies `/workspace/output.md` to `<bench_data>/<candidate>/<category>/<name>_pg1_repeat1.md`. An output that is missing, is not a regular file or is not UTF-8 becomes an empty file, the same rule as in this adapter.
   3. `score.py` runs the unmodified `python -m olmocr.bench.benchmark --dir <bench_data> --candidate <candidate>`. The original harness cannot start in the task image, because `benchmark.py` imports `pypdf`, `numpy` and `pillow`; it runs in the task image with exactly these three pinned packages added (`pypdf==7.1.0`, `numpy==2.4.6`, `pillow==13.0.0`). Chromium, the fonts and all packages used by the test classes are the same as in the verifier.
@@ -272,9 +272,10 @@ cd src/olmocr-bench
 uv run olmocr-bench-score ../../jobs/<job_name>
 ```
 
-Original side (from the parity fork of `allenai/olmocr`, which is not published yet; Python 3.11 or newer and Docker):
+Original side (from the parity fork; Python 3.11 or newer and Docker):
 
 ```bash
+git clone -b harbor-parity https://github.com/him1411/olmocr.git && cd olmocr
 hf download allenai/olmOCR-bench --repo-type dataset \
   --revision 54a96a6fb6a2bd3b297e59869491db4d3625b711 --local-dir ./olmOCR-bench
 python3 harbor_parity/prepare.py --harbor-dataset <adapters repo>/datasets/olmocr-bench-parity \
@@ -299,7 +300,7 @@ Scores of agents are not directly comparable with the published olmOCR-Bench row
 ### Links
 
 - Original benchmark: https://github.com/allenai/olmocr (`olmocr/bench/`), dataset https://huggingface.co/datasets/allenai/olmOCR-bench
-- Parity fork: not created yet
+- Parity fork: https://github.com/him1411/olmocr/tree/harbor-parity (the runner is in `harbor_parity/`)
 - Adapter PR: https://github.com/harbor-index/adapters/pull/3
 - Dataset PR, parity results PR: not opened yet
 
