@@ -1,0 +1,49 @@
+schema_version = "1.0"
+
+# The solution file is the only artifact this task declares for scoring.
+artifacts = [{solution_artifact}]
+
+[task]
+name = "bigcode/humanevalpack__{task_id}"
+description = {description}
+authors = [
+    { name = "Niklas Muennighoff", email = "n.muennighoff@gmail.com" },
+    { name = "Qian Liu" },
+    { name = "Armel Zebaze" },
+    { name = "Qinkai Zheng" },
+    { name = "Binyuan Hui" },
+    { name = "Terry Yue Zhuo" },
+    { name = "Swayam Singh" },
+    { name = "Xiangru Tang" },
+    { name = "Leandro von Werra" },
+    { name = "Shayne Longpre" },
+]
+keywords = {keywords}
+
+[metadata]
+benchmark = "HumanEvalPack"
+difficulty = "easy"
+category = {category}
+language = {language}
+upstream_task = {upstream_task}
+upstream_task_id = {upstream_task_id}
+{extra_metadata}
+[verifier]
+# Scoring runs in a fresh container built from the same image, so nothing done
+# in the agent's container can change the toolchain that scores the solution.
+# It needs no network.
+environment_mode = "separate"
+network_mode = "no-network"
+timeout_sec = {verifier_timeout_sec}
+
+[agent]
+# No network access while the agent works, apart from its own model endpoint:
+# the problems and their reference solutions are public.
+network_mode = "no-network"
+timeout_sec = 900.0
+
+[environment]
+build_timeout_sec = 1800.0
+cpus = 1
+memory_mb = 4096
+storage_mb = 10240
