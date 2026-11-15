@@ -1,0 +1,48 @@
+[
+  {
+    "adapter_name": "cwe-bench",
+    "adapter_builders": [
+      "Himanshu Gupta (him141195@gmail.com)"
+    ],
+    "original_benchmark": [
+      {
+        "split": "public",
+        "size": 100,
+        "harness": "agent",
+        "supported_agents": [
+          "claude-code",
+          "opencode",
+          "codex"
+        ],
+        "adaptable": true,
+        "notes": "CWE-bench v2 public set (100 tasks, 91 CWEs) at upstream release 2.0.1. Distributed as native Harbor tasks in the gated Hugging Face dataset collinear-ai/cwe-bench; the upstream harness is Harbor, so any Harbor agent can run it. The agents listed are harnesses on the upstream leaderboard, which does not publish their versions; it also lists Antigravity without saying which interface."
+      },
+      {
+        "split": "held-out",
+        "size": 150,
+        "harness": "agent",
+        "supported_agents": [
+          "None"
+        ],
+        "adaptable": false,
+        "notes": "CWE-bench v2 held-out set (150 tasks). Not released, so it cannot be adapted."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "public",
+        "adapted_benchmark_size": 100,
+        "parity_benchmark_size": null,
+        "parity_sampling_rate": null,
+        "registry_benchmark_size": null,
+        "added_agents": [
+          "None"
+        ],
+        "parity_matching_agents": [],
+        "parity_unmatching_agents": [],
+        "parity_costs": null,
+        "notes": "Parity experiments have not been run yet, and the dataset is not registered yet. Task packages are copied verbatim from upstream; only the [task] identity in task.toml is set by the adapter."
+      }
+    ]
+  }
+]

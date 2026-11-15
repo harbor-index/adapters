@@ -1,0 +1,37 @@
+# Reference config for the CWE-bench public set (100 tasks, upstream release 2.0.1).
+#
+# 1. Generate the tasks (needs access to the gated upstream dataset, see README):
+#      cd src/cwe-bench && uv run cwe-bench --output-dir ../../datasets/cwe-bench
+#
+# 2. Oracle verification (the default below), from the repository root:
+#      harbor run -c src/cwe-bench/run_cwe-bench.yaml
+#
+# 3. Benchmark an agent. Upstream reports the mean reward over 4 attempts per task
+#    (set n_attempts: 4). The agent phase of every task runs without network access,
+#    so admit the model API host the agent needs on the command line:
+#      harbor run -c src/cwe-bench/run_cwe-bench.yaml -a claude-code -m <model> \
+#        --allow-agent-host api.anthropic.com
+jobs_dir: jobs
+n_attempts: 1
+timeout_multiplier: 1.0
+orchestrator:
+  type: local
+  n_concurrent_trials: 4
+  quiet: false
+environment:
+  type: docker
+  force_build: true
+  delete: true
+  # env:
+  #   ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+  #   ANTHROPIC_BASE_URL: ${ANTHROPIC_BASE_URL}
+agents:
+  # To run another agent, replace the oracle entry with one of the entries below
+  # (leaving both uncommented runs both agents).
+  - name: oracle
+  # - name: claude-code
+  #   model_name: anthropic/claude-haiku-4-5
+  # - name: codex
+  #   model_name: openai/gpt-5-mini
+datasets:
+  - path: datasets/cwe-bench
