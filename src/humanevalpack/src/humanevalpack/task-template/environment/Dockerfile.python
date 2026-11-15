@@ -1,0 +1,5 @@
+
+# --- Python: CPython 3.9.13 on PATH + NumPy (imported in front of every solution) ---
+ENV PATH=/opt/toolchain/python/bin:$PATH
+RUN python3 -m pip install --no-cache-dir --disable-pip-version-check numpy==1.25.2 \
+    && python3 -c "import numpy; print('numpy', numpy.__version__)"
