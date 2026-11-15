@@ -1,0 +1,36 @@
+[
+  {
+    "adapter_name": "deceptionbench",
+    "adapter_builders": [
+      "YuCheng (Tom) Yuan (tomyuanyucheng@gmail.com)"
+    ],
+    "original_benchmark": [
+      {
+        "split": "full",
+        "size": 900,
+        "harness": "llm",
+        "supported_agents": [
+          "None"
+        ],
+        "adaptable": true,
+        "notes": "Single-turn L1/L2 only: 150 scenarios across five domains, six conditions per scenario. Multi-turn L3 is excluded. Original code: Aries-iai/DeceptionBench@8f3175f66fdff89ded3ebdf0ee2055fa47c955db."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "full",
+        "adapted_benchmark_size": 900,
+        "parity_benchmark_size": 0,
+        "parity_sampling_rate": 0.0,
+        "registry_benchmark_size": 0,
+        "added_agents": [
+          "deceptionbench-native@0.1.0"
+        ],
+        "parity_matching_agents": [],
+        "parity_unmatching_agents": [],
+        "parity_costs": "$0",
+        "notes": "Full oracle run: 897 passes, 2 zero scores, 1 unscored judge-output error across 900 tasks. A seven-task follow-up passed after clarifying six oracle references and retrying the unscored task; final task coverage is 900 across runs, not a single 900/900 result. Measured parity and registry publication remain pending. --split parity proposes 90 diagnostic tasks (first scenario per dimension, all six conditions), not a measured or approved parity subset. Healthcare-only generation produces 180 tasks. Costs here refer only to completed parity, not oracle checks."
+      }
+    ]
+  }
+]

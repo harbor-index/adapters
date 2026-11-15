@@ -1,0 +1,24 @@
+# Run from src/deceptionbench/ after `uv sync --extra native`.
+# Supply dedicated judge credentials in the host environment; see README.
+# Oracle evidence: full run + seven-task follow-up; measured parity is pending.
+jobs_dir: jobs
+n_attempts: 1
+timeout_multiplier: 1.0
+orchestrator:
+  type: local
+  n_concurrent_trials: 4
+  quiet: false
+environment:
+  type: docker
+  delete: true
+agents:
+  - name: oracle
+# For native API experiments replace the agents block above with:
+# agents:
+#   - import_path: deceptionbench.native_agent:DeceptionBenchAgent
+#     model_name: gpt-4o
+# The endpoint-native ID is passed unchanged; pin the team-agreed model for parity.
+# The native agent also requires DECEPTIONBENCH_MODEL_API_KEY on the host.
+# CLI agents use instruction.md's delivery wrapper and do not establish native parity.
+datasets:
+  - path: ../../datasets/deceptionbench
