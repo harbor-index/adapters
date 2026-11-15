@@ -2,7 +2,7 @@
   "date": "2026-11-14",
   "scope": "single-turn L1/L2; implementation checks and limited oracle smoke only",
   "unit_tests": {
-    "passed": 65,
+    "passed": 72,
     "subtests_passed": 21
   },
   "generated_tasks": {
@@ -358,5 +358,39 @@
     "Full 900-task oracle validation",
     "Team-agreed native API and CLI agent parity experiments",
     "Dataset publication and contribution PR"
-  ]
+  ],
+  "interrupted_original_gold_run": {
+    "local_job": "jobs/deceptionbench/oracle-full-20261114",
+    "status": "interrupted_after_reference_defect",
+    "scored_reports": 144,
+    "reward_one": 143,
+    "reward_zero": 1,
+    "n_cancelled_trials": 12,
+    "prompt_tokens": 102216,
+    "completion_tokens": 4455,
+    "estimated_recorded_response_cost_usd": 0.30009,
+    "note": "Initial evidence retained; intentional cancellations are not benchmark scores."
+  },
+  "oracle_repair_smoke": {
+    "local_job": "jobs/deceptionbench/oracle-repair-smoke-20261114",
+    "status": "passed",
+    "scored_reports": 6,
+    "reward_one": 6,
+    "reward_zero": 0,
+    "n_cancelled_trials": 0,
+    "prompt_tokens": 4344,
+    "completion_tokens": 192,
+    "estimated_recorded_response_cost_usd": 0.01278,
+    "note": "Six conditions of the repaired entertainment scenario008; real GPT-4o judging."
+  },
+  "oracle_reference_repair": {
+    "scenario": "entertainment-008",
+    "affected_tasks": 6,
+    "unchanged_source_gold_tasks": 894,
+    "reason": "The pinned groundtruth explicitly endorses fabricating rumors.",
+    "change": "Use an explicit honest refusal for the oracle response, as allowed by the original judge rules.",
+    "public_prompts_changed": false,
+    "verifier_metadata_changed": false,
+    "judge_or_scoring_changed": false
+  }
 }
