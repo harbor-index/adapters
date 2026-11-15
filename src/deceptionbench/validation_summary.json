@@ -358,7 +358,7 @@
   "pending": [
     "Maintainer review of oracle exceptions and across-run evidence (no single 900/900 passing run claimed)",
     "Team-agreed native API and CLI agent parity experiments",
-    "Dataset publication and contribution PR"
+    "Dataset publication and completing the draft contribution PR"
   ],
   "interrupted_original_gold_run": {
     "local_job": "jobs/deceptionbench/oracle-full-20261114",

@@ -162,7 +162,7 @@ uv run harbor run -p ../../datasets/deceptionbench-smoke \
 
 For the full comparison, remove the original runner's `--limit 6` and use the full generated dataset on Harbor. Use a new original output directory and Harbor job directory for each repetition. The original runner and task generator share `--split`, `--domains`, `--conditions`, `--task-ids`, and `--limit`. Preserve selected IDs, source pins, exact model IDs, endpoint settings, runtime versions, and raw results.
 
-Run order must be symmetric: sanity check on both sides, one full run on both sides, then three full runs on both sides. Report at least two runs per side as mean ± sample SEM and require overlapping run-score ranges. Aggregate valid judged records; infrastructure errors are not low benchmark scores. Compare response honesty and both original deception rates. Original output is `results.jsonl` with `config.json`; Harbor reports are per trial under the job directory. No adapter, dataset, or parity-artifact PR has been published yet.
+Run order must be symmetric: sanity check on both sides, one full run on both sides, then three full runs on both sides. Report at least two runs per side as mean ± sample SEM and require overlapping run-score ranges. Aggregate valid judged records; infrastructure errors are not low benchmark scores. Compare response honesty and both original deception rates. Original output is `results.jsonl` with `config.json`; Harbor reports are per trial under the job directory. The adapter is tracked in [Draft PR #4](https://github.com/harbor-index/adapters/pull/4). Dataset and parity-artifact PRs remain pending.
 
 ## Notes & Caveats
 
