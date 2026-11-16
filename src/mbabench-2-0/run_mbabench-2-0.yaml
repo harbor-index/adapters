@@ -1,0 +1,50 @@
+# Reference config for MBABench 2.0.
+#
+#   harbor run -c src/mbabench-2-0/run_mbabench-2-0.yaml
+#
+# Oracle (default) needs no API key. Agent runs need the agent's key plus
+# OPENAI_API_KEY for the judge (openai/gpt-5.6-sol, ~$3.5 per graded attempt
+# upstream); set OPENAI_BASE_URL to grade through a compatible proxy.
+jobs_dir: jobs
+n_attempts: 1
+timeout_multiplier: 1.0
+orchestrator:
+  type: local
+  n_concurrent_trials: 4
+  quiet: false
+environment:
+  type: docker
+  # type: daytona
+  force_build: false
+  delete: true
+agents:
+  - name: oracle
+  # Mirrors the upstream coding-agent cohort claudecode_anthropic/claude-haiku-4-5
+  # (coding-agents/coding_agent/agent_identities.yaml + agents.py). Pin
+  # `version` to the Claude Code version the original side's image uses.
+  # - name: claude-code
+  #   model_name: anthropic/claude-haiku-4-5-20251001
+  #   kwargs:
+  #     version: "2.1.251"
+  #   env:
+  #     # agents.agent_env: telemetry switches applied to every upstream run
+  #     CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: "1"
+  #     DISABLE_TELEMETRY: "1"
+  #     DISABLE_ERROR_REPORTING: "1"
+  #     # agents.CLAUDE_HARNESS_ENV: long-turn harness defaults
+  #     CLAUDE_STREAM_IDLE_TIMEOUT_MS: "1800000"
+  #     CLAUDE_BYTE_STREAM_IDLE_TIMEOUT_MS: "1800000"
+  #     CLAUDE_CODE_DISABLE_NONSTREAMING_FALLBACK: "1"
+  #     CLAUDE_CODE_MAX_RETRIES: "15"
+  #     API_FORCE_IDLE_TIMEOUT: "0"
+  #     # identity pins of claudecode_anthropic/claude-haiku-4-5
+  #     CLAUDE_CODE_MAX_OUTPUT_TOKENS: "128000"
+  #     API_TIMEOUT_MS: "3600000"
+  #   # extra_allowed_hosts: ["<proxy host>"]   # if ANTHROPIC_BASE_URL is a proxy
+  # - name: codex
+  #   model_name: openai/gpt-5.6-sol
+  #   kwargs:
+  #     version: "0.155.1"
+  #     reasoning_effort: xhigh
+datasets:
+  - path: datasets/mbabench-2-0

@@ -1,0 +1,30 @@
+[
+  {
+    "adapter_name": "mbabench-2-0",
+    "adapter_builders": ["ayush1298 (munotayush6@kgpian.iitkgp.ac.in)"],
+    "original_benchmark": [
+      {
+        "split": "full",
+        "size": 101,
+        "harness": "agent",
+        "supported_agents": ["claude-code", "codex"],
+        "adaptable": true,
+        "notes": "101 public tasks (HF namkoong-lab/MBABench-2.0, dataset v1.1). Upstream runs agents through four surfaces (GUI chat products, Excel add-ins, raw-API CLI agents, coding agents in Docker); this adapter reproduces the coding-agent surface (Claude Code / Codex, prompt template v13), the only one that maps onto Harbor's CLI agents. CLI versions are pinned per sandbox image upstream (e.g. Claude Code 2.1.251 / 2.1.280, Codex 0.150.1 / 0.155.1)."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "full",
+        "adapted_benchmark_size": 101,
+        "parity_benchmark_size": 30,
+        "parity_sampling_rate": 0.297,
+        "registry_benchmark_size": 101,
+        "added_agents": ["None"],
+        "parity_matching_agents": [],
+        "parity_unmatching_agents": ["None"],
+        "parity_costs": null,
+        "notes": "Parity not yet run (plan pending team approval). Proposed: claude-code + claude-haiku-4-5-20251001, 3 runs per side on the 30-task `--split parity` subset; judge cost alone is ~$3.5 per graded attempt upstream (~$630 for 3 runs x 2 sides x 30 tasks)."
+      }
+    ]
+  }
+]

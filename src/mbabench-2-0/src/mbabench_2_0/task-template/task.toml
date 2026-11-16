@@ -1,0 +1,78 @@
+# Refer to https://harborframework.com/docs/task-format for more details.
+
+schema_version = "1.0"
+
+# Agent -> verifier handoff: the delivered workbook is collected from the
+# agent container and re-materialised at the same path in the separate
+# verifier container (and kept with the trial's artifacts on the host).
+artifacts = ["/workspace/solution.xlsx"]
+
+[task]
+name = "{task_org}/{local_task_id}"
+description = {description}
+# MBABench-2.0 authors (arXiv:2610.31711).
+authors = [
+    { name = "Julian Poeltl" },
+    { name = "Thomson Yen" },
+    { name = "Patrick Shea" },
+    { name = "Shubham Anil Varma" },
+    { name = "Dhruv Rastogi" },
+    { name = "Zihao Chen" },
+    { name = "Mengshi Zhang" },
+    { name = "Hongseok Namkoong" },
+]
+keywords = ["mbabench", "finance", "financial-modelling", "excel", "spreadsheet"]
+
+[metadata]
+difficulty = "{difficulty}"
+category = "financial-modelling"
+upstream_task_id = {task_id}
+upstream_task_name = {task_name}
+upstream_difficulty = {upstream_difficulty}
+difficulty_score = {difficulty_score}
+model_type = {model_type}
+estimated_solve_time_hours = {estimated_solve_time_hours}
+
+# Upstream coding-agent sandbox: 4 h wall clock; egress limited to the model
+# API (coding-agents/coding_agent/config.py DEFAULT_ALLOWED_DOMAINS). Add a
+# proxy endpoint at run time with the agent's `extra_allowed_hosts`.
+[agent]
+timeout_sec = 14400.0
+network_mode = "allowlist"
+allowed_hosts = ["api.anthropic.com", "api.openai.com"]
+
+[verifier]
+# A cap, not a budget: typical tasks grade in minutes (one judge conversation,
+# ~2 min upstream). The multi-million-cell workbooks take far longer before the
+# model is called; task 89's took ~107 min in local measurements. Upstream sets
+# no grading time limit.
+timeout_sec = 10800.0
+environment_mode = "separate"
+
+[verifier.env]
+OPENAI_API_KEY = "${OPENAI_API_KEY:-}"
+OPENAI_BASE_URL = "${OPENAI_BASE_URL:-https://api.openai.com/v1}"
+# Pinned grader (judge/judge_identities.yaml: gpt-5.6-sol, effort none).
+# Override only symmetrically with the original-benchmark side.
+MBABENCH_JUDGE_MODEL = "${MBABENCH_JUDGE_MODEL:-openai/gpt-5.6-sol}"
+# 1 = a delivery byte-identical to the golden workbook scores 1.0 without a
+# judge call (oracle runs); 0 = grade it with the judge.
+MBABENCH_ORACLE_SHORTCIRCUIT = "${MBABENCH_ORACLE_SHORTCIRCUIT:-1}"
+
+# Built from tests/Dockerfile: LibreOffice 25.8.7 + the pinned upstream judge.
+[verifier.environment]
+build_timeout_sec = 1800.0
+cpus = 2
+memory_mb = 8192
+storage_mb = 10240
+network_mode = "public"
+
+# Upstream sandbox resources (coding_agent/config.py SandboxConfig): 4 CPUs, 8 GB.
+# The public baseline lets Harbor install the agent CLI before the agent phase.
+[environment]
+build_timeout_sec = 1800.0
+cpus = 4
+memory_mb = 8192
+storage_mb = 10240
+workdir = "/workspace"
+network_mode = "public"

@@ -1,0 +1,26 @@
+[
+  {
+    "adapter_name": "mbabench-2-0",
+    "agent": "claude-code@2.1.251",
+    "model": "claude-haiku-4-5-20251001",
+    "date": null,
+    "adapted_benchmark_size": 101,
+    "parity_benchmark_size": 30,
+    "number_of_runs": 3,
+    "notes": "PLANNED, NOT YET RUN - pending team approval of agent, model, subset and run count. Original side: upstream coding-agents pipeline (run_configs/claude_haiku_4_5.yaml, prompt template v13 / prompt_version 113, image mbabench-coding-agent with Claude Code pinned to the same version). Both sides graded by the upstream judge at commit d3fc95f7964260759632d2a1a9d729092f26c9bb (judge v15, prompt template 8, rubric_9, grader openai/gpt-5.6-sol at effort none, --accuracy-check harness, deterministic checks on, LibreOffice 25.8.7). Metric: MBABench Score (judge total, 0-100). Parity subset: `--split parity` (30 tasks stratified by difficulty).",
+    "original_parity_repo": null,
+    "adapter_pr": ["https://github.com/harbor-index/adapters/pull/8"],
+    "dataset_pr": [],
+    "parity_pr": [],
+    "metrics": [
+      {
+        "benchmark_name": "MBABench 2.0",
+        "metric": "score",
+        "original": null,
+        "harbor": null,
+        "original_runs": [],
+        "harbor_runs": []
+      }
+    ]
+  }
+]
