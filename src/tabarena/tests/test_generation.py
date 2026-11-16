@@ -57,11 +57,36 @@ class ManifestTests(unittest.TestCase):
             [task_slug(x) for x in selected],
             [task_slug(x) for x in lite["splits"]],
         )
-        self.assertTrue(all(x["split_index"] == "r0f0" for x in selected))
+        self.assertTrue(all(x["repeat"] == x["fold"] == 0 for x in selected))
         self.assertEqual(
             {x["problem_type"] for x in selected},
             {"binary", "multiclass", "regression"},
         )
+
+    def test_manifest_rejects_missing_fields_and_invalid_selection(self):
+        from copy import deepcopy
+
+        original = load_manifest()
+        mutations = [
+            lambda m: m["splits"][0].pop("target"),
+            lambda m: m["splits"][0].update(fold=1),
+            lambda m: m["splits"][0].update(repeat=False),
+            lambda m: m["splits"][0].update(feature_count=0),
+            lambda m: m["splits"][0].update(metric="wrong"),
+            lambda m: m["splits"].__setitem__(1, m["splits"][0].copy()),
+            lambda m: m.update(upstream_commit="wrong"),
+            lambda m: m["splits"].pop(),
+        ]
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory)
+            for mutate in mutations:
+                with self.subTest(mutation=mutate):
+                    value = deepcopy(original)
+                    mutate(value)
+                    (path / "manifest.json").write_text(json.dumps(value))
+                    with patch("tabarena.data.DATA_DIR", path):
+                        with self.assertRaises(ValueError):
+                            load_manifest()
 
     def test_selection_and_invalid_requests(self):
         adapter = TabArenaAdapter(Path("unused"), limit=2)
@@ -381,6 +406,21 @@ class GenerationTests(unittest.TestCase):
                 'name="tabarena/tabarena-v01-12-r0-f0"',
                 (task / "task.toml").read_text(),
             )
+            provenance = json.loads((task / "tests/manifest.json").read_text())
+            self.assertEqual(
+                set(provenance["split"]),
+                {
+                    "openml_task_id",
+                    "openml_dataset_id",
+                    "repeat",
+                    "fold",
+                },
+            )
+            original_bytes = {
+                str(p.relative_to(output)): p.read_bytes()
+                for p in output.rglob("*")
+                if p.is_file()
+            }
             with self.assertRaises(FileExistsError):
                 adapter.run()
             sibling = output / "unrelated"
@@ -388,6 +428,8 @@ class GenerationTests(unittest.TestCase):
             (sibling / "keep").write_text("preserved")
             TabArenaAdapter(output, overwrite=True, cache_dir=self.root / "cache").run()
             self.assertEqual((sibling / "keep").read_text(), "preserved")
+            for relative, content in original_bytes.items():
+                self.assertEqual((output / relative).read_bytes(), content, relative)
 
 
 if __name__ == "__main__":

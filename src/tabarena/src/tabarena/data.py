@@ -23,11 +23,48 @@ def load_manifest() -> dict[str, Any]:
     if manifest["upstream_commit"] != UPSTREAM_COMMIT:
         raise ValueError("Manifest upstream pin does not match the adapter")
     splits = manifest["splits"]
+    required = {
+        "dataset_name",
+        "openml_task_id",
+        "openml_dataset_id",
+        "repeat",
+        "fold",
+        "problem_type",
+        "metric",
+        "target",
+        "feature_count",
+    }
+    metrics = {"binary": "roc_auc", "multiclass": "log_loss", "regression": "rmse"}
+    for item in splits:
+        if not required <= item.keys():
+            raise ValueError("Manifest split is missing required generation fields")
+        if any(
+            type(item[key]) is not int or item[key] < 1
+            for key in ("openml_task_id", "openml_dataset_id", "feature_count")
+        ):
+            raise ValueError(
+                "Manifest IDs and feature counts must be positive integers"
+            )
+        if any(
+            type(item[key]) is not int or item[key] != 0 for key in ("repeat", "fold")
+        ):
+            raise ValueError("Manifest must use repeat zero and fold zero")
+        if any(
+            not isinstance(item[key], str) or not item[key].strip()
+            for key in ("dataset_name", "target")
+        ):
+            raise ValueError(
+                "Manifest dataset names and targets must be nonempty strings"
+            )
+        if (
+            item["problem_type"] not in metrics
+            or item["metric"] != metrics[item["problem_type"]]
+        ):
+            raise ValueError("Manifest problem type and native metric disagree")
     if (
         len(splits) != 51
         or len({item["openml_dataset_id"] for item in splits}) != 51
         or len({item["openml_task_id"] for item in splits}) != 51
-        or any(int(item["repeat"]) != 0 or int(item["fold"]) != 0 for item in splits)
     ):
         raise ValueError("Manifest must contain exactly 51 official first splits")
     return manifest
@@ -290,7 +327,10 @@ def load_task(split: dict[str, Any], cache: AssetCache) -> TaskData:
     provenance = {
         "task_name": f"tabarena/{task_slug(split)}",
         "upstream_commit": UPSTREAM_COMMIT,
-        "split": split,
+        "split": {
+            key: split[key]
+            for key in ("openml_task_id", "openml_dataset_id", "repeat", "fold")
+        },
         "train_indices": train_indices,
         "test_indices": test_indices,
         "assets": {name: cache.records[name] for name in asset_names},
