@@ -1,0 +1,36 @@
+# Working directory: src/tabarena. Generate all 51 tasks before running.
+# uv run tabarena --output-dir datasets/tabarena
+# harbor run -c run_tabarena.yaml
+jobs_dir: jobs
+n_attempts: 1
+retry:
+  max_retries: 0
+orchestrator:
+  type: local
+  n_concurrent_trials: 8
+environment:
+  type: modal
+  delete: true
+  kwargs:
+    app_name: tabarena
+    sandbox_timeout_secs: 300
+    sandbox_idle_timeout_secs: 60
+agents:
+  - name: oracle
+# Standard-agent alternative (requires OPENAI_API_KEY):
+# Raise sandbox_timeout_secs to 1200 for agent setup and fitting.
+# agents:
+#   - name: codex
+#     model_name: openai/gpt-6-luna
+#     kwargs:
+#       version: '0.118.0'
+#       reasoning_effort: low
+#       disable_web_search: true
+datasets:
+  - path: datasets/tabarena
+# Oracle diagnostic only; native errors stay per-task and are never averaged.
+# For a subset, set TABARENA_EXPECTED_TASKS to its planned size before running.
+metrics:
+  - type: uv-script
+    kwargs:
+      script_path: scripts/oracle_coverage_metric.py
