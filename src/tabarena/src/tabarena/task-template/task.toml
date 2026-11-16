@@ -1,0 +1,28 @@
+version = "1.0"
+[task]
+name = "$task_name"
+authors = [{name = "Nick Erickson"}, {name = "Lennart Purucker"}]
+[metadata]
+category = "machine-learning"
+dataset = "$dataset_name"
+native_metric = "$metric"
+release = "TabArena-Lite"
+prediction_contract = "frozen-python-batch-v1"
+[agent]
+timeout_sec = 600.0
+network_mode = "no-network"
+[environment]
+build_timeout_sec = 900.0
+cpus = 2
+memory_mb = 4096
+storage_mb = 10240
+network_mode = "allowlist"
+# Standard-agent installation only; the agent phase allows its inference host.
+allowed_hosts = ["deb.debian.org", "raw.githubusercontent.com", "github.com", "nodejs.org", "registry.npmjs.org"]
+[verifier]
+timeout_sec = 240.0
+environment_mode = "separate"
+network_mode = "no-network"
+[[artifacts]]
+source = "/workspace/submission"
+destination = "submission"

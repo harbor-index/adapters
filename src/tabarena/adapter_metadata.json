@@ -1,0 +1,40 @@
+[
+  {
+    "adapter_name": "tabarena",
+    "adapter_builders": [
+      "Joachim Baumann (joachimbaumann1@gmail.com)"
+    ],
+    "original_benchmark": [
+      {
+        "split": "lite-v0.1",
+        "size": 51,
+        "harness": "None",
+        "supported_agents": [
+          "None"
+        ],
+        "adaptable": true,
+        "notes": "The official TabArena-Lite v0.1 split contains 51 datasets, each using native split zero (repeat zero, fold zero). Source revision: bfa8c50c17885e5b722d75ce5bcb5db3822257a3."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "lite-v0.1",
+        "adapted_benchmark_size": 51,
+        "parity_benchmark_size": 0,
+        "parity_sampling_rate": 0.0,
+        "registry_benchmark_size": 0,
+        "added_agents": [
+          "None"
+        ],
+        "parity_matching_agents": [
+          "None"
+        ],
+        "parity_unmatching_agents": [
+          "None"
+        ],
+        "parity_costs": "$0",
+        "notes": "All 51 tasks use frozen Python batch predictions, protected test labels and native error metrics; privileged reference outputs provide the known-answer oracle. Formal model parity and registry publication are pending."
+      }
+    ]
+  }
+]
