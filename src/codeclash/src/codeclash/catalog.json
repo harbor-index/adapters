@@ -1,0 +1,1385 @@
+{
+  "schema_version": 1,
+  "upstream_commit": "f0694c64ecf6abfca2bc867bad2de9333fef5be8",
+  "scope": "All 21 non-Dummy arenas registered by the pinned upstream; runtime validation tracked separately.",
+  "selection_policy": "Use the published claude-sonnet-4-5-20250929 versus o3 PvP config where present, otherwise retain upstream diagnostic dummy config without inventing a model budget.",
+  "arenas": [
+    {
+      "id": "ants",
+      "name": "Ants",
+      "module": "codeclash.arenas.ants.ants",
+      "class_name": "AntsArena",
+      "submission": "main.py",
+      "source_config_path": "configs/test/ants.yaml",
+      "source_config_sha256": "eab15cdc4ceacfdf832fa4f9e2cfadc6e1fc4c634bb1ada1319eb18e527cfb66",
+      "source_files_sha256": {
+        "configs/test/ants.yaml": "eab15cdc4ceacfdf832fa4f9e2cfadc6e1fc4c634bb1ada1319eb18e527cfb66"
+      },
+      "native_config": {
+        "tournament": {
+          "rounds": 3
+        },
+        "game": {
+          "name": "Ants",
+          "sims_per_round": 6
+        },
+        "players": [
+          {
+            "agent": "dummy",
+            "name": "p1"
+          },
+          {
+            "agent": "dummy",
+            "name": "p2"
+          }
+        ],
+        "prompts": {
+          "game_description": "You are a software developer ({{player_id}}) competing in a coding game called Ants.\nYour bot (`main.py`) commands a swarm of ants in a fog-of-war RTS on a toroidal (wrap-around) grid,\nin the spirit of the 2010 Ants AI Challenge. Every turn all ants move one cell at once. You only see\nthe map within your ants' view radius. Combat is focus-fire: an ant dies unless it has strictly fewer\nenemies within attack range than every enemy attacking it (gang up to win fights). Food within spawn\nradius of exactly one player's ants is gathered and spawns a new ant on a hill. Move an ant onto an\nenemy hill to raze it -- razing enemy hills is the objective. Most hills razed (tiebreak: ants alive)\nwins.\n\nYour bot must implement `do_turn(obs) -> list`, returning moves [row, col, dir] with dir in\n\"N\",\"S\",\"E\",\"W\". Un-ordered ants stay; moving into water is ignored; two ants onto one cell both die.\ndo_turn runs in one long-lived process, so you may remember the map in module globals. `obs` is your\nfog-limited view: obs[\"turn\"]/[\"max_turns\"], obs[\"rows\"]/[\"cols\"] (toroidal),\nobs[\"viewradius2\"]/[\"attackradius2\"]/[\"spawnradius2\"], obs[\"you\"], obs[\"my_ants\"], obs[\"my_hills\"],\nand (only where visible) obs[\"enemy_ants\"], obs[\"enemy_hills\"], obs[\"food\"], obs[\"water\"].\n\nThe game is played in {{rounds}} rounds. For every round, you (and your competitor) edit program\ncode that controls your bot. This is round {{round}}.\nAfter you and your competitor finish editing your codebases, the game is run automatically.\n\nYour task: improve the bot in `main.py`, located in {{working_dir}}.\n{{working_dir}} is your codebase, which contains both your bot and supporting assets.\n"
+        }
+      },
+      "native_config_sha256": "280a0e62f3d8c64f8337a5cc8aae6e8e2af27ae0c0b79b2192ef651e463392ee",
+      "config_origin": "upstream_diagnostic",
+      "dockerfile_path": "codeclash/arenas/ants/Ants.Dockerfile",
+      "dockerfile_sha256": "61affbc6e372d413b6923547b154b9b589ddeef7ea168cbe9afd302a00ac7b31",
+      "workspace_source": {
+        "kind": "repository",
+        "repository": "https://github.com/CodeClash-ai/Ants.git",
+        "commit": "e99836b2588a45ff64188432aabbb0601e71618f",
+        "destination": "/workspace",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00",
+          "head": "e99836b2588a45ff64188432aabbb0601e71618f"
+        }
+      },
+      "external_sources": [],
+      "smoke_sims": 3,
+      "smoke_edit_path": "main.py"
+    },
+    {
+      "id": "battlecode23",
+      "name": "BattleCode23",
+      "module": "codeclash.arenas.battlecode23.battlecode23",
+      "class_name": "BattleCode23Arena",
+      "submission": "src/mysubmission",
+      "source_config_path": "configs/test/battlecode23.yaml",
+      "source_config_sha256": "a13522cd24c64c3f94d55b44e19d4b68b304957ba051f72cf11a63ce8a476708",
+      "source_files_sha256": {
+        "configs/test/battlecode23.yaml": "a13522cd24c64c3f94d55b44e19d4b68b304957ba051f72cf11a63ce8a476708"
+      },
+      "native_config": {
+        "tournament": {
+          "rounds": 3
+        },
+        "game": {
+          "name": "BattleCode23",
+          "sims_per_round": 1,
+          "args": {
+            "maps": "maptestsmall"
+          }
+        },
+        "players": [
+          {
+            "agent": "dummy",
+            "name": "p1"
+          },
+          {
+            "agent": "dummy",
+            "name": "p2"
+          }
+        ],
+        "prompts": {
+          "game_description": "You are a software developer ({{player_id}}) competing in a coding game called BattleCode23.\nBattlecode 2023: Tempest is a real-time strategy game where your Java bot controls a team of robots competing to conquer sky islands.\nYour mission: conquer 75% or more of all sky islands by placing reality anchors on them. The first team to succeed immediately wins.\n\nThe game is played in {{rounds}} rounds. For every round, you (and your competitor) edit program code that controls your bot. This is round {{round}}.\nAfter you and your competitor finish editing your codebases, the game is run automatically.\n\nYour task: improve the bot in `src/mysubmission`, located in {{working_dir}}.\n{{working_dir}} is your codebase, which contains both your bot and supporting assets.\n"
+        }
+      },
+      "native_config_sha256": "483c93fc6da7df1d1e8ce0b23f5964d2666658e25b8be775910d26bff57425ac",
+      "config_origin": "upstream_diagnostic",
+      "dockerfile_path": "codeclash/arenas/battlecode23/BattleCode23.Dockerfile",
+      "dockerfile_sha256": "f8fd6a7b2b813205034e976315be0e9e54ff0bc6e358689871fdd79b53d7e57a",
+      "workspace_source": {
+        "kind": "repository",
+        "repository": "https://github.com/CodeClash-ai/BattleCode2023.git",
+        "commit": "3af546d684436f8ccf6f02c9ca97790f002848a0",
+        "destination": "/workspace",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00",
+          "head": "3af546d684436f8ccf6f02c9ca97790f002848a0"
+        }
+      },
+      "external_sources": [],
+      "smoke_sims": 1,
+      "smoke_edit_path": "src/mysubmission/RobotPlayer.java"
+    },
+    {
+      "id": "battlecode24",
+      "name": "BattleCode24",
+      "module": "codeclash.arenas.battlecode24.battlecode24",
+      "class_name": "BattleCode24Arena",
+      "submission": "src/mysubmission",
+      "source_config_path": "configs/test/battlecode24.yaml",
+      "source_config_sha256": "451334c3a63d902af1e5b224309d5e222bf1014995630490fb6efb30841eefa0",
+      "source_files_sha256": {
+        "configs/test/battlecode24.yaml": "451334c3a63d902af1e5b224309d5e222bf1014995630490fb6efb30841eefa0"
+      },
+      "native_config": {
+        "tournament": {
+          "rounds": 3
+        },
+        "game": {
+          "name": "BattleCode24",
+          "sims_per_round": 20
+        },
+        "players": [
+          {
+            "agent": "dummy",
+            "name": "p1"
+          },
+          {
+            "agent": "dummy",
+            "name": "p2"
+          }
+        ],
+        "prompts": {
+          "game_description": "You are a software developer ({{player_id}}) competing in a coding game called BattleCode24.\nBattlecode 2024: Breadwars is a real-time strategy game where your Java bot controls a team of robots competing to capture the opponent's flags.\nYour mission: capture all 3 of the opponent's flags before they capture yours. Robots can attack, heal, build traps, dig/fill terrain, and specialize in different skills through experience.\nThe game features a setup phase (first 200 rounds) where teams are separated by a dam, followed by open combat. Robots gain experience and level up their attack, build, and heal specializations.\n\nThe game is played in {{rounds}} rounds. For every round, you (and your competitor) edit program code that controls your bot. This is round {{round}}.\nAfter you and your competitor finish editing your codebases, the game is run automatically.\n\nYour task: improve the bot in `src/mysubmission`, located in {{working_dir}}.\n{{working_dir}} is your codebase, which contains both your bot and supporting assets.\n"
+        }
+      },
+      "native_config_sha256": "6ff452da354d13716ba589bd7b5faf6017bd7dfa1988a3e74502dc2ac9b49ec7",
+      "config_origin": "upstream_diagnostic",
+      "dockerfile_path": "codeclash/arenas/battlecode24/BattleCode24.Dockerfile",
+      "dockerfile_sha256": "21b551c0cfed50b0b6e37f77ae5df081b912e1dd95df23f0c3373a7f4107b285",
+      "workspace_source": {
+        "kind": "repository",
+        "repository": "https://github.com/CodeClash-ai/BattleCode2024.git",
+        "commit": "59e51acd0d43bdbc5111f609314cd0292bc6e45a",
+        "destination": "/workspace",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00",
+          "head": "59e51acd0d43bdbc5111f609314cd0292bc6e45a"
+        }
+      },
+      "external_sources": [],
+      "smoke_sims": 3,
+      "smoke_edit_path": "src/mysubmission/RobotPlayer.java"
+    },
+    {
+      "id": "battlecode25",
+      "name": "BattleCode25",
+      "module": "codeclash.arenas.battlecode25.battlecode25",
+      "class_name": "BattleCode25Arena",
+      "submission": "src/mysubmission",
+      "source_config_path": "configs/test/battlecode25.yaml",
+      "source_config_sha256": "ea1c901c6db89e558d45abb8559bea831b2f1b36f2c2ca466a5786f6347b42a4",
+      "source_files_sha256": {
+        "configs/test/battlecode25.yaml": "ea1c901c6db89e558d45abb8559bea831b2f1b36f2c2ca466a5786f6347b42a4"
+      },
+      "native_config": {
+        "tournament": {
+          "rounds": 3
+        },
+        "game": {
+          "name": "BattleCode25",
+          "sims_per_round": 20,
+          "args": {
+            "maps": "quack"
+          }
+        },
+        "players": [
+          {
+            "agent": "dummy",
+            "name": "p1"
+          },
+          {
+            "agent": "dummy",
+            "name": "p2"
+          }
+        ],
+        "prompts": {
+          "game_description": "You are a software developer ({{player_id}}) competing in a coding game called BattleCode25.\nBattlecode2025 throws you into a real-time strategy showdown where your Python bot pilots a team of specialized robots—Soldiers, Moppers, Splashers—alongside towers that spawn units or generate resources.\nYour mission: paint over 70% of the map (or eliminate the enemy) by coordinating cleanups, area cover, and tower-building through tight bytecode budgets and clever unit synergy.\n\nThe game is played in {{rounds}} rounds. For every round, you (and your competitor) edit program code that controls your bot. This is round {{round}}.\nAfter you and your competitor finish editing your codebases, the game is run automatically.\n\nYour task: improve the bot in `src/mysubmission`, located in {{working_dir}}.\n{{working_dir}} is your codebase, which contains both your bot and supporting assets.\n"
+        }
+      },
+      "native_config_sha256": "cd34b82e8a3d29451222f3633ec61dc44c7a12b806c11551fd73751f80f3da7b",
+      "config_origin": "upstream_diagnostic",
+      "dockerfile_path": "codeclash/arenas/battlecode25/BattleCode25.Dockerfile",
+      "dockerfile_sha256": "5c887972e09d26f30f507c3c5539bd6a39d7c9b7cfcbabe11c04231df77101c4",
+      "workspace_source": {
+        "kind": "repository",
+        "repository": "https://github.com/CodeClash-ai/BattleCode2025.git",
+        "commit": "4499ec262ba80dfc16917b5151f4eb43d6088528",
+        "destination": "/workspace",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00",
+          "head": "4499ec262ba80dfc16917b5151f4eb43d6088528"
+        }
+      },
+      "external_sources": [],
+      "smoke_sims": 3,
+      "smoke_edit_path": "src/mysubmission/bot.py"
+    },
+    {
+      "id": "battlesnake",
+      "name": "BattleSnake",
+      "module": "codeclash.arenas.battlesnake.battlesnake",
+      "class_name": "BattleSnakeArena",
+      "submission": "main.py",
+      "source_config_path": "configs/pvp/BattleSnake__claude-sonnet-4-5-20250929__o3__r15__s1000.yaml",
+      "source_config_sha256": "04f9434456bf779a3d09460836e6490a353e347d306cac49c52c765dac576bc5",
+      "source_files_sha256": {
+        "configs/pvp/BattleSnake__claude-sonnet-4-5-20250929__o3__r15__s1000.yaml": "04f9434456bf779a3d09460836e6490a353e347d306cac49c52c765dac576bc5",
+        "configs/mini/default.yaml": "17512d0c0b52c51967bc998208112594a51176f15eda2224be1ef0f25e42b466"
+      },
+      "native_config": {
+        "tournament": {
+          "rounds": 15
+        },
+        "game": {
+          "name": "BattleSnake",
+          "sims_per_round": 1000,
+          "args": {
+            "width": 11,
+            "height": 11,
+            "browser": false
+          }
+        },
+        "players": [
+          {
+            "agent": "mini",
+            "name": "claude-sonnet-4-5-20250929",
+            "config": {
+              "agent": {
+                "system_template": "You are a helpful assistant interacting continuously with a computer by issuing bash commands.\nYou'll be editing a codebase to play a programming game.\n\nYou issue ONE bash command at a time using the bash tool, see its result, then issue your next command.\nDirectory and environment changes are not persistent: every command runs in a fresh subshell, so chain\ncommands with `&&` or prefix them (e.g. `cd /path && ...`) when needed.\n\nWhen you have finished your work for this round, submit by running exactly:\n`echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT`\non its own (do not combine it with other commands). After submitting you cannot continue working this round.\n",
+                "instance_template": "## Game Description\n\n{{game_description}}\n\n## General tips about how to play the game\n\n The game details are in this codebase ({{working_dir}}):\n - `docs/`: Game documentation\n - `/logs/`: Past rounds and outcomes (agent runs in `/logs/edits/`, gameplay logs in `/logs/rounds/`)\n\n The game is played in team rounds. You play one round, then a teammate takes over.\n You're scored on total team performance across all rounds.\n\n Each round has a limit of {{step_limit}} steps.\n After you've reached the step limit, you cannot continue working on this task, and we will play the game with your codebase.\n We recommend submitting before you hit the limit to avoid losing work.\n\n Each round starts fresh with no knowledge of previous actions.\n Leave tools, notes, and strategies in the codebase for teammates.\n Use README_agent.md at repository root to pass instructions to your next teammate.\n Document important files, analysis tools, and context.\n\n Improve the bot however you like — experiment, document, iterate.\n\n IMPORTANT: Store all changes in {{working_dir}} or subdirectories.\n\n Tips:\n\n 1. Check README_agent.md for notes from previous teammates.\n 2. Consider writing analysis scripts for game logs (in `/logs/`) to understand win/loss status and opponent strategies.\n    Write analysis scripts and save them for teammates (mention in README_agent.md).\n 3. You don't *have* to modify anything in your player code.\n    For instance, if your team has been winning, and you think keeping the same strategy is best,\n    feel free to just submit, or put more time towards adding analyses and documentation for your teammates.\n    Of course, you can also try to improve your bot if you think you can do better.\n 4. You can modify *any* part of the codebase, particularly if you think the code is impacting performance negatively.\n 5. You could create tests to ensure your changes or bots are working as expected.\n 6. Testing against previous versions can be helpful for making sure your changes are improvements.\n 7. Examine game logic and documentation for clarity, but modifying game logic won't affect your rating.\n 8. Remember `/logs/` is outside your working directory when writing analyses.\n\n## Environment Details\n\n- You have a full Linux shell environment\n- Always use non-interactive flags (-y, -f) for commands\n- Avoid interactive tools like vi, nano, or any that require user input\n- If a command isn't available, you can install it\n\n## Useful command examples\n\n### Create a new file:\n\n```bash\ncat <<'EOF' > newfile.py\nimport numpy as np\nhello = \"world\"\nprint(hello)\nEOF\n```\n\nNote: You cannot combine this heredoc usage with other commands through the use of `&&` or `||`.\n\n### Edit files with sed:\n\n```bash\n# Replace all occurrences\nsed -i 's/old_string/new_string/g' filename.py\n\n# Replace only first occurrence\nsed -i 's/old_string/new_string/' filename.py\n\n# Replace first occurrence on line 1\nsed -i '1s/old_string/new_string/' filename.py\n\n# Replace all occurrences in lines 1-10\nsed -i '1,10s/old_string/new_string/g' filename.py\n```\n\n### View file content:\n\n```bash\n# View specific lines with numbers\nnl -ba filename.py | sed -n '10,20p'\n```\n\n## Submission\n\nWhen you've completed your work (reading, editing, testing), and cannot make further progress,\nrun exactly `echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT` to submit your work.\nYou cannot continue working in any way on this task after submitting.\n",
+                "step_limit": 30,
+                "cost_limit": 0
+              },
+              "model": {
+                "model_name": "@anthropic/claude-sonnet-4-5-20250929",
+                "model_class": "portkey",
+                "model_kwargs": {
+                  "temperature": 0.2,
+                  "max_tokens": 4096
+                }
+              }
+            }
+          },
+          {
+            "agent": "mini",
+            "name": "o3",
+            "config": {
+              "agent": {
+                "system_template": "You are a helpful assistant interacting continuously with a computer by issuing bash commands.\nYou'll be editing a codebase to play a programming game.\n\nYou issue ONE bash command at a time using the bash tool, see its result, then issue your next command.\nDirectory and environment changes are not persistent: every command runs in a fresh subshell, so chain\ncommands with `&&` or prefix them (e.g. `cd /path && ...`) when needed.\n\nWhen you have finished your work for this round, submit by running exactly:\n`echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT`\non its own (do not combine it with other commands). After submitting you cannot continue working this round.\n",
+                "instance_template": "## Game Description\n\n{{game_description}}\n\n## General tips about how to play the game\n\n The game details are in this codebase ({{working_dir}}):\n - `docs/`: Game documentation\n - `/logs/`: Past rounds and outcomes (agent runs in `/logs/edits/`, gameplay logs in `/logs/rounds/`)\n\n The game is played in team rounds. You play one round, then a teammate takes over.\n You're scored on total team performance across all rounds.\n\n Each round has a limit of {{step_limit}} steps.\n After you've reached the step limit, you cannot continue working on this task, and we will play the game with your codebase.\n We recommend submitting before you hit the limit to avoid losing work.\n\n Each round starts fresh with no knowledge of previous actions.\n Leave tools, notes, and strategies in the codebase for teammates.\n Use README_agent.md at repository root to pass instructions to your next teammate.\n Document important files, analysis tools, and context.\n\n Improve the bot however you like — experiment, document, iterate.\n\n IMPORTANT: Store all changes in {{working_dir}} or subdirectories.\n\n Tips:\n\n 1. Check README_agent.md for notes from previous teammates.\n 2. Consider writing analysis scripts for game logs (in `/logs/`) to understand win/loss status and opponent strategies.\n    Write analysis scripts and save them for teammates (mention in README_agent.md).\n 3. You don't *have* to modify anything in your player code.\n    For instance, if your team has been winning, and you think keeping the same strategy is best,\n    feel free to just submit, or put more time towards adding analyses and documentation for your teammates.\n    Of course, you can also try to improve your bot if you think you can do better.\n 4. You can modify *any* part of the codebase, particularly if you think the code is impacting performance negatively.\n 5. You could create tests to ensure your changes or bots are working as expected.\n 6. Testing against previous versions can be helpful for making sure your changes are improvements.\n 7. Examine game logic and documentation for clarity, but modifying game logic won't affect your rating.\n 8. Remember `/logs/` is outside your working directory when writing analyses.\n\n## Environment Details\n\n- You have a full Linux shell environment\n- Always use non-interactive flags (-y, -f) for commands\n- Avoid interactive tools like vi, nano, or any that require user input\n- If a command isn't available, you can install it\n\n## Useful command examples\n\n### Create a new file:\n\n```bash\ncat <<'EOF' > newfile.py\nimport numpy as np\nhello = \"world\"\nprint(hello)\nEOF\n```\n\nNote: You cannot combine this heredoc usage with other commands through the use of `&&` or `||`.\n\n### Edit files with sed:\n\n```bash\n# Replace all occurrences\nsed -i 's/old_string/new_string/g' filename.py\n\n# Replace only first occurrence\nsed -i 's/old_string/new_string/' filename.py\n\n# Replace first occurrence on line 1\nsed -i '1s/old_string/new_string/' filename.py\n\n# Replace all occurrences in lines 1-10\nsed -i '1,10s/old_string/new_string/g' filename.py\n```\n\n### View file content:\n\n```bash\n# View specific lines with numbers\nnl -ba filename.py | sed -n '10,20p'\n```\n\n## Submission\n\nWhen you've completed your work (reading, editing, testing), and cannot make further progress,\nrun exactly `echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT` to submit your work.\nYou cannot continue working in any way on this task after submitting.\n",
+                "step_limit": 30,
+                "cost_limit": 0
+              },
+              "model": {
+                "model_name": "@openai/o3",
+                "model_class": "portkey"
+              }
+            }
+          }
+        ],
+        "prompts": {
+          "game_description": "You are a software developer ({{player_id}}) competing in a coding game called BattleSnake.\nYour bot (`main.py`) controls a snake on a grid-based board.\nSnakes collect food, avoid collisions, and try to outlast their opponents.\n\nThe game is played in 15 rounds. For every round, you (and your competitors) edit program code that controls your bot. This is round {{round}}.\nAfter you and your competitor finish editing your codebases, the game is run automatically.\n\nYour task: improve the bot in `main.py`, located in {{working_dir}}.\n{{working_dir}} is your codebase, which contains both your bot and supporting assets.\nAll of your commands will be executed in the {{working_dir}} directory (see notes below)."
+        }
+      },
+      "native_config_sha256": "4d8ef44d3ef60ba8e03b1248319f4f6a0e222d7f5cc172ffe5fd4389ffba084b",
+      "config_origin": "published_pvp",
+      "dockerfile_path": "codeclash/arenas/battlesnake/BattleSnake.Dockerfile",
+      "dockerfile_sha256": "c42775342b32608a81e93c3dfa98ecdf219cabd7f21849f6dc0f8cb022d652fc",
+      "workspace_source": {
+        "kind": "repository",
+        "repository": "https://github.com/CodeClash-ai/BattleSnake.git",
+        "commit": "aaf48003cfa5034a14d7053bb0ccc0bc6ae99cee",
+        "destination": "/workspace",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00",
+          "head": "aaf48003cfa5034a14d7053bb0ccc0bc6ae99cee"
+        }
+      },
+      "external_sources": [],
+      "smoke_sims": 3,
+      "smoke_edit_path": "main.py"
+    },
+    {
+      "id": "bomberland",
+      "name": "Bomberland",
+      "module": "codeclash.arenas.bomberland.bomberland",
+      "class_name": "BomberlandArena",
+      "submission": "bomberland_agent.py",
+      "source_config_path": "configs/examples/Bomberland__dummy__r1__s2.yaml",
+      "source_config_sha256": "2a5935bf661c9dbe699419f467f9fdbecdeae6a2bda8c9fde88e058f17a372c2",
+      "source_files_sha256": {
+        "configs/examples/Bomberland__dummy__r1__s2.yaml": "2a5935bf661c9dbe699419f467f9fdbecdeae6a2bda8c9fde88e058f17a372c2"
+      },
+      "native_config": {
+        "tournament": {
+          "rounds": 1
+        },
+        "game": {
+          "name": "Bomberland",
+          "sims_per_round": 2,
+          "args": {
+            "ticks": 40,
+            "width": 11,
+            "height": 11,
+            "unit_count": 3,
+            "agent_timeout": 0.25,
+            "timeout": 180
+          }
+        },
+        "players": [
+          {
+            "agent": "dummy",
+            "name": "alpha"
+          },
+          {
+            "agent": "dummy",
+            "name": "beta"
+          }
+        ],
+        "prompts": {
+          "game_description": "You are a software developer ({{player_id}}) competing in CodeClash's Bomberland arena.\n\nThe game is played in {{total_rounds}} rounds. For every round, you and your competitor edit\ncode that controls a squad in a Bomberman-style grid arena. This is round {{round}}.\n\nYour task: improve `bomberland_agent.py`, located in {{working_dir}}.\nAll commands run from {{working_dir}}.\n\nYour file must define `next_actions(game_state)`. A valid starting point is:\n\ndef next_actions(game_state):\n    agent_id = game_state[\"connection\"][\"agent_id\"]\n    return {unit_id: \"stay\" for unit_id in game_state[\"agents\"][agent_id][\"unit_ids\"]}\n\nValid actions are \"up\", \"down\", \"left\", \"right\", \"bomb\", and \"stay\".\nThe arena runs multiple seeded Bomberland simulations. Your objective is to maximize average\nscore by surviving, damaging enemy units, destroying blocks, and eliminating enemy units."
+        }
+      },
+      "native_config_sha256": "be6f626c255695512624e279d21c53a10fb7ec19df4d98379e5dec88b6b991d1",
+      "config_origin": "upstream_diagnostic",
+      "dockerfile_path": "codeclash/arenas/bomberland/Bomberland.Dockerfile",
+      "dockerfile_sha256": "3c927c623e5e0030055f6f4d7ce94806ae5d3d8609322b89fc1a9397a0df23dc",
+      "workspace_source": {
+        "kind": "bundled_runtime",
+        "path": "codeclash/arenas/bomberland/runtime",
+        "commit": "f0694c64ecf6abfca2bc867bad2de9333fef5be8",
+        "tree": "98f47c9b95e41c67fceb246fc0562f717cc3cd78"
+      },
+      "external_sources": [
+        {
+          "kind": "repository",
+          "repository": "https://github.com/CodeClash-ai/bomberland.git",
+          "commit": "8b6b7a1c013d96feb0a5468a7a59a63a7c59dadc",
+          "destination": "/opt/bomberland",
+          "pin_origin": "upstream_dockerfile",
+          "public_access": {
+            "method": "git ls-remote with credentials disabled",
+            "verified_at": "2026-11-16T10:34:01.853300+00:00",
+            "head": "75fb0d6b0b3c6ebc2350d8d9d6d0218cc8de2672"
+          }
+        }
+      ],
+      "smoke_sims": 2,
+      "smoke_edit_path": "bomberland_agent.py"
+    },
+    {
+      "id": "bridge",
+      "name": "Bridge",
+      "module": "codeclash.arenas.bridge.bridge",
+      "class_name": "BridgeArena",
+      "submission": "bridge_agent.py",
+      "source_config_path": "configs/test/bridge.yaml",
+      "source_config_sha256": "75be1100f1548215921fc1a027e1f9b0d208ad6b754aa85ad9f52b3ae9d54719",
+      "source_files_sha256": {
+        "configs/test/bridge.yaml": "75be1100f1548215921fc1a027e1f9b0d208ad6b754aa85ad9f52b3ae9d54719"
+      },
+      "native_config": {
+        "tournament": {
+          "rounds": 3
+        },
+        "game": {
+          "name": "Bridge",
+          "sims_per_round": 10
+        },
+        "players": [
+          {
+            "agent": "dummy",
+            "name": "north"
+          },
+          {
+            "agent": "dummy",
+            "name": "east"
+          },
+          {
+            "agent": "dummy",
+            "name": "south"
+          },
+          {
+            "agent": "dummy",
+            "name": "west"
+          }
+        ],
+        "prompts": {
+          "game_description": "You are a software developer ({{player_id}}) competing in a Bridge coding game.\n\nBridge is a 4-player trick-taking card game played in teams:\n- North/South (positions 0/2) vs East/West (positions 1/3)\n\nThe game is played in {{rounds}} rounds. For every round, you edit your bot code (bridge_agent.py).\nAfter all players finish editing, games are run automatically. This is round {{round}}.\n\nYour bot must implement two functions:\n- get_bid(game_state) -> str: Return bid like \"1H\", \"2NT\", \"PASS\"\n- play_card(game_state) -> str: Return card like \"AS\", \"7H\"\n\nThe game_state dict contains:\n- position: Your position (0=North, 1=East, 2=South, 3=West)\n- hand: List of cards in your hand\n- bids: List of previous bids\n- legal_bids: Legal bids you can make (during bidding)\n- legal_cards: Legal cards you can play (during playing)\n- current_trick: Cards played so far in current trick\n- contract: The current contract (if bidding is complete)\n"
+        }
+      },
+      "native_config_sha256": "69f1d576ba6f703dc03a47612103d6d247b3ca485a0d30961576ac6775786efd",
+      "config_origin": "upstream_diagnostic",
+      "dockerfile_path": "codeclash/arenas/bridge/Bridge.Dockerfile",
+      "dockerfile_sha256": "853f2bbfbf89f5b58afa4ddd7e68eb2175d8633875831f6d5f3a22322acb25e5",
+      "workspace_source": {
+        "kind": "repository",
+        "repository": "https://github.com/CodeClash-ai/Bridge.git",
+        "commit": "e688dd238d3936f9584e1684d76daec43b982b6c",
+        "destination": "/workspace",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00",
+          "head": "e688dd238d3936f9584e1684d76daec43b982b6c"
+        }
+      },
+      "external_sources": [],
+      "smoke_sims": 3,
+      "smoke_edit_path": "bridge_agent.py"
+    },
+    {
+      "id": "chess",
+      "name": "Chess",
+      "module": "codeclash.arenas.chess.chess",
+      "class_name": "ChessArena",
+      "submission": "src/",
+      "source_config_path": "configs/test/chess.yaml",
+      "source_config_sha256": "20a9d5e45637930e69e120284ebeb29dc4c95ecbdecaf3b5a77fdb115905b541",
+      "source_files_sha256": {
+        "configs/test/chess.yaml": "20a9d5e45637930e69e120284ebeb29dc4c95ecbdecaf3b5a77fdb115905b541"
+      },
+      "native_config": {
+        "tournament": {
+          "rounds": 3
+        },
+        "game": {
+          "name": "Chess",
+          "sims_per_round": 20
+        },
+        "players": [
+          {
+            "agent": "dummy",
+            "name": "p1"
+          },
+          {
+            "agent": "dummy",
+            "name": "p2"
+          }
+        ],
+        "prompts": {
+          "game_description": "You are a software developer ({{player_id}}) competing in a coding game.\nYou will be writing and improving an engine (Kojiro) to play chess against another competitor's engine.\nYour engine is written in C++ and uses the UCI (Universal Chess Interface) protocol.\nYou can modify the evaluation function, search algorithms, move ordering, and other aspects of the engine to improve its strength.\nThe engine source code is located in the `src/` directory, and you compile it using `make native`.\nIMPORTANT: Do not modify the executable name in the Makefile (keep `EXE = kojiro`). The executable must be named `kojiro`.\n\nThe game is played in {{rounds}} rounds. For every round, you (and your competitor) edit program code that controls your bot. This is round {{round}}.\nAfter you and your competitor finish editing your codebases, the game is run automatically.\n\nYour task: improve the bot in `src/mysubmission`, located in {{working_dir}}.\n{{working_dir}} is your codebase, which contains both your bot and supporting assets.\n"
+        }
+      },
+      "native_config_sha256": "3bf2f3e2f8d7907742dfcee2a0d70e0e3620037f0e494eb156d5232b8c5df204",
+      "config_origin": "upstream_diagnostic",
+      "dockerfile_path": "codeclash/arenas/chess/Chess.Dockerfile",
+      "dockerfile_sha256": "8ab75817275fa6eab91b0d3c14113549bf28e205d314dc4704477c6097158754",
+      "workspace_source": {
+        "kind": "repository",
+        "repository": "https://github.com/Babak-SSH/Kojiro.git",
+        "commit": "61248747567b5d79fbeaff122e32a2162b114b12",
+        "destination": "/workspace",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00",
+          "head": "61248747567b5d79fbeaff122e32a2162b114b12"
+        }
+      },
+      "external_sources": [
+        {
+          "kind": "repository",
+          "repository": "https://github.com/Disservin/fastchess.git",
+          "commit": "d6e3a7a71f8437a39836856ae78a3dcdc9bf934c",
+          "destination": "/tmp/fastchess",
+          "pin_origin": "public_head_snapshot",
+          "public_access": {
+            "method": "git ls-remote with credentials disabled",
+            "verified_at": "2026-11-16T10:34:01.853300+00:00",
+            "head": "d6e3a7a71f8437a39836856ae78a3dcdc9bf934c"
+          }
+        }
+      ],
+      "smoke_sims": 3,
+      "smoke_edit_path": "src/eval.cpp"
+    },
+    {
+      "id": "corewar",
+      "name": "CoreWar",
+      "module": "codeclash.arenas.corewar.corewar",
+      "class_name": "CoreWarArena",
+      "submission": "warrior.red",
+      "source_config_path": "configs/pvp/CoreWar__claude-sonnet-4-5-20250929__o3__r15__s1000.yaml",
+      "source_config_sha256": "74cce12ec7b1d55f5037a71fc4ce6316759242fc24b549cf0e20d46bf2285a36",
+      "source_files_sha256": {
+        "configs/pvp/CoreWar__claude-sonnet-4-5-20250929__o3__r15__s1000.yaml": "74cce12ec7b1d55f5037a71fc4ce6316759242fc24b549cf0e20d46bf2285a36",
+        "configs/mini/default.yaml": "17512d0c0b52c51967bc998208112594a51176f15eda2224be1ef0f25e42b466"
+      },
+      "native_config": {
+        "tournament": {
+          "rounds": 15
+        },
+        "game": {
+          "name": "CoreWar",
+          "sims_per_round": 1000,
+          "args": {}
+        },
+        "players": [
+          {
+            "agent": "mini",
+            "name": "claude-sonnet-4-5-20250929",
+            "config": {
+              "agent": {
+                "system_template": "You are a helpful assistant interacting continuously with a computer by issuing bash commands.\nYou'll be editing a codebase to play a programming game.\n\nYou issue ONE bash command at a time using the bash tool, see its result, then issue your next command.\nDirectory and environment changes are not persistent: every command runs in a fresh subshell, so chain\ncommands with `&&` or prefix them (e.g. `cd /path && ...`) when needed.\n\nWhen you have finished your work for this round, submit by running exactly:\n`echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT`\non its own (do not combine it with other commands). After submitting you cannot continue working this round.\n",
+                "instance_template": "## Game Description\n\n{{game_description}}\n\n## General tips about how to play the game\n\n The game details are in this codebase ({{working_dir}}):\n - `docs/`: Game documentation\n - `/logs/`: Past rounds and outcomes (agent runs in `/logs/edits/`, gameplay logs in `/logs/rounds/`)\n\n The game is played in team rounds. You play one round, then a teammate takes over.\n You're scored on total team performance across all rounds.\n\n Each round has a limit of {{step_limit}} steps.\n After you've reached the step limit, you cannot continue working on this task, and we will play the game with your codebase.\n We recommend submitting before you hit the limit to avoid losing work.\n\n Each round starts fresh with no knowledge of previous actions.\n Leave tools, notes, and strategies in the codebase for teammates.\n Use README_agent.md at repository root to pass instructions to your next teammate.\n Document important files, analysis tools, and context.\n\n Improve the bot however you like — experiment, document, iterate.\n\n IMPORTANT: Store all changes in {{working_dir}} or subdirectories.\n\n Tips:\n\n 1. Check README_agent.md for notes from previous teammates.\n 2. Consider writing analysis scripts for game logs (in `/logs/`) to understand win/loss status and opponent strategies.\n    Write analysis scripts and save them for teammates (mention in README_agent.md).\n 3. You don't *have* to modify anything in your player code.\n    For instance, if your team has been winning, and you think keeping the same strategy is best,\n    feel free to just submit, or put more time towards adding analyses and documentation for your teammates.\n    Of course, you can also try to improve your bot if you think you can do better.\n 4. You can modify *any* part of the codebase, particularly if you think the code is impacting performance negatively.\n 5. You could create tests to ensure your changes or bots are working as expected.\n 6. Testing against previous versions can be helpful for making sure your changes are improvements.\n 7. Examine game logic and documentation for clarity, but modifying game logic won't affect your rating.\n 8. Remember `/logs/` is outside your working directory when writing analyses.\n\n## Environment Details\n\n- You have a full Linux shell environment\n- Always use non-interactive flags (-y, -f) for commands\n- Avoid interactive tools like vi, nano, or any that require user input\n- If a command isn't available, you can install it\n\n## Useful command examples\n\n### Create a new file:\n\n```bash\ncat <<'EOF' > newfile.py\nimport numpy as np\nhello = \"world\"\nprint(hello)\nEOF\n```\n\nNote: You cannot combine this heredoc usage with other commands through the use of `&&` or `||`.\n\n### Edit files with sed:\n\n```bash\n# Replace all occurrences\nsed -i 's/old_string/new_string/g' filename.py\n\n# Replace only first occurrence\nsed -i 's/old_string/new_string/' filename.py\n\n# Replace first occurrence on line 1\nsed -i '1s/old_string/new_string/' filename.py\n\n# Replace all occurrences in lines 1-10\nsed -i '1,10s/old_string/new_string/g' filename.py\n```\n\n### View file content:\n\n```bash\n# View specific lines with numbers\nnl -ba filename.py | sed -n '10,20p'\n```\n\n## Submission\n\nWhen you've completed your work (reading, editing, testing), and cannot make further progress,\nrun exactly `echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT` to submit your work.\nYou cannot continue working in any way on this task after submitting.\n",
+                "step_limit": 30,
+                "cost_limit": 0
+              },
+              "model": {
+                "model_name": "@anthropic/claude-sonnet-4-5-20250929",
+                "model_class": "portkey",
+                "model_kwargs": {
+                  "temperature": 0.2,
+                  "max_tokens": 4096
+                }
+              }
+            }
+          },
+          {
+            "agent": "mini",
+            "name": "o3",
+            "config": {
+              "agent": {
+                "system_template": "You are a helpful assistant interacting continuously with a computer by issuing bash commands.\nYou'll be editing a codebase to play a programming game.\n\nYou issue ONE bash command at a time using the bash tool, see its result, then issue your next command.\nDirectory and environment changes are not persistent: every command runs in a fresh subshell, so chain\ncommands with `&&` or prefix them (e.g. `cd /path && ...`) when needed.\n\nWhen you have finished your work for this round, submit by running exactly:\n`echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT`\non its own (do not combine it with other commands). After submitting you cannot continue working this round.\n",
+                "instance_template": "## Game Description\n\n{{game_description}}\n\n## General tips about how to play the game\n\n The game details are in this codebase ({{working_dir}}):\n - `docs/`: Game documentation\n - `/logs/`: Past rounds and outcomes (agent runs in `/logs/edits/`, gameplay logs in `/logs/rounds/`)\n\n The game is played in team rounds. You play one round, then a teammate takes over.\n You're scored on total team performance across all rounds.\n\n Each round has a limit of {{step_limit}} steps.\n After you've reached the step limit, you cannot continue working on this task, and we will play the game with your codebase.\n We recommend submitting before you hit the limit to avoid losing work.\n\n Each round starts fresh with no knowledge of previous actions.\n Leave tools, notes, and strategies in the codebase for teammates.\n Use README_agent.md at repository root to pass instructions to your next teammate.\n Document important files, analysis tools, and context.\n\n Improve the bot however you like — experiment, document, iterate.\n\n IMPORTANT: Store all changes in {{working_dir}} or subdirectories.\n\n Tips:\n\n 1. Check README_agent.md for notes from previous teammates.\n 2. Consider writing analysis scripts for game logs (in `/logs/`) to understand win/loss status and opponent strategies.\n    Write analysis scripts and save them for teammates (mention in README_agent.md).\n 3. You don't *have* to modify anything in your player code.\n    For instance, if your team has been winning, and you think keeping the same strategy is best,\n    feel free to just submit, or put more time towards adding analyses and documentation for your teammates.\n    Of course, you can also try to improve your bot if you think you can do better.\n 4. You can modify *any* part of the codebase, particularly if you think the code is impacting performance negatively.\n 5. You could create tests to ensure your changes or bots are working as expected.\n 6. Testing against previous versions can be helpful for making sure your changes are improvements.\n 7. Examine game logic and documentation for clarity, but modifying game logic won't affect your rating.\n 8. Remember `/logs/` is outside your working directory when writing analyses.\n\n## Environment Details\n\n- You have a full Linux shell environment\n- Always use non-interactive flags (-y, -f) for commands\n- Avoid interactive tools like vi, nano, or any that require user input\n- If a command isn't available, you can install it\n\n## Useful command examples\n\n### Create a new file:\n\n```bash\ncat <<'EOF' > newfile.py\nimport numpy as np\nhello = \"world\"\nprint(hello)\nEOF\n```\n\nNote: You cannot combine this heredoc usage with other commands through the use of `&&` or `||`.\n\n### Edit files with sed:\n\n```bash\n# Replace all occurrences\nsed -i 's/old_string/new_string/g' filename.py\n\n# Replace only first occurrence\nsed -i 's/old_string/new_string/' filename.py\n\n# Replace first occurrence on line 1\nsed -i '1s/old_string/new_string/' filename.py\n\n# Replace all occurrences in lines 1-10\nsed -i '1,10s/old_string/new_string/g' filename.py\n```\n\n### View file content:\n\n```bash\n# View specific lines with numbers\nnl -ba filename.py | sed -n '10,20p'\n```\n\n## Submission\n\nWhen you've completed your work (reading, editing, testing), and cannot make further progress,\nrun exactly `echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT` to submit your work.\nYou cannot continue working in any way on this task after submitting.\n",
+                "step_limit": 30,
+                "cost_limit": 0
+              },
+              "model": {
+                "model_name": "@openai/o3",
+                "model_class": "portkey"
+              }
+            }
+          }
+        ],
+        "prompts": {
+          "game_description": "You are a software developer ({{player_id}}) competing in a coding game called CoreWar.\nCoreWar is a programming battle where you write \"warriors\" in an assembly-like language called Redcode to compete within a virtual machine (MARS), aiming to eliminate your rivals by making their code self-terminate.\nVictory comes from crafting clever tactics—replicators, scanners, bombers—that exploit memory layout and instruction timing to control the core.\n\nThe game is played in 15 rounds. For every round, you (and your competitors) edit program code that controls your bot. This is round {{round}}.\nAfter you and your competitor finish editing your codebases, the game is run automatically.\n\nYour task: improve the bot in `warrior.red`, located in {{working_dir}}.\n{{working_dir}} is your codebase, which contains both your bot and supporting assets.\nAll of your commands will be executed in the {{working_dir}} directory (see notes below)."
+        }
+      },
+      "native_config_sha256": "024efaecbfb565795e4284177006edb7423df89379a7fa417a9b0bd810d2eb7c",
+      "config_origin": "published_pvp",
+      "dockerfile_path": "codeclash/arenas/corewar/CoreWar.Dockerfile",
+      "dockerfile_sha256": "f734c2e8f57e84f2fae666a4a99f7175c856cf5d22b8c26fd65efdae90e92b5e",
+      "workspace_source": {
+        "kind": "repository",
+        "repository": "https://github.com/CodeClash-ai/CoreWar.git",
+        "commit": "eda6773b3f0bde428b04bacb31d2f8c302159655",
+        "destination": "/workspace",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00",
+          "head": "eda6773b3f0bde428b04bacb31d2f8c302159655"
+        }
+      },
+      "external_sources": [],
+      "smoke_sims": 3,
+      "smoke_edit_path": "warrior.red"
+    },
+    {
+      "id": "cyborg",
+      "name": "CybORG",
+      "module": "codeclash.arenas.cyborg.cyborg",
+      "class_name": "CybORGArena",
+      "submission": "cyborg_agent.py",
+      "source_config_path": "configs/examples/CybORG__dummy__r1__s2.yaml",
+      "source_config_sha256": "0b04b967f74230e85fa91a89bebb9fa23a7af7f23a93911b11166b6c41180f88",
+      "source_files_sha256": {
+        "configs/examples/CybORG__dummy__r1__s2.yaml": "0b04b967f74230e85fa91a89bebb9fa23a7af7f23a93911b11166b6c41180f88"
+      },
+      "native_config": {
+        "tournament": {
+          "rounds": 1
+        },
+        "game": {
+          "name": "CybORG",
+          "sims_per_round": 2,
+          "args": {
+            "steps_per_episode": 5,
+            "num_drones": 8,
+            "decision_timeout": 3.0,
+            "validation_timeout": 10,
+            "timeout": 240
+          }
+        },
+        "players": [
+          {
+            "agent": "dummy",
+            "name": "alpha"
+          },
+          {
+            "agent": "dummy",
+            "name": "beta"
+          }
+        ],
+        "prompts": {
+          "game_description": "You are a software developer ({{player_id}}) competing in CodeClash's CybORG arena.\n\nThe game is played in {{total_rounds}} rounds. For every round, you and your competitors edit\ncode that controls a blue-team cyber-defense agent in a simulated CAGE Challenge environment.\nThis is round {{round}}.\n\nYour task: improve `cyborg_agent.py`, located in {{working_dir}}.\nAll commands run from {{working_dir}}.\n\nYour file must define `decide(observation, action_space)`. The trusted runtime passes a plain\nobservation list and an action-space dictionary such as `{\"type\": \"discrete\", \"n\": 11}`.\nA valid starting point is:\n\ndef decide(observation, action_space):\n    return 0\n\nThe arena runs simulated DroneSwarm episodes. Your objective is to maximize average reward."
+        }
+      },
+      "native_config_sha256": "9b87090be6e41e82fa0b580b4bf685eb046a9203678d9a1b4c3ad5ff493149e6",
+      "config_origin": "upstream_diagnostic",
+      "dockerfile_path": "codeclash/arenas/cyborg/CybORG.Dockerfile",
+      "dockerfile_sha256": "812d30b92a51a5556a79af36750cd84381ac44e7e241bc6bb0f637c650c0d76d",
+      "workspace_source": {
+        "kind": "bundled_runtime",
+        "path": "codeclash/arenas/cyborg/runtime",
+        "commit": "f0694c64ecf6abfca2bc867bad2de9333fef5be8",
+        "tree": "67426b9a3c9973b600626b0989ed877b3bc220f1"
+      },
+      "external_sources": [
+        {
+          "kind": "repository",
+          "repository": "https://github.com/CodeClash-ai/CybORG.git",
+          "commit": "a2d03f99e587af153ae0ac50fb94ba6272e4fff2",
+          "destination": "/opt/CybORG",
+          "pin_origin": "upstream_dockerfile",
+          "public_access": {
+            "method": "git ls-remote with credentials disabled",
+            "verified_at": "2026-11-16T10:34:01.853300+00:00",
+            "head": "2742b5e0ce4330c9b14006b38acd3b5ebe00d6fd"
+          }
+        }
+      ],
+      "smoke_sims": 2,
+      "smoke_edit_path": "cyborg_agent.py"
+    },
+    {
+      "id": "figgie",
+      "name": "Figgie",
+      "module": "codeclash.arenas.figgie.figgie",
+      "class_name": "FiggieArena",
+      "submission": "main.py",
+      "source_config_path": "configs/test/figgie.yaml",
+      "source_config_sha256": "d0436f1e03151c14e3ffd5c06964a2f372d5a02765dc69a178a194b2f9c72ff6",
+      "source_files_sha256": {
+        "configs/test/figgie.yaml": "d0436f1e03151c14e3ffd5c06964a2f372d5a02765dc69a178a194b2f9c72ff6"
+      },
+      "native_config": {
+        "tournament": {
+          "rounds": 3
+        },
+        "game": {
+          "name": "Figgie",
+          "sims_per_round": 10
+        },
+        "players": [
+          {
+            "agent": "dummy",
+            "name": "p1"
+          },
+          {
+            "agent": "dummy",
+            "name": "p2"
+          },
+          {
+            "agent": "dummy",
+            "name": "p3"
+          },
+          {
+            "agent": "dummy",
+            "name": "p4"
+          }
+        ],
+        "prompts": {
+          "game_description": "You are a software developer ({{player_id}}) competing in a coding game called Figgie.\nFiggie is a card trading game invented at Jane Street that simulates open-outcry commodities trading.\n\nGame Rules:\n- 4 or 5 players, each starting with $350\n- 4 players: $50 ante, 10 cards each\n- 5 players: $40 ante, 8 cards each\n- Pot is always $200\n- Deck: one 12-card suit, two 10-card suits, one 8-card suit\n- Goal suit: same color as 12-card suit, contains 8 or 10 cards (secret until end)\n- At end: $10 per goal suit card, remainder to player(s) with most goal suit cards\n\nTrading Model (Simultaneous Tick):\n- Each tick, ALL players are polled for their action\n- Actions are executed in random order (simulates racing to the order book)\n- Order books cleared after each trade (per official Figgie rules)\n\nYour bot (main.py) must implement:\n    def get_action(state: dict) -> dict\n\nstate contains:\n- position: your player index\n- hand: dict of suit -> count of cards you hold\n- money: your current money\n- books: dict of suit -> {bid: {price, player} or None, ask: {price, player} or None, last_trade}\n- trades: list of completed trades\n- num_players: number of players (4 or 5)\n- tick: current tick number\n\nReturn one of:\n- {\"type\": \"pass\"}\n- {\"type\": \"bid\", \"suit\": \"spades\", \"price\": 5}\n- {\"type\": \"ask\", \"suit\": \"spades\", \"price\": 10}\n- {\"type\": \"buy\", \"suit\": \"spades\"}\n- {\"type\": \"sell\", \"suit\": \"spades\"}\n\nThe game is played in {{rounds}} rounds. For every round, you edit program code that controls your bot. This is round {{round}}.\nAfter you and your competitors finish editing your codebases, the game is run automatically.\n\nYour task: improve the bot in `main.py`, located in {{working_dir}}.\n{{working_dir}} is your codebase, which contains both your bot and supporting assets.\n"
+        }
+      },
+      "native_config_sha256": "1e3e0cb6689c092400c17f2792726f85934ca5a253d371245c7a819993fc53f9",
+      "config_origin": "upstream_diagnostic",
+      "dockerfile_path": "codeclash/arenas/figgie/Figgie.Dockerfile",
+      "dockerfile_sha256": "8b27e45bdb217ae40bc9e71f5dd04084a866e5256f2ba49da914f19e13e71c5e",
+      "workspace_source": {
+        "kind": "repository",
+        "repository": "https://github.com/CodeClash-ai/Figgie.git",
+        "commit": "d6308b438496a975d74fc6664da56c0694dab882",
+        "destination": "/workspace",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00",
+          "head": "d6308b438496a975d74fc6664da56c0694dab882"
+        }
+      },
+      "external_sources": [],
+      "smoke_sims": 3,
+      "smoke_edit_path": "main.py"
+    },
+    {
+      "id": "gomoku",
+      "name": "Gomoku",
+      "module": "codeclash.arenas.gomoku.gomoku",
+      "class_name": "GomokuArena",
+      "submission": "main.py",
+      "source_config_path": "configs/test/gomoku.yaml",
+      "source_config_sha256": "5006d9bf1900408ba2c74ae1849751c192151a54235705aca7bcaaa337fa0bd1",
+      "source_files_sha256": {
+        "configs/test/gomoku.yaml": "5006d9bf1900408ba2c74ae1849751c192151a54235705aca7bcaaa337fa0bd1"
+      },
+      "native_config": {
+        "tournament": {
+          "rounds": 3
+        },
+        "game": {
+          "name": "Gomoku",
+          "sims_per_round": 10,
+          "args": {
+            "board_size": 15,
+            "timeout": 10
+          }
+        },
+        "players": [
+          {
+            "agent": "dummy",
+            "name": "p1"
+          },
+          {
+            "agent": "dummy",
+            "name": "p2"
+          }
+        ],
+        "prompts": {
+          "game_description": "You are a software developer ({{player_id}}) competing in a coding game called Gomoku.\nYour bot (`main.py`) controls a Gomoku player on a 15x15 board.\nPlayers take turns placing stones. Win by connecting 5 stones in a row (horizontally, vertically, or diagonally).\nBlack plays first.\n\nThe game is played in {{rounds}} rounds. For every round, you (and your competitor) edit program code that controls your bot. This is round {{round}}.\nAfter you and your competitor finish editing your codebases, the game is run automatically.\n\nYour task: improve the bot in `main.py`, located in {{working_dir}}.\n{{working_dir}} is your codebase, which contains both your bot and supporting assets.\n"
+        }
+      },
+      "native_config_sha256": "3637bbdeac4b860ec129697905c40bc7d0f0e3fc188bb7f76ed1f08c723a508f",
+      "config_origin": "upstream_diagnostic",
+      "dockerfile_path": "codeclash/arenas/gomoku/Gomoku.Dockerfile",
+      "dockerfile_sha256": "edb1698a2e7abd0389f134af0eba50208ba6d2ef492df702d9c6c0945908bde0",
+      "workspace_source": {
+        "kind": "repository",
+        "repository": "https://github.com/CodeClash-ai/Gomoku.git",
+        "commit": "923c141699319d0de6de6bccb347cff599e5ac98",
+        "destination": "/workspace",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00",
+          "head": "923c141699319d0de6de6bccb347cff599e5ac98"
+        }
+      },
+      "external_sources": [],
+      "smoke_sims": 3,
+      "smoke_edit_path": "main.py"
+    },
+    {
+      "id": "halite",
+      "name": "Halite",
+      "module": "codeclash.arenas.halite.halite",
+      "class_name": "HaliteArena",
+      "submission": "submission",
+      "source_config_path": "configs/pvp/Halite__claude-sonnet-4-5-20250929__o3__r15__s250.yaml",
+      "source_config_sha256": "780ffa8ca645747f4813cd932b225d1b739d540cb0172f3512ba51568067105e",
+      "source_files_sha256": {
+        "configs/pvp/Halite__claude-sonnet-4-5-20250929__o3__r15__s250.yaml": "780ffa8ca645747f4813cd932b225d1b739d540cb0172f3512ba51568067105e",
+        "configs/mini/default.yaml": "17512d0c0b52c51967bc998208112594a51176f15eda2224be1ef0f25e42b466"
+      },
+      "native_config": {
+        "tournament": {
+          "rounds": 15
+        },
+        "game": {
+          "name": "Halite",
+          "sims_per_round": 250,
+          "args": {}
+        },
+        "players": [
+          {
+            "agent": "mini",
+            "name": "claude-sonnet-4-5-20250929",
+            "config": {
+              "agent": {
+                "system_template": "You are a helpful assistant interacting continuously with a computer by issuing bash commands.\nYou'll be editing a codebase to play a programming game.\n\nYou issue ONE bash command at a time using the bash tool, see its result, then issue your next command.\nDirectory and environment changes are not persistent: every command runs in a fresh subshell, so chain\ncommands with `&&` or prefix them (e.g. `cd /path && ...`) when needed.\n\nWhen you have finished your work for this round, submit by running exactly:\n`echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT`\non its own (do not combine it with other commands). After submitting you cannot continue working this round.\n",
+                "instance_template": "## Game Description\n\n{{game_description}}\n\n## General tips about how to play the game\n\n The game details are in this codebase ({{working_dir}}):\n - `docs/`: Game documentation\n - `/logs/`: Past rounds and outcomes (agent runs in `/logs/edits/`, gameplay logs in `/logs/rounds/`)\n\n The game is played in team rounds. You play one round, then a teammate takes over.\n You're scored on total team performance across all rounds.\n\n Each round has a limit of {{step_limit}} steps.\n After you've reached the step limit, you cannot continue working on this task, and we will play the game with your codebase.\n We recommend submitting before you hit the limit to avoid losing work.\n\n Each round starts fresh with no knowledge of previous actions.\n Leave tools, notes, and strategies in the codebase for teammates.\n Use README_agent.md at repository root to pass instructions to your next teammate.\n Document important files, analysis tools, and context.\n\n Improve the bot however you like — experiment, document, iterate.\n\n IMPORTANT: Store all changes in {{working_dir}} or subdirectories.\n\n Tips:\n\n 1. Check README_agent.md for notes from previous teammates.\n 2. Consider writing analysis scripts for game logs (in `/logs/`) to understand win/loss status and opponent strategies.\n    Write analysis scripts and save them for teammates (mention in README_agent.md).\n 3. You don't *have* to modify anything in your player code.\n    For instance, if your team has been winning, and you think keeping the same strategy is best,\n    feel free to just submit, or put more time towards adding analyses and documentation for your teammates.\n    Of course, you can also try to improve your bot if you think you can do better.\n 4. You can modify *any* part of the codebase, particularly if you think the code is impacting performance negatively.\n 5. You could create tests to ensure your changes or bots are working as expected.\n 6. Testing against previous versions can be helpful for making sure your changes are improvements.\n 7. Examine game logic and documentation for clarity, but modifying game logic won't affect your rating.\n 8. Remember `/logs/` is outside your working directory when writing analyses.\n\n## Environment Details\n\n- You have a full Linux shell environment\n- Always use non-interactive flags (-y, -f) for commands\n- Avoid interactive tools like vi, nano, or any that require user input\n- If a command isn't available, you can install it\n\n## Useful command examples\n\n### Create a new file:\n\n```bash\ncat <<'EOF' > newfile.py\nimport numpy as np\nhello = \"world\"\nprint(hello)\nEOF\n```\n\nNote: You cannot combine this heredoc usage with other commands through the use of `&&` or `||`.\n\n### Edit files with sed:\n\n```bash\n# Replace all occurrences\nsed -i 's/old_string/new_string/g' filename.py\n\n# Replace only first occurrence\nsed -i 's/old_string/new_string/' filename.py\n\n# Replace first occurrence on line 1\nsed -i '1s/old_string/new_string/' filename.py\n\n# Replace all occurrences in lines 1-10\nsed -i '1,10s/old_string/new_string/g' filename.py\n```\n\n### View file content:\n\n```bash\n# View specific lines with numbers\nnl -ba filename.py | sed -n '10,20p'\n```\n\n## Submission\n\nWhen you've completed your work (reading, editing, testing), and cannot make further progress,\nrun exactly `echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT` to submit your work.\nYou cannot continue working in any way on this task after submitting.\n",
+                "step_limit": 30,
+                "cost_limit": 0
+              },
+              "model": {
+                "model_name": "@anthropic/claude-sonnet-4-5-20250929",
+                "model_class": "portkey",
+                "model_kwargs": {
+                  "temperature": 0.2,
+                  "max_tokens": 4096
+                }
+              }
+            }
+          },
+          {
+            "agent": "mini",
+            "name": "o3",
+            "config": {
+              "agent": {
+                "system_template": "You are a helpful assistant interacting continuously with a computer by issuing bash commands.\nYou'll be editing a codebase to play a programming game.\n\nYou issue ONE bash command at a time using the bash tool, see its result, then issue your next command.\nDirectory and environment changes are not persistent: every command runs in a fresh subshell, so chain\ncommands with `&&` or prefix them (e.g. `cd /path && ...`) when needed.\n\nWhen you have finished your work for this round, submit by running exactly:\n`echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT`\non its own (do not combine it with other commands). After submitting you cannot continue working this round.\n",
+                "instance_template": "## Game Description\n\n{{game_description}}\n\n## General tips about how to play the game\n\n The game details are in this codebase ({{working_dir}}):\n - `docs/`: Game documentation\n - `/logs/`: Past rounds and outcomes (agent runs in `/logs/edits/`, gameplay logs in `/logs/rounds/`)\n\n The game is played in team rounds. You play one round, then a teammate takes over.\n You're scored on total team performance across all rounds.\n\n Each round has a limit of {{step_limit}} steps.\n After you've reached the step limit, you cannot continue working on this task, and we will play the game with your codebase.\n We recommend submitting before you hit the limit to avoid losing work.\n\n Each round starts fresh with no knowledge of previous actions.\n Leave tools, notes, and strategies in the codebase for teammates.\n Use README_agent.md at repository root to pass instructions to your next teammate.\n Document important files, analysis tools, and context.\n\n Improve the bot however you like — experiment, document, iterate.\n\n IMPORTANT: Store all changes in {{working_dir}} or subdirectories.\n\n Tips:\n\n 1. Check README_agent.md for notes from previous teammates.\n 2. Consider writing analysis scripts for game logs (in `/logs/`) to understand win/loss status and opponent strategies.\n    Write analysis scripts and save them for teammates (mention in README_agent.md).\n 3. You don't *have* to modify anything in your player code.\n    For instance, if your team has been winning, and you think keeping the same strategy is best,\n    feel free to just submit, or put more time towards adding analyses and documentation for your teammates.\n    Of course, you can also try to improve your bot if you think you can do better.\n 4. You can modify *any* part of the codebase, particularly if you think the code is impacting performance negatively.\n 5. You could create tests to ensure your changes or bots are working as expected.\n 6. Testing against previous versions can be helpful for making sure your changes are improvements.\n 7. Examine game logic and documentation for clarity, but modifying game logic won't affect your rating.\n 8. Remember `/logs/` is outside your working directory when writing analyses.\n\n## Environment Details\n\n- You have a full Linux shell environment\n- Always use non-interactive flags (-y, -f) for commands\n- Avoid interactive tools like vi, nano, or any that require user input\n- If a command isn't available, you can install it\n\n## Useful command examples\n\n### Create a new file:\n\n```bash\ncat <<'EOF' > newfile.py\nimport numpy as np\nhello = \"world\"\nprint(hello)\nEOF\n```\n\nNote: You cannot combine this heredoc usage with other commands through the use of `&&` or `||`.\n\n### Edit files with sed:\n\n```bash\n# Replace all occurrences\nsed -i 's/old_string/new_string/g' filename.py\n\n# Replace only first occurrence\nsed -i 's/old_string/new_string/' filename.py\n\n# Replace first occurrence on line 1\nsed -i '1s/old_string/new_string/' filename.py\n\n# Replace all occurrences in lines 1-10\nsed -i '1,10s/old_string/new_string/g' filename.py\n```\n\n### View file content:\n\n```bash\n# View specific lines with numbers\nnl -ba filename.py | sed -n '10,20p'\n```\n\n## Submission\n\nWhen you've completed your work (reading, editing, testing), and cannot make further progress,\nrun exactly `echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT` to submit your work.\nYou cannot continue working in any way on this task after submitting.\n",
+                "step_limit": 30,
+                "cost_limit": 0
+              },
+              "model": {
+                "model_name": "@openai/o3",
+                "model_class": "portkey"
+              }
+            }
+          }
+        ],
+        "prompts": {
+          "game_description": "You are a software developer ({{player_id}}) competing in a coding game called Halite.\nHalite is a multi-player turn-based strategy game where bots compete on a rectangular grid to capture territory and accumulate strength.\nPlayers control pieces that can move across the map to conquer neutral and enemy territory, with each cell providing production that increases the strength of pieces occupying it.\nThe goal is to control the most territory by the end of the game through strategic expansion, consolidation of forces, and tactical combat decisions.\n\nYou have the choice of writing your Halite bot in one of four programming languages: C, C++, OCaml, or Rust.\nExample implementations can be found under the `airesources/` folder.\nYour submission should be stored in the `submission/` folder. This folder currently contains an example C bot, but feel free to use any of the supported languages.\nPlease make sure your main file is named `main.<ext>`, where `<ext>` is the appropriate file extension for your chosen programming language.\nYou may include additional files as needed, but please ensure:\n1. The `submission/` folder contains only files relevant to your bot.\n2. The `submission/` folder ONLY contains a single bot (no multiple bots in one submission).\n3. Your bot can be compiled. See `runGame.sh` under the corresponding `submission/<language>/` folder to see how we will compile and run your bot.\n\n\nThe game is played in 15 rounds. For every round, you (and your competitors) edit program code that controls your bot. This is round {{round}}.\nAfter you and your competitor finish editing your codebases, the game is run automatically.\n\nYour task: improve the bot in `submission`, located in {{working_dir}}.\n{{working_dir}} is your codebase, which contains both your bot and supporting assets.\nAll of your commands will be executed in the {{working_dir}} directory (see notes below)."
+        }
+      },
+      "native_config_sha256": "12486bc55faaa77a6a24747f4804d23e6ef693aa20c7c1c3c7d4abcfd4da8914",
+      "config_origin": "published_pvp",
+      "dockerfile_path": "codeclash/arenas/halite/Halite.Dockerfile",
+      "dockerfile_sha256": "782bbc89c3378054d32c318c93ae34095cc11bdb779fb3d0e30adcb3c7fe0482",
+      "workspace_source": {
+        "kind": "repository",
+        "repository": "https://github.com/CodeClash-ai/Halite.git",
+        "commit": "173ef1a63ea9987d9df3439d4d34b3346a5cadad",
+        "destination": "/workspace",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00",
+          "head": "173ef1a63ea9987d9df3439d4d34b3346a5cadad"
+        }
+      },
+      "external_sources": [],
+      "smoke_sims": 3,
+      "smoke_edit_path": "submission/main.c"
+    },
+    {
+      "id": "halite2",
+      "name": "Halite2",
+      "module": "codeclash.arenas.halite2.halite2",
+      "class_name": "Halite2Arena",
+      "submission": "submission",
+      "source_config_path": "configs/test/halite2.yaml",
+      "source_config_sha256": "b1babd532dd3e2ad04d1204f350b7cf830448d6e3bea90242c9b84845be7afbc",
+      "source_files_sha256": {
+        "configs/test/halite2.yaml": "b1babd532dd3e2ad04d1204f350b7cf830448d6e3bea90242c9b84845be7afbc"
+      },
+      "native_config": {
+        "tournament": {
+          "rounds": 3
+        },
+        "game": {
+          "name": "Halite2",
+          "sims_per_round": 250
+        },
+        "players": [
+          {
+            "agent": "dummy",
+            "name": "p1"
+          },
+          {
+            "agent": "dummy",
+            "name": "p2"
+          }
+        ],
+        "prompts": {
+          "game_description": "You are a software developer ({{player_id}}) competing in an arena called Halite2.\nIn this game, you will write code to control fleets of spaceships across a continuous space-themed universe.\nPlayers command ships to mine planets for halite, use that resource to build additional ships, and expand control across the map.\nVictory depends on efficient resource gathering, fleet management, and strategic expansion to outcompete rival bots for dominance.\n\nThe game is played in {{rounds}} rounds. For every round, you (and your competitor) edit program code that controls your bot. This is round {{round}}.\nAfter you and your competitor finish editing your codebases, the game is run automatically.\n\nYour task: improve the bot, located in {{working_dir}}.\n{{working_dir}} is your codebase, which contains both your bot and supporting assets.\n"
+        }
+      },
+      "native_config_sha256": "b569b0600d594d2a4c79de02c3c3ecb783148ff4dc598c97c1c0ffa0088ca1fa",
+      "config_origin": "upstream_diagnostic",
+      "dockerfile_path": "codeclash/arenas/halite2/Halite2.Dockerfile",
+      "dockerfile_sha256": "eef21f3a3dce04d8b5073ea86454336b3a2e952021cb005427d14f7c3e6af367",
+      "workspace_source": {
+        "kind": "repository",
+        "repository": "https://github.com/CodeClash-ai/Halite2.git",
+        "commit": "a0753f48c5e060be08d38216b497e8905551e363",
+        "destination": "/workspace",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00",
+          "head": "a0753f48c5e060be08d38216b497e8905551e363"
+        }
+      },
+      "external_sources": [],
+      "smoke_sims": 3,
+      "smoke_edit_path": "submission/main.ml"
+    },
+    {
+      "id": "halite3",
+      "name": "Halite3",
+      "module": "codeclash.arenas.halite3.halite3",
+      "class_name": "Halite3Arena",
+      "submission": "submission",
+      "source_config_path": "configs/test/halite3.yaml",
+      "source_config_sha256": "5f8afaaeb9bbb36e19d35fbfa41c6b0ae36e2fd883b3c10372fa4aa605532f00",
+      "source_files_sha256": {
+        "configs/test/halite3.yaml": "5f8afaaeb9bbb36e19d35fbfa41c6b0ae36e2fd883b3c10372fa4aa605532f00"
+      },
+      "native_config": {
+        "tournament": {
+          "rounds": 3
+        },
+        "game": {
+          "name": "Halite3",
+          "sims_per_round": 250
+        },
+        "players": [
+          {
+            "agent": "dummy",
+            "name": "p1"
+          },
+          {
+            "agent": "dummy",
+            "name": "p2"
+          }
+        ],
+        "prompts": {
+          "game_description": "You are a software developer ({{player_id}}) competing in an arena called Halite.\nIn this game, you will write code to control ships that gather resources, build structures, and compete for dominance on a grid-based map.\nVictory is achieved by outmaneuvering opponents, optimizing resource collection, and strategically expanding your territory.\n\nThe game is played in {{rounds}} rounds. For every round, you (and your competitor) edit program code that controls your bot. This is round {{round}}.\nAfter you and your competitor finish editing your codebases, the game is run automatically.\n\nYour task: improve the bot, located in {{working_dir}}.\n{{working_dir}} is your codebase, which contains both your bot and supporting assets.\n"
+        }
+      },
+      "native_config_sha256": "19c6e10e80cddcc680e6d6e8e09b57c3104c2f44f513e5c12c1979def5d0b952",
+      "config_origin": "upstream_diagnostic",
+      "dockerfile_path": "codeclash/arenas/halite3/Halite3.Dockerfile",
+      "dockerfile_sha256": "f07266c46bb5feb0d9f6e39889ba80617e6a5538757ef15437f9e83af6f140f1",
+      "workspace_source": {
+        "kind": "repository",
+        "repository": "https://github.com/CodeClash-ai/Halite3.git",
+        "commit": "385265d708758b2446bfc4dc60537628ad564d4f",
+        "destination": "/workspace",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00",
+          "head": "385265d708758b2446bfc4dc60537628ad564d4f"
+        }
+      },
+      "external_sources": [],
+      "smoke_sims": 3,
+      "smoke_edit_path": "submission/src/main.rs"
+    },
+    {
+      "id": "huskybench",
+      "name": "HuskyBench",
+      "module": "codeclash.arenas.huskybench.huskybench",
+      "class_name": "HuskyBenchArena",
+      "submission": "client/player.py",
+      "source_config_path": "configs/pvp/HuskyBench__claude-sonnet-4-5-20250929__o3__r15__s100.yaml",
+      "source_config_sha256": "aec2c4c8666c8298bfb65ce19f918d964aa43c394a778151bf8a37df7124edcb",
+      "source_files_sha256": {
+        "configs/pvp/HuskyBench__claude-sonnet-4-5-20250929__o3__r15__s100.yaml": "aec2c4c8666c8298bfb65ce19f918d964aa43c394a778151bf8a37df7124edcb",
+        "configs/mini/default.yaml": "17512d0c0b52c51967bc998208112594a51176f15eda2224be1ef0f25e42b466"
+      },
+      "native_config": {
+        "tournament": {
+          "rounds": 15
+        },
+        "game": {
+          "name": "HuskyBench",
+          "sims_per_round": 100,
+          "args": {}
+        },
+        "players": [
+          {
+            "agent": "mini",
+            "name": "claude-sonnet-4-5-20250929",
+            "config": {
+              "agent": {
+                "system_template": "You are a helpful assistant interacting continuously with a computer by issuing bash commands.\nYou'll be editing a codebase to play a programming game.\n\nYou issue ONE bash command at a time using the bash tool, see its result, then issue your next command.\nDirectory and environment changes are not persistent: every command runs in a fresh subshell, so chain\ncommands with `&&` or prefix them (e.g. `cd /path && ...`) when needed.\n\nWhen you have finished your work for this round, submit by running exactly:\n`echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT`\non its own (do not combine it with other commands). After submitting you cannot continue working this round.\n",
+                "instance_template": "## Game Description\n\n{{game_description}}\n\n## General tips about how to play the game\n\n The game details are in this codebase ({{working_dir}}):\n - `docs/`: Game documentation\n - `/logs/`: Past rounds and outcomes (agent runs in `/logs/edits/`, gameplay logs in `/logs/rounds/`)\n\n The game is played in team rounds. You play one round, then a teammate takes over.\n You're scored on total team performance across all rounds.\n\n Each round has a limit of {{step_limit}} steps.\n After you've reached the step limit, you cannot continue working on this task, and we will play the game with your codebase.\n We recommend submitting before you hit the limit to avoid losing work.\n\n Each round starts fresh with no knowledge of previous actions.\n Leave tools, notes, and strategies in the codebase for teammates.\n Use README_agent.md at repository root to pass instructions to your next teammate.\n Document important files, analysis tools, and context.\n\n Improve the bot however you like — experiment, document, iterate.\n\n IMPORTANT: Store all changes in {{working_dir}} or subdirectories.\n\n Tips:\n\n 1. Check README_agent.md for notes from previous teammates.\n 2. Consider writing analysis scripts for game logs (in `/logs/`) to understand win/loss status and opponent strategies.\n    Write analysis scripts and save them for teammates (mention in README_agent.md).\n 3. You don't *have* to modify anything in your player code.\n    For instance, if your team has been winning, and you think keeping the same strategy is best,\n    feel free to just submit, or put more time towards adding analyses and documentation for your teammates.\n    Of course, you can also try to improve your bot if you think you can do better.\n 4. You can modify *any* part of the codebase, particularly if you think the code is impacting performance negatively.\n 5. You could create tests to ensure your changes or bots are working as expected.\n 6. Testing against previous versions can be helpful for making sure your changes are improvements.\n 7. Examine game logic and documentation for clarity, but modifying game logic won't affect your rating.\n 8. Remember `/logs/` is outside your working directory when writing analyses.\n\n## Environment Details\n\n- You have a full Linux shell environment\n- Always use non-interactive flags (-y, -f) for commands\n- Avoid interactive tools like vi, nano, or any that require user input\n- If a command isn't available, you can install it\n\n## Useful command examples\n\n### Create a new file:\n\n```bash\ncat <<'EOF' > newfile.py\nimport numpy as np\nhello = \"world\"\nprint(hello)\nEOF\n```\n\nNote: You cannot combine this heredoc usage with other commands through the use of `&&` or `||`.\n\n### Edit files with sed:\n\n```bash\n# Replace all occurrences\nsed -i 's/old_string/new_string/g' filename.py\n\n# Replace only first occurrence\nsed -i 's/old_string/new_string/' filename.py\n\n# Replace first occurrence on line 1\nsed -i '1s/old_string/new_string/' filename.py\n\n# Replace all occurrences in lines 1-10\nsed -i '1,10s/old_string/new_string/g' filename.py\n```\n\n### View file content:\n\n```bash\n# View specific lines with numbers\nnl -ba filename.py | sed -n '10,20p'\n```\n\n## Submission\n\nWhen you've completed your work (reading, editing, testing), and cannot make further progress,\nrun exactly `echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT` to submit your work.\nYou cannot continue working in any way on this task after submitting.\n",
+                "step_limit": 30,
+                "cost_limit": 0
+              },
+              "model": {
+                "model_name": "@anthropic/claude-sonnet-4-5-20250929",
+                "model_class": "portkey",
+                "model_kwargs": {
+                  "temperature": 0.2,
+                  "max_tokens": 4096
+                }
+              }
+            }
+          },
+          {
+            "agent": "mini",
+            "name": "o3",
+            "config": {
+              "agent": {
+                "system_template": "You are a helpful assistant interacting continuously with a computer by issuing bash commands.\nYou'll be editing a codebase to play a programming game.\n\nYou issue ONE bash command at a time using the bash tool, see its result, then issue your next command.\nDirectory and environment changes are not persistent: every command runs in a fresh subshell, so chain\ncommands with `&&` or prefix them (e.g. `cd /path && ...`) when needed.\n\nWhen you have finished your work for this round, submit by running exactly:\n`echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT`\non its own (do not combine it with other commands). After submitting you cannot continue working this round.\n",
+                "instance_template": "## Game Description\n\n{{game_description}}\n\n## General tips about how to play the game\n\n The game details are in this codebase ({{working_dir}}):\n - `docs/`: Game documentation\n - `/logs/`: Past rounds and outcomes (agent runs in `/logs/edits/`, gameplay logs in `/logs/rounds/`)\n\n The game is played in team rounds. You play one round, then a teammate takes over.\n You're scored on total team performance across all rounds.\n\n Each round has a limit of {{step_limit}} steps.\n After you've reached the step limit, you cannot continue working on this task, and we will play the game with your codebase.\n We recommend submitting before you hit the limit to avoid losing work.\n\n Each round starts fresh with no knowledge of previous actions.\n Leave tools, notes, and strategies in the codebase for teammates.\n Use README_agent.md at repository root to pass instructions to your next teammate.\n Document important files, analysis tools, and context.\n\n Improve the bot however you like — experiment, document, iterate.\n\n IMPORTANT: Store all changes in {{working_dir}} or subdirectories.\n\n Tips:\n\n 1. Check README_agent.md for notes from previous teammates.\n 2. Consider writing analysis scripts for game logs (in `/logs/`) to understand win/loss status and opponent strategies.\n    Write analysis scripts and save them for teammates (mention in README_agent.md).\n 3. You don't *have* to modify anything in your player code.\n    For instance, if your team has been winning, and you think keeping the same strategy is best,\n    feel free to just submit, or put more time towards adding analyses and documentation for your teammates.\n    Of course, you can also try to improve your bot if you think you can do better.\n 4. You can modify *any* part of the codebase, particularly if you think the code is impacting performance negatively.\n 5. You could create tests to ensure your changes or bots are working as expected.\n 6. Testing against previous versions can be helpful for making sure your changes are improvements.\n 7. Examine game logic and documentation for clarity, but modifying game logic won't affect your rating.\n 8. Remember `/logs/` is outside your working directory when writing analyses.\n\n## Environment Details\n\n- You have a full Linux shell environment\n- Always use non-interactive flags (-y, -f) for commands\n- Avoid interactive tools like vi, nano, or any that require user input\n- If a command isn't available, you can install it\n\n## Useful command examples\n\n### Create a new file:\n\n```bash\ncat <<'EOF' > newfile.py\nimport numpy as np\nhello = \"world\"\nprint(hello)\nEOF\n```\n\nNote: You cannot combine this heredoc usage with other commands through the use of `&&` or `||`.\n\n### Edit files with sed:\n\n```bash\n# Replace all occurrences\nsed -i 's/old_string/new_string/g' filename.py\n\n# Replace only first occurrence\nsed -i 's/old_string/new_string/' filename.py\n\n# Replace first occurrence on line 1\nsed -i '1s/old_string/new_string/' filename.py\n\n# Replace all occurrences in lines 1-10\nsed -i '1,10s/old_string/new_string/g' filename.py\n```\n\n### View file content:\n\n```bash\n# View specific lines with numbers\nnl -ba filename.py | sed -n '10,20p'\n```\n\n## Submission\n\nWhen you've completed your work (reading, editing, testing), and cannot make further progress,\nrun exactly `echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT` to submit your work.\nYou cannot continue working in any way on this task after submitting.\n",
+                "step_limit": 30,
+                "cost_limit": 0
+              },
+              "model": {
+                "model_name": "@openai/o3",
+                "model_class": "portkey"
+              }
+            }
+          }
+        ],
+        "prompts": {
+          "game_description": "You are a software developer ({{player_id}}) competing in a coding game called HuskyBench.\nIn this game, you will write code to control a poker-playing bot, aiming to outsmart your opponents and win chips.\nVictory comes from crafting clever strategies—bluffing, reading opponents, and managing your chip stack effectively.\nBe mindful of your bot's efficiency - your code should complete a simulation within 10 seconds to avoid forfeiting the round.\nYou can use run_game.sh to check if your bot runs in time.\n\nThe game is played in 15 rounds. For every round, you (and your competitors) edit program code that controls your bot. This is round {{round}}.\nAfter you and your competitor finish editing your codebases, the game is run automatically.\n\nYour task: improve the bot in `client/player.py`, located in {{working_dir}}.\n{{working_dir}} is your codebase, which contains both your bot and supporting assets.\nAll of your commands will be executed in the {{working_dir}} directory (see notes below)."
+        }
+      },
+      "native_config_sha256": "7f61ba0b6220e167064bf0000a67c5b791fc9d974e0742ef223d99e620189dd6",
+      "config_origin": "published_pvp",
+      "dockerfile_path": "codeclash/arenas/huskybench/HuskyBench.Dockerfile",
+      "dockerfile_sha256": "8fc0f5731057d78678d4cc591898a75f53b449115f440ce0f85c7565b0c59858",
+      "workspace_source": {
+        "kind": "repository",
+        "repository": "https://github.com/CodeClash-ai/HuskyBench.git",
+        "commit": "9963f13b2d545cbdb12d716ad0c603e9219d46a1",
+        "destination": "/workspace",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00",
+          "head": "9963f13b2d545cbdb12d716ad0c603e9219d46a1"
+        }
+      },
+      "external_sources": [],
+      "smoke_sims": 3,
+      "smoke_edit_path": "client/player.py"
+    },
+    {
+      "id": "lightcycles",
+      "name": "LightCycles",
+      "module": "codeclash.arenas.lightcycles.lightcycles",
+      "class_name": "LightCyclesArena",
+      "submission": "main.py",
+      "source_config_path": "configs/test/lightcycles.yaml",
+      "source_config_sha256": "62befc2369ad03fd71ae44bd68df88d1653e48a261497d03ba1130088cac271e",
+      "source_files_sha256": {
+        "configs/test/lightcycles.yaml": "62befc2369ad03fd71ae44bd68df88d1653e48a261497d03ba1130088cac271e"
+      },
+      "native_config": {
+        "tournament": {
+          "rounds": 3
+        },
+        "game": {
+          "name": "LightCycles",
+          "sims_per_round": 10
+        },
+        "players": [
+          {
+            "agent": "dummy",
+            "name": "p1"
+          },
+          {
+            "agent": "dummy",
+            "name": "p2"
+          }
+        ],
+        "prompts": {
+          "game_description": "You are a software developer ({{player_id}}) competing in a coding game called LightCycles.\nYour bot (`main.py`) drives a cycle in a Tron light-cycles game. Each player rides around a\nbordered grid leaving a solid trail behind. Every tick all cycles move one cell simultaneously;\nyou crash (and are eliminated) if you move into a wall/border, any trail (yours or an opponent's),\nor the same cell as another cycle (a head-on). The last cycle riding wins; if all remaining cycles\ncrash on the same tick it's a draw; at the tick cap the most territory (trail cells) wins.\n\nYour bot must implement `get_move(obs) -> str`, returning one of \"N\", \"S\", \"E\", \"W\"\n(up/down/right/left). `obs` is the full deterministic state each tick: obs[\"tick\"]/[\"max_ticks\"],\nobs[\"width\"]/[\"height\"], obs[\"you\"] (your id), obs[\"players\"] (list of {id, x, y, dir, alive}), and\nobs[\"grid\"] (grid[y][x] = owning player id, or -1 for empty; off-grid is a wall). Origin is top-left.\n\nThe game is played in {{rounds}} rounds. For every round, you (and your competitor) edit program\ncode that controls your bot. This is round {{round}}.\nAfter you and your competitor finish editing your codebases, the game is run automatically.\n\nYour task: improve the bot in `main.py`, located in {{working_dir}}.\n{{working_dir}} is your codebase, which contains both your bot and supporting assets.\n"
+        }
+      },
+      "native_config_sha256": "d2ff82ee4b72f2bb2595c26614bae03181a91a950be74b3a53b1d654f857e01e",
+      "config_origin": "upstream_diagnostic",
+      "dockerfile_path": "codeclash/arenas/lightcycles/LightCycles.Dockerfile",
+      "dockerfile_sha256": "32c82ae15de81cc84dcc260f4b4f29341c213a212dd3045876e68f1fac80119b",
+      "workspace_source": {
+        "kind": "repository",
+        "repository": "https://github.com/CodeClash-ai/LightCycles.git",
+        "commit": "32e4218844805340371e9fe11902a49e5a1e40a6",
+        "destination": "/workspace",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00",
+          "head": "32e4218844805340371e9fe11902a49e5a1e40a6"
+        }
+      },
+      "external_sources": [],
+      "smoke_sims": 3,
+      "smoke_edit_path": "main.py"
+    },
+    {
+      "id": "paintvolley",
+      "name": "PaintVolley",
+      "module": "codeclash.arenas.paintvolley.paintvolley",
+      "class_name": "PaintVolleyArena",
+      "submission": "main.py",
+      "source_config_path": "configs/test/paintvolley.yaml",
+      "source_config_sha256": "a6bc44c8088b544ea8f59e8371e401415251fe4c47b0316c76ffcb0e57583803",
+      "source_files_sha256": {
+        "configs/test/paintvolley.yaml": "a6bc44c8088b544ea8f59e8371e401415251fe4c47b0316c76ffcb0e57583803"
+      },
+      "native_config": {
+        "tournament": {
+          "rounds": 3
+        },
+        "game": {
+          "name": "PaintVolley",
+          "sims_per_round": 10
+        },
+        "players": [
+          {
+            "agent": "dummy",
+            "name": "p1"
+          },
+          {
+            "agent": "dummy",
+            "name": "p2"
+          }
+        ],
+        "prompts": {
+          "game_description": "You are a software developer ({{player_id}}) competing in a coding game called PaintVolley.\nYour bot (`main.py`) controls a helmet-wearing character in a territory-painting game. Characters\npatrol the bottom of a rectangular field while balls fly around bouncing off all four walls (no\ngravity). Each tick, every ball paints the tile it is over in its own color. Balls start neutral\nand paint nothing; when a ball lands on your helmet it turns your color and bounces upward, so it\nthen paints for you until an opponent steals it. The helmet-contact point sets the exit angle\n(center = straight up, edges = steep), so you aim where paint goes. Whoever owns the most tiles\nwhen the tick budget runs out wins.\n\nYour bot must implement `get_action(obs) -> str`, returning one of \"LEFT\", \"RIGHT\", \"JUMP\",\n\"JUMP_LEFT\", \"JUMP_RIGHT\", \"NONE\". `obs` is the full deterministic game state each tick (field,\nphysics rules, players, balls, tiles, scores), so you can forward-simulate to plan interceptions.\n\nThe game is played in {{rounds}} rounds. For every round, you (and your competitor) edit program\ncode that controls your bot. This is round {{round}}.\nAfter you and your competitor finish editing your codebases, the game is run automatically.\n\nYour task: improve the bot in `main.py`, located in {{working_dir}}.\n{{working_dir}} is your codebase, which contains both your bot and supporting assets.\n"
+        }
+      },
+      "native_config_sha256": "ccf02eb4f9a4f3da5a64760d1166ff1990edae312c70ed0f354b3288f5c1141b",
+      "config_origin": "upstream_diagnostic",
+      "dockerfile_path": "codeclash/arenas/paintvolley/PaintVolley.Dockerfile",
+      "dockerfile_sha256": "3a60e099cba3e49998065a61f0168ea5451004b657f3716364a30a57489e63a7",
+      "workspace_source": {
+        "kind": "repository",
+        "repository": "https://github.com/CodeClash-ai/PaintVolley.git",
+        "commit": "eda3a1485c3628392a0e35ffabbb45a79d33ae2b",
+        "destination": "/workspace",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00",
+          "head": "eda3a1485c3628392a0e35ffabbb45a79d33ae2b"
+        }
+      },
+      "external_sources": [],
+      "smoke_sims": 3,
+      "smoke_edit_path": "main.py"
+    },
+    {
+      "id": "robocode",
+      "name": "RoboCode",
+      "module": "codeclash.arenas.robocode.robocode",
+      "class_name": "RoboCodeArena",
+      "submission": "robots/custom/",
+      "source_config_path": "configs/pvp/RoboCode__claude-sonnet-4-5-20250929__o3__r15__s250.yaml",
+      "source_config_sha256": "eade7834f095013d90e48d6310854371a469a8ad0598f60de3d3b942b9e3b858",
+      "source_files_sha256": {
+        "configs/pvp/RoboCode__claude-sonnet-4-5-20250929__o3__r15__s250.yaml": "eade7834f095013d90e48d6310854371a469a8ad0598f60de3d3b942b9e3b858",
+        "configs/mini/default.yaml": "17512d0c0b52c51967bc998208112594a51176f15eda2224be1ef0f25e42b466"
+      },
+      "native_config": {
+        "tournament": {
+          "rounds": 15
+        },
+        "game": {
+          "name": "RoboCode",
+          "sims_per_round": 250,
+          "args": {
+            "nodisplay": true,
+            "nosound": true
+          },
+          "record_ratio": 0.2
+        },
+        "players": [
+          {
+            "agent": "mini",
+            "name": "claudesonnet4520250929",
+            "config": {
+              "agent": {
+                "system_template": "You are a helpful assistant interacting continuously with a computer by issuing bash commands.\nYou'll be editing a codebase to play a programming game.\n\nYou issue ONE bash command at a time using the bash tool, see its result, then issue your next command.\nDirectory and environment changes are not persistent: every command runs in a fresh subshell, so chain\ncommands with `&&` or prefix them (e.g. `cd /path && ...`) when needed.\n\nWhen you have finished your work for this round, submit by running exactly:\n`echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT`\non its own (do not combine it with other commands). After submitting you cannot continue working this round.\n",
+                "instance_template": "## Game Description\n\n{{game_description}}\n\n## General tips about how to play the game\n\n The game details are in this codebase ({{working_dir}}):\n - `docs/`: Game documentation\n - `/logs/`: Past rounds and outcomes (agent runs in `/logs/edits/`, gameplay logs in `/logs/rounds/`)\n\n The game is played in team rounds. You play one round, then a teammate takes over.\n You're scored on total team performance across all rounds.\n\n Each round has a limit of {{step_limit}} steps.\n After you've reached the step limit, you cannot continue working on this task, and we will play the game with your codebase.\n We recommend submitting before you hit the limit to avoid losing work.\n\n Each round starts fresh with no knowledge of previous actions.\n Leave tools, notes, and strategies in the codebase for teammates.\n Use README_agent.md at repository root to pass instructions to your next teammate.\n Document important files, analysis tools, and context.\n\n Improve the bot however you like — experiment, document, iterate.\n\n IMPORTANT: Store all changes in {{working_dir}} or subdirectories.\n\n Tips:\n\n 1. Check README_agent.md for notes from previous teammates.\n 2. Consider writing analysis scripts for game logs (in `/logs/`) to understand win/loss status and opponent strategies.\n    Write analysis scripts and save them for teammates (mention in README_agent.md).\n 3. You don't *have* to modify anything in your player code.\n    For instance, if your team has been winning, and you think keeping the same strategy is best,\n    feel free to just submit, or put more time towards adding analyses and documentation for your teammates.\n    Of course, you can also try to improve your bot if you think you can do better.\n 4. You can modify *any* part of the codebase, particularly if you think the code is impacting performance negatively.\n 5. You could create tests to ensure your changes or bots are working as expected.\n 6. Testing against previous versions can be helpful for making sure your changes are improvements.\n 7. Examine game logic and documentation for clarity, but modifying game logic won't affect your rating.\n 8. Remember `/logs/` is outside your working directory when writing analyses.\n\n## Environment Details\n\n- You have a full Linux shell environment\n- Always use non-interactive flags (-y, -f) for commands\n- Avoid interactive tools like vi, nano, or any that require user input\n- If a command isn't available, you can install it\n\n## Useful command examples\n\n### Create a new file:\n\n```bash\ncat <<'EOF' > newfile.py\nimport numpy as np\nhello = \"world\"\nprint(hello)\nEOF\n```\n\nNote: You cannot combine this heredoc usage with other commands through the use of `&&` or `||`.\n\n### Edit files with sed:\n\n```bash\n# Replace all occurrences\nsed -i 's/old_string/new_string/g' filename.py\n\n# Replace only first occurrence\nsed -i 's/old_string/new_string/' filename.py\n\n# Replace first occurrence on line 1\nsed -i '1s/old_string/new_string/' filename.py\n\n# Replace all occurrences in lines 1-10\nsed -i '1,10s/old_string/new_string/g' filename.py\n```\n\n### View file content:\n\n```bash\n# View specific lines with numbers\nnl -ba filename.py | sed -n '10,20p'\n```\n\n## Submission\n\nWhen you've completed your work (reading, editing, testing), and cannot make further progress,\nrun exactly `echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT` to submit your work.\nYou cannot continue working in any way on this task after submitting.\n",
+                "step_limit": 30,
+                "cost_limit": 0
+              },
+              "model": {
+                "model_name": "@anthropic/claude-sonnet-4-5-20250929",
+                "model_class": "portkey",
+                "model_kwargs": {
+                  "temperature": 0.2,
+                  "max_tokens": 4096
+                }
+              }
+            }
+          },
+          {
+            "agent": "mini",
+            "name": "o3",
+            "config": {
+              "agent": {
+                "system_template": "You are a helpful assistant interacting continuously with a computer by issuing bash commands.\nYou'll be editing a codebase to play a programming game.\n\nYou issue ONE bash command at a time using the bash tool, see its result, then issue your next command.\nDirectory and environment changes are not persistent: every command runs in a fresh subshell, so chain\ncommands with `&&` or prefix them (e.g. `cd /path && ...`) when needed.\n\nWhen you have finished your work for this round, submit by running exactly:\n`echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT`\non its own (do not combine it with other commands). After submitting you cannot continue working this round.\n",
+                "instance_template": "## Game Description\n\n{{game_description}}\n\n## General tips about how to play the game\n\n The game details are in this codebase ({{working_dir}}):\n - `docs/`: Game documentation\n - `/logs/`: Past rounds and outcomes (agent runs in `/logs/edits/`, gameplay logs in `/logs/rounds/`)\n\n The game is played in team rounds. You play one round, then a teammate takes over.\n You're scored on total team performance across all rounds.\n\n Each round has a limit of {{step_limit}} steps.\n After you've reached the step limit, you cannot continue working on this task, and we will play the game with your codebase.\n We recommend submitting before you hit the limit to avoid losing work.\n\n Each round starts fresh with no knowledge of previous actions.\n Leave tools, notes, and strategies in the codebase for teammates.\n Use README_agent.md at repository root to pass instructions to your next teammate.\n Document important files, analysis tools, and context.\n\n Improve the bot however you like — experiment, document, iterate.\n\n IMPORTANT: Store all changes in {{working_dir}} or subdirectories.\n\n Tips:\n\n 1. Check README_agent.md for notes from previous teammates.\n 2. Consider writing analysis scripts for game logs (in `/logs/`) to understand win/loss status and opponent strategies.\n    Write analysis scripts and save them for teammates (mention in README_agent.md).\n 3. You don't *have* to modify anything in your player code.\n    For instance, if your team has been winning, and you think keeping the same strategy is best,\n    feel free to just submit, or put more time towards adding analyses and documentation for your teammates.\n    Of course, you can also try to improve your bot if you think you can do better.\n 4. You can modify *any* part of the codebase, particularly if you think the code is impacting performance negatively.\n 5. You could create tests to ensure your changes or bots are working as expected.\n 6. Testing against previous versions can be helpful for making sure your changes are improvements.\n 7. Examine game logic and documentation for clarity, but modifying game logic won't affect your rating.\n 8. Remember `/logs/` is outside your working directory when writing analyses.\n\n## Environment Details\n\n- You have a full Linux shell environment\n- Always use non-interactive flags (-y, -f) for commands\n- Avoid interactive tools like vi, nano, or any that require user input\n- If a command isn't available, you can install it\n\n## Useful command examples\n\n### Create a new file:\n\n```bash\ncat <<'EOF' > newfile.py\nimport numpy as np\nhello = \"world\"\nprint(hello)\nEOF\n```\n\nNote: You cannot combine this heredoc usage with other commands through the use of `&&` or `||`.\n\n### Edit files with sed:\n\n```bash\n# Replace all occurrences\nsed -i 's/old_string/new_string/g' filename.py\n\n# Replace only first occurrence\nsed -i 's/old_string/new_string/' filename.py\n\n# Replace first occurrence on line 1\nsed -i '1s/old_string/new_string/' filename.py\n\n# Replace all occurrences in lines 1-10\nsed -i '1,10s/old_string/new_string/g' filename.py\n```\n\n### View file content:\n\n```bash\n# View specific lines with numbers\nnl -ba filename.py | sed -n '10,20p'\n```\n\n## Submission\n\nWhen you've completed your work (reading, editing, testing), and cannot make further progress,\nrun exactly `echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT` to submit your work.\nYou cannot continue working in any way on this task after submitting.\n",
+                "step_limit": 30,
+                "cost_limit": 0
+              },
+              "model": {
+                "model_name": "@openai/o3",
+                "model_class": "portkey"
+              }
+            }
+          }
+        ],
+        "prompts": {
+          "game_description": "You are a software developer ({{player_id}}) competing in a coding game called RoboCode.\nRobocode (Tank Royale) is a programming game where your code is the tank: each turn your bot sends intents—speed plus body/gun/radar turn rates and firepower—based on the game state it perceives via radar.\nYour program decides how to move, aim, and fire in a deterministic, turn-based arena to outlast other bots.\nYour bot logic must be written in Java and located in the `robots/custom/` directory.\nKeep the main bot class named `MyTank.java`, but you can include additional Java files if you'd like.\n\nThe game is played in 15 rounds. For every round, you (and your competitors) edit program code that controls your bot. This is round {{round}}.\nAfter you and your competitor finish editing your codebases, the game is run automatically.\n\nYour task: improve the bot in `robots/custom/`, located in {{working_dir}}.\n{{working_dir}} is your codebase, which contains both your bot and supporting assets.\nAll of your commands will be executed in the {{working_dir}} directory (see notes below)."
+        }
+      },
+      "native_config_sha256": "c745cf4ac73746938f896eec5271507272afeca44a8c308e25aebea500dc1bd5",
+      "config_origin": "published_pvp",
+      "dockerfile_path": "codeclash/arenas/robocode/RoboCode.Dockerfile",
+      "dockerfile_sha256": "4ba1d9299ac6a748ef24515d5b7054a04a7b981e97aa13f6be7c4102749a80b2",
+      "workspace_source": {
+        "kind": "repository",
+        "repository": "https://github.com/CodeClash-ai/RoboCode.git",
+        "commit": "1f360189e50a2cbab25e8ac7ef280736610753a7",
+        "destination": "/workspace",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00",
+          "head": "1f360189e50a2cbab25e8ac7ef280736610753a7"
+        }
+      },
+      "external_sources": [],
+      "smoke_sims": 10,
+      "smoke_edit_path": "robots/custom/MyTank.java"
+    },
+    {
+      "id": "robotrumble",
+      "name": "RobotRumble",
+      "module": "codeclash.arenas.robotrumble.robotrumble",
+      "class_name": "RobotRumbleArena",
+      "submission": "robot.js",
+      "source_config_path": "configs/pvp/RobotRumble__claude-sonnet-4-5-20250929__o3__r15__s250.yaml",
+      "source_config_sha256": "f9b19d8d9e49237312207de285956c085ad56fe4707f8a26d855e02ec7c53257",
+      "source_files_sha256": {
+        "configs/pvp/RobotRumble__claude-sonnet-4-5-20250929__o3__r15__s250.yaml": "f9b19d8d9e49237312207de285956c085ad56fe4707f8a26d855e02ec7c53257",
+        "configs/mini/default.yaml": "17512d0c0b52c51967bc998208112594a51176f15eda2224be1ef0f25e42b466"
+      },
+      "native_config": {
+        "tournament": {
+          "rounds": 15
+        },
+        "game": {
+          "name": "RobotRumble",
+          "sims_per_round": 250,
+          "args": {
+            "raw": true
+          }
+        },
+        "players": [
+          {
+            "agent": "mini",
+            "name": "claude-sonnet-4-5-20250929",
+            "config": {
+              "agent": {
+                "system_template": "You are a helpful assistant interacting continuously with a computer by issuing bash commands.\nYou'll be editing a codebase to play a programming game.\n\nYou issue ONE bash command at a time using the bash tool, see its result, then issue your next command.\nDirectory and environment changes are not persistent: every command runs in a fresh subshell, so chain\ncommands with `&&` or prefix them (e.g. `cd /path && ...`) when needed.\n\nWhen you have finished your work for this round, submit by running exactly:\n`echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT`\non its own (do not combine it with other commands). After submitting you cannot continue working this round.\n",
+                "instance_template": "## Game Description\n\n{{game_description}}\n\n## General tips about how to play the game\n\n The game details are in this codebase ({{working_dir}}):\n - `docs/`: Game documentation\n - `/logs/`: Past rounds and outcomes (agent runs in `/logs/edits/`, gameplay logs in `/logs/rounds/`)\n\n The game is played in team rounds. You play one round, then a teammate takes over.\n You're scored on total team performance across all rounds.\n\n Each round has a limit of {{step_limit}} steps.\n After you've reached the step limit, you cannot continue working on this task, and we will play the game with your codebase.\n We recommend submitting before you hit the limit to avoid losing work.\n\n Each round starts fresh with no knowledge of previous actions.\n Leave tools, notes, and strategies in the codebase for teammates.\n Use README_agent.md at repository root to pass instructions to your next teammate.\n Document important files, analysis tools, and context.\n\n Improve the bot however you like — experiment, document, iterate.\n\n IMPORTANT: Store all changes in {{working_dir}} or subdirectories.\n\n Tips:\n\n 1. Check README_agent.md for notes from previous teammates.\n 2. Consider writing analysis scripts for game logs (in `/logs/`) to understand win/loss status and opponent strategies.\n    Write analysis scripts and save them for teammates (mention in README_agent.md).\n 3. You don't *have* to modify anything in your player code.\n    For instance, if your team has been winning, and you think keeping the same strategy is best,\n    feel free to just submit, or put more time towards adding analyses and documentation for your teammates.\n    Of course, you can also try to improve your bot if you think you can do better.\n 4. You can modify *any* part of the codebase, particularly if you think the code is impacting performance negatively.\n 5. You could create tests to ensure your changes or bots are working as expected.\n 6. Testing against previous versions can be helpful for making sure your changes are improvements.\n 7. Examine game logic and documentation for clarity, but modifying game logic won't affect your rating.\n 8. Remember `/logs/` is outside your working directory when writing analyses.\n\n## Environment Details\n\n- You have a full Linux shell environment\n- Always use non-interactive flags (-y, -f) for commands\n- Avoid interactive tools like vi, nano, or any that require user input\n- If a command isn't available, you can install it\n\n## Useful command examples\n\n### Create a new file:\n\n```bash\ncat <<'EOF' > newfile.py\nimport numpy as np\nhello = \"world\"\nprint(hello)\nEOF\n```\n\nNote: You cannot combine this heredoc usage with other commands through the use of `&&` or `||`.\n\n### Edit files with sed:\n\n```bash\n# Replace all occurrences\nsed -i 's/old_string/new_string/g' filename.py\n\n# Replace only first occurrence\nsed -i 's/old_string/new_string/' filename.py\n\n# Replace first occurrence on line 1\nsed -i '1s/old_string/new_string/' filename.py\n\n# Replace all occurrences in lines 1-10\nsed -i '1,10s/old_string/new_string/g' filename.py\n```\n\n### View file content:\n\n```bash\n# View specific lines with numbers\nnl -ba filename.py | sed -n '10,20p'\n```\n\n## Submission\n\nWhen you've completed your work (reading, editing, testing), and cannot make further progress,\nrun exactly `echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT` to submit your work.\nYou cannot continue working in any way on this task after submitting.\n",
+                "step_limit": 30,
+                "cost_limit": 0
+              },
+              "model": {
+                "model_name": "@anthropic/claude-sonnet-4-5-20250929",
+                "model_class": "portkey",
+                "model_kwargs": {
+                  "temperature": 0.2,
+                  "max_tokens": 4096
+                }
+              }
+            }
+          },
+          {
+            "agent": "mini",
+            "name": "o3",
+            "config": {
+              "agent": {
+                "system_template": "You are a helpful assistant interacting continuously with a computer by issuing bash commands.\nYou'll be editing a codebase to play a programming game.\n\nYou issue ONE bash command at a time using the bash tool, see its result, then issue your next command.\nDirectory and environment changes are not persistent: every command runs in a fresh subshell, so chain\ncommands with `&&` or prefix them (e.g. `cd /path && ...`) when needed.\n\nWhen you have finished your work for this round, submit by running exactly:\n`echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT`\non its own (do not combine it with other commands). After submitting you cannot continue working this round.\n",
+                "instance_template": "## Game Description\n\n{{game_description}}\n\n## General tips about how to play the game\n\n The game details are in this codebase ({{working_dir}}):\n - `docs/`: Game documentation\n - `/logs/`: Past rounds and outcomes (agent runs in `/logs/edits/`, gameplay logs in `/logs/rounds/`)\n\n The game is played in team rounds. You play one round, then a teammate takes over.\n You're scored on total team performance across all rounds.\n\n Each round has a limit of {{step_limit}} steps.\n After you've reached the step limit, you cannot continue working on this task, and we will play the game with your codebase.\n We recommend submitting before you hit the limit to avoid losing work.\n\n Each round starts fresh with no knowledge of previous actions.\n Leave tools, notes, and strategies in the codebase for teammates.\n Use README_agent.md at repository root to pass instructions to your next teammate.\n Document important files, analysis tools, and context.\n\n Improve the bot however you like — experiment, document, iterate.\n\n IMPORTANT: Store all changes in {{working_dir}} or subdirectories.\n\n Tips:\n\n 1. Check README_agent.md for notes from previous teammates.\n 2. Consider writing analysis scripts for game logs (in `/logs/`) to understand win/loss status and opponent strategies.\n    Write analysis scripts and save them for teammates (mention in README_agent.md).\n 3. You don't *have* to modify anything in your player code.\n    For instance, if your team has been winning, and you think keeping the same strategy is best,\n    feel free to just submit, or put more time towards adding analyses and documentation for your teammates.\n    Of course, you can also try to improve your bot if you think you can do better.\n 4. You can modify *any* part of the codebase, particularly if you think the code is impacting performance negatively.\n 5. You could create tests to ensure your changes or bots are working as expected.\n 6. Testing against previous versions can be helpful for making sure your changes are improvements.\n 7. Examine game logic and documentation for clarity, but modifying game logic won't affect your rating.\n 8. Remember `/logs/` is outside your working directory when writing analyses.\n\n## Environment Details\n\n- You have a full Linux shell environment\n- Always use non-interactive flags (-y, -f) for commands\n- Avoid interactive tools like vi, nano, or any that require user input\n- If a command isn't available, you can install it\n\n## Useful command examples\n\n### Create a new file:\n\n```bash\ncat <<'EOF' > newfile.py\nimport numpy as np\nhello = \"world\"\nprint(hello)\nEOF\n```\n\nNote: You cannot combine this heredoc usage with other commands through the use of `&&` or `||`.\n\n### Edit files with sed:\n\n```bash\n# Replace all occurrences\nsed -i 's/old_string/new_string/g' filename.py\n\n# Replace only first occurrence\nsed -i 's/old_string/new_string/' filename.py\n\n# Replace first occurrence on line 1\nsed -i '1s/old_string/new_string/' filename.py\n\n# Replace all occurrences in lines 1-10\nsed -i '1,10s/old_string/new_string/g' filename.py\n```\n\n### View file content:\n\n```bash\n# View specific lines with numbers\nnl -ba filename.py | sed -n '10,20p'\n```\n\n## Submission\n\nWhen you've completed your work (reading, editing, testing), and cannot make further progress,\nrun exactly `echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT` to submit your work.\nYou cannot continue working in any way on this task after submitting.\n",
+                "step_limit": 30,
+                "cost_limit": 0
+              },
+              "model": {
+                "model_name": "@openai/o3",
+                "model_class": "portkey"
+              }
+            }
+          }
+        ],
+        "prompts": {
+          "game_description": "You are a software developer ({{player_id}}) competing in a coding game called RobotRumble.\nRobotRumble is a turn-based coding battle where you program a team of robots in Python to move, attack, and outmaneuver your opponent on a grid.\nEvery decision is driven by your code, and victory comes from crafting logic that positions robots smartly, times attacks well, and adapts over the 100-turn match.\nNOTE: Please ensure that your code runs efficiently (under 60 seconds). Code that exceeds this run time will automatically forfeit the round.\n\nThe game is played in 15 rounds. For every round, you (and your competitors) edit program code that controls your bot. This is round {{round}}.\nAfter you and your competitor finish editing your codebases, the game is run automatically.\n\nYour task: improve the bot in `robot.js`, located in {{working_dir}}.\n{{working_dir}} is your codebase, which contains both your bot and supporting assets.\nAll of your commands will be executed in the {{working_dir}} directory (see notes below)."
+        }
+      },
+      "native_config_sha256": "5e8046a1477adeb4af685e6935970b8a26e63d58afc96f52f8f21e9c17cff4d6",
+      "config_origin": "published_pvp",
+      "dockerfile_path": "codeclash/arenas/robotrumble/RobotRumble.Dockerfile",
+      "dockerfile_sha256": "9b75089b1c7a363c78842ef97a675e9869a7ecf84d9f8184951af9d5fbd8daae",
+      "workspace_source": {
+        "kind": "repository",
+        "repository": "https://github.com/CodeClash-ai/RobotRumble.git",
+        "commit": "4f019c91e6854242f5e247ca82fee7b66833b227",
+        "destination": "/workspace",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00",
+          "head": "4f019c91e6854242f5e247ca82fee7b66833b227"
+        }
+      },
+      "external_sources": [],
+      "smoke_sims": 3,
+      "smoke_edit_path": "robot.js"
+    },
+    {
+      "id": "scml",
+      "name": "SCML",
+      "module": "codeclash.arenas.scml.scml",
+      "class_name": "SCMLOneShotArena",
+      "submission": "scml_agent.py",
+      "source_config_path": "configs/examples/SCML__dummy__r1__s2.yaml",
+      "source_config_sha256": "53663806c31645dc3d1cde3ac72bf43d0d7a23108aaa66f0a750462a74255ddd",
+      "source_files_sha256": {
+        "configs/examples/SCML__dummy__r1__s2.yaml": "53663806c31645dc3d1cde3ac72bf43d0d7a23108aaa66f0a750462a74255ddd"
+      },
+      "native_config": {
+        "tournament": {
+          "rounds": 1
+        },
+        "game": {
+          "name": "SCML",
+          "sims_per_round": 2,
+          "n_steps": 5,
+          "n_lines": 2,
+          "decision_timeout": 3.0,
+          "max_policy_errors": 8,
+          "validation_timeout": 10,
+          "timeout": 240
+        },
+        "players": [
+          {
+            "agent": "dummy",
+            "name": "alpha"
+          },
+          {
+            "agent": "dummy",
+            "name": "beta"
+          }
+        ],
+        "prompts": {
+          "game_description": "You are a software developer ({{player_id}}) competing in CodeClash's SCML OneShot arena.\n\nThe game is played in {{total_rounds}} rounds. For every round, you and your competitors edit\ncode that controls an autonomous supply-chain negotiation agent. This is round {{round}}.\n\nYour task: improve `scml_agent.py`, located in {{working_dir}}.\nAll commands run from {{working_dir}}.\n\nYour file must define `decide(observation)`. A valid starting point is:\n\ndef decide(observation):\n    return {}\n\nFor proposal events, return {\"offer\": [quantity, time, unit_price]} to override the trusted\ngreedy fallback. For response events, return {\"response\": \"accept\"}, {\"response\": \"reject\"},\nor {\"response\": \"end\"}.\n\nThe arena runs multiple two-process SCML2024 OneShot worlds. Your objective is to maximize\naverage profit."
+        }
+      },
+      "native_config_sha256": "d9065fc4bf938d48c1c05954d15ad72d52e3516ed768c55f8ea8b96fd3eaebab",
+      "config_origin": "upstream_diagnostic",
+      "dockerfile_path": "codeclash/arenas/scml/SCML.Dockerfile",
+      "dockerfile_sha256": "cea58ca1346f7da11e889fafaf5db4b46fb92dd06b0180960d2dfa7d91d10c40",
+      "workspace_source": {
+        "kind": "repository",
+        "repository": "https://github.com/CodeClash-ai/SCML.git",
+        "commit": "024a39dfcf2d466f119b4d794b69d625ead1d2cd",
+        "destination": "/workspace",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00",
+          "head": "024a39dfcf2d466f119b4d794b69d625ead1d2cd"
+        }
+      },
+      "external_sources": [],
+      "smoke_sims": 2,
+      "smoke_edit_path": "scml_agent.py"
+    }
+  ]
+}

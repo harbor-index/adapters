@@ -1,0 +1,30 @@
+# Working draft. This default intentionally fails: competitive oracle policy is open.
+# Generate with: uv run --project src/codeclash codeclash --profile benchmark --output-dir datasets/codeclash
+# The full catalog includes 6 model PvP presets and 15 native diagnostic presets.
+# Use --config for complete model configs in other arenas; preserve their player names.
+jobs_dir: jobs/codeclash
+n_attempts: 1
+timeout_multiplier: 1.0
+orchestrator:
+  type: local
+  n_concurrent_trials: 1
+  quiet: false
+environment:
+  type: docker
+  delete: true
+agents:
+  - name: oracle
+  # Replace the oracle entry above only after resolving the documented grading
+  # blocker and agreeing the experiment plan. Do not run paid parity by default.
+  # - name: codeclash.harbor_agent:CodeClashAgent
+  #   kwargs:
+  #     native_python: /absolute/path/to/CodeClash/.venv/bin/python
+  #     upstream_repo: /absolute/path/to/CodeClash
+  #     # Omit image to select codeclash-adapter/<arena>:f0694c64ecf6 per task.
+  #     # With no overrides, each task preserves its native model configuration.
+  #     # For a named model roster, player_models maps existing mini player names
+  #     # to model strings; it cannot turn dummy players into model players.
+  #     # model_name/opponent_model_name are only valid for exactly two mini players.
+  #     # Do not mix positional model options with player_models.
+datasets:
+  - path: datasets/codeclash

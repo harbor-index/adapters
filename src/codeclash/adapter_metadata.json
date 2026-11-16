@@ -1,0 +1,36 @@
+[
+  {
+    "adapter_name": "codeclash",
+    "adapter_builders": [
+      "harshang03 (58983401+harshang03@users.noreply.github.com)"
+    ],
+    "original_benchmark": [
+      {
+        "split": "public_software_pvp",
+        "size": 21,
+        "harness": "agent",
+        "supported_agents": [
+          "mini-swe-agent@2.4.2"
+        ],
+        "adaptable": true,
+        "notes": "Pinned inventory contains 21 substantive public software/game arenas; the synthetic Dummy arena is excluded. Size counts arenas, never rounds, simulations, repeated tournaments, rosters or matchups. CodeClash pin f0694c64ecf6abfca2bc867bad2de9333fef5be8. Catalog records full resolved native configs and arena source pins. Six presets are published model PvP configurations (BattleSnake, CoreWar, Halite, HuskyBench, RoboCode, RobotRumble); the other 15 are upstream diagnostic configurations, not published model benchmarks. Physical/embodied and video/audio tasks are excluded. Native single-player and ladder workflows are distinct and do not have adapter backends. The published PvP suite has 168 configurations across 28 model pairs and six arenas; bundled presets choose one pair per published arena."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "public_software_pvp",
+        "adapted_benchmark_size": 21,
+        "parity_benchmark_size": 0,
+        "parity_sampling_rate": 0.0,
+        "registry_benchmark_size": 0,
+        "added_agents": [
+          "codeclash@0.2.0"
+        ],
+        "parity_matching_agents": [],
+        "parity_unmatching_agents": [],
+        "parity_costs": "$0",
+        "notes": "Working draft v0.2.0: one schema2 descriptor per 21 substantive arenas, using a common native PvP coordinator and separate evidence verifier. Six published model presets and 15 upstream diagnostic presets retain exact resolved configs and source provenance. Named multiplayer rosters, transparent PvP, arena-specific budgets and native YAML/JSON inputs are supported; repeated tournaments are not additional tasks. Verified 73 unit tests, 21 source-config matches, both 21-task profiles, all 21 image builds and 21 complete no-model Harbor smoke runs (63 rounds, 92 edit proofs, 67 native containers cleaned), plus separate transparent Bridge and final verifier replay for all 22 scenarios. Native scorer behavior is preserved, including confirmed Halite2/Halite3 player-attribution defects. Smoke is not model quality, an oracle pass or parity; model, parity and registry coverage remain zero. Original failures and recovery evidence are retained in validation/compatibility.json. Standard CLI agents, remote providers, single-player/ladder and branch/opponent-snapshot overrides are unsupported. HIGH blocker: submitted programs share the native arena with grading code, opponents and logs; consistency checks do not authenticate adversarial results. Oracle policy is unresolved and solve.sh intentionally fails. Draft for implementation discussion, not benchmark acceptance. A separate native Mini action-loop preflight through Harbor uses only built-in deterministic model responses: two attempts, each with nine completed games and 16 query/action steps. The second verifies diagnostic labeling after a classification fix. No real provider transport or inference was tested; evidence is retained in validation/native-mini-preflight.json. Validation on harbor-index/adapters base 7b4df9deb2381ae32f26e6cebec06aaa2975dc56 repeated 73 tests, 42 task parses, 21 native config comparisons and 22 artifact replays, then ran fresh native-Mini BattleSnake and transparent Bridge checks (18 completed games, eight native containers removed); see validation/local-checks.json. No paid model evaluation was performed."
+      }
+    ]
+  }
+]

@@ -1,0 +1,22 @@
+# Diagnostic only: scripted edits, 2 edit rounds + baseline, arena-specific budgets.
+# Replace BOTH absolute path placeholders below before running.
+# Build every selected arena's image before running. No model overrides are allowed.
+# Example: uv run --project src/codeclash codeclash --profile smoke --task-ids bridge --output-dir datasets/codeclash-smoke
+jobs_dir: jobs/codeclash-smoke
+n_attempts: 1
+timeout_multiplier: 1.0
+orchestrator:
+  type: local
+  n_concurrent_trials: 1
+  quiet: false
+environment:
+  type: docker
+  delete: true
+agents:
+  - name: codeclash.harbor_agent:CodeClashAgent
+    kwargs:
+      native_python: /absolute/path/to/CodeClash/.venv/bin/python
+      upstream_repo: /absolute/path/to/CodeClash
+      # Image defaults to codeclash-adapter/<arena>:f0694c64ecf6 per task.
+datasets:
+  - path: datasets/codeclash-smoke

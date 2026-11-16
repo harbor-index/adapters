@@ -1,0 +1,4413 @@
+{
+  "all_first_attempts_passed": true,
+  "all_owned_containers_removed": true,
+  "arena_count": 21,
+  "arenas": [
+    {
+      "arena": "ants",
+      "attempts": 1,
+      "checks": {
+        "missing_entrypoint_native_validator": true,
+        "native_all_invalid_tie": true,
+        "native_one_valid_forfeit": true,
+        "pristine_native_validator": true,
+        "restored_native_validator": true,
+        "restored_reference_bytes": true
+      },
+      "cleanup": {
+        "owned_containers": 3,
+        "removed_containers": 3,
+        "verified": true
+      },
+      "command_log_sha256": "27ca0d5b77ebd0830644d77989f4d2d78e0b6cf36dda648b2f3793ceab224b5e",
+      "config_origin": "upstream_diagnostic",
+      "elapsed_seconds": 2.5279898643493652,
+      "image": {
+        "architecture": "arm64",
+        "id": "sha256:083dcf2db42ef27d5506afd29079fbb5004c0ae44c345a5e9b90ea9694a02125",
+        "os": "linux",
+        "tag": "codeclash-adapter/ants:f0694c64ecf6"
+      },
+      "native_config_sha256": "280a0e62f3d8c64f8337a5cc8aae6e8e2af27ae0c0b79b2192ef651e463392ee",
+      "native_forfeit_expected_and_observed": [
+        {
+          "expected": {
+            "scores": {
+              "p1": 6,
+              "p2": 0
+            },
+            "tournament_simulations": 0,
+            "winner": "p1"
+          },
+          "name": "native_one_valid_forfeit",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "p1": {
+                "invalid_reason": "",
+                "name": "p1",
+                "score": 6,
+                "valid_submit": true
+              },
+              "p2": {
+                "invalid_reason": "No main.py file found in the root directory",
+                "name": "p2",
+                "score": 0.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 1,
+            "scores": {
+              "p1": 6,
+              "p2": 0.0
+            },
+            "winner": "p1"
+          },
+          "passed": true
+        },
+        {
+          "expected": {
+            "scores": {
+              "p1": 3.0,
+              "p2": 3.0
+            },
+            "tournament_simulations": 0,
+            "winner": "Tie"
+          },
+          "name": "native_all_invalid_tie",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "p1": {
+                "invalid_reason": "No main.py file found in the root directory",
+                "name": "p1",
+                "score": 3.0,
+                "valid_submit": false
+              },
+              "p2": {
+                "invalid_reason": "No main.py file found in the root directory",
+                "name": "p2",
+                "score": 3.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 2,
+            "scores": {
+              "p1": 3.0,
+              "p2": 3.0
+            },
+            "winner": "Tie"
+          },
+          "passed": true
+        }
+      ],
+      "native_implementation": {
+        "run_round_source_sha256": "daceaf1db5b482797c5f36954c8be08389ce3cc534b73a774f6e6c098892fd98",
+        "validator": "codeclash.arenas.ants.ants.AntsArena.validate_code",
+        "validator_file_sha256": "590b47c9d28c3f136ad65874a111ac0599b581291ff0c273c243cd44eae21814",
+        "validator_source_sha256": "1009f9dd6852680d02f2796b2b34f1d07f99e7065136daec414251e0e35092d1"
+      },
+      "negative_reason": "No main.py file found in the root directory",
+      "negative_remove_paths": [
+        "main.py"
+      ],
+      "raw_report_sha256": "8ab30fe3f1534f5d7af8b3f8f53e3bf77b2eab5970d9e6512f3aa98ba1669de7",
+      "reference_archive_sha256": "14fb21cf7ee8fbc228642801076aac570792e5912be53f9508d2dbe61373fadc",
+      "reference_byte_inventory": [
+        {
+          "path": "main.py",
+          "sha256": "c6e74bd9437b638fb2cc6dfe66007c0745ac67b5bafb6e39e24521dbddf42737",
+          "size": 4346
+        }
+      ],
+      "reference_source": {
+        "commit": "e99836b2588a45ff64188432aabbb0601e71618f",
+        "destination": "/workspace",
+        "kind": "repository",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "head": "e99836b2588a45ff64188432aabbb0601e71618f",
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00"
+        },
+        "repository": "https://github.com/CodeClash-ai/Ants.git"
+      },
+      "restored_files": 1,
+      "status": "passed"
+    },
+    {
+      "arena": "battlecode23",
+      "attempts": 1,
+      "checks": {
+        "missing_entrypoint_native_validator": true,
+        "native_all_invalid_tie": true,
+        "native_one_valid_forfeit": true,
+        "pristine_native_validator": true,
+        "restored_native_validator": true,
+        "restored_reference_bytes": true
+      },
+      "cleanup": {
+        "owned_containers": 3,
+        "removed_containers": 3,
+        "verified": true
+      },
+      "command_log_sha256": "deefcedfd91bcaf81fa8bd602aca52695fa65d692b4bfdebcb21780a6e999563",
+      "config_origin": "upstream_diagnostic",
+      "elapsed_seconds": 2.88411283493042,
+      "image": {
+        "architecture": "arm64",
+        "id": "sha256:5453b5eb6c674073e73e2954080da796e6224eb5d876a09ad158dac83dcd1b72",
+        "os": "linux",
+        "tag": "codeclash-adapter/battlecode23:f0694c64ecf6"
+      },
+      "native_config_sha256": "483c93fc6da7df1d1e8ce0b23f5964d2666658e25b8be775910d26bff57425ac",
+      "native_forfeit_expected_and_observed": [
+        {
+          "expected": {
+            "scores": {
+              "p1": 1,
+              "p2": 0
+            },
+            "tournament_simulations": 0,
+            "winner": "p1"
+          },
+          "name": "native_one_valid_forfeit",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "p1": {
+                "invalid_reason": "",
+                "name": "p1",
+                "score": 1,
+                "valid_submit": true
+              },
+              "p2": {
+                "invalid_reason": "There should be a `src/mysubmission/RobotPlayer.java` file",
+                "name": "p2",
+                "score": 0.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 1,
+            "scores": {
+              "p1": 1,
+              "p2": 0.0
+            },
+            "winner": "p1"
+          },
+          "passed": true
+        },
+        {
+          "expected": {
+            "scores": {
+              "p1": 0.5,
+              "p2": 0.5
+            },
+            "tournament_simulations": 0,
+            "winner": "Tie"
+          },
+          "name": "native_all_invalid_tie",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "p1": {
+                "invalid_reason": "There should be a `src/mysubmission/RobotPlayer.java` file",
+                "name": "p1",
+                "score": 0.5,
+                "valid_submit": false
+              },
+              "p2": {
+                "invalid_reason": "There should be a `src/mysubmission/RobotPlayer.java` file",
+                "name": "p2",
+                "score": 0.5,
+                "valid_submit": false
+              }
+            },
+            "round_num": 2,
+            "scores": {
+              "p1": 0.5,
+              "p2": 0.5
+            },
+            "winner": "Tie"
+          },
+          "passed": true
+        }
+      ],
+      "native_implementation": {
+        "run_round_source_sha256": "daceaf1db5b482797c5f36954c8be08389ce3cc534b73a774f6e6c098892fd98",
+        "validator": "codeclash.arenas.battlecode23.battlecode23.BattleCode23Arena.validate_code",
+        "validator_file_sha256": "af044540b1264d408c58530dc76ce5f94e62d686cbfb0224bc5875ffb2d681bc",
+        "validator_source_sha256": "75962d3321083a18a22bbd5897758e0fd555f95017ca2505bb6dfe87b981e1e3"
+      },
+      "negative_reason": "There should be a `src/mysubmission/RobotPlayer.java` file",
+      "negative_remove_paths": [
+        "src/mysubmission/RobotPlayer.java"
+      ],
+      "raw_report_sha256": "3b4651d93f87a229506703373716614be468021876a283197e0acbe13d7247ab",
+      "reference_archive_sha256": "4e0f54fdf4c869e9a3b5368f7dc3804cbdcbc7e90c9a84ad17c50ba92e825db4",
+      "reference_byte_inventory": [
+        {
+          "path": "src/mysubmission/RobotPlayer.java",
+          "sha256": "17d3bdf370a96a19b869b2292c61f4a76ad3377757bce2fae954f3b6fdf781a9",
+          "size": 10258
+        }
+      ],
+      "reference_source": {
+        "commit": "3af546d684436f8ccf6f02c9ca97790f002848a0",
+        "destination": "/workspace",
+        "kind": "repository",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "head": "3af546d684436f8ccf6f02c9ca97790f002848a0",
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00"
+        },
+        "repository": "https://github.com/CodeClash-ai/BattleCode2023.git"
+      },
+      "restored_files": 1,
+      "status": "passed"
+    },
+    {
+      "arena": "battlecode24",
+      "attempts": 1,
+      "checks": {
+        "missing_entrypoint_native_validator": true,
+        "native_all_invalid_tie": true,
+        "native_one_valid_forfeit": true,
+        "pristine_native_validator": true,
+        "restored_native_validator": true,
+        "restored_reference_bytes": true
+      },
+      "cleanup": {
+        "owned_containers": 3,
+        "removed_containers": 3,
+        "verified": true
+      },
+      "command_log_sha256": "a4a9142cb364a7accdf38081c169335604d0d00c7fb265630f596b03c30bed7c",
+      "config_origin": "upstream_diagnostic",
+      "elapsed_seconds": 2.5315210819244385,
+      "image": {
+        "architecture": "arm64",
+        "id": "sha256:82548dbc08317b2af9dd62f76de145ac32193e614237fae373846a8511640270",
+        "os": "linux",
+        "tag": "codeclash-adapter/battlecode24:f0694c64ecf6"
+      },
+      "native_config_sha256": "6ff452da354d13716ba589bd7b5faf6017bd7dfa1988a3e74502dc2ac9b49ec7",
+      "native_forfeit_expected_and_observed": [
+        {
+          "expected": {
+            "scores": {
+              "p1": 20,
+              "p2": 0
+            },
+            "tournament_simulations": 0,
+            "winner": "p1"
+          },
+          "name": "native_one_valid_forfeit",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "p1": {
+                "invalid_reason": "",
+                "name": "p1",
+                "score": 20,
+                "valid_submit": true
+              },
+              "p2": {
+                "invalid_reason": "There should be a `src/mysubmission/RobotPlayer.java` file",
+                "name": "p2",
+                "score": 0.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 1,
+            "scores": {
+              "p1": 20,
+              "p2": 0.0
+            },
+            "winner": "p1"
+          },
+          "passed": true
+        },
+        {
+          "expected": {
+            "scores": {
+              "p1": 10.0,
+              "p2": 10.0
+            },
+            "tournament_simulations": 0,
+            "winner": "Tie"
+          },
+          "name": "native_all_invalid_tie",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "p1": {
+                "invalid_reason": "There should be a `src/mysubmission/RobotPlayer.java` file",
+                "name": "p1",
+                "score": 10.0,
+                "valid_submit": false
+              },
+              "p2": {
+                "invalid_reason": "There should be a `src/mysubmission/RobotPlayer.java` file",
+                "name": "p2",
+                "score": 10.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 2,
+            "scores": {
+              "p1": 10.0,
+              "p2": 10.0
+            },
+            "winner": "Tie"
+          },
+          "passed": true
+        }
+      ],
+      "native_implementation": {
+        "run_round_source_sha256": "daceaf1db5b482797c5f36954c8be08389ce3cc534b73a774f6e6c098892fd98",
+        "validator": "codeclash.arenas.battlecode24.battlecode24.BattleCode24Arena.validate_code",
+        "validator_file_sha256": "7ec7e4dbed5efa977fa44eb4c220091b60b3b9ab0c5278e5a816a59789396d10",
+        "validator_source_sha256": "02b4cf9ca22911fce5cb9dff2671abf374ce8ea82ba3a2d189cde0bfca50ec10"
+      },
+      "negative_reason": "There should be a `src/mysubmission/RobotPlayer.java` file",
+      "negative_remove_paths": [
+        "src/mysubmission/RobotPlayer.java"
+      ],
+      "raw_report_sha256": "da32ab7a2883561820c69376a3ebbfc198767b1ac1d908606a79008e93a9350d",
+      "reference_archive_sha256": "93bb1f45bc281956212c06bab4a42d7cacd0af743248582c63957cc54a5049b4",
+      "reference_byte_inventory": [
+        {
+          "path": "src/mysubmission/RobotPlayer.java",
+          "sha256": "d68555b12293e39942d455b62751af359df2b1ed0ffff9cf12b265b411a5bf4a",
+          "size": 7551
+        }
+      ],
+      "reference_source": {
+        "commit": "59e51acd0d43bdbc5111f609314cd0292bc6e45a",
+        "destination": "/workspace",
+        "kind": "repository",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "head": "59e51acd0d43bdbc5111f609314cd0292bc6e45a",
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00"
+        },
+        "repository": "https://github.com/CodeClash-ai/BattleCode2024.git"
+      },
+      "restored_files": 1,
+      "status": "passed"
+    },
+    {
+      "arena": "battlecode25",
+      "attempts": 1,
+      "checks": {
+        "missing_entrypoint_native_validator": true,
+        "native_all_invalid_tie": true,
+        "native_one_valid_forfeit": true,
+        "pristine_native_validator": true,
+        "restored_native_validator": true,
+        "restored_reference_bytes": true
+      },
+      "cleanup": {
+        "owned_containers": 3,
+        "removed_containers": 3,
+        "verified": true
+      },
+      "command_log_sha256": "0d3a7cbb12545a73b25d807215e619403c179b69413d9fb54b3f289e5f17b561",
+      "config_origin": "upstream_diagnostic",
+      "elapsed_seconds": 2.4953348636627197,
+      "image": {
+        "architecture": "arm64",
+        "id": "sha256:62203dbe5db66e990beb78ce59dac10d710be1989665a66c51682a224744452d",
+        "os": "linux",
+        "tag": "codeclash-adapter/battlecode25:f0694c64ecf6"
+      },
+      "native_config_sha256": "cd34b82e8a3d29451222f3633ec61dc44c7a12b806c11551fd73751f80f3da7b",
+      "native_forfeit_expected_and_observed": [
+        {
+          "expected": {
+            "scores": {
+              "p1": 20,
+              "p2": 0
+            },
+            "tournament_simulations": 0,
+            "winner": "p1"
+          },
+          "name": "native_one_valid_forfeit",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "p1": {
+                "invalid_reason": "",
+                "name": "p1",
+                "score": 20,
+                "valid_submit": true
+              },
+              "p2": {
+                "invalid_reason": "There should be a `src/mysubmission/bot.py` file",
+                "name": "p2",
+                "score": 0.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 1,
+            "scores": {
+              "p1": 20,
+              "p2": 0.0
+            },
+            "winner": "p1"
+          },
+          "passed": true
+        },
+        {
+          "expected": {
+            "scores": {
+              "p1": 10.0,
+              "p2": 10.0
+            },
+            "tournament_simulations": 0,
+            "winner": "Tie"
+          },
+          "name": "native_all_invalid_tie",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "p1": {
+                "invalid_reason": "There should be a `src/mysubmission/bot.py` file",
+                "name": "p1",
+                "score": 10.0,
+                "valid_submit": false
+              },
+              "p2": {
+                "invalid_reason": "There should be a `src/mysubmission/bot.py` file",
+                "name": "p2",
+                "score": 10.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 2,
+            "scores": {
+              "p1": 10.0,
+              "p2": 10.0
+            },
+            "winner": "Tie"
+          },
+          "passed": true
+        }
+      ],
+      "native_implementation": {
+        "run_round_source_sha256": "daceaf1db5b482797c5f36954c8be08389ce3cc534b73a774f6e6c098892fd98",
+        "validator": "codeclash.arenas.battlecode25.battlecode25.BattleCode25Arena.validate_code",
+        "validator_file_sha256": "39d631cc40f3c8c6bf52dbfdc076bd51492be316a6513f7c7115a13600a6accb",
+        "validator_source_sha256": "0cc18497ee62509e313b7c4b01edeadb33c895d470259e262725909f4f92251d"
+      },
+      "negative_reason": "There should be a `src/mysubmission/bot.py` file",
+      "negative_remove_paths": [
+        "src/mysubmission/bot.py"
+      ],
+      "raw_report_sha256": "3468202388b4baa936ff97cf5e9b57af79692428dcd6842afc3ee50ba41769c2",
+      "reference_archive_sha256": "128dc9ca98ddb6a081c0d1d30f7808e6684c2fa3fc1a9ffaaa615836cf9897d5",
+      "reference_byte_inventory": [
+        {
+          "path": "src/mysubmission/bot.py",
+          "sha256": "b080b85aadd4a103f8210ddefc5b2db15409afd626f742fd317ece7ae529642c",
+          "size": 5361
+        }
+      ],
+      "reference_source": {
+        "commit": "4499ec262ba80dfc16917b5151f4eb43d6088528",
+        "destination": "/workspace",
+        "kind": "repository",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "head": "4499ec262ba80dfc16917b5151f4eb43d6088528",
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00"
+        },
+        "repository": "https://github.com/CodeClash-ai/BattleCode2025.git"
+      },
+      "restored_files": 1,
+      "status": "passed"
+    },
+    {
+      "arena": "battlesnake",
+      "attempts": 1,
+      "checks": {
+        "missing_entrypoint_native_validator": true,
+        "native_all_invalid_tie": true,
+        "native_one_valid_forfeit": true,
+        "pristine_native_validator": true,
+        "restored_native_validator": true,
+        "restored_reference_bytes": true
+      },
+      "cleanup": {
+        "owned_containers": 3,
+        "removed_containers": 3,
+        "verified": true
+      },
+      "command_log_sha256": "670b4a33b25bba67446d4e7557891473675141cf751f6365edf37ca09eb8ef20",
+      "config_origin": "published_pvp",
+      "elapsed_seconds": 2.2671890258789062,
+      "image": {
+        "architecture": "arm64",
+        "id": "sha256:e863d9e3da4d5dc0ac114002c31bdb67bccb22aba2375e7bc4afe582dda66cd5",
+        "os": "linux",
+        "tag": "codeclash-adapter/battlesnake:f0694c64ecf6"
+      },
+      "native_config_sha256": "4d8ef44d3ef60ba8e03b1248319f4f6a0e222d7f5cc172ffe5fd4389ffba084b",
+      "native_forfeit_expected_and_observed": [
+        {
+          "expected": {
+            "scores": {
+              "claude-sonnet-4-5-20250929": 1000,
+              "o3": 0
+            },
+            "tournament_simulations": 0,
+            "winner": "claude-sonnet-4-5-20250929"
+          },
+          "name": "native_one_valid_forfeit",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "claude-sonnet-4-5-20250929": {
+                "invalid_reason": "",
+                "name": "claude-sonnet-4-5-20250929",
+                "score": 1000,
+                "valid_submit": true
+              },
+              "o3": {
+                "invalid_reason": "No main.py file found in the root directory",
+                "name": "o3",
+                "score": 0.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 1,
+            "scores": {
+              "claude-sonnet-4-5-20250929": 1000,
+              "o3": 0.0
+            },
+            "winner": "claude-sonnet-4-5-20250929"
+          },
+          "passed": true
+        },
+        {
+          "expected": {
+            "scores": {
+              "claude-sonnet-4-5-20250929": 500.0,
+              "o3": 500.0
+            },
+            "tournament_simulations": 0,
+            "winner": "Tie"
+          },
+          "name": "native_all_invalid_tie",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "claude-sonnet-4-5-20250929": {
+                "invalid_reason": "No main.py file found in the root directory",
+                "name": "claude-sonnet-4-5-20250929",
+                "score": 500.0,
+                "valid_submit": false
+              },
+              "o3": {
+                "invalid_reason": "No main.py file found in the root directory",
+                "name": "o3",
+                "score": 500.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 2,
+            "scores": {
+              "claude-sonnet-4-5-20250929": 500.0,
+              "o3": 500.0
+            },
+            "winner": "Tie"
+          },
+          "passed": true
+        }
+      ],
+      "native_implementation": {
+        "run_round_source_sha256": "daceaf1db5b482797c5f36954c8be08389ce3cc534b73a774f6e6c098892fd98",
+        "validator": "codeclash.arenas.battlesnake.battlesnake.BattleSnakeArena.validate_code",
+        "validator_file_sha256": "fdcb53dbf92cd190af2d246f9e4ad1d5c3744cee9ce18a426a09b00cac047132",
+        "validator_source_sha256": "10a1bfbdc061c9666b3406e2ebda4b80ee2e7537f33c51a6d24f86c6eef8f120"
+      },
+      "negative_reason": "No main.py file found in the root directory",
+      "negative_remove_paths": [
+        "main.py",
+        "run.sh"
+      ],
+      "raw_report_sha256": "0fc3b9b31dbb3a7ebd3a48e535c599c385f72d16a6f8406e28705b0da82476e8",
+      "reference_archive_sha256": "c3dcd7de4df929b38e526e473b2a7c5a4992225045c4cbe73a41284122ede515",
+      "reference_byte_inventory": [
+        {
+          "path": "main.py",
+          "sha256": "f550a8cc412a16e898490beb58d85d72e79326207ac6e29a6fe0bc5077bdad3c",
+          "size": 3570
+        }
+      ],
+      "reference_source": {
+        "commit": "aaf48003cfa5034a14d7053bb0ccc0bc6ae99cee",
+        "destination": "/workspace",
+        "kind": "repository",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "head": "aaf48003cfa5034a14d7053bb0ccc0bc6ae99cee",
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00"
+        },
+        "repository": "https://github.com/CodeClash-ai/BattleSnake.git"
+      },
+      "restored_files": 1,
+      "status": "passed"
+    },
+    {
+      "arena": "bomberland",
+      "attempts": 1,
+      "checks": {
+        "missing_entrypoint_native_validator": true,
+        "native_all_invalid_tie": true,
+        "native_one_valid_forfeit": true,
+        "pristine_native_validator": true,
+        "restored_native_validator": true,
+        "restored_reference_bytes": true
+      },
+      "cleanup": {
+        "owned_containers": 3,
+        "removed_containers": 3,
+        "verified": true
+      },
+      "command_log_sha256": "21e0b02742e6da264210cb9a33358ad94fb481adf9764493a4e06a2824f513f9",
+      "config_origin": "upstream_diagnostic",
+      "elapsed_seconds": 2.6067678928375244,
+      "image": {
+        "architecture": "arm64",
+        "id": "sha256:9d0cb2728a492c88c894ccdead993e18afff76b68dae1bca2a09ef700bfbc6f5",
+        "os": "linux",
+        "tag": "codeclash-adapter/bomberland:f0694c64ecf6"
+      },
+      "native_config_sha256": "be6f626c255695512624e279d21c53a10fb7ec19df4d98379e5dec88b6b991d1",
+      "native_forfeit_expected_and_observed": [
+        {
+          "expected": {
+            "scores": {
+              "alpha": 2,
+              "beta": 0
+            },
+            "tournament_simulations": 0,
+            "winner": "alpha"
+          },
+          "name": "native_one_valid_forfeit",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "alpha": {
+                "invalid_reason": "",
+                "name": "alpha",
+                "score": 2,
+                "valid_submit": true
+              },
+              "beta": {
+                "invalid_reason": "Submission file `bomberland_agent.py` not found in the workspace root",
+                "name": "beta",
+                "score": 0.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 1,
+            "scores": {
+              "alpha": 2,
+              "beta": 0.0
+            },
+            "winner": "alpha"
+          },
+          "passed": true
+        },
+        {
+          "expected": {
+            "scores": {
+              "alpha": 1.0,
+              "beta": 1.0
+            },
+            "tournament_simulations": 0,
+            "winner": "Tie"
+          },
+          "name": "native_all_invalid_tie",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "alpha": {
+                "invalid_reason": "Submission file `bomberland_agent.py` not found in the workspace root",
+                "name": "alpha",
+                "score": 1.0,
+                "valid_submit": false
+              },
+              "beta": {
+                "invalid_reason": "Submission file `bomberland_agent.py` not found in the workspace root",
+                "name": "beta",
+                "score": 1.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 2,
+            "scores": {
+              "alpha": 1.0,
+              "beta": 1.0
+            },
+            "winner": "Tie"
+          },
+          "passed": true
+        }
+      ],
+      "native_implementation": {
+        "run_round_source_sha256": "daceaf1db5b482797c5f36954c8be08389ce3cc534b73a774f6e6c098892fd98",
+        "validator": "codeclash.arenas.bomberland.bomberland.BomberlandArena.validate_code",
+        "validator_file_sha256": "b4b675749767207740d72617990bd3f0666c8f9652f83fa0ee8d3f8bd16811c1",
+        "validator_source_sha256": "2ea73170bbc6d96cee6ea067d69f7f98c03ded38d6a40848d64900ac7270161a"
+      },
+      "negative_reason": "Submission file `bomberland_agent.py` not found in the workspace root",
+      "negative_remove_paths": [
+        "bomberland_agent.py"
+      ],
+      "raw_report_sha256": "06133328c5b2b89602c0a4919526cf58162129fbc6207164b8553a299d04c252",
+      "reference_archive_sha256": "6906be5427a939874ba8259fb7e905ca87b2155fac1122173699b2519a417039",
+      "reference_byte_inventory": [
+        {
+          "path": "bomberland_agent.py",
+          "sha256": "4582fc894d5469d03487dcb9caaf2ae33c9540128222e1e1d2c1b9ad716cb192",
+          "size": 307
+        }
+      ],
+      "reference_source": {
+        "commit": "f0694c64ecf6abfca2bc867bad2de9333fef5be8",
+        "kind": "bundled_runtime",
+        "path": "codeclash/arenas/bomberland/runtime",
+        "tree": "98f47c9b95e41c67fceb246fc0562f717cc3cd78"
+      },
+      "restored_files": 1,
+      "status": "passed"
+    },
+    {
+      "arena": "bridge",
+      "attempts": 1,
+      "checks": {
+        "missing_entrypoint_native_validator": true,
+        "native_all_invalid_tie": true,
+        "native_one_valid_forfeit": true,
+        "pristine_native_validator": true,
+        "restored_native_validator": true,
+        "restored_reference_bytes": true
+      },
+      "cleanup": {
+        "owned_containers": 5,
+        "removed_containers": 5,
+        "verified": true
+      },
+      "command_log_sha256": "ccead8673695784bd14e4a1c4821fa67cc070b4fa26e7e806795cb1c124c6a78",
+      "config_origin": "upstream_diagnostic",
+      "elapsed_seconds": 3.208688735961914,
+      "image": {
+        "architecture": "arm64",
+        "id": "sha256:c9a49178d1fde788df2a3b6c874c6bb11b52eb77ebbff261259ff9d138408ba4",
+        "os": "linux",
+        "tag": "codeclash-adapter/bridge:f0694c64ecf6"
+      },
+      "native_config_sha256": "69f1d576ba6f703dc03a47612103d6d247b3ca485a0d30961576ac6775786efd",
+      "native_forfeit_expected_and_observed": [
+        {
+          "expected": {
+            "scores": {
+              "east": 0,
+              "north": 10,
+              "south": 0,
+              "west": 0
+            },
+            "tournament_simulations": 0,
+            "winner": "north"
+          },
+          "name": "native_one_valid_forfeit",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "east": {
+                "invalid_reason": "No bridge_agent.py file found in root directory",
+                "name": "east",
+                "score": 0.0,
+                "valid_submit": false
+              },
+              "north": {
+                "invalid_reason": "",
+                "name": "north",
+                "score": 10,
+                "valid_submit": true
+              },
+              "south": {
+                "invalid_reason": "No bridge_agent.py file found in root directory",
+                "name": "south",
+                "score": 0.0,
+                "valid_submit": false
+              },
+              "west": {
+                "invalid_reason": "No bridge_agent.py file found in root directory",
+                "name": "west",
+                "score": 0.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 1,
+            "scores": {
+              "east": 0.0,
+              "north": 10,
+              "south": 0.0,
+              "west": 0.0
+            },
+            "winner": "north"
+          },
+          "passed": true
+        },
+        {
+          "expected": {
+            "scores": {
+              "east": 2.5,
+              "north": 2.5,
+              "south": 2.5,
+              "west": 2.5
+            },
+            "tournament_simulations": 0,
+            "winner": "Tie"
+          },
+          "name": "native_all_invalid_tie",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "east": {
+                "invalid_reason": "No bridge_agent.py file found in root directory",
+                "name": "east",
+                "score": 2.5,
+                "valid_submit": false
+              },
+              "north": {
+                "invalid_reason": "No bridge_agent.py file found in root directory",
+                "name": "north",
+                "score": 2.5,
+                "valid_submit": false
+              },
+              "south": {
+                "invalid_reason": "No bridge_agent.py file found in root directory",
+                "name": "south",
+                "score": 2.5,
+                "valid_submit": false
+              },
+              "west": {
+                "invalid_reason": "No bridge_agent.py file found in root directory",
+                "name": "west",
+                "score": 2.5,
+                "valid_submit": false
+              }
+            },
+            "round_num": 2,
+            "scores": {
+              "east": 2.5,
+              "north": 2.5,
+              "south": 2.5,
+              "west": 2.5
+            },
+            "winner": "Tie"
+          },
+          "passed": true
+        }
+      ],
+      "native_implementation": {
+        "run_round_source_sha256": "daceaf1db5b482797c5f36954c8be08389ce3cc534b73a774f6e6c098892fd98",
+        "validator": "codeclash.arenas.bridge.bridge.BridgeArena.validate_code",
+        "validator_file_sha256": "6b8f7cca8239e541e3f950dd87b2c5156be28b0468309692e551d4ff1d92b71b",
+        "validator_source_sha256": "24a6ee540f74f888d6d025eaf87cc37d827c279f40b20be385996dce8d7fa389"
+      },
+      "negative_reason": "No bridge_agent.py file found in root directory",
+      "negative_remove_paths": [
+        "bridge_agent.py"
+      ],
+      "raw_report_sha256": "4ea3f82784506a724113a310a9490846d377bddd53c2d0dd3701323bb9c8e872",
+      "reference_archive_sha256": "5c6355a1a8104571f61846673e9db0ffa1b24392b619f29443c60e99a6dc6e2b",
+      "reference_byte_inventory": [
+        {
+          "path": "bridge_agent.py",
+          "sha256": "5a2b7b28208fd0042f8c845ce46e13774dd27f745b610b84affe3c280d7545e2",
+          "size": 1877
+        }
+      ],
+      "reference_source": {
+        "commit": "e688dd238d3936f9584e1684d76daec43b982b6c",
+        "destination": "/workspace",
+        "kind": "repository",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "head": "e688dd238d3936f9584e1684d76daec43b982b6c",
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00"
+        },
+        "repository": "https://github.com/CodeClash-ai/Bridge.git"
+      },
+      "restored_files": 1,
+      "status": "passed"
+    },
+    {
+      "arena": "chess",
+      "attempts": 1,
+      "checks": {
+        "missing_entrypoint_native_validator": true,
+        "native_all_invalid_tie": true,
+        "native_one_valid_forfeit": true,
+        "pristine_native_validator": true,
+        "restored_native_validator": true,
+        "restored_reference_bytes": true
+      },
+      "cleanup": {
+        "owned_containers": 3,
+        "removed_containers": 3,
+        "verified": true
+      },
+      "command_log_sha256": "91e05b33c9352ba56851541e92f70ddc080a45ecd581ad1540c4a6e65cc9ecc0",
+      "config_origin": "upstream_diagnostic",
+      "elapsed_seconds": 29.38458490371704,
+      "image": {
+        "architecture": "arm64",
+        "id": "sha256:9057f858c42b9975c5fdb24e2cdd609f321dd5a5a9758334f17ff845343d5fa6",
+        "os": "linux",
+        "tag": "codeclash-adapter/chess:f0694c64ecf6"
+      },
+      "native_config_sha256": "3bf2f3e2f8d7907742dfcee2a0d70e0e3620037f0e494eb156d5232b8c5df204",
+      "native_forfeit_expected_and_observed": [
+        {
+          "expected": {
+            "scores": {
+              "p1": 20,
+              "p2": 0
+            },
+            "tournament_simulations": 0,
+            "winner": "p1"
+          },
+          "name": "native_one_valid_forfeit",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "p1": {
+                "invalid_reason": "",
+                "name": "p1",
+                "score": 20,
+                "valid_submit": true
+              },
+              "p2": {
+                "invalid_reason": "There should be a `src/` directory in the workspace",
+                "name": "p2",
+                "score": 0.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 1,
+            "scores": {
+              "p1": 20,
+              "p2": 0.0
+            },
+            "winner": "p1"
+          },
+          "passed": true
+        },
+        {
+          "expected": {
+            "scores": {
+              "p1": 10.0,
+              "p2": 10.0
+            },
+            "tournament_simulations": 0,
+            "winner": "Tie"
+          },
+          "name": "native_all_invalid_tie",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "p1": {
+                "invalid_reason": "There should be a `src/` directory in the workspace",
+                "name": "p1",
+                "score": 10.0,
+                "valid_submit": false
+              },
+              "p2": {
+                "invalid_reason": "There should be a `src/` directory in the workspace",
+                "name": "p2",
+                "score": 10.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 2,
+            "scores": {
+              "p1": 10.0,
+              "p2": 10.0
+            },
+            "winner": "Tie"
+          },
+          "passed": true
+        }
+      ],
+      "native_implementation": {
+        "run_round_source_sha256": "daceaf1db5b482797c5f36954c8be08389ce3cc534b73a774f6e6c098892fd98",
+        "validator": "codeclash.arenas.chess.chess.ChessArena.validate_code",
+        "validator_file_sha256": "95886b5a6a035593b120a9a6fec202218c3cf55e803d3c5415765b31fbbab710",
+        "validator_source_sha256": "d2589aeefa9dbe2f6966f0a5796f3a4005378f003800716ef4b6e49e7581252c"
+      },
+      "negative_reason": "There should be a `src/` directory in the workspace",
+      "negative_remove_paths": [
+        "src"
+      ],
+      "raw_report_sha256": "ce3b11d5d006e290677de34ca6aef62462d715689179ecc99f3f932113eea77a",
+      "reference_archive_sha256": "46c62093693d62870e832587e22124ac0e223320c42ffde607893c7146149474",
+      "reference_byte_inventory": [
+        {
+          "path": "src/magic.h",
+          "sha256": "5ca0bced247c4a7baa72a6d54104e88b4478127cada0f8aa4eae06d539372752",
+          "size": 986
+        },
+        {
+          "path": "src/uci.cpp",
+          "sha256": "fb2ba5b4f1017d75685044f15a22b3d069b73e274d83eec6975fc54b8489bb85",
+          "size": 5626
+        },
+        {
+          "path": "src/timeman.cpp",
+          "sha256": "3d1c63f88d6cb99d49d6d75015d63bf3400d74733f7b5362f7acdef9f226dec0",
+          "size": 951
+        },
+        {
+          "path": "src/search.cpp",
+          "sha256": "43adca0dc4e9ecc43a5540bfc1345138684f587d3c1cc5809f3feb2fb1d794cc",
+          "size": 17507
+        },
+        {
+          "path": "src/cons.h",
+          "sha256": "c9afe4ec592b09abfb6a5aac8e6018fcc8b528032ee8751cae03a3c5ea58ef7e",
+          "size": 768
+        },
+        {
+          "path": "src/bishop.h",
+          "sha256": "aae649dd2029f29aabae7ca17906381c3359c2af0ebe899371c5b81b0c6070eb",
+          "size": 1027
+        },
+        {
+          "path": "src/tt.cpp",
+          "sha256": "9692d2cd12aab6925e814965b0b5bc24d89bf96fd280e91731e8705ca0cdd492",
+          "size": 2677
+        },
+        {
+          "path": "src/thread.h",
+          "sha256": "94bd592fc80b4a518e5d7b0f116c5bee8f4d8f37ed0450a2a21f0ec0989017a3",
+          "size": 2329
+        },
+        {
+          "path": "src/position.h",
+          "sha256": "0f7d282e042006f6488ece132bad4be9e1d912a39413936f8f1d9e1ef505912e",
+          "size": 5003
+        },
+        {
+          "path": "src/thread.cpp",
+          "sha256": "9fcfda28f7a7ff96b441e5ce329302c5fa4f4e4cb7930137379b174d8d925562",
+          "size": 4479
+        },
+        {
+          "path": "src/logger.h",
+          "sha256": "d69306e03a47ff75eda57b5f94b2109f1b5304fa0bd2561a31f146a738ac7a9e",
+          "size": 386
+        },
+        {
+          "path": "src/queen.h",
+          "sha256": "41497ff95ef19f49a9816f149d71545bd0ea0f46850452515aa5acc8d872d8fa",
+          "size": 355
+        },
+        {
+          "path": "src/king.h",
+          "sha256": "5e060dc73529a4e450db95236dfd6a4768fc341039a4a4bda32f415fe713ab78",
+          "size": 423
+        },
+        {
+          "path": "src/move.cpp",
+          "sha256": "08eb7d4aadfe29c242bc21bd6c06fb5bf18479b48f60133f70f0ae1fd757f1ae",
+          "size": 3522
+        },
+        {
+          "path": "src/position.cpp",
+          "sha256": "fd0410f0ecb00d8197eb6ad10b567161cdb5f09bdcbac0b1b4f8404ccd5bec0e",
+          "size": 14286
+        },
+        {
+          "path": "src/makefile",
+          "sha256": "20e5cf3d472377d3e03357021259ba5441bd65acd3da1e8fdea13cf3e675d18e",
+          "size": 5612
+        },
+        {
+          "path": "src/movegen.h",
+          "sha256": "224efce452e04348b8b494a99cbed86b8f703246e4a5ee2d50ae1083643fe5ee",
+          "size": 1044
+        },
+        {
+          "path": "src/bitboard.cpp",
+          "sha256": "319a76f0a6f768fecc0cb76ea8045916c0fae74ca831bf56ffb3498fc4474b9c",
+          "size": 2811
+        },
+        {
+          "path": "src/types.h",
+          "sha256": "f5e7a478cfb10b9a539a6d43e45b2cf2e185039daa070dd9dd9cd80c5b5f2d26",
+          "size": 1310
+        },
+        {
+          "path": "src/logger.cpp",
+          "sha256": "92128b6f46ee1eefa82d921d7304a54d17c40f14668ca7aade7dbe97012dc233",
+          "size": 1200
+        },
+        {
+          "path": "src/eval.h",
+          "sha256": "38f27f6ea7170c71a3fc88a8c195abfcf1084c6587bd1e9510ed705ec53355bc",
+          "size": 6911
+        },
+        {
+          "path": "src/queen.cpp",
+          "sha256": "22f4e4d910db8a2c03572611ceeca3f4cec2732e26da84eb5ed18b4936304838",
+          "size": 274
+        },
+        {
+          "path": "src/search.h",
+          "sha256": "0dd704e8126797af057f9bfc4f3f1609f7062dee5c71f674253cfe027c80aa9d",
+          "size": 1597
+        },
+        {
+          "path": "src/uci.h",
+          "sha256": "aa39884c9d244f04810cca749fe65721bb497181257827374d4a91c67f7c692b",
+          "size": 1514
+        },
+        {
+          "path": "src/move.h",
+          "sha256": "69de41c8914fce68aaa1513088a58ab6e1ea89a978c767be95e30229bcbf46dd",
+          "size": 1461
+        },
+        {
+          "path": "src/timeman.h",
+          "sha256": "06d05f908e5451724c7c2e2f5410e203a1349782e6da5c753972a55296be0414",
+          "size": 676
+        },
+        {
+          "path": "src/king.cpp",
+          "sha256": "1909e1a2ff1ef79670fbec31fc397c8ce9fd2231b30ce349927edc20bdf6bae4",
+          "size": 1006
+        },
+        {
+          "path": "src/perft.h",
+          "sha256": "c9eb07e09b8c00528ea8a5d4779f45e649b6d5be28705cd79973cbeb1666cd95",
+          "size": 670
+        },
+        {
+          "path": "src/bishop.cpp",
+          "sha256": "5021ff97a2c67ce7fa010d777835949d3f5d8e580a0e5182c1fe88caad453a76",
+          "size": 5577
+        },
+        {
+          "path": "src/perft.cpp",
+          "sha256": "904dff85b448a9922d92ce3e0b985b3c87e2492179720bf3ac971751e3c7b42d",
+          "size": 1895
+        },
+        {
+          "path": "src/tt.h",
+          "sha256": "97373fc9250d3ef32679977592166bd0cec439c7636ba75f35aa80c916da1ccf",
+          "size": 964
+        },
+        {
+          "path": "src/rook.cpp",
+          "sha256": "d42e17729a68233ec6f420cf1d94bddc9493fc9496f4a72a53d47ed56ed62993",
+          "size": 5368
+        },
+        {
+          "path": "src/bitboard.h",
+          "sha256": "89639a1499bb4f5d2af72c7c51dede5e066bc98d4a1f10bda39be6ce6ee0b2cf",
+          "size": 1388
+        },
+        {
+          "path": "src/cons.cpp",
+          "sha256": "78823cd9c951210d3c3935f9a31007b122a069c5a6c4526e7c0385bcc46c7b67",
+          "size": 3642
+        },
+        {
+          "path": "src/kojiro.cpp",
+          "sha256": "3c1b82154e0d5b81d1297322b56c604fa2448f44bc77f3fb2ea2deac62d9202a",
+          "size": 1027
+        },
+        {
+          "path": "src/pawn.cpp",
+          "sha256": "f3c579ebc5d0e2931a7d13fe7c64b247b1821e77bb8f857910c808091d2c4aed",
+          "size": 1028
+        },
+        {
+          "path": "src/movegen.cpp",
+          "sha256": "71186e9e73a91881d40dff1637cc089b3b50b17083d055d1bce67dcd3236c01f",
+          "size": 8812
+        },
+        {
+          "path": "src/pawn.h",
+          "sha256": "9447a3eae454dcd7f066ddf5b65e9f90c1ac86db203e8cdedde5056930eec603",
+          "size": 483
+        },
+        {
+          "path": "src/knight.cpp",
+          "sha256": "826929c2748475448737ec0f1650f00ce0cd829fef356732ce12bef5163b62b7",
+          "size": 962
+        },
+        {
+          "path": "src/knight.h",
+          "sha256": "4d2bbb916261745ef1e26cc436f28e7da38e82f5f94f377322b98d6d05a32b03",
+          "size": 442
+        },
+        {
+          "path": "src/rook.h",
+          "sha256": "4694580b0c1b624aae8f0f4e4bed977eea9deacfacc2d4973f3ab3745a4b89ce",
+          "size": 1046
+        },
+        {
+          "path": "src/fmt/base.h",
+          "sha256": "b0d52ef9d0f7203100eeee451056938e11536894feff6f99a6566497d6f40d4b",
+          "size": 102780
+        },
+        {
+          "path": "src/fmt/format.cc",
+          "sha256": "c253dc156509a9cba330bbad3f3d7057d8de33acedbe64fc3e8c5a18bc171def",
+          "size": 1393
+        },
+        {
+          "path": "src/fmt/core.h",
+          "sha256": "b2b6692145b11c7c2774db106078c97575a47d18e80c7783c68566475325ebb4",
+          "size": 187
+        },
+        {
+          "path": "src/fmt/format.h",
+          "sha256": "f6515852b0b0375fb05d27d27cd386da4c6aff40a4fb9232413f604c8c49b6d8",
+          "size": 157742
+        },
+        {
+          "path": "src/fmt/format-inl.h",
+          "sha256": "02f79502fc57326bbafec8f07c2b664ac0bcb83cb444ee464359dba83c10c36f",
+          "size": 80997
+        },
+        {
+          "path": "src/misc.h",
+          "sha256": "a16710f1b9ec2e47ce4f05d603888ed5e768d458642b1b95ddb84bf7a184a288",
+          "size": 2980
+        },
+        {
+          "path": "src/eval.cpp",
+          "sha256": "1342ad325e58eba35e32f155ac087ee3c2702dbd0d9d4df57aa5653857293bea",
+          "size": 10447
+        },
+        {
+          "path": "src/magic.cpp",
+          "sha256": "7ed7b2cdda46ae6d427627b2b011bc7d8f753fa59ddc44dd9dfe95696cddff3a",
+          "size": 4291
+        }
+      ],
+      "reference_source": {
+        "commit": "61248747567b5d79fbeaff122e32a2162b114b12",
+        "destination": "/workspace",
+        "kind": "repository",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "head": "61248747567b5d79fbeaff122e32a2162b114b12",
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00"
+        },
+        "repository": "https://github.com/Babak-SSH/Kojiro.git"
+      },
+      "restored_files": 49,
+      "status": "passed"
+    },
+    {
+      "arena": "corewar",
+      "attempts": 1,
+      "checks": {
+        "missing_entrypoint_native_validator": true,
+        "native_all_invalid_tie": true,
+        "native_one_valid_forfeit": true,
+        "pristine_native_validator": true,
+        "restored_native_validator": true,
+        "restored_reference_bytes": true
+      },
+      "cleanup": {
+        "owned_containers": 3,
+        "removed_containers": 3,
+        "verified": true
+      },
+      "command_log_sha256": "a3391e06d6936b30e9bfde3aa9fce744b05e8b1425150614a518e12d7c1c6257",
+      "config_origin": "published_pvp",
+      "elapsed_seconds": 3.834861993789673,
+      "image": {
+        "architecture": "arm64",
+        "id": "sha256:3dd25ef024fe8145ab57db6f324752cb89a7d780e21fe30e8c5799be7a650fdf",
+        "os": "linux",
+        "tag": "codeclash-adapter/corewar:f0694c64ecf6"
+      },
+      "native_config_sha256": "024efaecbfb565795e4284177006edb7423df89379a7fa417a9b0bd810d2eb7c",
+      "native_forfeit_expected_and_observed": [
+        {
+          "expected": {
+            "scores": {
+              "claude-sonnet-4-5-20250929": 1000,
+              "o3": 0
+            },
+            "tournament_simulations": 0,
+            "winner": "claude-sonnet-4-5-20250929"
+          },
+          "name": "native_one_valid_forfeit",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "claude-sonnet-4-5-20250929": {
+                "invalid_reason": "",
+                "name": "claude-sonnet-4-5-20250929",
+                "score": 1000,
+                "valid_submit": true
+              },
+              "o3": {
+                "invalid_reason": "There should be a `warrior.red` file",
+                "name": "o3",
+                "score": 0.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 1,
+            "scores": {
+              "claude-sonnet-4-5-20250929": 1000,
+              "o3": 0.0
+            },
+            "winner": "claude-sonnet-4-5-20250929"
+          },
+          "passed": true
+        },
+        {
+          "expected": {
+            "scores": {
+              "claude-sonnet-4-5-20250929": 500.0,
+              "o3": 500.0
+            },
+            "tournament_simulations": 0,
+            "winner": "Tie"
+          },
+          "name": "native_all_invalid_tie",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "claude-sonnet-4-5-20250929": {
+                "invalid_reason": "There should be a `warrior.red` file",
+                "name": "claude-sonnet-4-5-20250929",
+                "score": 500.0,
+                "valid_submit": false
+              },
+              "o3": {
+                "invalid_reason": "There should be a `warrior.red` file",
+                "name": "o3",
+                "score": 500.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 2,
+            "scores": {
+              "claude-sonnet-4-5-20250929": 500.0,
+              "o3": 500.0
+            },
+            "winner": "Tie"
+          },
+          "passed": true
+        }
+      ],
+      "native_implementation": {
+        "run_round_source_sha256": "daceaf1db5b482797c5f36954c8be08389ce3cc534b73a774f6e6c098892fd98",
+        "validator": "codeclash.arenas.corewar.corewar.CoreWarArena.validate_code",
+        "validator_file_sha256": "28a0323172a4b24abd962ca1a87c7e4967674bec9a72839a9140475429866a8b",
+        "validator_source_sha256": "16820ad0f3683a0d47305a3b63a9918d5ceb229f7e1d4036122348a05ba6db0a"
+      },
+      "negative_reason": "There should be a `warrior.red` file",
+      "negative_remove_paths": [
+        "warrior.red"
+      ],
+      "raw_report_sha256": "f64e8ee907c42812baee2dca51bb7cd6ba926b7c61b8a03835d7a07ab216e9f9",
+      "reference_archive_sha256": "bee96a45b9c367ff90dbf6f30d1aa15c74c10215686ed170c09f7744e3434704",
+      "reference_byte_inventory": [
+        {
+          "path": "warrior.red",
+          "sha256": "79ebd140ed7e735e4b41c404712751d73ae2592732dbdef0f3e27e12c2d9ca9b",
+          "size": 178
+        }
+      ],
+      "reference_source": {
+        "commit": "eda6773b3f0bde428b04bacb31d2f8c302159655",
+        "destination": "/workspace",
+        "kind": "repository",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "head": "eda6773b3f0bde428b04bacb31d2f8c302159655",
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00"
+        },
+        "repository": "https://github.com/CodeClash-ai/CoreWar.git"
+      },
+      "restored_files": 1,
+      "status": "passed"
+    },
+    {
+      "arena": "cyborg",
+      "attempts": 1,
+      "checks": {
+        "missing_entrypoint_native_validator": true,
+        "native_all_invalid_tie": true,
+        "native_one_valid_forfeit": true,
+        "pristine_native_validator": true,
+        "restored_native_validator": true,
+        "restored_reference_bytes": true
+      },
+      "cleanup": {
+        "owned_containers": 3,
+        "removed_containers": 3,
+        "verified": true
+      },
+      "command_log_sha256": "bc9995366e00dce246440da7e651a58f8f296d7b9daa3a5fd926bc4e3617af78",
+      "config_origin": "upstream_diagnostic",
+      "elapsed_seconds": 2.9839189052581787,
+      "image": {
+        "architecture": "arm64",
+        "id": "sha256:115a657686f8cb7efe3dc7d2aa47f6c6cadf40420e086a361d2e9f9d29556435",
+        "os": "linux",
+        "tag": "codeclash-adapter/cyborg:f0694c64ecf6"
+      },
+      "native_config_sha256": "9b87090be6e41e82fa0b580b4bf685eb046a9203678d9a1b4c3ad5ff493149e6",
+      "native_forfeit_expected_and_observed": [
+        {
+          "expected": {
+            "scores": {
+              "alpha": 2,
+              "beta": 0
+            },
+            "tournament_simulations": 0,
+            "winner": "alpha"
+          },
+          "name": "native_one_valid_forfeit",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "alpha": {
+                "invalid_reason": "",
+                "name": "alpha",
+                "score": 2,
+                "valid_submit": true
+              },
+              "beta": {
+                "invalid_reason": "Submission file `cyborg_agent.py` not found in the workspace root",
+                "name": "beta",
+                "score": 0.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 1,
+            "scores": {
+              "alpha": 2,
+              "beta": 0.0
+            },
+            "winner": "alpha"
+          },
+          "passed": true
+        },
+        {
+          "expected": {
+            "scores": {
+              "alpha": 1.0,
+              "beta": 1.0
+            },
+            "tournament_simulations": 0,
+            "winner": "Tie"
+          },
+          "name": "native_all_invalid_tie",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "alpha": {
+                "invalid_reason": "Submission file `cyborg_agent.py` not found in the workspace root",
+                "name": "alpha",
+                "score": 1.0,
+                "valid_submit": false
+              },
+              "beta": {
+                "invalid_reason": "Submission file `cyborg_agent.py` not found in the workspace root",
+                "name": "beta",
+                "score": 1.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 2,
+            "scores": {
+              "alpha": 1.0,
+              "beta": 1.0
+            },
+            "winner": "Tie"
+          },
+          "passed": true
+        }
+      ],
+      "native_implementation": {
+        "run_round_source_sha256": "daceaf1db5b482797c5f36954c8be08389ce3cc534b73a774f6e6c098892fd98",
+        "validator": "codeclash.arenas.cyborg.cyborg.CybORGArena.validate_code",
+        "validator_file_sha256": "de52d53d3b810066ef9768fb9477042e60264ce236c8578ecb3b1b5464b74ff0",
+        "validator_source_sha256": "68f65167339c70c7d7a893550195d4feff7a3f8b3203bbb186754714052f4c13"
+      },
+      "negative_reason": "Submission file `cyborg_agent.py` not found in the workspace root",
+      "negative_remove_paths": [
+        "cyborg_agent.py"
+      ],
+      "raw_report_sha256": "331fd6e03fe720c13406414296850b9ecf8b8bf40644a70d00da38549fa2bb9b",
+      "reference_archive_sha256": "3650a05c551e55b1adc63cd6e613826c4109ca3dbb06534045c0af6994353311",
+      "reference_byte_inventory": [
+        {
+          "path": "cyborg_agent.py",
+          "sha256": "9b835c23380ecc1294b6a77ed296b022c68d45954bb36b60aff9d504af176857",
+          "size": 131
+        }
+      ],
+      "reference_source": {
+        "commit": "f0694c64ecf6abfca2bc867bad2de9333fef5be8",
+        "kind": "bundled_runtime",
+        "path": "codeclash/arenas/cyborg/runtime",
+        "tree": "67426b9a3c9973b600626b0989ed877b3bc220f1"
+      },
+      "restored_files": 1,
+      "status": "passed"
+    },
+    {
+      "arena": "figgie",
+      "attempts": 1,
+      "checks": {
+        "missing_entrypoint_native_validator": true,
+        "native_all_invalid_tie": true,
+        "native_one_valid_forfeit": true,
+        "pristine_native_validator": true,
+        "restored_native_validator": true,
+        "restored_reference_bytes": true
+      },
+      "cleanup": {
+        "owned_containers": 5,
+        "removed_containers": 5,
+        "verified": true
+      },
+      "command_log_sha256": "d9f47853234e3ecd04039d17957bcc23a0589c2cf09a95d38a2f9e5d2300a370",
+      "config_origin": "upstream_diagnostic",
+      "elapsed_seconds": 3.2505791187286377,
+      "image": {
+        "architecture": "arm64",
+        "id": "sha256:3525c7d8654a4d4e103894419f61463e2b28fe5b9a30c0278a579a33fbe8c371",
+        "os": "linux",
+        "tag": "codeclash-adapter/figgie:f0694c64ecf6"
+      },
+      "native_config_sha256": "1e3e0cb6689c092400c17f2792726f85934ca5a253d371245c7a819993fc53f9",
+      "native_forfeit_expected_and_observed": [
+        {
+          "expected": {
+            "scores": {
+              "p1": 10,
+              "p2": 0,
+              "p3": 0,
+              "p4": 0
+            },
+            "tournament_simulations": 0,
+            "winner": "p1"
+          },
+          "name": "native_one_valid_forfeit",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "p1": {
+                "invalid_reason": "",
+                "name": "p1",
+                "score": 10,
+                "valid_submit": true
+              },
+              "p2": {
+                "invalid_reason": "No main.py file found in the root directory",
+                "name": "p2",
+                "score": 0.0,
+                "valid_submit": false
+              },
+              "p3": {
+                "invalid_reason": "No main.py file found in the root directory",
+                "name": "p3",
+                "score": 0.0,
+                "valid_submit": false
+              },
+              "p4": {
+                "invalid_reason": "No main.py file found in the root directory",
+                "name": "p4",
+                "score": 0.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 1,
+            "scores": {
+              "p1": 10,
+              "p2": 0.0,
+              "p3": 0.0,
+              "p4": 0.0
+            },
+            "winner": "p1"
+          },
+          "passed": true
+        },
+        {
+          "expected": {
+            "scores": {
+              "p1": 2.5,
+              "p2": 2.5,
+              "p3": 2.5,
+              "p4": 2.5
+            },
+            "tournament_simulations": 0,
+            "winner": "Tie"
+          },
+          "name": "native_all_invalid_tie",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "p1": {
+                "invalid_reason": "No main.py file found in the root directory",
+                "name": "p1",
+                "score": 2.5,
+                "valid_submit": false
+              },
+              "p2": {
+                "invalid_reason": "No main.py file found in the root directory",
+                "name": "p2",
+                "score": 2.5,
+                "valid_submit": false
+              },
+              "p3": {
+                "invalid_reason": "No main.py file found in the root directory",
+                "name": "p3",
+                "score": 2.5,
+                "valid_submit": false
+              },
+              "p4": {
+                "invalid_reason": "No main.py file found in the root directory",
+                "name": "p4",
+                "score": 2.5,
+                "valid_submit": false
+              }
+            },
+            "round_num": 2,
+            "scores": {
+              "p1": 2.5,
+              "p2": 2.5,
+              "p3": 2.5,
+              "p4": 2.5
+            },
+            "winner": "Tie"
+          },
+          "passed": true
+        }
+      ],
+      "native_implementation": {
+        "run_round_source_sha256": "daceaf1db5b482797c5f36954c8be08389ce3cc534b73a774f6e6c098892fd98",
+        "validator": "codeclash.arenas.figgie.figgie.FiggieArena.validate_code",
+        "validator_file_sha256": "670644d0d3cd2a00bb616167872c3d09a9ae964e2f4b8db562922b008c5356b4",
+        "validator_source_sha256": "e22b686aefa72a13f6a50cb211ea25445d24bd85eee7c9aacfbc4bb8543f338a"
+      },
+      "negative_reason": "No main.py file found in the root directory",
+      "negative_remove_paths": [
+        "main.py"
+      ],
+      "raw_report_sha256": "206cbec5f2d3a96b7008f8d71a4a29c713206331a110b48966539dc6be0c7d03",
+      "reference_archive_sha256": "c1cd8696d0ddfe26ad54b075234c6174c6e9115a53b078b3b27ceb878526ddb9",
+      "reference_byte_inventory": [
+        {
+          "path": "main.py",
+          "sha256": "336b6a3d5c72820db60ce080677b01a070f5a768ed49e94f2498101a7372b4f0",
+          "size": 8213
+        }
+      ],
+      "reference_source": {
+        "commit": "d6308b438496a975d74fc6664da56c0694dab882",
+        "destination": "/workspace",
+        "kind": "repository",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "head": "d6308b438496a975d74fc6664da56c0694dab882",
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00"
+        },
+        "repository": "https://github.com/CodeClash-ai/Figgie.git"
+      },
+      "restored_files": 1,
+      "status": "passed"
+    },
+    {
+      "arena": "gomoku",
+      "attempts": 1,
+      "checks": {
+        "missing_entrypoint_native_validator": true,
+        "native_all_invalid_tie": true,
+        "native_one_valid_forfeit": true,
+        "pristine_native_validator": true,
+        "restored_native_validator": true,
+        "restored_reference_bytes": true
+      },
+      "cleanup": {
+        "owned_containers": 3,
+        "removed_containers": 3,
+        "verified": true
+      },
+      "command_log_sha256": "5dc5bd5dc5295f801052a4afd1c327ba32edf5d378cb2488b2dd644d116caf8e",
+      "config_origin": "upstream_diagnostic",
+      "elapsed_seconds": 2.095670700073242,
+      "image": {
+        "architecture": "arm64",
+        "id": "sha256:459839b258ccb4d4dc8b706ef8c97ff7c1946612a7119976d39a894f0dcc5e6e",
+        "os": "linux",
+        "tag": "codeclash-adapter/gomoku:f0694c64ecf6"
+      },
+      "native_config_sha256": "3637bbdeac4b860ec129697905c40bc7d0f0e3fc188bb7f76ed1f08c723a508f",
+      "native_forfeit_expected_and_observed": [
+        {
+          "expected": {
+            "scores": {
+              "p1": 10,
+              "p2": 0
+            },
+            "tournament_simulations": 0,
+            "winner": "p1"
+          },
+          "name": "native_one_valid_forfeit",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "p1": {
+                "invalid_reason": "",
+                "name": "p1",
+                "score": 10,
+                "valid_submit": true
+              },
+              "p2": {
+                "invalid_reason": "No main.py file found in the root directory",
+                "name": "p2",
+                "score": 0.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 1,
+            "scores": {
+              "p1": 10,
+              "p2": 0.0
+            },
+            "winner": "p1"
+          },
+          "passed": true
+        },
+        {
+          "expected": {
+            "scores": {
+              "p1": 5.0,
+              "p2": 5.0
+            },
+            "tournament_simulations": 0,
+            "winner": "Tie"
+          },
+          "name": "native_all_invalid_tie",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "p1": {
+                "invalid_reason": "No main.py file found in the root directory",
+                "name": "p1",
+                "score": 5.0,
+                "valid_submit": false
+              },
+              "p2": {
+                "invalid_reason": "No main.py file found in the root directory",
+                "name": "p2",
+                "score": 5.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 2,
+            "scores": {
+              "p1": 5.0,
+              "p2": 5.0
+            },
+            "winner": "Tie"
+          },
+          "passed": true
+        }
+      ],
+      "native_implementation": {
+        "run_round_source_sha256": "daceaf1db5b482797c5f36954c8be08389ce3cc534b73a774f6e6c098892fd98",
+        "validator": "codeclash.arenas.gomoku.gomoku.GomokuArena.validate_code",
+        "validator_file_sha256": "dc58882fc9abba10f30a065503d9aa35877b545dcbd7b1f82c3173d3bc2ee625",
+        "validator_source_sha256": "027d0b84a1f7bc859d27ba8d176559386721ede663e3cdd67fa8ff584d8bfa02"
+      },
+      "negative_reason": "No main.py file found in the root directory",
+      "negative_remove_paths": [
+        "main.py"
+      ],
+      "raw_report_sha256": "f65cc1667b1a01adfc77ea466d4a32fe0abfc9adb8f714d78d7a0ed3c18878f5",
+      "reference_archive_sha256": "e82853be5eff878e64010c744ff9d27a37dd9a3bbfe4f76fb74dffa6f90e7c66",
+      "reference_byte_inventory": [
+        {
+          "path": "main.py",
+          "sha256": "b797adec79161322d460c7c91847067ff3243395f4096ea4bf7bd90f3e1efa8c",
+          "size": 3190
+        }
+      ],
+      "reference_source": {
+        "commit": "923c141699319d0de6de6bccb347cff599e5ac98",
+        "destination": "/workspace",
+        "kind": "repository",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "head": "923c141699319d0de6de6bccb347cff599e5ac98",
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00"
+        },
+        "repository": "https://github.com/CodeClash-ai/Gomoku.git"
+      },
+      "restored_files": 1,
+      "status": "passed"
+    },
+    {
+      "arena": "halite",
+      "attempts": 1,
+      "checks": {
+        "missing_entrypoint_native_validator": true,
+        "native_all_invalid_tie": true,
+        "native_one_valid_forfeit": true,
+        "pristine_native_validator": true,
+        "restored_native_validator": true,
+        "restored_reference_bytes": true
+      },
+      "cleanup": {
+        "owned_containers": 3,
+        "removed_containers": 3,
+        "verified": true
+      },
+      "command_log_sha256": "9ea4a58c1189a35c70301d081876aabdab5e5cb2450ac378e43b7e59acf43e94",
+      "config_origin": "published_pvp",
+      "elapsed_seconds": 3.629688024520874,
+      "image": {
+        "architecture": "arm64",
+        "id": "sha256:8dd41ee83daa4e17db17c917b49a40ab9a3a5236b00b72fdb62d5534c71aa0be",
+        "os": "linux",
+        "tag": "codeclash-adapter/halite:f0694c64ecf6"
+      },
+      "native_config_sha256": "12486bc55faaa77a6a24747f4804d23e6ef693aa20c7c1c3c7d4abcfd4da8914",
+      "native_forfeit_expected_and_observed": [
+        {
+          "expected": {
+            "scores": {
+              "claude-sonnet-4-5-20250929": 250,
+              "o3": 0
+            },
+            "tournament_simulations": 0,
+            "winner": "claude-sonnet-4-5-20250929"
+          },
+          "name": "native_one_valid_forfeit",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "claude-sonnet-4-5-20250929": {
+                "invalid_reason": "",
+                "name": "claude-sonnet-4-5-20250929",
+                "score": 250,
+                "valid_submit": true
+              },
+              "o3": {
+                "invalid_reason": "Submission folder `submission/` does not exist",
+                "name": "o3",
+                "score": 0.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 1,
+            "scores": {
+              "claude-sonnet-4-5-20250929": 250,
+              "o3": 0.0
+            },
+            "winner": "claude-sonnet-4-5-20250929"
+          },
+          "passed": true
+        },
+        {
+          "expected": {
+            "scores": {
+              "claude-sonnet-4-5-20250929": 125.0,
+              "o3": 125.0
+            },
+            "tournament_simulations": 0,
+            "winner": "Tie"
+          },
+          "name": "native_all_invalid_tie",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "claude-sonnet-4-5-20250929": {
+                "invalid_reason": "Submission folder `submission/` does not exist",
+                "name": "claude-sonnet-4-5-20250929",
+                "score": 125.0,
+                "valid_submit": false
+              },
+              "o3": {
+                "invalid_reason": "Submission folder `submission/` does not exist",
+                "name": "o3",
+                "score": 125.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 2,
+            "scores": {
+              "claude-sonnet-4-5-20250929": 125.0,
+              "o3": 125.0
+            },
+            "winner": "Tie"
+          },
+          "passed": true
+        }
+      ],
+      "native_implementation": {
+        "run_round_source_sha256": "daceaf1db5b482797c5f36954c8be08389ce3cc534b73a774f6e6c098892fd98",
+        "validator": "codeclash.arenas.halite.halite.HaliteArena.validate_code",
+        "validator_file_sha256": "38ea342515720a2ea3219170315928a9028d708ea91b49a4f7e3d16a91ee2712",
+        "validator_source_sha256": "da8a9b37a79d48914c51a94b6dddcb79a793eecc5e09f85ff348323dff72401a"
+      },
+      "negative_reason": "Submission folder `submission/` does not exist",
+      "negative_remove_paths": [
+        "submission"
+      ],
+      "raw_report_sha256": "e991dc2faaa7a2a8e88248e849bfcc5226b40292442b17033542de4425adfe5c",
+      "reference_archive_sha256": "37e39c03f812e4c086de3dcbb908823942e1354d1f26745d42a948f7c7f1fcc0",
+      "reference_byte_inventory": [
+        {
+          "path": "submission/hlt.h",
+          "sha256": "5897ce7f4209f9c239f7f7e7e7c902c70ce8511dcb688e2fa69e726279693342",
+          "size": 5541
+        },
+        {
+          "path": "submission/main.c",
+          "sha256": "078b514adec6edd10e9a91714d8ab25b4abeff9c1881d3b49517b6d6a158456f",
+          "size": 615
+        }
+      ],
+      "reference_source": {
+        "commit": "173ef1a63ea9987d9df3439d4d34b3346a5cadad",
+        "destination": "/workspace",
+        "kind": "repository",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "head": "173ef1a63ea9987d9df3439d4d34b3346a5cadad",
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00"
+        },
+        "repository": "https://github.com/CodeClash-ai/Halite.git"
+      },
+      "restored_files": 2,
+      "status": "passed"
+    },
+    {
+      "arena": "halite2",
+      "attempts": 1,
+      "checks": {
+        "missing_entrypoint_native_validator": true,
+        "native_all_invalid_tie": true,
+        "native_one_valid_forfeit": true,
+        "pristine_native_validator": true,
+        "restored_native_validator": true,
+        "restored_reference_bytes": true
+      },
+      "cleanup": {
+        "owned_containers": 3,
+        "removed_containers": 3,
+        "verified": true
+      },
+      "command_log_sha256": "19c2bd4a34fcc9f9a58f91ec6e5b51c6ec43e1f373cd01fe897d650f82ca681f",
+      "config_origin": "upstream_diagnostic",
+      "elapsed_seconds": 5.399857044219971,
+      "image": {
+        "architecture": "arm64",
+        "id": "sha256:af15563db341124090a85b05a1a63e31711569b69977255d8762550b0ce77a24",
+        "os": "linux",
+        "tag": "codeclash-adapter/halite2:f0694c64ecf6"
+      },
+      "native_config_sha256": "b569b0600d594d2a4c79de02c3c3ecb783148ff4dc598c97c1c0ffa0088ca1fa",
+      "native_forfeit_expected_and_observed": [
+        {
+          "expected": {
+            "scores": {
+              "p1": 250,
+              "p2": 0
+            },
+            "tournament_simulations": 0,
+            "winner": "p1"
+          },
+          "name": "native_one_valid_forfeit",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "p1": {
+                "invalid_reason": "",
+                "name": "p1",
+                "score": 250,
+                "valid_submit": true
+              },
+              "p2": {
+                "invalid_reason": "Submission folder `submission/` does not exist",
+                "name": "p2",
+                "score": 0.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 1,
+            "scores": {
+              "p1": 250,
+              "p2": 0.0
+            },
+            "winner": "p1"
+          },
+          "passed": true
+        },
+        {
+          "expected": {
+            "scores": {
+              "p1": 125.0,
+              "p2": 125.0
+            },
+            "tournament_simulations": 0,
+            "winner": "Tie"
+          },
+          "name": "native_all_invalid_tie",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "p1": {
+                "invalid_reason": "Submission folder `submission/` does not exist",
+                "name": "p1",
+                "score": 125.0,
+                "valid_submit": false
+              },
+              "p2": {
+                "invalid_reason": "Submission folder `submission/` does not exist",
+                "name": "p2",
+                "score": 125.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 2,
+            "scores": {
+              "p1": 125.0,
+              "p2": 125.0
+            },
+            "winner": "Tie"
+          },
+          "passed": true
+        }
+      ],
+      "native_implementation": {
+        "run_round_source_sha256": "daceaf1db5b482797c5f36954c8be08389ce3cc534b73a774f6e6c098892fd98",
+        "validator": "codeclash.arenas.halite.halite.HaliteArena.validate_code",
+        "validator_file_sha256": "38ea342515720a2ea3219170315928a9028d708ea91b49a4f7e3d16a91ee2712",
+        "validator_source_sha256": "da8a9b37a79d48914c51a94b6dddcb79a793eecc5e09f85ff348323dff72401a"
+      },
+      "negative_reason": "Submission folder `submission/` does not exist",
+      "negative_remove_paths": [
+        "submission"
+      ],
+      "raw_report_sha256": "8dc74b44153864afed27e2897758651c9968e9fa6e92bf384a7544a04270993d",
+      "reference_archive_sha256": "5f387c133f4003cc5ebe626420f67fc8b1f7cfea487c85e0c47ee2c17ae774c6",
+      "reference_byte_inventory": [
+        {
+          "path": "submission/utility.mli",
+          "sha256": "f072253ec555f458083b978946295d0fbf0761d6cfde3d0992be03f8bf2d5063",
+          "size": 349
+        },
+        {
+          "path": "submission/networking.ml",
+          "sha256": "cb5501a657ede0b60ad5a36cef966d6aab98caf74baba80f9f607979ca4eecd7",
+          "size": 6891
+        },
+        {
+          "path": "submission/utility.ml",
+          "sha256": "eccf5034232dbff15432de0966566f4e830a768edd2be2b9e5b1b04427b291d6",
+          "size": 1223
+        },
+        {
+          "path": "submission/game.ml",
+          "sha256": "f25e5ef8522b04663e4d67d6807aa42e379f847b1dffc5a0a2cf5faf42253661",
+          "size": 6367
+        },
+        {
+          "path": "submission/game.mli",
+          "sha256": "7290e3eadf898661c1ca41f70a273e21d4349b6c832e76829089bbd2b41e3698",
+          "size": 2074
+        },
+        {
+          "path": "submission/networking.mli",
+          "sha256": "ac19454d20e9d5a73c673bd8e6e30b82129a50e209c0ffcea68791d60212a30d",
+          "size": 380
+        },
+        {
+          "path": "submission/README.md",
+          "sha256": "205557e295b893c96b8d5c42107f23ee69999cf83b5b988ac9736ad27db1c4b0",
+          "size": 1007
+        },
+        {
+          "path": "submission/td.ml",
+          "sha256": "38c03374b85d7ed7d2171d9cbab26e2cdfa4a992a6d3b2b2a29f6e98f28fd7dc",
+          "size": 1270
+        },
+        {
+          "path": "submission/debug.mli",
+          "sha256": "3f9545ae0185ebe8c344cc40cb1bc299c7a99e7a3d4072fab9d3f4a1587e61cc",
+          "size": 153
+        },
+        {
+          "path": "submission/main.ml",
+          "sha256": "29ec7b581edb41a169851308c5b776cf9cd3b67e32e77c3c920488a1df4147db",
+          "size": 1762
+        },
+        {
+          "path": "submission/debug.ml",
+          "sha256": "c3eb4c0eaf5918135d492f8fdc5369ea9cbff1e1bfb022ad351d1bf870a3290c",
+          "size": 797
+        },
+        {
+          "path": "submission/const.mli",
+          "sha256": "ab949082107d9cd31bdb1716481278cc3f4936880785f538344901ad6ac8f7f5",
+          "size": 300
+        },
+        {
+          "path": "submission/const.ml",
+          "sha256": "72eaf70b8aaf5d8540a21dacf14fe4806c7c416bc411d8d54ecd23e05d67e08a",
+          "size": 416
+        }
+      ],
+      "reference_source": {
+        "commit": "a0753f48c5e060be08d38216b497e8905551e363",
+        "destination": "/workspace",
+        "kind": "repository",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "head": "a0753f48c5e060be08d38216b497e8905551e363",
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00"
+        },
+        "repository": "https://github.com/CodeClash-ai/Halite2.git"
+      },
+      "restored_files": 13,
+      "status": "passed"
+    },
+    {
+      "arena": "halite3",
+      "attempts": 1,
+      "checks": {
+        "missing_entrypoint_native_validator": true,
+        "native_all_invalid_tie": true,
+        "native_one_valid_forfeit": true,
+        "pristine_native_validator": true,
+        "restored_native_validator": true,
+        "restored_reference_bytes": true
+      },
+      "cleanup": {
+        "owned_containers": 3,
+        "removed_containers": 3,
+        "verified": true
+      },
+      "command_log_sha256": "d926a1d2a65b422b843038ed362d52cbc78d73d263599607d62c188e46965ba8",
+      "config_origin": "upstream_diagnostic",
+      "elapsed_seconds": 15.964632034301758,
+      "image": {
+        "architecture": "arm64",
+        "id": "sha256:7ef7620a54c45f03843348314224a08ddf251579b65de491583a5806bdf546e5",
+        "os": "linux",
+        "tag": "codeclash-adapter/halite3:f0694c64ecf6"
+      },
+      "native_config_sha256": "19c6e10e80cddcc680e6d6e8e09b57c3104c2f44f513e5c12c1979def5d0b952",
+      "native_forfeit_expected_and_observed": [
+        {
+          "expected": {
+            "scores": {
+              "p1": 250,
+              "p2": 0
+            },
+            "tournament_simulations": 0,
+            "winner": "p1"
+          },
+          "name": "native_one_valid_forfeit",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "p1": {
+                "invalid_reason": "",
+                "name": "p1",
+                "score": 250,
+                "valid_submit": true
+              },
+              "p2": {
+                "invalid_reason": "Submission folder `submission/` does not exist",
+                "name": "p2",
+                "score": 0.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 1,
+            "scores": {
+              "p1": 250,
+              "p2": 0.0
+            },
+            "winner": "p1"
+          },
+          "passed": true
+        },
+        {
+          "expected": {
+            "scores": {
+              "p1": 125.0,
+              "p2": 125.0
+            },
+            "tournament_simulations": 0,
+            "winner": "Tie"
+          },
+          "name": "native_all_invalid_tie",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "p1": {
+                "invalid_reason": "Submission folder `submission/` does not exist",
+                "name": "p1",
+                "score": 125.0,
+                "valid_submit": false
+              },
+              "p2": {
+                "invalid_reason": "Submission folder `submission/` does not exist",
+                "name": "p2",
+                "score": 125.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 2,
+            "scores": {
+              "p1": 125.0,
+              "p2": 125.0
+            },
+            "winner": "Tie"
+          },
+          "passed": true
+        }
+      ],
+      "native_implementation": {
+        "run_round_source_sha256": "daceaf1db5b482797c5f36954c8be08389ce3cc534b73a774f6e6c098892fd98",
+        "validator": "codeclash.arenas.halite3.halite3.Halite3Arena.validate_code",
+        "validator_file_sha256": "88933e5721d8994032880e4d3a22c2757ec0f9642580a08804e8e089f6c6e230",
+        "validator_source_sha256": "9d0545eb4003c1bf39e278a13ab3e379d1eb1d4d64dfc7e760677a75d6fb4e5e"
+      },
+      "negative_reason": "Submission folder `submission/` does not exist",
+      "negative_remove_paths": [
+        "submission"
+      ],
+      "raw_report_sha256": "14a77ec9daaea4185d290ad7b7bab23913e1599964266fa6910daf040de7c0de",
+      "reference_archive_sha256": "af766afb2f2507796b82a7ceeadf241f6c30ed6846463d8acb4c0e8a5eedaaa6",
+      "reference_byte_inventory": [
+        {
+          "path": "submission/run_game.sh",
+          "sha256": "3e543b0e35e12545e9ba0e867df95a1f20e7e82637f03fda8d9bfe73bc649152",
+          "size": 188
+        },
+        {
+          "path": "submission/src/hlt/entity.rs",
+          "sha256": "b2a1a3bba5e49bb121af0b21332724bda5a0946507c48436872d198c777d0f11",
+          "size": 139
+        },
+        {
+          "path": "submission/src/hlt/constants.rs",
+          "sha256": "cc30a059a5cab794954773db54a72e939b09c14ad407da6cb743f79950faa7e9",
+          "size": 2678
+        },
+        {
+          "path": "submission/src/hlt/direction.rs",
+          "sha256": "faa3ead07a145d010a5557ae632b289e410fddf5b2804795233ffd4b023231a7",
+          "size": 875
+        },
+        {
+          "path": "submission/src/hlt/shipyard.rs",
+          "sha256": "19a5212d0cbe6336a99ca0d113aafd30a9e02a390de5d17d5be70b1e4c3158f8",
+          "size": 425
+        },
+        {
+          "path": "submission/src/hlt/command.rs",
+          "sha256": "7a478b69d0b64c70bc0affef448a5b3845ef4bb678cf3b60758bbba4f32668c8",
+          "size": 455
+        },
+        {
+          "path": "submission/src/hlt/map_cell.rs",
+          "sha256": "00bac440743b44d129c79162c041e93ea4d8a9ad7156f82bb3c1848a3b58ce23",
+          "size": 502
+        },
+        {
+          "path": "submission/src/hlt/dropoff.rs",
+          "sha256": "011a3326cc6fcd7ac03a302c3aad669c967669bde40ecd6f28dc70051e1d36b8",
+          "size": 691
+        },
+        {
+          "path": "submission/src/hlt/ship.rs",
+          "sha256": "321c8e1d84dd7e9afbb23829dca097af5d1d4be7864de5040bed573b4fcd7c6e",
+          "size": 1263
+        },
+        {
+          "path": "submission/src/hlt/player.rs",
+          "sha256": "a2fa3ead40c5106366ac0543eebcc84181dffa3b1be1e38fb1eb51c0396e70d2",
+          "size": 1585
+        },
+        {
+          "path": "submission/src/hlt/game.rs",
+          "sha256": "f057e28710e231f0f8f3b38c441c373d5021bff11a753774b11f64b72ec8b530",
+          "size": 2859
+        },
+        {
+          "path": "submission/src/hlt/mod.rs",
+          "sha256": "66166fa1e0b0efee3143d64d8ee0024451fb3d808c92136f2f02ab7f7b9ec6ce",
+          "size": 773
+        },
+        {
+          "path": "submission/src/hlt/navi.rs",
+          "sha256": "bc4afd98cf9ad88cbb72aeec73c2a0ac808d012920176531896bdd983cbf0879",
+          "size": 3629
+        },
+        {
+          "path": "submission/src/hlt/log.rs",
+          "sha256": "fd41c33dbfcd97bd2e688ee787add13df749dea04f76ff73ca6d6a7635b31068",
+          "size": 2779
+        },
+        {
+          "path": "submission/src/hlt/game_map.rs",
+          "sha256": "59efb781df281adce277acfaac517f46e1baeb8e76d5e8ac537ffb97a4b6e426",
+          "size": 2858
+        },
+        {
+          "path": "submission/src/hlt/input.rs",
+          "sha256": "0943da370277593d0cad28b84d2d9858972e0a5b775ea3c23f61d229a0acfc82",
+          "size": 1415
+        },
+        {
+          "path": "submission/src/hlt/position.rs",
+          "sha256": "9a356bc2f4c85914e8b011090feeb6d270093155cc09a42aa43f8b47a7234ae3",
+          "size": 801
+        },
+        {
+          "path": "submission/src/main.rs",
+          "sha256": "4a028877600c28231689a955dfced0c1a8cad0784ec9861527f494cc283c68ea",
+          "size": 2453
+        },
+        {
+          "path": "submission/Cargo.toml",
+          "sha256": "e584500af511b4509ab3d4d82a55e5f415005924a76681fca75d9e0c65c3d5ba",
+          "size": 89
+        },
+        {
+          "path": "submission/run_game.bat",
+          "sha256": "c60484a40a95a231f0b42617e4ff27c2899b1b9ea06a89a2eba8466a39841265",
+          "size": 123
+        },
+        {
+          "path": "submission/target/debug/.cargo-build-lock",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/4kokdorswpjfa57uep9cthfjo.o",
+          "sha256": "c552a07fba13342316748b9ce1b3e06928eb23365d411aaafc6222eaae20fc85",
+          "size": 7920
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/bu7qgofkvhjm8xyfap74latpz.o",
+          "sha256": "208104268296b7436313eacdc0cd80d30ad9503368768ad282a6abc6a57bd3dc",
+          "size": 17568
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/8tfes0o3hwveb75ai6hee701u.o",
+          "sha256": "79f83f9d29a5150dabdf37224309e353db9d68787618d27bbb7d755ff2432912",
+          "size": 10624
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/8bqx9fivdgkntqzbc2iogqyof.o",
+          "sha256": "5f3396ebcd376faa2d2ab0f6c20de69bd028e77c0205ba3ab37cd6fac04f6179",
+          "size": 14504
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/ai62da0veomsphtg2d2dp1z1a.o",
+          "sha256": "df0449e8da25ed9a1d092e966ca71b2bad5d40adc2dc355f3dd343fac5f7af3a",
+          "size": 9848
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/1jo0g1415bj2rgzl3k62jyn27.o",
+          "sha256": "6f7ddd0944d48ae97a7650a1e0a791396ddb0a0a5400df0aacba1608ec4e1113",
+          "size": 277928
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/d05wseuiqv19i8udvhftz8cfr.o",
+          "sha256": "247d851dc92183b3d99015fef9ebca0e133dd8d583c3b936895963fc7efe7be9",
+          "size": 11504
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/query-cache.bin",
+          "sha256": "58f018713f522af95ba82bbb74fb8eaad7b8028897260305a966d1ba29ad7c2c",
+          "size": 684373
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/2bmh32joqbqlsi8lfre8cim7k.o",
+          "sha256": "d15644db7041d006c9fb3248045f052ad4a50294596237bef2d1276a46aedc12",
+          "size": 16584
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/0lejpnvy8ifdtoysu1ciipvci.o",
+          "sha256": "5e92ccbabad51c2844d1d0b69fee209bca545c651fce85001a307c448ccf63bf",
+          "size": 6368
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/3lbuup52wusd6q0jzrk1xx8zm.o",
+          "sha256": "a8518385a0c4c6bbbef79ef70816d4329d2c4902169dd66700686d510c7e2d8a",
+          "size": 3952
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/di5s4s569spsxq52u10seyt4l.o",
+          "sha256": "7a23fc3fbed3c5b6ef525883eb84b48f5768cbe3ef33bea95db02b9e35aa200d",
+          "size": 87088
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/084hkl8hzhd8vp17e0inomjpg.o",
+          "sha256": "98e5f0e13f41a34ac6c55b181360551b3d58c6af7ce7275a837a7f021642f90e",
+          "size": 17568
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/f02ttuwk7pm1hp7m8flcve7sa.o",
+          "sha256": "b3819ed7fcd53b16b7c7b910ca836c303d5a5f276afd17446d07b756c85b5265",
+          "size": 18328
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/b681zyznd0wn9mgrhx8gvdib7.o",
+          "sha256": "3833fb63b47643542e13346ef79f05ec9df2127535e1df8f47d7b6ac347a36c7",
+          "size": 304856
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/bcf0mw5r4zf9142j6oqduf1ci.o",
+          "sha256": "0507f2823d1985bbc295ba8e8fab891cf415ce6406c88f462431cde9dac527bf",
+          "size": 50432
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/4qmsy4bmzb7qmaxlzzi2rcmdc.o",
+          "sha256": "5e93e30e223e1e4d06bded728a873a13c57820ba207e3867240bc8349a56e9d2",
+          "size": 12304
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/2gfxa5kcv301czt8gzkesh3nu.o",
+          "sha256": "d58ce466c3091599602bea2447265664460a9789f4b72af4d0c53c6f6802ce93",
+          "size": 4496
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/c2o155iy37lx16tocyletb736.o",
+          "sha256": "8eb01fea8f82adcce0d915d759d3b07ddda1ed013693c82e6db180fa5866997d",
+          "size": 5344
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/9eeg1ambamsb3b2kzlc6s2sk2.o",
+          "sha256": "4256aba2c95f281af631fb2dbe04e0d2fc2281e0e4952bbad33a4b02b67ac2bb",
+          "size": 23008
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/2cjsieg4n03tjqxbcmr0gstg3.o",
+          "sha256": "f044a794ea44a6c6748cbfe63b5ff88079520ebe178f0f0ac4f8b353f75bce3b",
+          "size": 9224
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/dvueimaiw7wlj6hihg7ln2eav.o",
+          "sha256": "a88825d373b56524858649db2bc58614f74a954b28923c2a7a43acc3165d1fcc",
+          "size": 9480
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/0pknknie403lpx4o66p2os4bp.o",
+          "sha256": "6a8d60cf518b1b9e4e11bf783b46a002f659f7f3733c0f55c9311013d816318d",
+          "size": 14400
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/e8jn0jiye9cy3p4le8u3hzvek.o",
+          "sha256": "a25bd1e748188f1c2b91f2788561d5cf179a4e0c3448b1db5da573e8c7a50e02",
+          "size": 8624
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/9qzc72d9hguslc18bhx2rqul4.o",
+          "sha256": "189b2500f983f0e1e517deb783ca432bff66ce0bffffa1730c8c01d0018b1b45",
+          "size": 6856
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/4ooowjsu40t99q1q151emg71f.o",
+          "sha256": "a8ddef33e7126d941c92559e9000de68c52124e9866b6a0d8678a72bacee1766",
+          "size": 7160
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/eqq2ncb80hrs0j3vxaxlyr8c9.o",
+          "sha256": "1141e475317f4f7ad00ce95f6df5db952f7a2c4ba16f53efa61f791d44c49db9",
+          "size": 20232
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/a774qh46mtpl1ioh5dt7na33z.o",
+          "sha256": "f21a5927ce97d310b7fcd94d9086564f715f8fdd38d78d79aba3ed4f579f75f9",
+          "size": 13160
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/8qtbag7gxhptzjqz4rq6rvkl7.o",
+          "sha256": "b010d4290c30f0ddd5d79410308b0b9291a5adeebf3610d0062d1100e54f6ae9",
+          "size": 33992
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/5pqed8b1es9r3ot9ehb7tj1wy.o",
+          "sha256": "a05ffc99719dd961be3649c55be7f5f8e2bd0cc91c4920c138c6af8dda383bae",
+          "size": 23376
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/ayyerl47z6a0c5cpsmwp0q3nm.o",
+          "sha256": "18d8d91bef351e830164f88054cde2fbd37bc65dd717a9002fc407346b4f726d",
+          "size": 7664
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/4ugnaj69scqppezyxj80xfstc.o",
+          "sha256": "220c5c0eda0bc5f684008da1539b457733980e3368217fbe7ed99ca081c89746",
+          "size": 45984
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/4cy78yfa98y1ujli00gsju5sn.o",
+          "sha256": "8035fc3b41d3b3b5288ddecac27bd42c64473ff3dde3a867c5d55e2d0e9e4720",
+          "size": 20432
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/chvftvd7oml2fufkvkypdqqt2.o",
+          "sha256": "e9112e3e9ed14daa30c0e86c876bbd63fe2678efa72b0444addf49d0d163c22a",
+          "size": 4280
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/4l6jlobenh5u6int0qgoedhsa.o",
+          "sha256": "049fabcd62ca8d810b0d2a6b70ef8e2bd14af70117a1030175cc08674a2c2644",
+          "size": 20448
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/e0hnkyycwehwflvftoqposg6e.o",
+          "sha256": "3d7b00c4101b05a7814970f9a3189a8c096f6b3d2db946ad0c8a3f859c29f358",
+          "size": 12744
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/6zoyvnknxf4cmzbp1vud4zq8x.o",
+          "sha256": "65ad3e7941ce43fbb1b3932e2ce48702a515586cff6aff7d0ed2ce78f83bae70",
+          "size": 12272
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/b7lt0no4dj8oxsrqak2t8aaxz.o",
+          "sha256": "fb96b4be175e1310b12bdf92d64f7a2349edb40a34d989e8cff6f4624e7249df",
+          "size": 13224
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/0rdi1b3453e89tm6asems6lcr.o",
+          "sha256": "c74e6c2cba2e1fc84ca9f456b9e22dc14d9fb49c023c3a33ca22d08829cbebe9",
+          "size": 6424
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/19keqapna36z23ev9n987gf5m.o",
+          "sha256": "2e569e0f09b2a8261fb73940f323eaa172d833d7e57d9c3cf1b7d6137d2244f2",
+          "size": 4160
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/df03psl5zj6t1as56mn8mzbch.o",
+          "sha256": "3e913c137ee04b82e3f63fe0fdff7411eee77073cc7754225b29982fc874dc79",
+          "size": 26000
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/1rkcpc2pt6r1s00q3z7f7jku2.o",
+          "sha256": "1a8fe769bd151350870aa8ca8fea564854a05941affbb23d6c619dba1eec88d0",
+          "size": 5776
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/8s2lh4hc7hr453u6o99wmz59m.o",
+          "sha256": "56861d37d795f67939af500ae7e5fa7701d108003dc38838e43cb6dccd43b852",
+          "size": 87800
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/0h5zs8tci3htvdns2o1m521oh.o",
+          "sha256": "f9da6ed622764159f2fd329dc5aa2a4dd4a65fce6957fc6e3eaf8e3843718e44",
+          "size": 7064
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/b43n7qg1drbiko3d3utugldeo.o",
+          "sha256": "2ca5d3b620a60abd86f42300233d58e6218764ccbc5e0d709d205bd985cf4765",
+          "size": 32208
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/2v2p9w9ez4y2cc827lf8y19wh.o",
+          "sha256": "b20962b33a69cd069945c455879f468f93c66e515813a868f20d31233568f949",
+          "size": 20088
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/045ev0bbrt5zhf53mwla6xzg0.o",
+          "sha256": "eb2a34d28549a80e1aa780c8c21d6bbb29045f4cfb27eaa5eb3ae66a404dbfa7",
+          "size": 7680
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/0l7s1s589zbx7tcj8mrz0auyf.o",
+          "sha256": "1d6de6b66c51d44ad2e727a37a84f9eaffbe9908d9492e661551891a36d7a7e5",
+          "size": 5032
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/220ezble3bs6929z0y4royrw9.o",
+          "sha256": "f17d1c4aa918b44fb93ff8607978371a219a3f025eb8bcea3dd636b2897aa8d3",
+          "size": 25208
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/7bap1arodq7iya0osbhzjewkh.o",
+          "sha256": "ef9222640e6f32140a89e1b2a4b67430dfc1bc1c7cf6dd56508e99af498d8bfb",
+          "size": 11688
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/b5loalopi8y5amozyjn10b2w7.o",
+          "sha256": "8d24a57a4a2cb36502ad287faaf979affa9970de429a9569551f14c31e3c05ba",
+          "size": 43904
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/work-products.bin",
+          "sha256": "fb00eec05bf6f7f0013505504d3a3405aa16c37f94a9623a9c4cd23bc11c4613",
+          "size": 8943
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/bntawx216y98jmlz9wq4nvusb.o",
+          "sha256": "f0c1f4c1f23546e9189188146e59123f5eacef63f9ef185214f0a47a576458bb",
+          "size": 14208
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/338aycfozwbpje8ow2bkhcoeh.o",
+          "sha256": "91cd743644b87f7c7cfb66ca08ddd1806239c197b72e29468d2f32e04292ee0a",
+          "size": 7424
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/c8j8zw155phcech5w5v9r5voh.o",
+          "sha256": "e90000f14739ad2fa60b38db69a39b68b9f4c026b90236631ee76d369d391706",
+          "size": 5984
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/dmhqkbzmmfzc0mie6cg80a0wh.o",
+          "sha256": "d953cc4273f37360661fc6b5efc195224f17d3b7b29eaedf8e29e08b979756ff",
+          "size": 20792
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/e3yco69s5p1pcftvr1r8vs94p.o",
+          "sha256": "08ffd914ad0f26c9c72b6cfa857593b6356fc5a4a7a40ce8fb0e71ce14bee7a4",
+          "size": 20576
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/dimlg3fdhi9rfldm83mt2ugop.o",
+          "sha256": "f0e9bdc8bbf5b2097c6a0452ecfe12378bbf49e8e46cc4f71611fc75d454ec57",
+          "size": 4456
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/dep-graph.bin",
+          "sha256": "11778bcd8ab0066dae2c5b644cec68a92c30fac1ac7242d4b4618509b27940d6",
+          "size": 2833264
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/auagyuro68zzfb7be668oi710.o",
+          "sha256": "8422b984000aeff748f7e30581d9466532b24be9323fcd90376917ba97953c1a",
+          "size": 4464
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/bpt0up0hbgpbvae1p3nrij69c.o",
+          "sha256": "6d90d07838587fc1ff23247a0e9825230047f3cb286ab57023f760fa444e33e1",
+          "size": 19704
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/2esski1bwrtuhti7vfgh35512.o",
+          "sha256": "d808f407746b0801b327a2323ac2664ff6bef62bb37e428f3daab89b1c49ab54",
+          "size": 27544
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/f1npv35poihd8u7nfq0i84zri.o",
+          "sha256": "7727f9c9e5d6a2f917120749a6dd14aa688e821732271287b8c8103bd7de003f",
+          "size": 56352
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/16a0k6rc2c1a31p1aqhikchkx.o",
+          "sha256": "d32b66d81f98faa922daf4812cbc6e5d4c4a8dfeaf4911192f025ac9a4e73388",
+          "size": 23368
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/0h4re5tk9aabag1n0gfutgvr5.o",
+          "sha256": "af99b7fb33a9b2736f8abe8387c1e66aec28128478557b7ce47e9cdd286523a8",
+          "size": 15600
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/2wuoviab85lt3v014q4pngjvk.o",
+          "sha256": "2ba5b0b588037fd1ea3f514bfc7a445e4e259a32a2623a9fa08eba0ab5d10e64",
+          "size": 24600
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/cpbavfszcr7ekeip2z8k2jshg.o",
+          "sha256": "704255e5050109a603eeeaa3b69ba791b2c33b0428ad23c4cc751576f4c88201",
+          "size": 7288
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/8qjbjyc0c0tn8h9m29so7efkc.o",
+          "sha256": "b21fa150d01ab4e2daa909b8307c1150d17df3e278725f7afe7fd70e54deec15",
+          "size": 22440
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/9282jyj6z5dd95krficu5vn6d.o",
+          "sha256": "0d6ab7829ed55a2d8161d20765397b3a2ea9427e54c86d14c01edaab51410750",
+          "size": 15120
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/8wkf1w2dc8qatakkdcvf2322i.o",
+          "sha256": "399a31bff3a0579b866c44c078fe65c3f71981680d831f53ce9c567c554b2c2b",
+          "size": 9336
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/eo3flhk2klrlshpm6abwt46pn.o",
+          "sha256": "20d9b0f6ca11d59c4958f5af2c515f4388edac950436028e515da713180cb38d",
+          "size": 14648
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/71uknel3ecujjeqiuq15tohzx.o",
+          "sha256": "53a63d1dba06a71607dbb3af664dc510733889f9bf2c413d61a44a4d3318abc4",
+          "size": 4136
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/by5snlqlb55dmqujz9ea39hxh.o",
+          "sha256": "4c69ca44744e542ea83eccada0fed1bf4ee95fee789cb32953ab96469939a351",
+          "size": 12448
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/9nlrxq3gkg2jmsbuwq3cw8paf.o",
+          "sha256": "554d7a54c6a55aabe41fe23ab3166d6ac1d13774f38460315a93443e8dce4389",
+          "size": 26048
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/8fsaoxrozfd6dkr3d40etug3w.o",
+          "sha256": "0c5ddc6f37f4a4291c594e19fef0395f8166b4c31c3f22775297c5b613e6c2d5",
+          "size": 88656
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/23uw5h6j5rjtle58cps69d9xv.o",
+          "sha256": "74543aafd3dfb1c3f3c3cac2f147fe24b31fa5785529d27cf3a2b87d1738cb64",
+          "size": 23136
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/4h2mc8ywzynzmatiqsbjb2xja.o",
+          "sha256": "395b417a6abdab826ed39326dc1eda79bea1a05f7e4ef78de36f039c8b736047",
+          "size": 23552
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/59c9mmdvk5rbxzxtsk3dvshvr.o",
+          "sha256": "5cc39cf30588b0116a89b7af86f6a7bb6db73918790082632c196084e1d5df26",
+          "size": 16616
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/9wd7wgr5nuqbev0rj4o1mx5ay.o",
+          "sha256": "928b45d6da1e639cc2e060d4c252a39dd0e725e1225898027626cb20221eb601",
+          "size": 13464
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/7co95muo394b9n07ftwm9u407.o",
+          "sha256": "351f22d5f5129fe7fc4a9ba329683c5fb0f2fbcfc82d8783ff674d92d3ba5177",
+          "size": 7432
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/7e6oq6pqzdj4hi7wjjgupvy42.o",
+          "sha256": "24b7ca0e28cc3a0bb42e3ae1e61c2e7c799a9b56680887dd57fb9d69e834f16f",
+          "size": 14560
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/2yhd07ar8zxton64clohr3l26.o",
+          "sha256": "b6a576ad8c6a1f8f0ff8b383189cc12d334fbbf056ffca8bed375c8d2cc36f8f",
+          "size": 10512
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/8o243xys9wdvstdlob3yi8lhg.o",
+          "sha256": "b0f6043b6226a154a8cc647d169f4fa99678343a8cd2e9f1f021b035c1b8a6ab",
+          "size": 11464
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/6byfgrpw3r9akuf2telhfnw9s.o",
+          "sha256": "3d7300b2469526e98014a7aeca9c14287d1b137110edd84eebd862415e0e6e00",
+          "size": 5264
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/60psbx9k03nshvzyx907zytdq.o",
+          "sha256": "cc0e80a6a1aed46dc4d66f06510f1571e88660859d88cfbb00e8c43008e00252",
+          "size": 3824
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/4rq3ais93ouv0pztebkcxpga2.o",
+          "sha256": "38a8572b0e82f80c37c1b75a608ec57039b086d6c76e4e39087207301d5a0f9c",
+          "size": 22416
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/39h51xdr4c1tvn63hzm12gfi9.o",
+          "sha256": "274d73dfaca3ce5fc3b5fddd1d4ae8c4e4d945e856de978c8d55b16aea86dcc4",
+          "size": 295712
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/93ye80vh5l6uchjei3rb4yf6y.o",
+          "sha256": "4a19943e3b722d740535f28aaa08fe54659959f0494312fdf8cf27511d816113",
+          "size": 79896
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/comem84z1hhokass7htgjfvf4.o",
+          "sha256": "ba7d43f235b4e35ad348b3f81fe61212e9a6211bfe3470680c9c8b4d64d914a0",
+          "size": 17912
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/daqullt12wz3pndvg9hp3jx2n.o",
+          "sha256": "7d88862b82eac9b3aec628fd0802baa30cb6f7ab5d9c756c9e964dd270f9f629",
+          "size": 36752
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/e44b70zwgwwqh28pcyqdy10y8.o",
+          "sha256": "56b8e5a8a7af158c164d880974c63fda2fb9a7bf5b680621bff694cc440d0d9f",
+          "size": 7176
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/4hs52ackzoyyu34c1rt3igw9f.o",
+          "sha256": "87ccdbf7187006b25f0799908772de4182443279feacc35ffbf15ff0d5f400e5",
+          "size": 11616
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/0wy2fwj09abp3tal373atkw9k.o",
+          "sha256": "68b6f59c6298cb652e266c2542117b41d751c140a6b83cef36ad768d135200fb",
+          "size": 40960
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/0h9sihvydyr4h9jthi656lpb6.o",
+          "sha256": "ed647b7c784be79bf98f5cd3c1d13bfe2090575b3c956d7c36c86c085d22187e",
+          "size": 17816
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/da6j3ec9b4l1zuy9ql25gothk.o",
+          "sha256": "c917ff20ce15ccda969cd374b3bd08423931a71605a1c03cb18fff07923259a3",
+          "size": 14840
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/ehlio0njzu1r02771si1wbvq7.o",
+          "sha256": "3b4603ede6b5e6115857ff1b4e458aad929ad38d6b7e985e2e1a8e07cb1aa27a",
+          "size": 6104
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/49i753gxr0wa5gdmx740klgl3.o",
+          "sha256": "125db0e45189ab18b12e02c9131c2566dc8c14d9a5bbd99ffb5d3ad3a8f434a3",
+          "size": 8696
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/3q2w9tqcezqn9rlbej4699prs.o",
+          "sha256": "9e5839f4998847212887fc4cb4090b85a7c91b2f2ddf8a1fe656382de3192844",
+          "size": 5888
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/87zbikzc6t10lvwhwokgczol6.o",
+          "sha256": "94080788b5414f13d9c66cb176d9abcdbc0c4e88d321dd0397a54fa53a91a12e",
+          "size": 8216
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/d11ufq3t9gex37xigphihth0z.o",
+          "sha256": "41f9665549fb474707eb8d339026be58e7f1a707d99178aa3074d63ddd779d05",
+          "size": 3472
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/d1gc58oqlob81wdzb8n0oriox.o",
+          "sha256": "0f5acccded8f51653559a55110d4dd4298533db4d5ce0657e8a1b7fc3385dbff",
+          "size": 13608
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/8f7c5360c21qwxxv9lwxyi0dg.o",
+          "sha256": "711407a1913e6593d8ad2d502ac5d23bd0b067e0f8aaad718c87a1c7923d753f",
+          "size": 47808
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/2oxv7im3aoe2dp3hl1jocq7ou.o",
+          "sha256": "51dcacd205d3ce5135ef427a2a08601cc0d15385c0478738203657a751ec0ae3",
+          "size": 3560
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/dp5tpgxbbl087f7ejdab3nyrn.o",
+          "sha256": "6c2d750183edac91b0e7085856d3d6fd10d93eeaa7f7d7165da78c07e6d15500",
+          "size": 67328
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/4cnwk6w3k4pytcryy5zp1lz91.o",
+          "sha256": "b9521390b780041138f95a138fdaa2eb8dc0296a006a5741bca1623181934927",
+          "size": 11648
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/7lnsxpe4bea24lgahbcxwfhz6.o",
+          "sha256": "2525f26a97eacffdd75df32e15094b5c2471059e903e4e0afeec35835d6b4e57",
+          "size": 27632
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/2ffywier0at8iwp1074n0avpd.o",
+          "sha256": "3d11af0ac4c582304e528a3f5e05e45c639c3b137fee95574f3a0e4d6fb28be2",
+          "size": 4424
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/7uq2znjcj71a1evhhctxw90z2.o",
+          "sha256": "b4d5aa2537f690b2a07f95178aa88e71e0eb58033fc802844f12d60be049312d",
+          "size": 10872
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/1hz46tmn121dd3m2usp8tijn3.o",
+          "sha256": "e9bbc795e61d81d3245d4f232c02b0cedf2b6045bd314a5061d6be2544f0c861",
+          "size": 28480
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/eytz1j6p4o57y772eo8kbohv0.o",
+          "sha256": "3cb8d1294502f938c4cb7064db30382783087aeafaff8301d1dbfcd4c1ca14ff",
+          "size": 28120
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/awo4n6psn3ikmh49caz7nogqf.o",
+          "sha256": "4e251a76934c2f3c3e3369603be656423868f8df1763710252582430bdfea98d",
+          "size": 13248
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/8wic0x8v5khime2pykv9merhd.o",
+          "sha256": "02e1f8cd1b804d019158f372895dc686f61b811246b753a575aeba674d72d9d9",
+          "size": 8560
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/8sephi5cfbempk0m93ia7ttg4.o",
+          "sha256": "e5e9a39cb02afc6cb09bb008e94507563e003a9f6b34813099873a83b41b85c6",
+          "size": 5752
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/d1nzkq475thc5fd92nuwf7wcg.o",
+          "sha256": "eb8242ae2a541f0cb2755b497011a2b19c8ddafa6fba504087769694001ae91e",
+          "size": 2968
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/3ko1jdvsha5cvlr3qss76iw8v.o",
+          "sha256": "f1fc39ba82cc8907481586d02cfd11f14582b445f7aac54a1a29e1c5c8af6188",
+          "size": 27544
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/9w8kvg8gsadj647sh1mrw41y5.o",
+          "sha256": "fd0241f668ea2bc9515a3600d39196d8d330ec97fa79400b71f8650c560dd9cd",
+          "size": 12808
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/1dtvwtpira0e5r1met8n0maxx.o",
+          "sha256": "18150a8276491a9019fbfd5704bab0c0048232c4be4d1f11abcd53d180664773",
+          "size": 7376
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/82yy0isw9racenmp0865lzdgu.o",
+          "sha256": "b93707fb3e5c3c65690a0aec54cc9d88bb6ffa3369b00bdb1a0f57e80e19efe9",
+          "size": 11120
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/6js9t8y8s32hlfqbxn1jhq5x3.o",
+          "sha256": "5d7afe915483888810b92673568d168b325da2dc5fc4c97efa94d9588159df74",
+          "size": 4208
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q-e96e027p1iyz3m1vabk1ozh2b/4fqn2n0pn4aoxsdeldnm468em.o",
+          "sha256": "586ebb7c1c0af4ec2cddecd0071d1f2fed65f829532300bf128eaf200c24ec86",
+          "size": 4568
+        },
+        {
+          "path": "submission/target/debug/incremental/main-2c3fep7v0eoa2/s-ho7o7sabzt-10kqo4q.lock",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        {
+          "path": "submission/target/debug/main.d",
+          "sha256": "14d958735b83900b6f41f11542013ab41c858d6dc33aaf4f26d360dd4cc55ad3",
+          "size": 718
+        },
+        {
+          "path": "submission/target/debug/build/lazy_static/794f2ece9d299a33/out/liblazy_static-794f2ece9d299a33.rlib",
+          "sha256": "cadd08da886b00202238bd00917faf551899f4024c17ed70f514011a03930f33",
+          "size": 24836
+        },
+        {
+          "path": "submission/target/debug/build/lazy_static/794f2ece9d299a33/out/lazy_static-794f2ece9d299a33.d",
+          "sha256": "eeba2e7c8b745b719ab0bbab07417550696885395b50f26252b39a68174c05dd",
+          "size": 1072
+        },
+        {
+          "path": "submission/target/debug/build/lazy_static/794f2ece9d299a33/out/liblazy_static-794f2ece9d299a33.rmeta",
+          "sha256": "41a3e4a4e5ccd69a2f64164c5868b374eeec314bc7c49104e5650f4fbe7b8e30",
+          "size": 22572
+        },
+        {
+          "path": "submission/target/debug/build/lazy_static/794f2ece9d299a33/fingerprint/lib-lazy_static",
+          "sha256": "3d736221b0b65741503aa0aa2729963d20080cf2431e9f5d7a1d25baea4462ec",
+          "size": 16
+        },
+        {
+          "path": "submission/target/debug/build/lazy_static/794f2ece9d299a33/fingerprint/output-lib-lazy_static",
+          "sha256": "22252f8f4f23b0064ec76bad71b525405eece542d506d590268e604156526a41",
+          "size": 85
+        },
+        {
+          "path": "submission/target/debug/build/lazy_static/794f2ece9d299a33/fingerprint/lib-lazy_static.json",
+          "sha256": "1e4f4f9540e17271ec61f441330b664cd4b57025363c1f29894c13f0e2b1b0c9",
+          "size": 392
+        },
+        {
+          "path": "submission/target/debug/build/lazy_static/794f2ece9d299a33/fingerprint/invoked.timestamp",
+          "sha256": "5a109e6643e8d3e88642e3f35e85d2a83e639d07523aa6e99166c48178e965c3",
+          "size": 48
+        },
+        {
+          "path": "submission/target/debug/build/lazy_static/794f2ece9d299a33/fingerprint/dep-lib-lazy_static",
+          "sha256": "93a4afc37518a1bf7830744017176e1d1946e5df993e47159069839f61fe49ab",
+          "size": 14
+        },
+        {
+          "path": "submission/target/debug/build/rand/a459498a1f1ca3b6/out/rand-a459498a1f1ca3b6.d",
+          "sha256": "67a3aaed87b7734fdc2af07213d469c8017c3a4c439577ed147cca885dce0b5c",
+          "size": 13732
+        },
+        {
+          "path": "submission/target/debug/build/rand/a459498a1f1ca3b6/out/librand-a459498a1f1ca3b6.rmeta",
+          "sha256": "369f6b9b9e1c8aa4efbf9b6dd0d3568c7e8dfd15f88ca85b60263cd597e6cea1",
+          "size": 1335806
+        },
+        {
+          "path": "submission/target/debug/build/rand/a459498a1f1ca3b6/out/librand-a459498a1f1ca3b6.rlib",
+          "sha256": "605fa121f45694f8368058e547769c5bc75f0d93568d7de60c0a702e81bd2ddb",
+          "size": 3224680
+        },
+        {
+          "path": "submission/target/debug/build/rand/a459498a1f1ca3b6/fingerprint/lib-rand.json",
+          "sha256": "61a15c7b2f28e01179252dbf52ba49ac5c63dbce8f2e2b77db4ce4c9cf7e6e95",
+          "size": 734
+        },
+        {
+          "path": "submission/target/debug/build/rand/a459498a1f1ca3b6/fingerprint/output-lib-rand",
+          "sha256": "22252f8f4f23b0064ec76bad71b525405eece542d506d590268e604156526a41",
+          "size": 85
+        },
+        {
+          "path": "submission/target/debug/build/rand/a459498a1f1ca3b6/fingerprint/lib-rand",
+          "sha256": "c630d63cb22580397623e9223835f8a32f7d59201012edd62308d5e26ad82e23",
+          "size": 16
+        },
+        {
+          "path": "submission/target/debug/build/rand/a459498a1f1ca3b6/fingerprint/dep-lib-rand",
+          "sha256": "93a4afc37518a1bf7830744017176e1d1946e5df993e47159069839f61fe49ab",
+          "size": 14
+        },
+        {
+          "path": "submission/target/debug/build/rand/a459498a1f1ca3b6/fingerprint/invoked.timestamp",
+          "sha256": "5a109e6643e8d3e88642e3f35e85d2a83e639d07523aa6e99166c48178e965c3",
+          "size": 48
+        },
+        {
+          "path": "submission/target/debug/build/rand_core/26885a1d0857e66c/out/rand_core-26885a1d0857e66c.d",
+          "sha256": "97c8548e5646d9e0f4d182f5d3c1aec9dead27c1331970afc7f2ae3846eea50a",
+          "size": 667
+        },
+        {
+          "path": "submission/target/debug/build/rand_core/26885a1d0857e66c/out/librand_core-26885a1d0857e66c.rmeta",
+          "sha256": "7a032377522a16ef8dbf8d5c2bfde96042b580ae1b3bd84160200e4635afd7fa",
+          "size": 4529
+        },
+        {
+          "path": "submission/target/debug/build/rand_core/26885a1d0857e66c/out/librand_core-26885a1d0857e66c.rlib",
+          "sha256": "2b5275ef81c9bdb98047343412fb84794df4db644d61b4102f818bf29c7a35bf",
+          "size": 6792
+        },
+        {
+          "path": "submission/target/debug/build/rand_core/26885a1d0857e66c/fingerprint/output-lib-rand_core",
+          "sha256": "22252f8f4f23b0064ec76bad71b525405eece542d506d590268e604156526a41",
+          "size": 85
+        },
+        {
+          "path": "submission/target/debug/build/rand_core/26885a1d0857e66c/fingerprint/lib-rand_core",
+          "sha256": "79f7c76aab19a72bd7b2d5907e04052134b0d5a684e8b7a4665bcd59339d8ec0",
+          "size": 16
+        },
+        {
+          "path": "submission/target/debug/build/rand_core/26885a1d0857e66c/fingerprint/dep-lib-rand_core",
+          "sha256": "93a4afc37518a1bf7830744017176e1d1946e5df993e47159069839f61fe49ab",
+          "size": 14
+        },
+        {
+          "path": "submission/target/debug/build/rand_core/26885a1d0857e66c/fingerprint/lib-rand_core.json",
+          "sha256": "56e4f0f1e6309d432e7361018de66064962a0d2cce62d4bc6d39cad98c9adc4d",
+          "size": 484
+        },
+        {
+          "path": "submission/target/debug/build/rand_core/26885a1d0857e66c/fingerprint/invoked.timestamp",
+          "sha256": "5a109e6643e8d3e88642e3f35e85d2a83e639d07523aa6e99166c48178e965c3",
+          "size": 48
+        },
+        {
+          "path": "submission/target/debug/build/rand_core/bd78dbc99d9f96bb/out/librand_core-bd78dbc99d9f96bb.rlib",
+          "sha256": "61b7277719abd68888d2ef852efe0a56942d4b08b1502069d815fc6573b30b15",
+          "size": 270438
+        },
+        {
+          "path": "submission/target/debug/build/rand_core/bd78dbc99d9f96bb/out/librand_core-bd78dbc99d9f96bb.rmeta",
+          "sha256": "1decb9973c1c493482a0b364e0c1f0074854d9f95667724100c92447c74a6ad5",
+          "size": 118098
+        },
+        {
+          "path": "submission/target/debug/build/rand_core/bd78dbc99d9f96bb/out/rand_core-bd78dbc99d9f96bb.d",
+          "sha256": "db750ca4830606db6df875177e20172ebcd1a2bf715128bd28b254c6c31bd06e",
+          "size": 2067
+        },
+        {
+          "path": "submission/target/debug/build/rand_core/bd78dbc99d9f96bb/fingerprint/output-lib-rand_core",
+          "sha256": "22252f8f4f23b0064ec76bad71b525405eece542d506d590268e604156526a41",
+          "size": 85
+        },
+        {
+          "path": "submission/target/debug/build/rand_core/bd78dbc99d9f96bb/fingerprint/lib-rand_core",
+          "sha256": "d901f017fcf428c09e3b78990409cff2894d7e99acb8d61839414319d7e86558",
+          "size": 16
+        },
+        {
+          "path": "submission/target/debug/build/rand_core/bd78dbc99d9f96bb/fingerprint/dep-lib-rand_core",
+          "sha256": "93a4afc37518a1bf7830744017176e1d1946e5df993e47159069839f61fe49ab",
+          "size": 14
+        },
+        {
+          "path": "submission/target/debug/build/rand_core/bd78dbc99d9f96bb/fingerprint/lib-rand_core.json",
+          "sha256": "3050a259b1ca64a1906252fe42f8db4af262217a1e8857f7238bb6ddf247c587",
+          "size": 440
+        },
+        {
+          "path": "submission/target/debug/build/rand_core/bd78dbc99d9f96bb/fingerprint/invoked.timestamp",
+          "sha256": "5a109e6643e8d3e88642e3f35e85d2a83e639d07523aa6e99166c48178e965c3",
+          "size": 48
+        },
+        {
+          "path": "submission/target/debug/build/main/2475b9ecb8c8f7f2/out/main.d",
+          "sha256": "0c3a724a95c935b8ea12b6167c6eabfde559db0e3937d5f689239d52d69cbb41",
+          "size": 1076
+        },
+        {
+          "path": "submission/target/debug/build/main/2475b9ecb8c8f7f2/out/main",
+          "sha256": "9300c91eff5cb71d7bd115980d01574c20793652b06040ea415a68df3dc05cba",
+          "size": 6415424
+        },
+        {
+          "path": "submission/target/debug/build/main/2475b9ecb8c8f7f2/fingerprint/bin-main.json",
+          "sha256": "aa7891f3a187dd204fbfcf1a0c5a339f4747fd5460f81722ea16e01e55e1535e",
+          "size": 468
+        },
+        {
+          "path": "submission/target/debug/build/main/2475b9ecb8c8f7f2/fingerprint/bin-main",
+          "sha256": "9d46e87c69ff6d69c2faa76b6ef8b52814d02a307fa81a1fd68a1ec0950ed1f0",
+          "size": 16
+        },
+        {
+          "path": "submission/target/debug/build/main/2475b9ecb8c8f7f2/fingerprint/dep-bin-main",
+          "sha256": "41cdcb59af5068ab48108d3bbf7d55bdaf6cdf7e78f9d9bcad9e6593bdb1eb12",
+          "size": 402
+        },
+        {
+          "path": "submission/target/debug/build/main/2475b9ecb8c8f7f2/fingerprint/output-bin-main",
+          "sha256": "25ba258e759f6362209021718c6b19ce215b2b2760e4e8dbee60838097121827",
+          "size": 5817
+        },
+        {
+          "path": "submission/target/debug/build/main/2475b9ecb8c8f7f2/fingerprint/invoked.timestamp",
+          "sha256": "5a109e6643e8d3e88642e3f35e85d2a83e639d07523aa6e99166c48178e965c3",
+          "size": 48
+        },
+        {
+          "path": "submission/target/debug/build/libc/73d6a3f369c4a297/out/liblibc-73d6a3f369c4a297.rmeta",
+          "sha256": "442af34d3b6bfaf7ff66252480a691a60d5f053579e2f605ec2fa2439a1fb092",
+          "size": 4312554
+        },
+        {
+          "path": "submission/target/debug/build/libc/73d6a3f369c4a297/out/libc-73d6a3f369c4a297.d",
+          "sha256": "b008a061cfd6f8f29331871a8cb011fdec5ea34c0a7a8b903f7a0f84ee60bfb1",
+          "size": 28085
+        },
+        {
+          "path": "submission/target/debug/build/libc/73d6a3f369c4a297/out/liblibc-73d6a3f369c4a297.rlib",
+          "sha256": "036f8bf4b5f54363b1648d96af06254abd16b877f5481a967362680b2ded3b12",
+          "size": 4410310
+        },
+        {
+          "path": "submission/target/debug/build/libc/73d6a3f369c4a297/fingerprint/lib-libc",
+          "sha256": "56282ba7953020b6c61cd5477d7f80b532c28ae82c56ad0878092451f7223765",
+          "size": 16
+        },
+        {
+          "path": "submission/target/debug/build/libc/73d6a3f369c4a297/fingerprint/lib-libc.json",
+          "sha256": "26a7154559f8f98b1c92a713028ff53b6d86bb26932e243eac78c2fd8fc97017",
+          "size": 577
+        },
+        {
+          "path": "submission/target/debug/build/libc/73d6a3f369c4a297/fingerprint/dep-lib-libc",
+          "sha256": "93a4afc37518a1bf7830744017176e1d1946e5df993e47159069839f61fe49ab",
+          "size": 14
+        },
+        {
+          "path": "submission/target/debug/build/libc/73d6a3f369c4a297/fingerprint/output-lib-libc",
+          "sha256": "22252f8f4f23b0064ec76bad71b525405eece542d506d590268e604156526a41",
+          "size": 85
+        },
+        {
+          "path": "submission/target/debug/build/libc/73d6a3f369c4a297/fingerprint/invoked.timestamp",
+          "sha256": "5a109e6643e8d3e88642e3f35e85d2a83e639d07523aa6e99166c48178e965c3",
+          "size": 48
+        },
+        {
+          "path": "submission/target/debug/build/libc/9e675c7bebd3661d/out/build_script_build",
+          "sha256": "7618c0b8018112ea0d8cc981c50757c50a5bbaa606cc0f6943b14b1122198250",
+          "size": 4816600
+        },
+        {
+          "path": "submission/target/debug/build/libc/9e675c7bebd3661d/out/build_script_build.d",
+          "sha256": "84370fd92b0cd184364a648e56837b969596746ace2009cec888f3b16a15c929",
+          "size": 422
+        },
+        {
+          "path": "submission/target/debug/build/libc/9e675c7bebd3661d/fingerprint/output-build-script-build-script-build",
+          "sha256": "22252f8f4f23b0064ec76bad71b525405eece542d506d590268e604156526a41",
+          "size": 85
+        },
+        {
+          "path": "submission/target/debug/build/libc/9e675c7bebd3661d/fingerprint/build-script-build-script-build.json",
+          "sha256": "dc72db10d0787cb73bf04e296fedc638a04c7dfccf176faf0b834a8a5df6de6a",
+          "size": 531
+        },
+        {
+          "path": "submission/target/debug/build/libc/9e675c7bebd3661d/fingerprint/dep-build-script-build-script-build",
+          "sha256": "93a4afc37518a1bf7830744017176e1d1946e5df993e47159069839f61fe49ab",
+          "size": 14
+        },
+        {
+          "path": "submission/target/debug/build/libc/9e675c7bebd3661d/fingerprint/invoked.timestamp",
+          "sha256": "5a109e6643e8d3e88642e3f35e85d2a83e639d07523aa6e99166c48178e965c3",
+          "size": 48
+        },
+        {
+          "path": "submission/target/debug/build/libc/9e675c7bebd3661d/fingerprint/build-script-build-script-build",
+          "sha256": "9fe53643a885fea7686cb5d84d995e71391fa31b356360825e80401d6105e462",
+          "size": 16
+        },
+        {
+          "path": "submission/target/debug/build/libc/d516335e1fa53bc1/run/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        {
+          "path": "submission/target/debug/build/libc/d516335e1fa53bc1/run/stdout",
+          "sha256": "425a12207c5bfe7c3d4ba249841d7da1f5ca9b4a4dbf8e4eefe52ec4ee6f398f",
+          "size": 1478
+        },
+        {
+          "path": "submission/target/debug/build/libc/d516335e1fa53bc1/run/invoked.timestamp",
+          "sha256": "5a109e6643e8d3e88642e3f35e85d2a83e639d07523aa6e99166c48178e965c3",
+          "size": 48
+        },
+        {
+          "path": "submission/target/debug/build/libc/d516335e1fa53bc1/run/root-output",
+          "sha256": "6e5405b17f96df7e19f6af7912987b80476174077199fbd8d4a61b298e2f0566",
+          "size": 66
+        },
+        {
+          "path": "submission/target/debug/build/libc/d516335e1fa53bc1/fingerprint/run-build-script-build-script-build",
+          "sha256": "419d96000d7c70338c0d59a3e478fe7d30932e26fa695c62fc26cbbdebcde5b6",
+          "size": 16
+        },
+        {
+          "path": "submission/target/debug/build/libc/d516335e1fa53bc1/fingerprint/run-build-script-build-script-build.json",
+          "sha256": "e277e4a844eda995d403a68524d854b18731c350429943bd26b0da2383e3c9bc",
+          "size": 470
+        },
+        {
+          "path": "submission/target/debug/.cargo-lock",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        {
+          "path": "submission/target/debug/.cargo-artifact-lock",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        {
+          "path": "submission/target/.rustc_info.json",
+          "sha256": "b32ff9711780d43d07fc71d7f9a47d99b1d28efbdce739fc4b119493a5cda585",
+          "size": 1294
+        },
+        {
+          "path": "submission/target/CACHEDIR.TAG",
+          "sha256": "6d9d1d216e0f83abc5e5662ca62c92b4f23009466b54fa27321a69acdb778bb2",
+          "size": 177
+        },
+        {
+          "path": "submission/Cargo.lock",
+          "sha256": "87f2122dbd2a82e1a8d3b18b69de87b5719edbae80e24a6d90ffbd59928cc3cc",
+          "size": 2588
+        }
+      ],
+      "reference_source": {
+        "commit": "385265d708758b2446bfc4dc60537628ad564d4f",
+        "destination": "/workspace",
+        "kind": "repository",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "head": "385265d708758b2446bfc4dc60537628ad564d4f",
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00"
+        },
+        "repository": "https://github.com/CodeClash-ai/Halite3.git"
+      },
+      "restored_files": 208,
+      "status": "passed"
+    },
+    {
+      "arena": "huskybench",
+      "attempts": 1,
+      "checks": {
+        "missing_entrypoint_native_validator": true,
+        "native_all_invalid_tie": true,
+        "native_one_valid_forfeit": true,
+        "pristine_native_validator": true,
+        "restored_native_validator": true,
+        "restored_reference_bytes": true
+      },
+      "cleanup": {
+        "owned_containers": 3,
+        "removed_containers": 3,
+        "verified": true
+      },
+      "command_log_sha256": "41b17359564a9d5d5929cca484fcb398e06fcd105caac776e51924806ffdbfbb",
+      "config_origin": "published_pvp",
+      "elapsed_seconds": 4.179192066192627,
+      "image": {
+        "architecture": "arm64",
+        "id": "sha256:a0ae6a4525dae90955fbd16956b117c8eda87a4ff029bf9c8675a7f6d05c6862",
+        "os": "linux",
+        "tag": "codeclash-adapter/huskybench:f0694c64ecf6"
+      },
+      "native_config_sha256": "7f61ba0b6220e167064bf0000a67c5b791fc9d974e0742ef223d99e620189dd6",
+      "native_forfeit_expected_and_observed": [
+        {
+          "expected": {
+            "scores": {
+              "claude-sonnet-4-5-20250929": 100,
+              "o3": 0
+            },
+            "tournament_simulations": 0,
+            "winner": "claude-sonnet-4-5-20250929"
+          },
+          "name": "native_one_valid_forfeit",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "claude-sonnet-4-5-20250929": {
+                "invalid_reason": "",
+                "name": "claude-sonnet-4-5-20250929",
+                "score": 100,
+                "valid_submit": true
+              },
+              "o3": {
+                "invalid_reason": "There should be a `client/player.py` file",
+                "name": "o3",
+                "score": 0.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 1,
+            "scores": {
+              "claude-sonnet-4-5-20250929": 100,
+              "o3": 0.0
+            },
+            "winner": "claude-sonnet-4-5-20250929"
+          },
+          "passed": true
+        },
+        {
+          "expected": {
+            "scores": {
+              "claude-sonnet-4-5-20250929": 50.0,
+              "o3": 50.0
+            },
+            "tournament_simulations": 0,
+            "winner": "Tie"
+          },
+          "name": "native_all_invalid_tie",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "claude-sonnet-4-5-20250929": {
+                "invalid_reason": "There should be a `client/player.py` file",
+                "name": "claude-sonnet-4-5-20250929",
+                "score": 50.0,
+                "valid_submit": false
+              },
+              "o3": {
+                "invalid_reason": "There should be a `client/player.py` file",
+                "name": "o3",
+                "score": 50.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 2,
+            "scores": {
+              "claude-sonnet-4-5-20250929": 50.0,
+              "o3": 50.0
+            },
+            "winner": "Tie"
+          },
+          "passed": true
+        }
+      ],
+      "native_implementation": {
+        "run_round_source_sha256": "daceaf1db5b482797c5f36954c8be08389ce3cc534b73a774f6e6c098892fd98",
+        "validator": "codeclash.arenas.huskybench.huskybench.HuskyBenchArena.validate_code",
+        "validator_file_sha256": "73e1e5d0cffc10828820f27dcbe0a5b9b82b851d5146b1850ee2e16594f0f0f9",
+        "validator_source_sha256": "189d65d5f990b6db3421cf045ed0fe2a4948488db421067a1655b1e1b2a3a90a"
+      },
+      "negative_reason": "There should be a `client/player.py` file",
+      "negative_remove_paths": [
+        "client/player.py"
+      ],
+      "raw_report_sha256": "a83db2c1562474934246f8c355906b4141c258148e5fe8db91d1560255e6d8cf",
+      "reference_archive_sha256": "0f651afc07c8c11a3864f236c0ddbf4ae158a2ff75a728379eb047ffe2eed6b7",
+      "reference_byte_inventory": [
+        {
+          "path": "client/player.py",
+          "sha256": "3f306a5b4e6b7b3fadd4ba69c5ff4ed1dde302987f6b5a95b3542415c37847e5",
+          "size": 2061
+        }
+      ],
+      "reference_source": {
+        "commit": "9963f13b2d545cbdb12d716ad0c603e9219d46a1",
+        "destination": "/workspace",
+        "kind": "repository",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "head": "9963f13b2d545cbdb12d716ad0c603e9219d46a1",
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00"
+        },
+        "repository": "https://github.com/CodeClash-ai/HuskyBench.git"
+      },
+      "restored_files": 1,
+      "status": "passed"
+    },
+    {
+      "arena": "lightcycles",
+      "attempts": 1,
+      "checks": {
+        "missing_entrypoint_native_validator": true,
+        "native_all_invalid_tie": true,
+        "native_one_valid_forfeit": true,
+        "pristine_native_validator": true,
+        "restored_native_validator": true,
+        "restored_reference_bytes": true
+      },
+      "cleanup": {
+        "owned_containers": 3,
+        "removed_containers": 3,
+        "verified": true
+      },
+      "command_log_sha256": "9343e1db8ffb60aa05f5590c877ec15a9f210a59f96ff259d518941f5d126bfe",
+      "config_origin": "upstream_diagnostic",
+      "elapsed_seconds": 2.146840810775757,
+      "image": {
+        "architecture": "arm64",
+        "id": "sha256:69c0c0a30b20ed37d9f7222723c090cae83a2797ff3de80b3fb6760328d2599f",
+        "os": "linux",
+        "tag": "codeclash-adapter/lightcycles:f0694c64ecf6"
+      },
+      "native_config_sha256": "d2ff82ee4b72f2bb2595c26614bae03181a91a950be74b3a53b1d654f857e01e",
+      "native_forfeit_expected_and_observed": [
+        {
+          "expected": {
+            "scores": {
+              "p1": 10,
+              "p2": 0
+            },
+            "tournament_simulations": 0,
+            "winner": "p1"
+          },
+          "name": "native_one_valid_forfeit",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "p1": {
+                "invalid_reason": "",
+                "name": "p1",
+                "score": 10,
+                "valid_submit": true
+              },
+              "p2": {
+                "invalid_reason": "No main.py file found in the root directory",
+                "name": "p2",
+                "score": 0.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 1,
+            "scores": {
+              "p1": 10,
+              "p2": 0.0
+            },
+            "winner": "p1"
+          },
+          "passed": true
+        },
+        {
+          "expected": {
+            "scores": {
+              "p1": 5.0,
+              "p2": 5.0
+            },
+            "tournament_simulations": 0,
+            "winner": "Tie"
+          },
+          "name": "native_all_invalid_tie",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "p1": {
+                "invalid_reason": "No main.py file found in the root directory",
+                "name": "p1",
+                "score": 5.0,
+                "valid_submit": false
+              },
+              "p2": {
+                "invalid_reason": "No main.py file found in the root directory",
+                "name": "p2",
+                "score": 5.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 2,
+            "scores": {
+              "p1": 5.0,
+              "p2": 5.0
+            },
+            "winner": "Tie"
+          },
+          "passed": true
+        }
+      ],
+      "native_implementation": {
+        "run_round_source_sha256": "daceaf1db5b482797c5f36954c8be08389ce3cc534b73a774f6e6c098892fd98",
+        "validator": "codeclash.arenas.lightcycles.lightcycles.LightCyclesArena.validate_code",
+        "validator_file_sha256": "e7e422b598f9e8d32d92e7168455f7b99eb04dce15555c8ece43ec2f4af68863",
+        "validator_source_sha256": "b2bd85e9813836834f33ebca8e32616237fa7c4ebf75184b1d5023abb4fd0f40"
+      },
+      "negative_reason": "No main.py file found in the root directory",
+      "negative_remove_paths": [
+        "main.py"
+      ],
+      "raw_report_sha256": "a54683b9b71dc1742f050de45864406fcca70294537ed9d1e6472d825acabad2",
+      "reference_archive_sha256": "082441879ac0f1b4cbff221d557cdb64253a9d81f0bb47a01d53702cdf989e8f",
+      "reference_byte_inventory": [
+        {
+          "path": "main.py",
+          "sha256": "1ae631ca1af2b059a2e9fccf5febb661f67d2c84cf7a69e1c80d263183e29eb7",
+          "size": 2541
+        }
+      ],
+      "reference_source": {
+        "commit": "32e4218844805340371e9fe11902a49e5a1e40a6",
+        "destination": "/workspace",
+        "kind": "repository",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "head": "32e4218844805340371e9fe11902a49e5a1e40a6",
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00"
+        },
+        "repository": "https://github.com/CodeClash-ai/LightCycles.git"
+      },
+      "restored_files": 1,
+      "status": "passed"
+    },
+    {
+      "arena": "paintvolley",
+      "attempts": 1,
+      "checks": {
+        "missing_entrypoint_native_validator": true,
+        "native_all_invalid_tie": true,
+        "native_one_valid_forfeit": true,
+        "pristine_native_validator": true,
+        "restored_native_validator": true,
+        "restored_reference_bytes": true
+      },
+      "cleanup": {
+        "owned_containers": 3,
+        "removed_containers": 3,
+        "verified": true
+      },
+      "command_log_sha256": "13b9876c5b690cae641b7714eb2e0db3e76bedfd687afcb06ee4a597b16bd95f",
+      "config_origin": "upstream_diagnostic",
+      "elapsed_seconds": 2.2148449420928955,
+      "image": {
+        "architecture": "arm64",
+        "id": "sha256:c2109cd7f6c0458579d573101574045ed42b9c2404aefa1d94079a5b49e8eb3f",
+        "os": "linux",
+        "tag": "codeclash-adapter/paintvolley:f0694c64ecf6"
+      },
+      "native_config_sha256": "ccf02eb4f9a4f3da5a64760d1166ff1990edae312c70ed0f354b3288f5c1141b",
+      "native_forfeit_expected_and_observed": [
+        {
+          "expected": {
+            "scores": {
+              "p1": 10,
+              "p2": 0
+            },
+            "tournament_simulations": 0,
+            "winner": "p1"
+          },
+          "name": "native_one_valid_forfeit",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "p1": {
+                "invalid_reason": "",
+                "name": "p1",
+                "score": 10,
+                "valid_submit": true
+              },
+              "p2": {
+                "invalid_reason": "No main.py file found in the root directory",
+                "name": "p2",
+                "score": 0.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 1,
+            "scores": {
+              "p1": 10,
+              "p2": 0.0
+            },
+            "winner": "p1"
+          },
+          "passed": true
+        },
+        {
+          "expected": {
+            "scores": {
+              "p1": 5.0,
+              "p2": 5.0
+            },
+            "tournament_simulations": 0,
+            "winner": "Tie"
+          },
+          "name": "native_all_invalid_tie",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "p1": {
+                "invalid_reason": "No main.py file found in the root directory",
+                "name": "p1",
+                "score": 5.0,
+                "valid_submit": false
+              },
+              "p2": {
+                "invalid_reason": "No main.py file found in the root directory",
+                "name": "p2",
+                "score": 5.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 2,
+            "scores": {
+              "p1": 5.0,
+              "p2": 5.0
+            },
+            "winner": "Tie"
+          },
+          "passed": true
+        }
+      ],
+      "native_implementation": {
+        "run_round_source_sha256": "daceaf1db5b482797c5f36954c8be08389ce3cc534b73a774f6e6c098892fd98",
+        "validator": "codeclash.arenas.paintvolley.paintvolley.PaintVolleyArena.validate_code",
+        "validator_file_sha256": "46f80291e29c5012219d597b4280b797645cb13c995d2a1aa8de133fc6900355",
+        "validator_source_sha256": "7cba529744da6867afc9f7f2440c38de1a7b3a39a9aa2fd59bb906f2b2ec295a"
+      },
+      "negative_reason": "No main.py file found in the root directory",
+      "negative_remove_paths": [
+        "main.py"
+      ],
+      "raw_report_sha256": "6d90d3da55629715aa843f26a1bb0153a2c544b7cb404fb2f11b1c05c0af0cc6",
+      "reference_archive_sha256": "07d33abf3e03782d963e172011d235bd9451e0cc02bb82a97f576ecbc153a05a",
+      "reference_byte_inventory": [
+        {
+          "path": "main.py",
+          "sha256": "13960e288c3eed27861cb00c0754536fc184cf6aaddfe810b641b46457acc5eb",
+          "size": 5317
+        }
+      ],
+      "reference_source": {
+        "commit": "eda3a1485c3628392a0e35ffabbb45a79d33ae2b",
+        "destination": "/workspace",
+        "kind": "repository",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "head": "eda3a1485c3628392a0e35ffabbb45a79d33ae2b",
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00"
+        },
+        "repository": "https://github.com/CodeClash-ai/PaintVolley.git"
+      },
+      "restored_files": 1,
+      "status": "passed"
+    },
+    {
+      "arena": "robocode",
+      "attempts": 1,
+      "checks": {
+        "missing_entrypoint_native_validator": true,
+        "native_all_invalid_tie": true,
+        "native_one_valid_forfeit": true,
+        "pristine_native_validator": true,
+        "restored_native_validator": true,
+        "restored_reference_bytes": true
+      },
+      "cleanup": {
+        "owned_containers": 3,
+        "removed_containers": 3,
+        "verified": true
+      },
+      "command_log_sha256": "58cee7b5fcfe4aad718e2838f5d2a9bfa6a51392730dd8cb1582e8a4e7fee950",
+      "config_origin": "published_pvp",
+      "elapsed_seconds": 3.959398031234741,
+      "image": {
+        "architecture": "arm64",
+        "id": "sha256:bafe22aba8d3606d859f28e60ba19f6fcdd387b72b730291067edc9e55c2b6d9",
+        "os": "linux",
+        "tag": "codeclash-adapter/robocode:f0694c64ecf6"
+      },
+      "native_config_sha256": "c745cf4ac73746938f896eec5271507272afeca44a8c308e25aebea500dc1bd5",
+      "native_forfeit_expected_and_observed": [
+        {
+          "expected": {
+            "scores": {
+              "claudesonnet4520250929": 250,
+              "o3": 0
+            },
+            "tournament_simulations": 0,
+            "winner": "claudesonnet4520250929"
+          },
+          "name": "native_one_valid_forfeit",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "claudesonnet4520250929": {
+                "invalid_reason": "",
+                "name": "claudesonnet4520250929",
+                "score": 250,
+                "valid_submit": true
+              },
+              "o3": {
+                "invalid_reason": "There should be a `robots/custom/MyTank.java` file. You can include additional files, but the primary tank logic must be in `robots/custom/MyTank.java`",
+                "name": "o3",
+                "score": 0.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 1,
+            "scores": {
+              "claudesonnet4520250929": 250,
+              "o3": 0.0
+            },
+            "winner": "claudesonnet4520250929"
+          },
+          "passed": true
+        },
+        {
+          "expected": {
+            "scores": {
+              "claudesonnet4520250929": 125.0,
+              "o3": 125.0
+            },
+            "tournament_simulations": 0,
+            "winner": "Tie"
+          },
+          "name": "native_all_invalid_tie",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "claudesonnet4520250929": {
+                "invalid_reason": "There should be a `robots/custom/MyTank.java` file. You can include additional files, but the primary tank logic must be in `robots/custom/MyTank.java`",
+                "name": "claudesonnet4520250929",
+                "score": 125.0,
+                "valid_submit": false
+              },
+              "o3": {
+                "invalid_reason": "There should be a `robots/custom/MyTank.java` file. You can include additional files, but the primary tank logic must be in `robots/custom/MyTank.java`",
+                "name": "o3",
+                "score": 125.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 2,
+            "scores": {
+              "claudesonnet4520250929": 125.0,
+              "o3": 125.0
+            },
+            "winner": "Tie"
+          },
+          "passed": true
+        }
+      ],
+      "native_implementation": {
+        "run_round_source_sha256": "daceaf1db5b482797c5f36954c8be08389ce3cc534b73a774f6e6c098892fd98",
+        "validator": "codeclash.arenas.robocode.robocode.RoboCodeArena.validate_code",
+        "validator_file_sha256": "6198234ad38452bbace1b60643f1ada8d70a53275670f1492942324825aaa06f",
+        "validator_source_sha256": "77b14ef35c397023e8dc7b447bf624fc43e8d576fb39b58be2559a1d32732357"
+      },
+      "negative_reason": "There should be a `robots/custom/MyTank.java` file. You can include additional files, but the primary tank logic must be in `robots/custom/MyTank.java`",
+      "negative_remove_paths": [
+        "robots/custom/MyTank.java"
+      ],
+      "raw_report_sha256": "1b3e4954122b9c6fae3b257b127bf59cbafb110db58bb6ce3385c341b5b7d816",
+      "reference_archive_sha256": "a37c67b657b66b7f9bcb53ce718e33db85589bc84043074f4b6b376ba70f8fe1",
+      "reference_byte_inventory": [
+        {
+          "path": "robots/custom/MyTank.class",
+          "sha256": "38cc7797a50d7316fd416d459c0bbabc66508392f3b82fc8cb2ed7b3f147407a",
+          "size": 504
+        },
+        {
+          "path": "robots/custom/MyTank.java",
+          "sha256": "e9e84917a95f831acc86a65a0a1d851553133be0a832239bd9fc1cc4245949f9",
+          "size": 383
+        }
+      ],
+      "reference_source": {
+        "commit": "1f360189e50a2cbab25e8ac7ef280736610753a7",
+        "destination": "/workspace",
+        "kind": "repository",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "head": "1f360189e50a2cbab25e8ac7ef280736610753a7",
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00"
+        },
+        "repository": "https://github.com/CodeClash-ai/RoboCode.git"
+      },
+      "restored_files": 2,
+      "status": "passed"
+    },
+    {
+      "arena": "robotrumble",
+      "attempts": 1,
+      "checks": {
+        "missing_entrypoint_native_validator": true,
+        "native_all_invalid_tie": true,
+        "native_one_valid_forfeit": true,
+        "pristine_native_validator": true,
+        "restored_native_validator": true,
+        "restored_reference_bytes": true
+      },
+      "cleanup": {
+        "owned_containers": 3,
+        "removed_containers": 3,
+        "verified": true
+      },
+      "command_log_sha256": "476c97c8fa3407bbad384f993edc8321f2213981c336f9e0cc5baf8b62587f6d",
+      "config_origin": "published_pvp",
+      "elapsed_seconds": 4.501579999923706,
+      "image": {
+        "architecture": "amd64",
+        "id": "sha256:cda481b35c6bce906e50ab1ca34655606b0278f8b4fa28105fe8958d87ac5700",
+        "os": "linux",
+        "tag": "codeclash-adapter/robotrumble:f0694c64ecf6"
+      },
+      "native_config_sha256": "5e8046a1477adeb4af685e6935970b8a26e63d58afc96f52f8f21e9c17cff4d6",
+      "native_forfeit_expected_and_observed": [
+        {
+          "expected": {
+            "scores": {
+              "claude-sonnet-4-5-20250929": 250,
+              "o3": 0
+            },
+            "tournament_simulations": 0,
+            "winner": "claude-sonnet-4-5-20250929"
+          },
+          "name": "native_one_valid_forfeit",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "claude-sonnet-4-5-20250929": {
+                "invalid_reason": "",
+                "name": "claude-sonnet-4-5-20250929",
+                "score": 250,
+                "valid_submit": true
+              },
+              "o3": {
+                "invalid_reason": "There should be a `robot.js` or `robot.py` file",
+                "name": "o3",
+                "score": 0.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 1,
+            "scores": {
+              "claude-sonnet-4-5-20250929": 250,
+              "o3": 0.0
+            },
+            "winner": "claude-sonnet-4-5-20250929"
+          },
+          "passed": true
+        },
+        {
+          "expected": {
+            "scores": {
+              "claude-sonnet-4-5-20250929": 125.0,
+              "o3": 125.0
+            },
+            "tournament_simulations": 0,
+            "winner": "Tie"
+          },
+          "name": "native_all_invalid_tie",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "claude-sonnet-4-5-20250929": {
+                "invalid_reason": "There should be a `robot.js` or `robot.py` file",
+                "name": "claude-sonnet-4-5-20250929",
+                "score": 125.0,
+                "valid_submit": false
+              },
+              "o3": {
+                "invalid_reason": "There should be a `robot.js` or `robot.py` file",
+                "name": "o3",
+                "score": 125.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 2,
+            "scores": {
+              "claude-sonnet-4-5-20250929": 125.0,
+              "o3": 125.0
+            },
+            "winner": "Tie"
+          },
+          "passed": true
+        }
+      ],
+      "native_implementation": {
+        "run_round_source_sha256": "daceaf1db5b482797c5f36954c8be08389ce3cc534b73a774f6e6c098892fd98",
+        "validator": "codeclash.arenas.robotrumble.robotrumble.RobotRumbleArena.validate_code",
+        "validator_file_sha256": "3e6185bbac65ad4a33c3bd2ec9541367cd3816a6d365b91788818bf2dd845bee",
+        "validator_source_sha256": "11874bc46227d180b839ed92e6d39b0cf9896dd5a7f1b8f199d1205a288bba0e"
+      },
+      "negative_reason": "There should be a `robot.js` or `robot.py` file",
+      "negative_remove_paths": [
+        "robot.js",
+        "robot.py"
+      ],
+      "raw_report_sha256": "109926fd4549df94cf9465239ae0d97b1e89c9f9fd4d236a952e878016485ee8",
+      "reference_archive_sha256": "c933182978b8b1b9664f933782aede8286d9b1d92901d380762ff19a732d752d",
+      "reference_byte_inventory": [
+        {
+          "path": "robot.js",
+          "sha256": "05abc6a4b14cfef98b2a84fb4fea1ff85bc19d0626205ded45b6adbf17c85ae5",
+          "size": 163
+        }
+      ],
+      "reference_source": {
+        "commit": "4f019c91e6854242f5e247ca82fee7b66833b227",
+        "destination": "/workspace",
+        "kind": "repository",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "head": "4f019c91e6854242f5e247ca82fee7b66833b227",
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00"
+        },
+        "repository": "https://github.com/CodeClash-ai/RobotRumble.git"
+      },
+      "restored_files": 1,
+      "status": "passed"
+    },
+    {
+      "arena": "scml",
+      "attempts": 1,
+      "checks": {
+        "missing_entrypoint_native_validator": true,
+        "native_all_invalid_tie": true,
+        "native_one_valid_forfeit": true,
+        "pristine_native_validator": true,
+        "restored_native_validator": true,
+        "restored_reference_bytes": true
+      },
+      "cleanup": {
+        "owned_containers": 3,
+        "removed_containers": 3,
+        "verified": true
+      },
+      "command_log_sha256": "0c5036e2491b90d9b89d12c0960455ff21dd5cbf466b92d0576947e4342bcf7d",
+      "config_origin": "upstream_diagnostic",
+      "elapsed_seconds": 2.5300378799438477,
+      "image": {
+        "architecture": "arm64",
+        "id": "sha256:64b76d8653b0c5f5aa057b7e95d8ccbdf278472b44ea089493d8a4ed7d432c71",
+        "os": "linux",
+        "tag": "codeclash-adapter/scml:f0694c64ecf6"
+      },
+      "native_config_sha256": "d9065fc4bf938d48c1c05954d15ad72d52e3516ed768c55f8ea8b96fd3eaebab",
+      "native_forfeit_expected_and_observed": [
+        {
+          "expected": {
+            "scores": {
+              "alpha": 2,
+              "beta": 0
+            },
+            "tournament_simulations": 0,
+            "winner": "alpha"
+          },
+          "name": "native_one_valid_forfeit",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "alpha": {
+                "invalid_reason": "",
+                "name": "alpha",
+                "score": 2,
+                "valid_submit": true
+              },
+              "beta": {
+                "invalid_reason": "Submission file `scml_agent.py` not found in the workspace root",
+                "name": "beta",
+                "score": 0.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 1,
+            "scores": {
+              "alpha": 2,
+              "beta": 0.0
+            },
+            "winner": "alpha"
+          },
+          "passed": true
+        },
+        {
+          "expected": {
+            "scores": {
+              "alpha": 1.0,
+              "beta": 1.0
+            },
+            "tournament_simulations": 0,
+            "winner": "Tie"
+          },
+          "name": "native_all_invalid_tie",
+          "observed": {
+            "details": [],
+            "player_stats": {
+              "alpha": {
+                "invalid_reason": "Submission file `scml_agent.py` not found in the workspace root",
+                "name": "alpha",
+                "score": 1.0,
+                "valid_submit": false
+              },
+              "beta": {
+                "invalid_reason": "Submission file `scml_agent.py` not found in the workspace root",
+                "name": "beta",
+                "score": 1.0,
+                "valid_submit": false
+              }
+            },
+            "round_num": 2,
+            "scores": {
+              "alpha": 1.0,
+              "beta": 1.0
+            },
+            "winner": "Tie"
+          },
+          "passed": true
+        }
+      ],
+      "native_implementation": {
+        "run_round_source_sha256": "daceaf1db5b482797c5f36954c8be08389ce3cc534b73a774f6e6c098892fd98",
+        "validator": "codeclash.arenas.scml.scml.SCMLOneShotArena.validate_code",
+        "validator_file_sha256": "0c314b7c727d8b09d0e316ebf5483fa72ec157837e8986232167a44730c4c452",
+        "validator_source_sha256": "3fa6aba51323aa1b8b2569a42e7e00b83a086e7435d72bc8d6a9f85406d295d1"
+      },
+      "negative_reason": "Submission file `scml_agent.py` not found in the workspace root",
+      "negative_remove_paths": [
+        "scml_agent.py"
+      ],
+      "raw_report_sha256": "a397af7d276de95a2400b0f74344f94e843b3ca5390c27aa1fbfa8e92bb0007a",
+      "reference_archive_sha256": "c6df7b88669e4834e33ad3225d94ffa9fab4d3e3157c88351bcb17c217c08326",
+      "reference_byte_inventory": [
+        {
+          "path": "scml_agent.py",
+          "sha256": "2c67281290b00f7615dc2b920815885f3087e5fbe1f40977f5dddab818ebed6a",
+          "size": 182
+        }
+      ],
+      "reference_source": {
+        "commit": "024a39dfcf2d466f119b4d794b69d625ead1d2cd",
+        "destination": "/workspace",
+        "kind": "repository",
+        "pin_origin": "public_head_snapshot",
+        "public_access": {
+          "head": "024a39dfcf2d466f119b4d794b69d625ead1d2cd",
+          "method": "git ls-remote with credentials disabled",
+          "verified_at": "2026-11-16T10:34:01.853300+00:00"
+        },
+        "repository": "https://github.com/CodeClash-ai/SCML.git"
+      },
+      "restored_files": 1,
+      "status": "passed"
+    }
+  ],
+  "checks": 126,
+  "checks_per_arena": [
+    "pristine_native_validator",
+    "missing_entrypoint_native_validator",
+    "restored_reference_bytes",
+    "restored_native_validator",
+    "native_one_valid_forfeit",
+    "native_all_invalid_tie"
+  ],
+  "credentials_forwarded": false,
+  "executed_script": {
+    "availability": "Preserved local artifact; not included in the repository",
+    "path": "run_native_references.executed.py",
+    "sha256": "af61d012f7f026a3b6232cdaa6d160208322ce89174db8051cd53d0f0049db03"
+  },
+  "failure_count": 0,
+  "final_inventory_receipt_sha256": "91a81f8bb29dd6a989d929d338615018deedf79b70dcdd24183d11be8f9bbf8d",
+  "final_labeled_container_inventory_empty": true,
+  "forfeit_tournament_simulations": 0,
+  "host_mounts": false,
+  "invocation_shim": "Native classes, constructors, validate_code and run_round are invoked. CodeArena.get_environment is replaced with an offline Docker wrapper; lightweight player records expose name/environment. This is a native reference suite, not a complete tournament or agent workflow.",
+  "model_api_calls": 0,
+  "network": "none",
+  "oracle_pass": false,
+  "owned_containers": 67,
+  "parity_claim": false,
+  "passed_arenas": 21,
+  "passed_checks": 126,
+  "plan_sha256": "556794fd26f1bc0c41dd4ddd5a704be16d48e80a2c7cf9ed3bc7889e05f451a3",
+  "publication_script": {
+    "changes_since_execution": "Clarified tournament simulations versus validation probes and get_environment shim; formatted code; required explicit CLI paths; reject existing attempt directories and empty catalogs before launch; require every worker exit code to be zero. Native validator/check logic unchanged.",
+    "full_suite_repeated_after_publication_changes": false,
+    "path": "scripts/run_native_references.py",
+    "publication_checks": {
+      "new_regressions": [
+        "Existing passing reports cannot be reused as a new run",
+        "Empty catalog cannot report success"
+      ],
+      "ruff_check": "passed",
+      "ruff_format_check": "passed",
+      "test_log_sha256": "5e2331175e912254d3afe870ca87c07342e617cc16487b38523820ce3299238e",
+      "unit_tests_passed": 75
+    },
+    "sha256": "d869d578e9067c6bab15a6ef6c47379919d3f6c1e2e6ef25b5f85ba2ce5e8c2e"
+  },
+  "raw_summary_sha256": "bdabd88454f0383602013c27e6fc02ff990dce4c522307d280f346a23555e04a",
+  "reproduction": {
+    "arguments": [
+      "--upstream-repo",
+      "<pinned-native-CodeClash-checkout>",
+      "--catalog",
+      "src/codeclash/src/codeclash/catalog.json",
+      "--plan",
+      "src/codeclash/validation/native-reference-case-plan.json",
+      "--output-dir",
+      "<fresh-local-output-directory>"
+    ],
+    "command": "native-venv/bin/python src/codeclash/scripts/run_native_references.py <arguments below>",
+    "notes": "Use a fresh output directory: existing attempt paths are refused. All reference programs are the pinned starter submissions; no special winning program or simplified benchmark task is introduced.",
+    "python_environment": "Separate native CodeClash environment with mini-swe-agent 2.4.2 and pinned CodeClash dependencies; do not import adapter codeclash package",
+    "requires": "21 local codeclash-adapter/<arena>:f0694c64ecf6 images with verified source/arena labels and matching catalog commits; builds are not performed by this script",
+    "worker_timeout_seconds": 900,
+    "workers": 2
+  },
+  "schema_version": 1,
+  "scope": "Native validator and forfeit reference validation; not a winning oracle or real-model parity",
+  "simulation_scope": "Native validation can run genuine engine probes. Zero tournament simulations applies only to the two forfeit controls, where native run_round skips execute_round. The original raw report field game_simulations referred to this narrower quantity.",
+  "source_files_unchanged_during_execution": true,
+  "source_hashes": {
+    "catalog.json": "0598abe7b36dc974e082cbc3f249eea95600da0a8e802ce486958bf712375372",
+    "codeclash/__init__.py": "83e7310006f77ac5b670f785be46b1f4906d31a35cf6396f0d0be695230db27e",
+    "codeclash/agents/__init__.py": "73fbd297068a7cf67c18fd055d3d6fe21bd395e80431de1ff252c2c0f4bd089d",
+    "codeclash/agents/dummy_agent.py": "0e9ef2ff807573d814bfe67bea57f7ecae9dc9540454db6253cacdb23bf582f1",
+    "codeclash/agents/mini_anthropic_model.py": "08a8140fab2bc4400de4eb5e5990c1c2c85d042037a6660f057b4cf8bba428f6",
+    "codeclash/agents/minisweagent.py": "252b8f38df7a5cfbc2a87bd2db9ec8fe2143dbb6cf769d74af5f9284b1b3141a",
+    "codeclash/agents/player.py": "0046a15df8b9f95cde45a5bfb0be06a02234ae5aa1c93abc084dc79ef2e6ceec",
+    "codeclash/agents/utils.py": "28b78cd9f35446d2e92ebb235dd8286a302205a7d1f3e6e0fad20ab9cd5a0eee",
+    "codeclash/analysis/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "codeclash/analysis/bootstrap/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "codeclash/analysis/bootstrap/analyze_round_correlations.py": "1b1c39e0c5e585e789dc8474780f54c53f1522332545cf28250389d57f2a1e5c",
+    "codeclash/analysis/bootstrap/bootstrap.py": "44683c4855e4820bb1834fc23af547e91a9f9651b34e4187145ccc1553626859",
+    "codeclash/analysis/bootstrap/extract_round_scores.py": "cc2ad152b2df47ef6603fc86059e2359160e9e84ad38e5b56bf63331f63efa73",
+    "codeclash/analysis/code_evolve/main.py": "e446369a6d512d28ba13b46311fc8d3e83f30f79bae5275ff927ad99bedeb33f",
+    "codeclash/analysis/llm_as_judge/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "codeclash/analysis/llm_as_judge/action_categories_by_model.py": "18f4a4e55c013ffd6f9af3b0b330568168391671761a67e121f7d53b1137d166",
+    "codeclash/analysis/llm_as_judge/aggregate_results.py": "bc42adaea51a426cdfbdbebca3b338dc804a2b76c3de7db60d81e6098e08f943",
+    "codeclash/analysis/llm_as_judge/big_questions.py": "ed2557769de0448d657f80ac61062c6c4220736ff5283690e0b4986068d5b80b",
+    "codeclash/analysis/llm_as_judge/categorize_actions.py": "455b09281bced64aa08ece7ba987f25aeec00582de61f2aa823a812bbbbd8088",
+    "codeclash/analysis/llm_as_judge/get_instances.py": "c13a9d334382150559e9aca68fa0b7d2eb6d1625f30aba7d684ddaec006b75fc",
+    "codeclash/analysis/llm_as_judge/grounding_validation_triple_plot.py": "ea2a42a1e67f8cb95f14b87aaa23cecbbf5bfae7b694aee3d4df9b36d1619ce5",
+    "codeclash/analysis/llm_as_judge/hallucination.py": "1bef133802f8161ec5ad785680f57897661407d372d3cd1925cc3df5977a37a5",
+    "codeclash/analysis/llm_as_judge/plot_edit_type_stacked.py": "81d2d0d3b7dedf2e8bb90d3496d19f258e4182db9fb1f6d11bf3dca29403a4b7",
+    "codeclash/analysis/llm_as_judge/utils.py": "b9d54e2e71b342dd86a0c377071395208ce20dcf11bae7c3eb06e80e446c4ccc",
+    "codeclash/analysis/llm_as_judge/visualize.ipynb.py": "0277e927a9b9f21599046a8a6ea225aea1e590235dd1c723d3d9cb83ff391026",
+    "codeclash/analysis/matrix.py": "7da74cba9fb72223c4111204db18c324f4ba057b426ada35417ebb6518764907",
+    "codeclash/analysis/metrics/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "codeclash/analysis/metrics/elo.py": "73790eec2b43d5b4ee84be04f935f27a79f78d5938786d2b8a5acdcd94adf4c1",
+    "codeclash/analysis/metrics/tskill.py": "96c2eaed1119e95b7a85bd9f8ee6ded479340db967e1feeb29076fe5f5ae29e7",
+    "codeclash/analysis/metrics/win_rate.py": "7048ea57468c0c4d52a3e34dcfe50c823e98d615821f0f9f3f8646f4edcb7230",
+    "codeclash/analysis/multiplayer/__init__.py": "70d7eddbbf0534e351626c02ff31283ddf9581dc4d2e68b64d7d822d9924c111",
+    "codeclash/analysis/multiplayer/win_change_rate.py": "79408ec14e6d22c40fbc85124a8aca8909e9325be102053a753032b9df1ca58b",
+    "codeclash/analysis/multiplayer/win_share.py": "2640a500eaca55710013441d82cf9d617f07b29f30c0c43d69c91a104e721dc6",
+    "codeclash/analysis/significance.py": "95c9fc703c42dc09463177e9d3d47ac59ea4a569e21e5c22f7612dd7bb3a4f35",
+    "codeclash/analysis/stats/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "codeclash/analysis/stats/per_model.py": "6577fbdd773692398817474f91de46bb588f7c0c3801058dcebebcecd6894c69",
+    "codeclash/analysis/transparent/main.py": "e4a3abeb2db90375593ed673e8697f9b78ccbaad7347054e3b167d8abbd79b08",
+    "codeclash/analysis/viz/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "codeclash/analysis/viz/cdf_command_diversity.py": "503499c8bc8288252a95c9717650c72d6f17d16b3c8f7a85df33adcefb54da03",
+    "codeclash/analysis/viz/cdf_files_edited_per_round.py": "09fb3490f30963d623ae41acf5468c6af7d29d29b918a897a5ac3f06c013fe95",
+    "codeclash/analysis/viz/cdf_steps_per_round.py": "2d1696ebea57ff50c44a0c78345168e3b6281ed32e85a189bd8b684048812430",
+    "codeclash/analysis/viz/cdf_thought_length_per_round.py": "859f9fa564466578e2122dda47cd7b1129a8563a0e6d2469bbc19f30a2a49c71",
+    "codeclash/analysis/viz/cdf_total_created_files_round15.py": "f5211629005951c8b6c9c26fb2c964149c9b2e040b114a9ba76e17e272d55d38",
+    "codeclash/analysis/viz/heatmap_returncode.py": "0222c6cd7a55f653334b71e3e64ffbe5d284d67d353ba95ca527ce4721147a5a",
+    "codeclash/analysis/viz/heatmap_win_rates.py": "de9f269b97c63fb5b85d2c5c0001278d42817c7e5af2a5cb26fe01b172264941",
+    "codeclash/analysis/viz/heatmap_win_streak_distribution.py": "c4e5e24ec1d35d62e31c706138262410b28335568751d7599a77886edbb87f9f",
+    "codeclash/analysis/viz/line_chart_model_resiliency.py": "2db2a41e1070d77a35b73f097e79304c0652618155dd62e05164c13d7a7c6e44",
+    "codeclash/analysis/viz/line_chart_per_round_changes.py": "60c956dcb926d4fd663668a5a11479cfb325bfb8afafbe0bc14573110f2d70ff",
+    "codeclash/analysis/viz/line_chart_per_round_specific.py": "27a01580f4392cccdc2159a95b317a423cd9b660468771339854d4f271e9a3d4",
+    "codeclash/analysis/viz/line_chart_per_round_win_rate.py": "4290bc942ec08a977008ef1556218d235bffe2ffed5a5990fb750e4963ad1e47",
+    "codeclash/analysis/viz/line_chart_steps_per_round.py": "8af31b62ae10fb8c60d427609905109423ca45aace206834f66ce8417d0f2b3a",
+    "codeclash/analysis/viz/line_chart_thought_length_per_round.py": "da4455fc772f5ec37a60a0ef3d340bef92ce7f99fa9ddace97391c27fd4f8029",
+    "codeclash/analysis/viz/line_chart_total_created_files_vs_round.py": "73cf353d23d5bebd7b27981ca92a1c4082eaab3e3cc8d312ee34f8030b59aa48",
+    "codeclash/analysis/viz/recover_after_loss_streak.py": "b4b66cf0b3fad6a897eb941466bfaa97068778279b3901a90b06fcfb7e248058",
+    "codeclash/analysis/viz/round_score_distribution.py": "275ad30a72fbc12224a1de9f76b733037bf51586e4a33d6f93dd69104e516362",
+    "codeclash/analysis/viz/scatter_codebase_organization.py": "395317ec98c2ec1fc9855009e891a77cbeac5ee8adfea8643f1bf143bb16d323",
+    "codeclash/analysis/viz/survival_curve_error_recovery.py": "5917719407929b570400c70589fc139488227b83fb38c4a8de51563bc42aeade",
+    "codeclash/analysis/viz/throwaway_files_bar_chart.py": "a878ad7b55f0055d364aa80dbe50930f9aaa3020cb6bf017e07b49c8a2a0fe61",
+    "codeclash/analysis/viz/throwaway_files_cdf.py": "00ea1f2aa11591c1dd448cddffeacfddc2f881e6db7dc660517aad167756a37d",
+    "codeclash/analysis/viz/utils.py": "bad906bccb680670df80d5bb1aa6b84aa739ef12063a614970720462b4bd8222",
+    "codeclash/analysis/viz/win_rate_distribution.py": "644b8f18c9c0c84cdfa6e5d15090edf2cc1bdce5f01da0e746bac4bd7b2190cc",
+    "codeclash/arenas/__init__.py": "eff94f969c6ea8ec1bb53a0e7f52635f96f390114380bc387c87ff2a12e28984",
+    "codeclash/arenas/ants/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "codeclash/arenas/ants/ants.py": "590b47c9d28c3f136ad65874a111ac0599b581291ff0c273c243cd44eae21814",
+    "codeclash/arenas/ants/replay.py": "f4fb85610d3be7e1b2bc9e6fad8ac259eabf7e384e7a6d2aee84afd7c34e9406",
+    "codeclash/arenas/arena.py": "d2f00e6d2f681a9026b40af08796d2e3f92159b0c81f2ebc5764408b1903611b",
+    "codeclash/arenas/battlecode23/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "codeclash/arenas/battlecode23/battlecode23.py": "af044540b1264d408c58530dc76ce5f94e62d686cbfb0224bc5875ffb2d681bc",
+    "codeclash/arenas/battlecode24/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "codeclash/arenas/battlecode24/battlecode24.py": "7ec7e4dbed5efa977fa44eb4c220091b60b3b9ab0c5278e5a816a59789396d10",
+    "codeclash/arenas/battlecode25/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "codeclash/arenas/battlecode25/battlecode25.py": "39d631cc40f3c8c6bf52dbfdc076bd51492be316a6513f7c7115a13600a6accb",
+    "codeclash/arenas/battlesnake/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "codeclash/arenas/battlesnake/battlesnake.py": "fdcb53dbf92cd190af2d246f9e4ad1d5c3744cee9ce18a426a09b00cac047132",
+    "codeclash/arenas/battlesnake/replay.py": "2158739c34aaa436bb804415400f5a16a26dd362df1a03a16edf0962f68fb3c5",
+    "codeclash/arenas/bomberland/__init__.py": "080128b75cafbbff76c0ed42525362cd1d591b032fc9436404b0ce8ba0390c54",
+    "codeclash/arenas/bomberland/bomberland.py": "b4b675749767207740d72617990bd3f0666c8f9652f83fa0ee8d3f8bd16811c1",
+    "codeclash/arenas/bomberland/replay.py": "d8285dcaca38e1d6e362352d16aa60d4a325cd00f75b31cbc6cada813af2f4bc",
+    "codeclash/arenas/bomberland/runtime/bomberland_agent.py": "4582fc894d5469d03487dcb9caaf2ae33c9540128222e1e1d2c1b9ad716cb192",
+    "codeclash/arenas/bomberland/runtime/run_bomberland.py": "c79f43bb9cad8b910ae8fd377dd55aa1218642e06e83617bcd741e98ca6b7551",
+    "codeclash/arenas/bridge/__init__.py": "8a63b85db80f410398d06083ff4fa26a3ef978e1e5fc4831a76c3d694ecc5aab",
+    "codeclash/arenas/bridge/bridge.py": "6b8f7cca8239e541e3f950dd87b2c5156be28b0468309692e551d4ff1d92b71b",
+    "codeclash/arenas/bridge/replay.py": "b5ff8f5c95dec2dd6a6262f186959152ebf847e504a665965048e97eb20c8196",
+    "codeclash/arenas/chess/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "codeclash/arenas/chess/chess.py": "95886b5a6a035593b120a9a6fec202218c3cf55e803d3c5415765b31fbbab710",
+    "codeclash/arenas/chess/replay.py": "e32d9357ba987f33e3f3ec765d4a6767d007c2bc489eac3b65bd4d20ea5d7376",
+    "codeclash/arenas/corewar/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "codeclash/arenas/corewar/corewar.py": "28a0323172a4b24abd962ca1a87c7e4967674bec9a72839a9140475429866a8b",
+    "codeclash/arenas/corewar/replay.py": "ae784805830c148a77fb03b8d92749270ab7d680f778fdde33411e9e8c743ae0",
+    "codeclash/arenas/corewar/trace.py": "7f8738f2bb2eefbd7eddbd305a66e5a2fab4e6bc5bd61b3ee5048fd64e86ab21",
+    "codeclash/arenas/cyborg/__init__.py": "3916b9fdf7734726daa88c49110f089b85d8351c95e13257c39994694d2bf10a",
+    "codeclash/arenas/cyborg/cyborg.py": "de52d53d3b810066ef9768fb9477042e60264ce236c8578ecb3b1b5464b74ff0",
+    "codeclash/arenas/cyborg/runtime/cyborg_agent.py": "9b835c23380ecc1294b6a77ed296b022c68d45954bb36b60aff9d504af176857",
+    "codeclash/arenas/cyborg/runtime/run_cyborg.py": "e2f4e177a30eb619cf24aea0f0de65649d1c55cad708ad80f411855cf2566cbc",
+    "codeclash/arenas/dummy/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "codeclash/arenas/dummy/dummy.py": "e2fbdda697b4fc613792ea8cf426c614d6994f09e71b5b27e3b891ffc86c6e3e",
+    "codeclash/arenas/figgie/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "codeclash/arenas/figgie/figgie.py": "670644d0d3cd2a00bb616167872c3d09a9ae964e2f4b8db562922b008c5356b4",
+    "codeclash/arenas/figgie/replay.py": "0ae9df89178e4668141483740dba91a231e08a37fa918ab4569b05ecf81999fe",
+    "codeclash/arenas/gomoku/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "codeclash/arenas/gomoku/gomoku.py": "dc58882fc9abba10f30a065503d9aa35877b545dcbd7b1f82c3173d3bc2ee625",
+    "codeclash/arenas/gomoku/replay.py": "4aad74206626a531315e98a98b8f7e93868a1cf9396026ba106d1bcd6aa7de79",
+    "codeclash/arenas/halite/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "codeclash/arenas/halite/halite.py": "38ea342515720a2ea3219170315928a9028d708ea91b49a4f7e3d16a91ee2712",
+    "codeclash/arenas/halite/replay.py": "901a8d93000727991cc9cd16ca0ceeac08a9d7e560528b6a03f7256d67dceaca",
+    "codeclash/arenas/halite2/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "codeclash/arenas/halite2/halite2.py": "d66f62d2c2b92fe0dfbc776fc9316e98036fbdaf28c3a177e9a26018d73ef16b",
+    "codeclash/arenas/halite2/replay.py": "a3c1c0a75567133cab9d6f3190b9df7fca1852d2c81ede5dd79b4b821966e7c0",
+    "codeclash/arenas/halite3/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "codeclash/arenas/halite3/halite3.py": "88933e5721d8994032880e4d3a22c2757ec0f9642580a08804e8e089f6c6e230",
+    "codeclash/arenas/halite3/replay.py": "8633df90795f6dc58c76f84a78d6a148f772bfd0ec4a3d5b1bda4528270319f9",
+    "codeclash/arenas/huskybench/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "codeclash/arenas/huskybench/huskybench.py": "73e1e5d0cffc10828820f27dcbe0a5b9b82b851d5146b1850ee2e16594f0f0f9",
+    "codeclash/arenas/lightcycles/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "codeclash/arenas/lightcycles/lightcycles.py": "e7e422b598f9e8d32d92e7168455f7b99eb04dce15555c8ece43ec2f4af68863",
+    "codeclash/arenas/lightcycles/replay.py": "105550c18db8ba6d51fbc31858559da1002c83f67d329d6ce374d6a12a06a0d7",
+    "codeclash/arenas/paintvolley/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "codeclash/arenas/paintvolley/paintvolley.py": "46f80291e29c5012219d597b4280b797645cb13c995d2a1aa8de133fc6900355",
+    "codeclash/arenas/paintvolley/replay.py": "84f2a4f457cd2755de0a996bef04af3cad9949d94984507ff2e9896a92e18826",
+    "codeclash/arenas/robocode/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "codeclash/arenas/robocode/replay.py": "d9c5d7e9063fcb17891846b5cba24ece879753a00a60cdd0e5db3301cae2941b",
+    "codeclash/arenas/robocode/robocode.py": "6198234ad38452bbace1b60643f1ada8d70a53275670f1492942324825aaa06f",
+    "codeclash/arenas/robocode/trace.py": "fb6cc32b1acaebcdef453aaaed5fa4dfad85f7a9b602577fb141646dc2b371b9",
+    "codeclash/arenas/robotrumble/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "codeclash/arenas/robotrumble/replay.py": "4b11b9ae180577c63c15036a9ae83fc9609ea6d968b265854a691720a1981baa",
+    "codeclash/arenas/robotrumble/robotrumble.py": "3e6185bbac65ad4a33c3bd2ec9541367cd3816a6d365b91788818bf2dd845bee",
+    "codeclash/arenas/scml/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "codeclash/arenas/scml/runtime/run_scml.py": "0e8a1ea2df11623b3f721790012e97504ad7d4fa1d7c0efeb77d542c75d021d3",
+    "codeclash/arenas/scml/runtime/scml_agent.py": "2c67281290b00f7615dc2b920815885f3087e5fbe1f40977f5dddab818ebed6a",
+    "codeclash/arenas/scml/scml.py": "0c314b7c727d8b09d0e316ebf5483fa72ec157837e8986232167a44730c4c452",
+    "codeclash/cli/__init__.py": "0d60b49bc0a21831dc506026a5fb11339bd6fdf968ecf384595bebe6ff0b4d5e",
+    "codeclash/cli/app.py": "fa7e2cee7a5366af8a000f66050e857de78b1350cf6f86f46a987d16ed472147",
+    "codeclash/cli/ladder.py": "cf2dceeb7898fae0a9cf809413a60762c6cb11c844fe7b4edc89fd8e62b19b4b",
+    "codeclash/cli/rank.py": "4613ccee4d813c19e6316d6fb5cbb06ff1de94e80426e218548fc999b4b79154",
+    "codeclash/cli/replay.py": "13a3b7b250223e2edf74c222ac5cfa13fea11258ed26c5865c9ffb0dd2ed64be",
+    "codeclash/constants.py": "ecddce83e811d42afa956355470b18937b2a434d2b18d808213fac6ba2cdf7fb",
+    "codeclash/replay/__init__.py": "8935feaba2bd36fad5690d642fc8ee53ce47f1db26cb61579781b973edd82f4e",
+    "codeclash/replay/base.py": "e8c9472974da48d01673d66619c0014fd7c4b30bab2823d1e63a80f94bc71476",
+    "codeclash/replay/serve.py": "bf4065ff18fd0adb3db75b8e9aeb63e4270f802597a7d6f36eef2c51ffe51a77",
+    "codeclash/tournaments/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "codeclash/tournaments/ladder.py": "5b9fd6cdc35df0623c684ad22c65a339c75345da3266d8eb765d00223c44695c",
+    "codeclash/tournaments/pvp.py": "352194dac8b68cb0055d02474e252facc5b3299efe45c2ad6ffc717307f80107",
+    "codeclash/tournaments/single_player.py": "e7903a4a0024f77fd07a3c63a9ea4133db234227d5e9bd97f37c2be5df5e8155",
+    "codeclash/tournaments/tournament.py": "c8acd000f048911df2a82d67b53c7b40292fac6d79abd673df1b9cfe667a7f27",
+    "codeclash/tournaments/utils/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "codeclash/tournaments/utils/git_utils.py": "c22bae7d766d3cd5c81c4da3c107b88c66bec0599a5ca281a50205a3dd5fa21e",
+    "codeclash/utils/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "codeclash/utils/atomic_write.py": "96d7a0a68f1604fb9970429e2b9c1aa33210dee35d079cac62ed612968141620",
+    "codeclash/utils/aws.py": "1adced834f67b1f01ef92e2f50b8e7efa4a449da24b3ec148bc2136debf006db",
+    "codeclash/utils/environment.py": "471e2a9dc52258d5f42ee55232ba83dd5a26576d943cdf33a835ac0f1ef18ef8",
+    "codeclash/utils/generate_confs.py": "cae230c9f8e13fbd43a7a84e9df6e8022357a48e07bb128be9e8ad5dc434b119",
+    "codeclash/utils/generate_confs_multi.py": "3b641f991a6f36e0e7123724dd1d682e1641300ee7b191876390f8045c2a495f",
+    "codeclash/utils/generate_confs_transparent.py": "58d88253aa6210be5acee62dce8cf093fca46e217d0216306328968981a2a6fd",
+    "codeclash/utils/git_utils.py": "647b22d6659700041d5688ff69ddd4469e406566c1e97439d5f22a7048c3291a",
+    "codeclash/utils/internet_control.py": "95679e5b1206a67ef7a6df4738d4178aa06ca0841a3428faee705ff1e813512f",
+    "codeclash/utils/log.py": "45eef3197b4c4cee22c1f48a05dcf0c01f1f79684b668482f4e61d95efc172a2",
+    "codeclash/utils/update_tracker.py": "4fddd60b0ef9fe378326f5dc62c35b9154d7c63e8250228c4a9189897d3876ba",
+    "codeclash/utils/yaml_utils.py": "0491fe6d4ecaadfb64676aa15c7542f738df1316471b5270463c31f325a73a8a",
+    "codeclash/viewer/__init__.py": "ba474b304883fc00e5954651e01ae068664e59baa576dfe165a8ba6473e447c7",
+    "codeclash/viewer/app.py": "7396d027aaec063e31e3018d488302a5414dceee0b9ba4656cf13795612cafe5",
+    "codeclash/viewer/app_aws.py": "1a16975a3d0a43b76c18098160128327878b053a1a6e78ccab88f28d35db3349",
+    "reference-case-plan.json": "556794fd26f1bc0c41dd4ddd5a704be16d48e80a2c7cf9ed3bc7889e05f451a3",
+    "run_native_references.py": "af61d012f7f026a3b6232cdaa6d160208322ce89174db8051cd53d0f0049db03"
+  },
+  "status": "passed",
+  "upstream_commit": "f0694c64ecf6abfca2bc867bad2de9333fef5be8"
+}

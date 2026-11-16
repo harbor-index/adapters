@@ -1,0 +1,20 @@
+[project]
+name = "harbor-codeclash-adapter"
+version = "0.2.0"
+description = "Native CodeClash PvP benchmark adapter for Harbor"
+readme = "README.md"
+authors = [
+    { name = "harshang03", email = "58983401+harshang03@users.noreply.github.com" }
+]
+requires-python = ">=3.12"
+dependencies = ["PyYAML>=6.0.2,<7"]
+
+[project.scripts]
+codeclash = "codeclash.main:main"
+
+[build-system]
+requires = ["uv_build>=0.9.7,<0.10.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "codeclash"
