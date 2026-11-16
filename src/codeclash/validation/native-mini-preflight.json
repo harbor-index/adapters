@@ -1,0 +1,697 @@
+{
+  "schema_version": 1,
+  "purpose": "Exercise the production native MiniSWEAgent action loop through Harbor using predetermined in-process model responses",
+  "diagnostic_only": true,
+  "real_model_validation": false,
+  "parity_claim": false,
+  "oracle_pass": false,
+  "final_status": "passed",
+  "arena": "battlesnake",
+  "profile": "benchmark",
+  "configuration": {
+    "players": 2,
+    "edit_rounds": 2,
+    "baseline_rounds": 1,
+    "games_per_round": 3,
+    "model_class": "deterministic",
+    "agent_type": "codeclash.agents.minisweagent.ClashAgent",
+    "model_type": "minisweagent.models.test_models.DeterministicModel",
+    "source_edits": "Harmless comments in main.py; persistent round state and feedback hashes"
+  },
+  "native_config": {
+    "tournament": {
+      "rounds": 2
+    },
+    "game": {
+      "name": "BattleSnake",
+      "sims_per_round": 3,
+      "args": {
+        "width": 11,
+        "height": 11,
+        "browser": false
+      },
+      "sim_concurrency": 1
+    },
+    "players": [
+      {
+        "agent": "mini",
+        "name": "native-mini-1",
+        "config": {
+          "agent": {
+            "system_template": "You are a helpful assistant interacting continuously with a computer by issuing bash commands.\nYou'll be editing a codebase to play a programming game.\n\nYou issue ONE bash command at a time using the bash tool, see its result, then issue your next command.\nDirectory and environment changes are not persistent: every command runs in a fresh subshell, so chain\ncommands with `&&` or prefix them (e.g. `cd /path && ...`) when needed.\n\nWhen you have finished your work for this round, submit by running exactly:\n`echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT`\non its own (do not combine it with other commands). After submitting you cannot continue working this round.\n",
+            "instance_template": "## Game Description\n\n{{game_description}}\n\n## General tips about how to play the game\n\n The game details are in this codebase ({{working_dir}}):\n - `docs/`: Game documentation\n - `/logs/`: Past rounds and outcomes (agent runs in `/logs/edits/`, gameplay logs in `/logs/rounds/`)\n\n The game is played in team rounds. You play one round, then a teammate takes over.\n You're scored on total team performance across all rounds.\n\n Each round has a limit of {{step_limit}} steps.\n After you've reached the step limit, you cannot continue working on this task, and we will play the game with your codebase.\n We recommend submitting before you hit the limit to avoid losing work.\n\n Each round starts fresh with no knowledge of previous actions.\n Leave tools, notes, and strategies in the codebase for teammates.\n Use README_agent.md at repository root to pass instructions to your next teammate.\n Document important files, analysis tools, and context.\n\n Improve the bot however you like \u2014 experiment, document, iterate.\n\n IMPORTANT: Store all changes in {{working_dir}} or subdirectories.\n\n Tips:\n\n 1. Check README_agent.md for notes from previous teammates.\n 2. Consider writing analysis scripts for game logs (in `/logs/`) to understand win/loss status and opponent strategies.\n    Write analysis scripts and save them for teammates (mention in README_agent.md).\n 3. You don't *have* to modify anything in your player code.\n    For instance, if your team has been winning, and you think keeping the same strategy is best,\n    feel free to just submit, or put more time towards adding analyses and documentation for your teammates.\n    Of course, you can also try to improve your bot if you think you can do better.\n 4. You can modify *any* part of the codebase, particularly if you think the code is impacting performance negatively.\n 5. You could create tests to ensure your changes or bots are working as expected.\n 6. Testing against previous versions can be helpful for making sure your changes are improvements.\n 7. Examine game logic and documentation for clarity, but modifying game logic won't affect your rating.\n 8. Remember `/logs/` is outside your working directory when writing analyses.\n\n## Environment Details\n\n- You have a full Linux shell environment\n- Always use non-interactive flags (-y, -f) for commands\n- Avoid interactive tools like vi, nano, or any that require user input\n- If a command isn't available, you can install it\n\n## Useful command examples\n\n### Create a new file:\n\n```bash\ncat <<'EOF' > newfile.py\nimport numpy as np\nhello = \"world\"\nprint(hello)\nEOF\n```\n\nNote: You cannot combine this heredoc usage with other commands through the use of `&&` or `||`.\n\n### Edit files with sed:\n\n```bash\n# Replace all occurrences\nsed -i 's/old_string/new_string/g' filename.py\n\n# Replace only first occurrence\nsed -i 's/old_string/new_string/' filename.py\n\n# Replace first occurrence on line 1\nsed -i '1s/old_string/new_string/' filename.py\n\n# Replace all occurrences in lines 1-10\nsed -i '1,10s/old_string/new_string/g' filename.py\n```\n\n### View file content:\n\n```bash\n# View specific lines with numbers\nnl -ba filename.py | sed -n '10,20p'\n```\n\n## Submission\n\nWhen you've completed your work (reading, editing, testing), and cannot make further progress,\nrun exactly `echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT` to submit your work.\nYou cannot continue working in any way on this task after submitting.\n",
+            "step_limit": 8,
+            "cost_limit": 0
+          },
+          "model": {
+            "model_class": "deterministic",
+            "model_name": "deterministic-native-preflight",
+            "cost_per_call": 0.0,
+            "outputs": [
+              {
+                "role": "assistant",
+                "content": "Inspect previous-round feedback and persistent source.",
+                "extra": {
+                  "actions": [
+                    {
+                      "command": "python3 - <<'PREFLIGHT_PY'\nimport ast, hashlib, json\nfrom pathlib import Path\nplayer = 'native-mini-1'\nstate_path = Path(\"native_mini_preflight.json\")\nstate = json.loads(state_path.read_text()) if state_path.exists() else {\"completed_round\": 0, \"proofs\": []}\nround_number = state[\"completed_round\"] + 1\nsource = Path(\"main.py\")\nsource_bytes = source.read_bytes()\nif state[\"proofs\"]:\n    assert hashlib.sha256(source_bytes).hexdigest() == state[\"proofs\"][-1][\"source_sha256_after\"], \"Source persistence failed\"\nfeedback_path = Path(\"/logs/rounds\") / str(round_number - 1) / \"results.json\"\nfeedback_bytes = feedback_path.read_bytes()\nfeedback = json.loads(feedback_bytes)\nassert set(feedback[\"player_stats\"]) == {\"native-mini-1\", \"native-mini-2\"}, \"Wrong feedback players\"\nassert all(row[\"valid_submit\"] for row in feedback[\"player_stats\"].values()), \"Invalid preceding submissions\"\nprint(json.dumps({\"event\": \"native_mini_inspection\", \"player\": player, \"round\": round_number, \"source_sha256\": hashlib.sha256(source_bytes).hexdigest(), \"feedback_sha256\": hashlib.sha256(feedback_bytes).hexdigest(), \"feedback\": feedback, \"prior_state\": state}, sort_keys=True))\n\nPREFLIGHT_PY"
+                    }
+                  ],
+                  "cost": 0.0
+                }
+              },
+              {
+                "role": "assistant",
+                "content": "Append a diagnostic comment through the native bash tool.",
+                "extra": {
+                  "actions": [
+                    {
+                      "command": "python3 - <<'PREFLIGHT_PY'\nimport ast, hashlib, json\nfrom pathlib import Path\nplayer = 'native-mini-1'\nstate_path = Path(\"native_mini_preflight.json\")\nstate = json.loads(state_path.read_text()) if state_path.exists() else {\"completed_round\": 0, \"proofs\": []}\nround_number = state[\"completed_round\"] + 1\nsource = Path(\"main.py\")\nsource_bytes = source.read_bytes()\nif state[\"proofs\"]:\n    assert hashlib.sha256(source_bytes).hexdigest() == state[\"proofs\"][-1][\"source_sha256_after\"], \"Source persistence failed\"\nfeedback_path = Path(\"/logs/rounds\") / str(round_number - 1) / \"results.json\"\nfeedback_bytes = feedback_path.read_bytes()\nfeedback = json.loads(feedback_bytes)\nassert set(feedback[\"player_stats\"]) == {\"native-mini-1\", \"native-mini-2\"}, \"Wrong feedback players\"\nassert all(row[\"valid_submit\"] for row in feedback[\"player_stats\"].values()), \"Invalid preceding submissions\"\nnew_source = source_bytes + (\"\\n# Native Mini diagnostic tool execution: \" + player + \" round \" + str(round_number) + \"\\n\").encode()\nast.parse(new_source)\nsource.write_bytes(new_source)\nproof = {\"player\": player, \"round\": round_number, \"source_sha256_before\": hashlib.sha256(source_bytes).hexdigest(), \"source_sha256_after\": hashlib.sha256(new_source).hexdigest(), \"feedback_sha256\": hashlib.sha256(feedback_bytes).hexdigest(), \"feedback_round\": round_number - 1}\nstate[\"proofs\"].append(proof)\nstate[\"completed_round\"] = round_number\nstate_path.write_text(json.dumps(state, indent=2) + \"\\n\")\nprint(json.dumps({\"event\": \"native_mini_edit\", **proof}, sort_keys=True))\n\nPREFLIGHT_PY"
+                    }
+                  ],
+                  "cost": 0.0
+                }
+              },
+              {
+                "role": "assistant",
+                "content": "Validate the edit and persisted round state.",
+                "extra": {
+                  "actions": [
+                    {
+                      "command": "python3 - <<'PREFLIGHT_PY'\nimport ast, hashlib, json\nfrom pathlib import Path\nplayer = 'native-mini-1'\nstate = json.loads(Path(\"native_mini_preflight.json\").read_text())\nsource = Path(\"main.py\").read_bytes()\nast.parse(source)\nassert hashlib.sha256(source).hexdigest() == state[\"proofs\"][-1][\"source_sha256_after\"]\nassert len(state[\"proofs\"]) == state[\"completed_round\"]\nassert all(proof[\"player\"] == player for proof in state[\"proofs\"])\nprint(json.dumps({\"event\": \"native_mini_validation\", \"state\": state}, sort_keys=True))\n\nPREFLIGHT_PY"
+                    }
+                  ],
+                  "cost": 0.0
+                }
+              },
+              {
+                "role": "assistant",
+                "content": "Submit this diagnostic edit round.",
+                "extra": {
+                  "actions": [
+                    {
+                      "command": "echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT"
+                    }
+                  ],
+                  "cost": 0.0
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "agent": "mini",
+        "name": "native-mini-2",
+        "config": {
+          "agent": {
+            "system_template": "You are a helpful assistant interacting continuously with a computer by issuing bash commands.\nYou'll be editing a codebase to play a programming game.\n\nYou issue ONE bash command at a time using the bash tool, see its result, then issue your next command.\nDirectory and environment changes are not persistent: every command runs in a fresh subshell, so chain\ncommands with `&&` or prefix them (e.g. `cd /path && ...`) when needed.\n\nWhen you have finished your work for this round, submit by running exactly:\n`echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT`\non its own (do not combine it with other commands). After submitting you cannot continue working this round.\n",
+            "instance_template": "## Game Description\n\n{{game_description}}\n\n## General tips about how to play the game\n\n The game details are in this codebase ({{working_dir}}):\n - `docs/`: Game documentation\n - `/logs/`: Past rounds and outcomes (agent runs in `/logs/edits/`, gameplay logs in `/logs/rounds/`)\n\n The game is played in team rounds. You play one round, then a teammate takes over.\n You're scored on total team performance across all rounds.\n\n Each round has a limit of {{step_limit}} steps.\n After you've reached the step limit, you cannot continue working on this task, and we will play the game with your codebase.\n We recommend submitting before you hit the limit to avoid losing work.\n\n Each round starts fresh with no knowledge of previous actions.\n Leave tools, notes, and strategies in the codebase for teammates.\n Use README_agent.md at repository root to pass instructions to your next teammate.\n Document important files, analysis tools, and context.\n\n Improve the bot however you like \u2014 experiment, document, iterate.\n\n IMPORTANT: Store all changes in {{working_dir}} or subdirectories.\n\n Tips:\n\n 1. Check README_agent.md for notes from previous teammates.\n 2. Consider writing analysis scripts for game logs (in `/logs/`) to understand win/loss status and opponent strategies.\n    Write analysis scripts and save them for teammates (mention in README_agent.md).\n 3. You don't *have* to modify anything in your player code.\n    For instance, if your team has been winning, and you think keeping the same strategy is best,\n    feel free to just submit, or put more time towards adding analyses and documentation for your teammates.\n    Of course, you can also try to improve your bot if you think you can do better.\n 4. You can modify *any* part of the codebase, particularly if you think the code is impacting performance negatively.\n 5. You could create tests to ensure your changes or bots are working as expected.\n 6. Testing against previous versions can be helpful for making sure your changes are improvements.\n 7. Examine game logic and documentation for clarity, but modifying game logic won't affect your rating.\n 8. Remember `/logs/` is outside your working directory when writing analyses.\n\n## Environment Details\n\n- You have a full Linux shell environment\n- Always use non-interactive flags (-y, -f) for commands\n- Avoid interactive tools like vi, nano, or any that require user input\n- If a command isn't available, you can install it\n\n## Useful command examples\n\n### Create a new file:\n\n```bash\ncat <<'EOF' > newfile.py\nimport numpy as np\nhello = \"world\"\nprint(hello)\nEOF\n```\n\nNote: You cannot combine this heredoc usage with other commands through the use of `&&` or `||`.\n\n### Edit files with sed:\n\n```bash\n# Replace all occurrences\nsed -i 's/old_string/new_string/g' filename.py\n\n# Replace only first occurrence\nsed -i 's/old_string/new_string/' filename.py\n\n# Replace first occurrence on line 1\nsed -i '1s/old_string/new_string/' filename.py\n\n# Replace all occurrences in lines 1-10\nsed -i '1,10s/old_string/new_string/g' filename.py\n```\n\n### View file content:\n\n```bash\n# View specific lines with numbers\nnl -ba filename.py | sed -n '10,20p'\n```\n\n## Submission\n\nWhen you've completed your work (reading, editing, testing), and cannot make further progress,\nrun exactly `echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT` to submit your work.\nYou cannot continue working in any way on this task after submitting.\n",
+            "step_limit": 8,
+            "cost_limit": 0
+          },
+          "model": {
+            "model_class": "deterministic",
+            "model_name": "deterministic-native-preflight",
+            "cost_per_call": 0.0,
+            "outputs": [
+              {
+                "role": "assistant",
+                "content": "Inspect previous-round feedback and persistent source.",
+                "extra": {
+                  "actions": [
+                    {
+                      "command": "python3 - <<'PREFLIGHT_PY'\nimport ast, hashlib, json\nfrom pathlib import Path\nplayer = 'native-mini-2'\nstate_path = Path(\"native_mini_preflight.json\")\nstate = json.loads(state_path.read_text()) if state_path.exists() else {\"completed_round\": 0, \"proofs\": []}\nround_number = state[\"completed_round\"] + 1\nsource = Path(\"main.py\")\nsource_bytes = source.read_bytes()\nif state[\"proofs\"]:\n    assert hashlib.sha256(source_bytes).hexdigest() == state[\"proofs\"][-1][\"source_sha256_after\"], \"Source persistence failed\"\nfeedback_path = Path(\"/logs/rounds\") / str(round_number - 1) / \"results.json\"\nfeedback_bytes = feedback_path.read_bytes()\nfeedback = json.loads(feedback_bytes)\nassert set(feedback[\"player_stats\"]) == {\"native-mini-1\", \"native-mini-2\"}, \"Wrong feedback players\"\nassert all(row[\"valid_submit\"] for row in feedback[\"player_stats\"].values()), \"Invalid preceding submissions\"\nprint(json.dumps({\"event\": \"native_mini_inspection\", \"player\": player, \"round\": round_number, \"source_sha256\": hashlib.sha256(source_bytes).hexdigest(), \"feedback_sha256\": hashlib.sha256(feedback_bytes).hexdigest(), \"feedback\": feedback, \"prior_state\": state}, sort_keys=True))\n\nPREFLIGHT_PY"
+                    }
+                  ],
+                  "cost": 0.0
+                }
+              },
+              {
+                "role": "assistant",
+                "content": "Append a diagnostic comment through the native bash tool.",
+                "extra": {
+                  "actions": [
+                    {
+                      "command": "python3 - <<'PREFLIGHT_PY'\nimport ast, hashlib, json\nfrom pathlib import Path\nplayer = 'native-mini-2'\nstate_path = Path(\"native_mini_preflight.json\")\nstate = json.loads(state_path.read_text()) if state_path.exists() else {\"completed_round\": 0, \"proofs\": []}\nround_number = state[\"completed_round\"] + 1\nsource = Path(\"main.py\")\nsource_bytes = source.read_bytes()\nif state[\"proofs\"]:\n    assert hashlib.sha256(source_bytes).hexdigest() == state[\"proofs\"][-1][\"source_sha256_after\"], \"Source persistence failed\"\nfeedback_path = Path(\"/logs/rounds\") / str(round_number - 1) / \"results.json\"\nfeedback_bytes = feedback_path.read_bytes()\nfeedback = json.loads(feedback_bytes)\nassert set(feedback[\"player_stats\"]) == {\"native-mini-1\", \"native-mini-2\"}, \"Wrong feedback players\"\nassert all(row[\"valid_submit\"] for row in feedback[\"player_stats\"].values()), \"Invalid preceding submissions\"\nnew_source = source_bytes + (\"\\n# Native Mini diagnostic tool execution: \" + player + \" round \" + str(round_number) + \"\\n\").encode()\nast.parse(new_source)\nsource.write_bytes(new_source)\nproof = {\"player\": player, \"round\": round_number, \"source_sha256_before\": hashlib.sha256(source_bytes).hexdigest(), \"source_sha256_after\": hashlib.sha256(new_source).hexdigest(), \"feedback_sha256\": hashlib.sha256(feedback_bytes).hexdigest(), \"feedback_round\": round_number - 1}\nstate[\"proofs\"].append(proof)\nstate[\"completed_round\"] = round_number\nstate_path.write_text(json.dumps(state, indent=2) + \"\\n\")\nprint(json.dumps({\"event\": \"native_mini_edit\", **proof}, sort_keys=True))\n\nPREFLIGHT_PY"
+                    }
+                  ],
+                  "cost": 0.0
+                }
+              },
+              {
+                "role": "assistant",
+                "content": "Validate the edit and persisted round state.",
+                "extra": {
+                  "actions": [
+                    {
+                      "command": "python3 - <<'PREFLIGHT_PY'\nimport ast, hashlib, json\nfrom pathlib import Path\nplayer = 'native-mini-2'\nstate = json.loads(Path(\"native_mini_preflight.json\").read_text())\nsource = Path(\"main.py\").read_bytes()\nast.parse(source)\nassert hashlib.sha256(source).hexdigest() == state[\"proofs\"][-1][\"source_sha256_after\"]\nassert len(state[\"proofs\"]) == state[\"completed_round\"]\nassert all(proof[\"player\"] == player for proof in state[\"proofs\"])\nprint(json.dumps({\"event\": \"native_mini_validation\", \"state\": state}, sort_keys=True))\n\nPREFLIGHT_PY"
+                    }
+                  ],
+                  "cost": 0.0
+                }
+              },
+              {
+                "role": "assistant",
+                "content": "Submit this diagnostic edit round.",
+                "extra": {
+                  "actions": [
+                    {
+                      "command": "echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT"
+                    }
+                  ],
+                  "cost": 0.0
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "prompts": {
+      "game_description": "You are a software developer ({{player_id}}) competing in a coding game called BattleSnake.\nYour bot (`main.py`) controls a snake on a grid-based board.\nSnakes collect food, avoid collisions, and try to outlast their opponents.\n\nThe game is played in 15 rounds. For every round, you (and your competitors) edit program code that controls your bot. This is round {{round}}.\nAfter you and your competitor finish editing your codebases, the game is run automatically.\n\nYour task: improve the bot in `main.py`, located in {{working_dir}}.\n{{working_dir}} is your codebase, which contains both your bot and supporting assets.\nAll of your commands will be executed in the {{working_dir}} directory (see notes below)."
+    }
+  },
+  "native_config_file_sha256": "ca05a74f0861f7ca7b2ead57a1082ebfede7bd902dd10b424d212d87c32f4e4a",
+  "resolved_config_sha256": "fdd7e33d4e681c108b24e82b7a9ff84a366e6bd765dce5c7e47f6b4e889835b5",
+  "effective_config_sha256": "1d1379d54ef8271a56977e71d47f10353725245d05df43687aa92a5c18f02b5c",
+  "upstream_commit": "f0694c64ecf6abfca2bc867bad2de9333fef5be8",
+  "adapter_parent_commit_at_test": "0e6af8a46beae52294cd50c556b545a473698a3b",
+  "image_id": "sha256:e863d9e3da4d5dc0ac114002c31bdb67bccb22aba2375e7bc4afe582dda66cd5",
+  "python_version": "3.12.13",
+  "platform": "macOS arm64 host; Linux arm64 native BattleSnake image",
+  "dependencies": {
+    "native_environment": {
+      "Flask": "3.1.2",
+      "Frozen-Flask": "1.0.2",
+      "Jinja2": "3.1.6",
+      "MarkupSafe": "3.0.3",
+      "PyYAML": "6.0.3",
+      "Pygments": "2.19.2",
+      "Werkzeug": "3.1.4",
+      "aiohappyeyeballs": "2.6.1",
+      "aiohttp": "3.13.2",
+      "aiosignal": "1.4.0",
+      "annotated-types": "0.7.0",
+      "anthropic": "0.116.0",
+      "anyio": "4.12.0",
+      "attrs": "25.4.0",
+      "blinker": "1.9.0",
+      "cdifflib": "1.2.9",
+      "certifi": "2025.11.12",
+      "cfgv": "3.5.0",
+      "charset-normalizer": "3.4.4",
+      "click": "8.3.1",
+      "codeclash": "0.0.0",
+      "contourpy": "1.3.3",
+      "coverage": "7.13.0",
+      "cycler": "0.12.1",
+      "datasets": "5.0.0",
+      "dill": "0.4.1",
+      "distlib": "0.4.0",
+      "distro": "1.9.0",
+      "docstring_parser": "0.18.0",
+      "execnet": "2.1.2",
+      "fastcore": "1.8.17",
+      "fastuuid": "0.14.0",
+      "filelock": "3.20.0",
+      "fonttools": "4.63.0",
+      "frozenlist": "1.8.0",
+      "fsspec": "2025.12.0",
+      "ghapi": "1.0.8",
+      "grpcio": "1.67.1",
+      "h11": "0.16.0",
+      "hf-xet": "1.2.0",
+      "httpcore": "1.0.9",
+      "httpx": "0.28.1",
+      "huggingface_hub": "1.2.1",
+      "identify": "2.6.15",
+      "idna": "3.11",
+      "importlib_metadata": "8.7.0",
+      "iniconfig": "2.3.0",
+      "itsdangerous": "2.2.0",
+      "jiter": "0.12.0",
+      "jsonschema": "4.25.1",
+      "jsonschema-specifications": "2025.9.1",
+      "kiwisolver": "1.5.0",
+      "linkify-it-py": "2.0.3",
+      "litellm": "1.80.9",
+      "markdown-it-py": "4.0.0",
+      "matplotlib": "3.11.0",
+      "mdit-py-plugins": "0.5.0",
+      "mdurl": "0.1.2",
+      "mini-swe-agent": "2.4.2",
+      "multidict": "6.7.0",
+      "multiprocess": "0.70.19",
+      "nodeenv": "1.9.1",
+      "numpy": "2.3.5",
+      "openai": "2.9.0",
+      "packaging": "25.0",
+      "pandas": "3.0.3",
+      "pillow": "12.3.0",
+      "platformdirs": "4.5.1",
+      "pluggy": "1.6.0",
+      "pre_commit": "4.5.0",
+      "prompt_toolkit": "3.0.52",
+      "propcache": "0.4.1",
+      "pyarrow": "24.0.0",
+      "pydantic": "2.12.5",
+      "pydantic_core": "2.41.5",
+      "pyparsing": "3.3.2",
+      "pytest": "9.0.2",
+      "pytest-cov": "7.0.0",
+      "pytest-xdist": "3.8.0",
+      "python-dateutil": "2.9.0.post0",
+      "python-dotenv": "1.2.1",
+      "referencing": "0.37.0",
+      "regex": "2025.11.3",
+      "requests": "2.32.5",
+      "rich": "14.2.0",
+      "rpds-py": "0.30.0",
+      "ruff": "0.14.8",
+      "scipy": "1.16.3",
+      "shellingham": "1.5.4",
+      "six": "1.17.0",
+      "sniffio": "1.3.1",
+      "tenacity": "9.1.2",
+      "textual": "6.8.0",
+      "tiktoken": "0.12.0",
+      "tokenizers": "0.22.1",
+      "tqdm": "4.67.1",
+      "trueskill": "0.4.5",
+      "typer": "0.20.0",
+      "typer-slim": "0.20.0",
+      "typing-inspection": "0.4.2",
+      "typing_extensions": "4.15.0",
+      "uc-micro-py": "1.0.3",
+      "unidiff": "0.7.5",
+      "urllib3": "2.6.1",
+      "virtualenv": "20.35.4",
+      "wcwidth": "0.2.14",
+      "xxhash": "3.7.0",
+      "yarl": "1.22.0",
+      "zipp": "3.23.0",
+      "zstandard": "0.25.0"
+    },
+    "harbor_environment": {
+      "Jinja2": "3.1.6",
+      "MarkupSafe": "3.0.4",
+      "PyJWT": "2.15.1",
+      "PyYAML": "6.0.3",
+      "Pygments": "2.21.0",
+      "aiohappyeyeballs": "2.7.1",
+      "aiohttp": "3.14.5",
+      "aiosignal": "1.4.0",
+      "annotated-doc": "0.0.6",
+      "annotated-types": "0.8.0",
+      "anthropic": "2.8.0",
+      "anyio": "4.16.0",
+      "attrs": "26.1.0",
+      "boto3": "1.44.2",
+      "botocore": "1.44.2",
+      "certifi": "2026.10.23",
+      "cffi": "2.1.1",
+      "charset-normalizer": "3.5.2",
+      "click": "8.5.1",
+      "cryptography": "50.0.2",
+      "deprecation": "2.1.0",
+      "dirhash": "0.5.0",
+      "docstring_parser": "0.18.0",
+      "et_xmlfile": "2.0.0",
+      "fastapi": "0.162.7",
+      "fastuuid": "0.14.0",
+      "filelock": "4.2.10",
+      "frozenlist": "1.8.0",
+      "fsspec": "2026.9.0",
+      "h11": "0.16.0",
+      "h2": "4.4.1",
+      "harbor": "0.23.0",
+      "harbor-codeclash-adapter": "0.2.0",
+      "hf-xet": "1.8.0",
+      "hpack": "4.2.0",
+      "httpcore": "1.0.9",
+      "httpcore2": "2.16.0",
+      "httpx": "0.28.1",
+      "httpx2": "2.16.0",
+      "huggingface_hub": "1.33.0",
+      "hyperframe": "6.1.0",
+      "idna": "3.20",
+      "importlib_metadata": "8.9.0",
+      "jiter": "0.19.0",
+      "jmespath": "1.1.0",
+      "jsonschema": "4.26.0",
+      "jsonschema-specifications": "2025.9.1",
+      "litellm": "1.109.1",
+      "markdown-it-py": "4.3.0",
+      "mdurl": "0.1.2",
+      "multidict": "7.2.1",
+      "openai": "3.50.0",
+      "openpyxl": "3.1.5",
+      "opentelemetry-api": "1.45.2",
+      "packaging": "26.3",
+      "pathspec": "1.1.1",
+      "platformdirs": "4.14.5",
+      "postgrest": "2.34.1",
+      "propcache": "0.5.4",
+      "pycparser": "3.12",
+      "pydantic": "2.14.3",
+      "pydantic-settings": "2.16.3",
+      "pydantic_core": "2.50.4",
+      "pypdf": "7.1.0",
+      "python-dateutil": "2.9.0.post0",
+      "python-dotenv": "1.2.4",
+      "realtime": "2.34.1",
+      "referencing": "0.37.0",
+      "regex": "2026.11.9",
+      "requests": "2.34.2",
+      "rich": "15.0.0",
+      "rpds-py": "2026.9.1",
+      "s3transfer": "0.19.3",
+      "scantree": "0.0.4",
+      "semver": "3.1.1",
+      "shellingham": "1.5.4",
+      "shortuuid": "1.0.13",
+      "six": "1.17.0",
+      "sniffio": "1.3.1",
+      "starlette": "1.10.0",
+      "storage3": "2.34.1",
+      "supabase": "2.34.1",
+      "supabase-auth": "2.34.1",
+      "supabase-functions": "2.34.1",
+      "tenacity": "9.2.1",
+      "tiktoken": "0.14.0",
+      "tokenizers": "0.23.3",
+      "toml": "0.10.2",
+      "tqdm": "4.70.1",
+      "truststore": "0.10.5",
+      "typer": "0.29.1",
+      "typing-inspection": "0.4.5",
+      "typing_extensions": "4.16.0",
+      "urllib3": "2.8.0",
+      "uvicorn": "0.54.0",
+      "websockets": "15.0.1",
+      "yarl": "1.25.1",
+      "zipp": "4.1.2"
+    },
+    "portkey_ai_installed_in_native_environment": false
+  },
+  "source_sha256": {
+    "adapter": {
+      "src/codeclash/src/codeclash/contract.py": "f192a445905c8384871325068fba9212ea1b63382ffcee3d31d00383082e68ff",
+      "src/codeclash/src/codeclash/harbor_agent.py": "1079e86f4762396175f78357fbc4ff86041044ab09f69aae7e0dec857625950a",
+      "src/codeclash/src/codeclash/evidence.py": "f5030eb48ee56e3f4f758f1a140ca948f91ec43b5ac00e523cb843e2f6ad6606",
+      "src/codeclash/src/codeclash/runtime/native_runner.py": "61c079748db5bc7056fb158113780a2f21668302ca5334d3f0144a62de357c0c",
+      "src/codeclash/src/codeclash/runtime/replay.py": "f573f5e09d1d8a9da0440cd99d0158132d7d1ab1e74f9350d8e75503a78cec05",
+      "src/codeclash/pyproject.toml": "877780bfd3862e242365472e3ba0d3754e8de4e7456c65c3ce1334ed6424f0dd",
+      "src/codeclash/uv.lock": "8232a42c9068ad08def828eac5c52f27ab54606405d6a345585fdd46debe6634"
+    },
+    "native": {
+      "pyproject.toml": "8b0623a2a2678a90fbf4a739b7e55f4e94df1cad8de17786bca1cadeecc4bf32",
+      "uv.lock": "6d448465af8faa328eb2bb85d915a1b7d869cba9bfefd67baab262d55d8fe94c",
+      "codeclash/agents/minisweagent.py": "252b8f38df7a5cfbc2a87bd2db9ec8fe2143dbb6cf769d74af5f9284b1b3141a",
+      "codeclash/tournaments/pvp.py": "352194dac8b68cb0055d02474e252facc5b3299efe45c2ad6ffc717307f80107"
+    },
+    "native_model_double": "44330685739f47e554b90fa73ccf019bc2e2b80e4c287c025f63ea4f5263b23e"
+  },
+  "launch_environment_keys": [
+    "COPYFILE_DISABLE",
+    "HOME",
+    "LANG",
+    "LC_ALL",
+    "LOGNAME",
+    "MSWEA_GLOBAL_CONFIG_DIR",
+    "MSWEA_SILENT_STARTUP",
+    "PATH",
+    "PYTHON_DOTENV_DISABLED",
+    "TMPDIR",
+    "USER"
+  ],
+  "credential_keys_forwarded": [],
+  "dotenv_disabled": true,
+  "attempts": [
+    {
+      "attempt": 1,
+      "integration_status": "passed",
+      "classification_status": "failed_known_test_model_mislabeled",
+      "started_at": "2026-11-16T12:48:25.198571Z",
+      "finished_at": "2026-11-16T12:48:59.171993Z",
+      "configuration_identical_across_attempts": true,
+      "generated_contract_sha256": "b71887b41c83f59f05ad814013867ed81ab549bbed772f958f3d8cc8ccef6023",
+      "generated_verifier_sha256": "f5030eb48ee56e3f4f758f1a140ca948f91ec43b5ac00e523cb843e2f6ad6606",
+      "games_completed": 9,
+      "native_model_query_calls": 16,
+      "bash_tool_actions": 16,
+      "tool_observations_checked": 12,
+      "provenance_diagnostic_only": false,
+      "harbor_context_diagnostic_only": false,
+      "verifier_diagnostic_only": false,
+      "verifier_status": "verified",
+      "emitted_reward_keys": [
+        "native-mini-1_mean_native_score",
+        "native-mini-1_mean_tertiary",
+        "native-mini-1_round_1_native_score",
+        "native-mini-1_round_1_tertiary",
+        "native-mini-1_round_2_native_score",
+        "native-mini-1_round_2_tertiary",
+        "native-mini-2_mean_native_score",
+        "native-mini-2_mean_tertiary",
+        "native-mini-2_round_1_native_score",
+        "native-mini-2_round_1_tertiary",
+        "native-mini-2_round_2_native_score",
+        "native-mini-2_round_2_tertiary"
+      ],
+      "external_model_api_requests": 0,
+      "model_cost_usd": 0,
+      "owned_native_containers_removed": 3,
+      "cleanup_verified": true,
+      "edit_feedback_persistence_proofs": [
+        {
+          "event": "native_mini_edit",
+          "feedback_round": 0,
+          "feedback_sha256": "add568f600bfbc178c6084d69e948d3d286d72776b66b388e3441773cbc001e7",
+          "player": "native-mini-1",
+          "round": 1,
+          "source_sha256_after": "9a3671deceab3b5bf3e7efa5975090a980b04c6ccbb8045e0b75f0375208dd67",
+          "source_sha256_before": "f550a8cc412a16e898490beb58d85d72e79326207ac6e29a6fe0bc5077bdad3c"
+        },
+        {
+          "event": "native_mini_edit",
+          "feedback_round": 1,
+          "feedback_sha256": "4e983fcabf4389fad77c07f24974c75df6daa389ca954a55011eb1fe6e82a868",
+          "player": "native-mini-1",
+          "round": 2,
+          "source_sha256_after": "ff97fa3f73a1ee00e3d55bdd6c8bec32dcadcf64cfeae011254d7d90c586cc6c",
+          "source_sha256_before": "9a3671deceab3b5bf3e7efa5975090a980b04c6ccbb8045e0b75f0375208dd67"
+        },
+        {
+          "event": "native_mini_edit",
+          "feedback_round": 0,
+          "feedback_sha256": "add568f600bfbc178c6084d69e948d3d286d72776b66b388e3441773cbc001e7",
+          "player": "native-mini-2",
+          "round": 1,
+          "source_sha256_after": "659d4b3cc5947ad8690524ba2c6474e42c1bf725a0234d7540e68206b7bd8706",
+          "source_sha256_before": "f550a8cc412a16e898490beb58d85d72e79326207ac6e29a6fe0bc5077bdad3c"
+        },
+        {
+          "event": "native_mini_edit",
+          "feedback_round": 1,
+          "feedback_sha256": "4e983fcabf4389fad77c07f24974c75df6daa389ca954a55011eb1fe6e82a868",
+          "player": "native-mini-2",
+          "round": 2,
+          "source_sha256_after": "c32d71578ab2799be3573ae99f3b908fef1e99ffb5935088af99188d170467b5",
+          "source_sha256_before": "659d4b3cc5947ad8690524ba2c6474e42c1bf725a0234d7540e68206b7bd8706"
+        }
+      ],
+      "evidence_sha256": {
+        "agent/native/containers.json": "c8782d742dc86147f94f1dd44e70bdc3fbd5d697eedc3d390226a9a61dda33f2",
+        "agent/native/effective-config.json": "a886cf7ce28126ba3bdf957a85c26912b7975a6a4d6d360e8a41a423e9985278",
+        "agent/native/isolation.json": "f8fd181acd6b001a7980c8105285b1aefdfa710ebe4c8598497e41a53a5850bb",
+        "agent/native/metadata.json": "18a0020070307af16b253d3d52653ca7b0fe1858ef4c84ba17965712d24ff1d8",
+        "agent/native/players/native-mini-1/changes_r1.json": "375846b5f77f76392eda5e1f1cbfc3fdbfcaefb132eb21ab8a4e96ef4501494a",
+        "agent/native/players/native-mini-1/changes_r2.json": "d96d1f25046fba532cf2b4f4523a0665258c86399f0613ac32063870c58c4f7b",
+        "agent/native/players/native-mini-1/native-mini-1_r1.traj.json": "523301da9487957797bc894056056a9f63e6651cadf9d59ec38bd13e09a38ab2",
+        "agent/native/players/native-mini-1/native-mini-1_r2.traj.json": "1892b8a79f9c9d225be4d71299432a7538da2c0d65b6e4d4f37659be3d8427b5",
+        "agent/native/players/native-mini-2/changes_r1.json": "d81e49aac5dd94352c0fcb8bd930b4910a4bd57e5b32203365dcb2e0ba584359",
+        "agent/native/players/native-mini-2/changes_r2.json": "db6aab84900dc11c029df6467bdf644c77d344e738f183ac9395b1087d62f873",
+        "agent/native/players/native-mini-2/native-mini-2_r1.traj.json": "a50d069facc22e9491dfd6b6092e71fa92e2bd0cbfe44bdb46a4522f141a3e9e",
+        "agent/native/players/native-mini-2/native-mini-2_r2.traj.json": "2ea28beec493255a1a981ba3a6d729e5ad487f39f000e904d6fd2d4ec9a8b15e",
+        "agent/native/provenance.json": "07d6654a0a627895475825200a6dc7ae35c72133b23dbadfd7a865f2e4329c22",
+        "agent/native/request.json": "b2e2c2dd555e7f57e0783ab8c837f49227818f5ba93f9edf7eb6594eedc1e9dd",
+        "agent/native/round-execution.json": "e806cf48714ee13286738e92837a63eed9da99b48c76df576344bf92f13ed3fb",
+        "agent/native/rounds/round_0.tar.gz": "357158bbe843979fe3a275f806086c6cec9c8b7570bb65ee99f5571608905aa4",
+        "agent/native/rounds/round_1.tar.gz": "499a54267b8696088158ca571b7f637a9b27328233ef25d00b114fe6950c771c",
+        "agent/native/rounds/round_2.tar.gz": "b58060a893622e2b4b53296d0f8df8a2d326bc5983cbf99aaac6bcb552fd8d28",
+        "agent/native/runner-summary.json": "cced31e1e4941ec6291d92ac08e2801b36e27581ae9ba6d9911a247ff55e4aeb",
+        "agent/native/task-config.json": "c68c3b06cf12046846c89bdb17ef4cae3dff7d7561807760ab20d64bddda5b05",
+        "agent/native-cleanup-audit.json": "a9254b8cf4ee40baa87e5933c15b1b67da2a822cff4fbbeeea8436990530ad54",
+        "result.json": "ec012c581f9f0907ff5d576ea55dd7ea940f15cb91394b059a9069d4e7c4182c",
+        "verifier/reward.json": "5997f34d68ae0b7b4e10814adce3e755dd3abedc7a72b6401380cebdc1153bd7",
+        "verifier/verification.json": "44d182f171660482e53711c64c01ff1cc0bcc85bd7db9c9cc09c70fdf9f43403"
+      }
+    },
+    {
+      "attempt": 2,
+      "integration_status": "passed",
+      "classification_status": "passed",
+      "started_at": "2026-11-16T12:51:51.117109Z",
+      "finished_at": "2026-11-16T12:52:24.622571Z",
+      "configuration_identical_across_attempts": true,
+      "generated_contract_sha256": "f192a445905c8384871325068fba9212ea1b63382ffcee3d31d00383082e68ff",
+      "generated_verifier_sha256": "f5030eb48ee56e3f4f758f1a140ca948f91ec43b5ac00e523cb843e2f6ad6606",
+      "games_completed": 9,
+      "native_model_query_calls": 16,
+      "bash_tool_actions": 16,
+      "tool_observations_checked": 12,
+      "provenance_diagnostic_only": true,
+      "harbor_context_diagnostic_only": true,
+      "verifier_diagnostic_only": true,
+      "verifier_status": "verified",
+      "emitted_reward_keys": [
+        "diagnostic_native-mini-1_mean_native_score",
+        "diagnostic_native-mini-1_mean_tertiary",
+        "diagnostic_native-mini-1_round_1_native_score",
+        "diagnostic_native-mini-1_round_1_tertiary",
+        "diagnostic_native-mini-1_round_2_native_score",
+        "diagnostic_native-mini-1_round_2_tertiary",
+        "diagnostic_native-mini-2_mean_native_score",
+        "diagnostic_native-mini-2_mean_tertiary",
+        "diagnostic_native-mini-2_round_1_native_score",
+        "diagnostic_native-mini-2_round_1_tertiary",
+        "diagnostic_native-mini-2_round_2_native_score",
+        "diagnostic_native-mini-2_round_2_tertiary"
+      ],
+      "external_model_api_requests": 0,
+      "model_cost_usd": 0,
+      "owned_native_containers_removed": 3,
+      "cleanup_verified": true,
+      "edit_feedback_persistence_proofs": [
+        {
+          "event": "native_mini_edit",
+          "feedback_round": 0,
+          "feedback_sha256": "50ff0021b5f3c0ba78732b6b5eca0c046106f677a0d1362a78305b5d438702bc",
+          "player": "native-mini-1",
+          "round": 1,
+          "source_sha256_after": "9a3671deceab3b5bf3e7efa5975090a980b04c6ccbb8045e0b75f0375208dd67",
+          "source_sha256_before": "f550a8cc412a16e898490beb58d85d72e79326207ac6e29a6fe0bc5077bdad3c"
+        },
+        {
+          "event": "native_mini_edit",
+          "feedback_round": 1,
+          "feedback_sha256": "7419d510701b4eb6e48658cf6367e95a6dcadc2051f655c6c78e426fbde84334",
+          "player": "native-mini-1",
+          "round": 2,
+          "source_sha256_after": "ff97fa3f73a1ee00e3d55bdd6c8bec32dcadcf64cfeae011254d7d90c586cc6c",
+          "source_sha256_before": "9a3671deceab3b5bf3e7efa5975090a980b04c6ccbb8045e0b75f0375208dd67"
+        },
+        {
+          "event": "native_mini_edit",
+          "feedback_round": 0,
+          "feedback_sha256": "50ff0021b5f3c0ba78732b6b5eca0c046106f677a0d1362a78305b5d438702bc",
+          "player": "native-mini-2",
+          "round": 1,
+          "source_sha256_after": "659d4b3cc5947ad8690524ba2c6474e42c1bf725a0234d7540e68206b7bd8706",
+          "source_sha256_before": "f550a8cc412a16e898490beb58d85d72e79326207ac6e29a6fe0bc5077bdad3c"
+        },
+        {
+          "event": "native_mini_edit",
+          "feedback_round": 1,
+          "feedback_sha256": "7419d510701b4eb6e48658cf6367e95a6dcadc2051f655c6c78e426fbde84334",
+          "player": "native-mini-2",
+          "round": 2,
+          "source_sha256_after": "c32d71578ab2799be3573ae99f3b908fef1e99ffb5935088af99188d170467b5",
+          "source_sha256_before": "659d4b3cc5947ad8690524ba2c6474e42c1bf725a0234d7540e68206b7bd8706"
+        }
+      ],
+      "evidence_sha256": {
+        "agent/native/containers.json": "faedc18fca08716f8a5d4c8238e0de8475f0137c4735e704675ac4a7745223c5",
+        "agent/native/effective-config.json": "a886cf7ce28126ba3bdf957a85c26912b7975a6a4d6d360e8a41a423e9985278",
+        "agent/native/isolation.json": "d043d7aadc2d6255a2061e2d6de738f209c0314b222b4381629ed755de36293e",
+        "agent/native/metadata.json": "96415f8f5ee74fbae7a1a116e2d38d9a0e2a0007bb53afa5a6346574181e42e9",
+        "agent/native/players/native-mini-1/changes_r1.json": "0c119be6aa7ec2dfa0e32440c8b531cc2c05654b3991d23e1d7783cd62e05a0d",
+        "agent/native/players/native-mini-1/changes_r2.json": "853586558a9188b484fa68da7ebd029666ae0963819351eb8ca50edc3b898e70",
+        "agent/native/players/native-mini-1/native-mini-1_r1.traj.json": "cee4ada0ac058321288651dd045b4e22c272d5960d7a5bd71cccc994fee9b3d6",
+        "agent/native/players/native-mini-1/native-mini-1_r2.traj.json": "ca67ef6cdada7fd71c6d998ca3f48f6427185b09b12e6bbc445cf055668fdc51",
+        "agent/native/players/native-mini-2/changes_r1.json": "9c3fca80b427740654a076ab78f86c582b693839835debe1fa0a463224d1f19c",
+        "agent/native/players/native-mini-2/changes_r2.json": "b10773535f2698a72ce75c4741b5d5b50ac431d7434c0c24b96048e69ff98a16",
+        "agent/native/players/native-mini-2/native-mini-2_r1.traj.json": "61f84b79ce4a0810e2cbd2e691a87d32aa9878c0e08fc2b05522f93d0699d10b",
+        "agent/native/players/native-mini-2/native-mini-2_r2.traj.json": "7c1280eca38354d906391541cd9ca6a9fa90035c2b78aa8260626906ff75c7ea",
+        "agent/native/provenance.json": "95f6c2588cb8ca80a4107cd5d64fe1c0d00f34623b9fd9afb0d8a1d190c46e64",
+        "agent/native/request.json": "bd626c699a3f8888d9d54d8a1ccee2d71847b2e259583f789ef3f9f602e09155",
+        "agent/native/round-execution.json": "0a7850df59a2f0edd3246f67f66ff5e024d1d7c9d377661d834b04e961485de6",
+        "agent/native/rounds/round_0.tar.gz": "4bad860a0a32b31bda3938950c0c9da2aa76b82393dd0932f50aa5e292067568",
+        "agent/native/rounds/round_1.tar.gz": "e10254d9f7781278495d64554b605e3c3c91d98f55d5654d7719ae69246e83ea",
+        "agent/native/rounds/round_2.tar.gz": "5607eb30fd000b3d65fea0b29dac3c6560d4a671ea61b79d331ada006337df80",
+        "agent/native/runner-summary.json": "3940f97f800433fffc513b9261066114e5a9259b8843e50c36344bd661eea7a3",
+        "agent/native/task-config.json": "c68c3b06cf12046846c89bdb17ef4cae3dff7d7561807760ab20d64bddda5b05",
+        "agent/native-cleanup-audit.json": "5e053d699672ff4eccabb36d27db2448a91650e63ca2e49c98542920b1289dcb",
+        "result.json": "1baf1e9224ec6a7b7271186063b9bc09e34ef191146251f79786826aca6704dd",
+        "verifier/reward.json": "a97b4c467f29a293f1ea7d184b5106e884649b62a996869ecff5c391f941192e",
+        "verifier/verification.json": "0687c3af833ddc5ff0e5a0c053f557d414fa77d0275d2a63708b562273304ee0"
+      }
+    }
+  ],
+  "verification": [
+    "Native MiniSWEAgent and ClashAgent/DefaultAgent created, not adapter ScriptedPlayer",
+    "Four model queries and four real bash actions per player per edit round; native Submitted exit",
+    "Twelve successful tool observations per attempt parsed and independently checked",
+    "Source changes persisted across edit rounds and matched native committed source diffs",
+    "Previous-round feedback hashes matched the actual native round-results archives",
+    "Nine gameplay logs per attempt ended with a terminal winner/draw event; all submissions valid",
+    "Native score replay and separate Harbor verifier passed for every round",
+    "Three native containers per attempt were removed and absence was independently rechecked",
+    "After the classification fix, provenance, Harbor context and verifier all label diagnostic_only=true and all rewards carry diagnostic_ prefixes"
+  ],
+  "reproduction": {
+    "working_directory": "Repository root",
+    "extract_config": "python -c 'import json; from pathlib import Path; d=json.loads(Path(\"src/codeclash/validation/native-mini-preflight.json\").read_text()); Path(\"native-mini-config.json\").write_text(json.dumps(d[\"native_config\"], indent=2)+\"\\n\")'",
+    "generate_task": "uv run --project src/codeclash codeclash --profile benchmark --config native-mini-config.json --output-dir datasets/codeclash-native-mini",
+    "run": "harbor run --config native-mini-job.json",
+    "harbor_job_template": {
+      "job_name": "codeclash-native-mini-preflight",
+      "jobs_dir": "jobs/codeclash-native-mini",
+      "n_attempts": 1,
+      "orchestrator": {
+        "type": "local",
+        "n_concurrent_trials": 1
+      },
+      "environment": {
+        "type": "docker",
+        "delete": true
+      },
+      "agents": [
+        {
+          "import_path": "codeclash.harbor_agent:CodeClashAgent",
+          "kwargs": {
+            "native_python": "/absolute/path/to/native-venv/bin/python",
+            "upstream_repo": "/absolute/path/to/CodeClash",
+            "timeout_sec": 1200
+          }
+        }
+      ],
+      "datasets": [
+        {
+          "path": "datasets/codeclash-native-mini",
+          "task_names": [
+            "battlesnake"
+          ]
+        }
+      ]
+    },
+    "prerequisites": [
+      "Pinned native CodeClash checkout, separate native and Harbor virtualenvs, and the pinned BattleSnake image described in README",
+      "Install the adapter in the Harbor environment",
+      "Use a credential-free environment and set PYTHON_DOTENV_DISABLED=1; no API credentials are needed for this deterministic fixture",
+      "Replace both native path placeholders in the Harbor job template before running"
+    ]
+  },
+  "limitations": [
+    "Deterministic model double; no external LLM inference or coding capability measured",
+    "Native provider transport, provider credentials, token usage and paid-model latency not exercised",
+    "Native full prompt preserved, including its original hardcoded 15-round text despite the diagnostic 2-round budget",
+    "Three-game budget is diagnostic, not statistical parity",
+    "Source edit is a harmless comment, not a strategic bot improvement",
+    "Known native deterministic model backends are classified diagnostic; an arbitrary custom model class can still implement a stub and cannot be inferred automatically",
+    "Installed native environment lacks portkey-ai, required by the published Portkey presets; no real provider import/transport was exercised",
+    "This does not establish comparative scores, adversarial grading integrity, oracle validity or real-model parity"
+  ]
+}

@@ -1,0 +1,225 @@
+{
+  "kind": "diagnostic_smoke_validation",
+  "date": "2026-11-16",
+  "arena_count": 1,
+  "profile": "smoke",
+  "model_api_calls": 0,
+  "oracle_pass": false,
+  "parity_claim": false,
+  "base_commit": "40b140eab2aae7375b2369aeddd2f8b3f872e2da",
+  "codeclash_commit": "f0694c64ecf6abfca2bc867bad2de9333fef5be8",
+  "battlesnake_commit": "aaf48003cfa5034a14d7053bb0ccc0bc6ae99cee",
+  "harbor_commit": "99218a4611e3bd76e49ce3b5f977e8c8134ad3ac",
+  "seed_policy": "upstream_unseeded",
+  "attempt_ledger": [
+    {
+      "job": "codeclash-smoke-v1",
+      "status": "infrastructure_failure",
+      "error": "FileNotFoundError: separate verifier environment definition missing",
+      "correction": "Add tests Dockerfile and compose definition",
+      "reward_written": false
+    },
+    {
+      "job": "codeclash-smoke-v2",
+      "status": "infrastructure_failure",
+      "error": "RewardFileNotFoundError: /tests/test.sh missing from separate verifier image",
+      "correction": "COPY test.sh and evidence.py into verifier image",
+      "reward_written": false
+    },
+    {
+      "job": "codeclash-smoke-v3",
+      "trial": "battlesnake__uvbtGhF",
+      "status": "verified",
+      "trial_exception": null,
+      "reward_written": true
+    }
+  ],
+  "verified_smoke": {
+    "status": "verified",
+    "profile": "smoke",
+    "diagnostic_only": true,
+    "arena_count": 1,
+    "edit_rounds": 2,
+    "baseline_in_metric": false,
+    "oracle_pass": false,
+    "parity_claim": false,
+    "rounds": [
+      {
+        "round": 0,
+        "winner": "p2",
+        "scores": {
+          "p1": 0.0,
+          "p2": 3
+        },
+        "simulation_count": 3,
+        "usable_simulations": 3,
+        "tertiary_scores": {
+          "p1": 0.0,
+          "p2": 1.0
+        }
+      },
+      {
+        "round": 1,
+        "winner": "p1",
+        "scores": {
+          "Tie": 1,
+          "p1": 2,
+          "p2": 0.0
+        },
+        "simulation_count": 3,
+        "usable_simulations": 3,
+        "tertiary_scores": {
+          "p1": 1.0,
+          "p2": 0.0
+        }
+      },
+      {
+        "round": 2,
+        "winner": "p1",
+        "scores": {
+          "Tie": 1,
+          "p1": 2,
+          "p2": 0.0
+        },
+        "simulation_count": 3,
+        "usable_simulations": 3,
+        "tertiary_scores": {
+          "p1": 1.0,
+          "p2": 0.0
+        }
+      }
+    ],
+    "rewards": {
+      "diagnostic_p1_round_1_tertiary": 1.0,
+      "diagnostic_p2_round_1_tertiary": 0.0,
+      "diagnostic_p1_round_2_tertiary": 1.0,
+      "diagnostic_p2_round_2_tertiary": 0.0,
+      "diagnostic_p1_mean_tertiary": 1.0,
+      "diagnostic_p2_mean_tertiary": 0.0
+    }
+  },
+  "editor_assertions": [
+    {
+      "feedback_sha256": "21f3ec6d582498be0c2a034473dc1f84997742ac1aa97b8e3e2146b6341c5bfd",
+      "main_sha256_after": "7356188beaedf2834eea5089775b6ade0046a00be14ee39e903681e538e39c5d",
+      "main_sha256_before": "f550a8cc412a16e898490beb58d85d72e79326207ac6e29a6fe0bc5077bdad3c",
+      "marker_added": "# codeclash-scripted-edit-round-1",
+      "player": "p1",
+      "previous_marker_verified": true,
+      "previous_round": 0,
+      "round": 1,
+      "selection_index": -1
+    },
+    {
+      "feedback_sha256": "21f3ec6d582498be0c2a034473dc1f84997742ac1aa97b8e3e2146b6341c5bfd",
+      "main_sha256_after": "2d973ef489847388d566d982deb8ec17d7a8abdbf47da1ab79f063901efe50be",
+      "main_sha256_before": "f550a8cc412a16e898490beb58d85d72e79326207ac6e29a6fe0bc5077bdad3c",
+      "marker_added": "# codeclash-scripted-edit-round-1",
+      "player": "p2",
+      "previous_marker_verified": true,
+      "previous_round": 0,
+      "round": 1,
+      "selection_index": 0
+    },
+    {
+      "feedback_sha256": "e52acfd840ca7c3dcde3061ade838fbbd9b24519ba0f2952d8b5ea573a254719",
+      "main_sha256_after": "ccdc171ef974f75ad80f9ca29e4361d9986ff34f7f00bcfefac560310d4b36d5",
+      "main_sha256_before": "7356188beaedf2834eea5089775b6ade0046a00be14ee39e903681e538e39c5d",
+      "marker_added": "# codeclash-scripted-edit-round-2",
+      "player": "p1",
+      "previous_marker_verified": true,
+      "previous_round": 1,
+      "round": 2,
+      "selection_index": 0
+    },
+    {
+      "feedback_sha256": "e52acfd840ca7c3dcde3061ade838fbbd9b24519ba0f2952d8b5ea573a254719",
+      "main_sha256_after": "fa4e0d4588e583bfbe3c4408965769b1c2688e30776732b26d75ad170c29af91",
+      "main_sha256_before": "2d973ef489847388d566d982deb8ec17d7a8abdbf47da1ab79f063901efe50be",
+      "marker_added": "# codeclash-scripted-edit-round-2",
+      "player": "p2",
+      "previous_marker_verified": true,
+      "previous_round": 1,
+      "round": 2,
+      "selection_index": -1
+    }
+  ],
+  "native_containers": {
+    "count": 3,
+    "network_connections_after_setup": 0,
+    "cleanup_verified": true,
+    "all_owned_ids_absent_from_docker_after_run": true
+  },
+  "evidence_replay_checks": [
+    {
+      "case": "unchanged",
+      "passed": true,
+      "exit_code": 0,
+      "reward_written": true,
+      "result": "verified"
+    },
+    {
+      "case": "missing_round",
+      "passed": true,
+      "exit_code": 1,
+      "reward_written": false,
+      "result": "FileNotFoundError: missing rounds/round_1.tar.gz"
+    },
+    {
+      "case": "wrong_feedback",
+      "passed": true,
+      "exit_code": 1,
+      "reward_written": false,
+      "result": "ValueError: Wrong round feedback delivered"
+    },
+    {
+      "case": "broken_persistence",
+      "passed": true,
+      "exit_code": 1,
+      "reward_written": false,
+      "result": "ValueError: Code state did not persist"
+    },
+    {
+      "case": "changed_score",
+      "passed": true,
+      "exit_code": 1,
+      "reward_written": false,
+      "result": "ValueError: Native score/log mismatch"
+    },
+    {
+      "case": "missing_simulation",
+      "passed": true,
+      "exit_code": 1,
+      "reward_written": false,
+      "result": "ValueError: Simulation evidence lost or added during transport"
+    },
+    {
+      "case": "modified_simulation",
+      "passed": true,
+      "exit_code": 1,
+      "reward_written": false,
+      "result": "ValueError: Simulation hash mismatch"
+    }
+  ],
+  "unit_tests": {
+    "passed": 27,
+    "failed": 0
+  },
+  "ruff_check": "passed",
+  "ruff_format": "passed",
+  "wheel_build": "passed",
+  "review": "No additional material bugs found; disclosed release blockers remain.",
+  "release_blockers": [
+    "Submitted bot code shares root filesystem access with arena grader, opponents and match logs.",
+    "Competitive oracle acceptance procedure is unresolved; solve.sh intentionally fails.",
+    "Model benchmark path, standard-agent support and parity have not been validated.",
+    "Full eligible arena scope and reproducible seed/build policy need agreement."
+  ],
+  "repository_validator": {
+    "passed_checks": 28,
+    "errors": [
+      "Required parity_experiment.json absent: parity has not been run"
+    ],
+    "warnings": 0
+  }
+}

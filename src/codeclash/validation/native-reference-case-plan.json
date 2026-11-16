@@ -1,0 +1,601 @@
+[
+  {
+    "arena": "ants",
+    "native_module": "codeclash.arenas.ants.ants",
+    "native_class": "AntsArena",
+    "source": {
+      "kind": "repository",
+      "repository": "https://github.com/CodeClash-ai/Ants.git",
+      "commit": "e99836b2588a45ff64188432aabbb0601e71618f",
+      "destination": "/workspace",
+      "pin_origin": "public_head_snapshot",
+      "public_access": {
+        "method": "git ls-remote with credentials disabled",
+        "verified_at": "2026-11-16T10:34:01.853300+00:00",
+        "head": "e99836b2588a45ff64188432aabbb0601e71618f"
+      }
+    },
+    "submission": "main.py",
+    "negative_remove_paths": [
+      "main.py"
+    ],
+    "negative_expected": {
+      "valid": false,
+      "nonempty_reason": true
+    },
+    "positive_expected": {
+      "valid": true
+    },
+    "execution_status": "proposed_not_run"
+  },
+  {
+    "arena": "battlecode23",
+    "native_module": "codeclash.arenas.battlecode23.battlecode23",
+    "native_class": "BattleCode23Arena",
+    "source": {
+      "kind": "repository",
+      "repository": "https://github.com/CodeClash-ai/BattleCode2023.git",
+      "commit": "3af546d684436f8ccf6f02c9ca97790f002848a0",
+      "destination": "/workspace",
+      "pin_origin": "public_head_snapshot",
+      "public_access": {
+        "method": "git ls-remote with credentials disabled",
+        "verified_at": "2026-11-16T10:34:01.853300+00:00",
+        "head": "3af546d684436f8ccf6f02c9ca97790f002848a0"
+      }
+    },
+    "submission": "src/mysubmission",
+    "negative_remove_paths": [
+      "src/mysubmission/RobotPlayer.java"
+    ],
+    "negative_expected": {
+      "valid": false,
+      "nonempty_reason": true
+    },
+    "positive_expected": {
+      "valid": true
+    },
+    "execution_status": "proposed_not_run"
+  },
+  {
+    "arena": "battlecode24",
+    "native_module": "codeclash.arenas.battlecode24.battlecode24",
+    "native_class": "BattleCode24Arena",
+    "source": {
+      "kind": "repository",
+      "repository": "https://github.com/CodeClash-ai/BattleCode2024.git",
+      "commit": "59e51acd0d43bdbc5111f609314cd0292bc6e45a",
+      "destination": "/workspace",
+      "pin_origin": "public_head_snapshot",
+      "public_access": {
+        "method": "git ls-remote with credentials disabled",
+        "verified_at": "2026-11-16T10:34:01.853300+00:00",
+        "head": "59e51acd0d43bdbc5111f609314cd0292bc6e45a"
+      }
+    },
+    "submission": "src/mysubmission",
+    "negative_remove_paths": [
+      "src/mysubmission/RobotPlayer.java"
+    ],
+    "negative_expected": {
+      "valid": false,
+      "nonempty_reason": true
+    },
+    "positive_expected": {
+      "valid": true
+    },
+    "execution_status": "proposed_not_run"
+  },
+  {
+    "arena": "battlecode25",
+    "native_module": "codeclash.arenas.battlecode25.battlecode25",
+    "native_class": "BattleCode25Arena",
+    "source": {
+      "kind": "repository",
+      "repository": "https://github.com/CodeClash-ai/BattleCode2025.git",
+      "commit": "4499ec262ba80dfc16917b5151f4eb43d6088528",
+      "destination": "/workspace",
+      "pin_origin": "public_head_snapshot",
+      "public_access": {
+        "method": "git ls-remote with credentials disabled",
+        "verified_at": "2026-11-16T10:34:01.853300+00:00",
+        "head": "4499ec262ba80dfc16917b5151f4eb43d6088528"
+      }
+    },
+    "submission": "src/mysubmission",
+    "negative_remove_paths": [
+      "src/mysubmission/bot.py"
+    ],
+    "negative_expected": {
+      "valid": false,
+      "nonempty_reason": true
+    },
+    "positive_expected": {
+      "valid": true
+    },
+    "execution_status": "proposed_not_run"
+  },
+  {
+    "arena": "battlesnake",
+    "native_module": "codeclash.arenas.battlesnake.battlesnake",
+    "native_class": "BattleSnakeArena",
+    "source": {
+      "kind": "repository",
+      "repository": "https://github.com/CodeClash-ai/BattleSnake.git",
+      "commit": "aaf48003cfa5034a14d7053bb0ccc0bc6ae99cee",
+      "destination": "/workspace",
+      "pin_origin": "public_head_snapshot",
+      "public_access": {
+        "method": "git ls-remote with credentials disabled",
+        "verified_at": "2026-11-16T10:34:01.853300+00:00",
+        "head": "aaf48003cfa5034a14d7053bb0ccc0bc6ae99cee"
+      }
+    },
+    "submission": "main.py",
+    "negative_remove_paths": [
+      "main.py",
+      "run.sh"
+    ],
+    "negative_expected": {
+      "valid": false,
+      "nonempty_reason": true
+    },
+    "positive_expected": {
+      "valid": true
+    },
+    "execution_status": "proposed_not_run"
+  },
+  {
+    "arena": "bomberland",
+    "native_module": "codeclash.arenas.bomberland.bomberland",
+    "native_class": "BomberlandArena",
+    "source": {
+      "kind": "bundled_runtime",
+      "path": "codeclash/arenas/bomberland/runtime",
+      "commit": "f0694c64ecf6abfca2bc867bad2de9333fef5be8",
+      "tree": "98f47c9b95e41c67fceb246fc0562f717cc3cd78"
+    },
+    "submission": "bomberland_agent.py",
+    "negative_remove_paths": [
+      "bomberland_agent.py"
+    ],
+    "negative_expected": {
+      "valid": false,
+      "nonempty_reason": true
+    },
+    "positive_expected": {
+      "valid": true
+    },
+    "execution_status": "proposed_not_run"
+  },
+  {
+    "arena": "bridge",
+    "native_module": "codeclash.arenas.bridge.bridge",
+    "native_class": "BridgeArena",
+    "source": {
+      "kind": "repository",
+      "repository": "https://github.com/CodeClash-ai/Bridge.git",
+      "commit": "e688dd238d3936f9584e1684d76daec43b982b6c",
+      "destination": "/workspace",
+      "pin_origin": "public_head_snapshot",
+      "public_access": {
+        "method": "git ls-remote with credentials disabled",
+        "verified_at": "2026-11-16T10:34:01.853300+00:00",
+        "head": "e688dd238d3936f9584e1684d76daec43b982b6c"
+      }
+    },
+    "submission": "bridge_agent.py",
+    "negative_remove_paths": [
+      "bridge_agent.py"
+    ],
+    "negative_expected": {
+      "valid": false,
+      "nonempty_reason": true
+    },
+    "positive_expected": {
+      "valid": true
+    },
+    "execution_status": "proposed_not_run"
+  },
+  {
+    "arena": "chess",
+    "native_module": "codeclash.arenas.chess.chess",
+    "native_class": "ChessArena",
+    "source": {
+      "kind": "repository",
+      "repository": "https://github.com/Babak-SSH/Kojiro.git",
+      "commit": "61248747567b5d79fbeaff122e32a2162b114b12",
+      "destination": "/workspace",
+      "pin_origin": "public_head_snapshot",
+      "public_access": {
+        "method": "git ls-remote with credentials disabled",
+        "verified_at": "2026-11-16T10:34:01.853300+00:00",
+        "head": "61248747567b5d79fbeaff122e32a2162b114b12"
+      }
+    },
+    "submission": "src/",
+    "negative_remove_paths": [
+      "src"
+    ],
+    "negative_expected": {
+      "valid": false,
+      "nonempty_reason": true
+    },
+    "positive_expected": {
+      "valid": true
+    },
+    "execution_status": "proposed_not_run"
+  },
+  {
+    "arena": "corewar",
+    "native_module": "codeclash.arenas.corewar.corewar",
+    "native_class": "CoreWarArena",
+    "source": {
+      "kind": "repository",
+      "repository": "https://github.com/CodeClash-ai/CoreWar.git",
+      "commit": "eda6773b3f0bde428b04bacb31d2f8c302159655",
+      "destination": "/workspace",
+      "pin_origin": "public_head_snapshot",
+      "public_access": {
+        "method": "git ls-remote with credentials disabled",
+        "verified_at": "2026-11-16T10:34:01.853300+00:00",
+        "head": "eda6773b3f0bde428b04bacb31d2f8c302159655"
+      }
+    },
+    "submission": "warrior.red",
+    "negative_remove_paths": [
+      "warrior.red"
+    ],
+    "negative_expected": {
+      "valid": false,
+      "nonempty_reason": true
+    },
+    "positive_expected": {
+      "valid": true
+    },
+    "execution_status": "proposed_not_run"
+  },
+  {
+    "arena": "cyborg",
+    "native_module": "codeclash.arenas.cyborg.cyborg",
+    "native_class": "CybORGArena",
+    "source": {
+      "kind": "bundled_runtime",
+      "path": "codeclash/arenas/cyborg/runtime",
+      "commit": "f0694c64ecf6abfca2bc867bad2de9333fef5be8",
+      "tree": "67426b9a3c9973b600626b0989ed877b3bc220f1"
+    },
+    "submission": "cyborg_agent.py",
+    "negative_remove_paths": [
+      "cyborg_agent.py"
+    ],
+    "negative_expected": {
+      "valid": false,
+      "nonempty_reason": true
+    },
+    "positive_expected": {
+      "valid": true
+    },
+    "execution_status": "proposed_not_run"
+  },
+  {
+    "arena": "figgie",
+    "native_module": "codeclash.arenas.figgie.figgie",
+    "native_class": "FiggieArena",
+    "source": {
+      "kind": "repository",
+      "repository": "https://github.com/CodeClash-ai/Figgie.git",
+      "commit": "d6308b438496a975d74fc6664da56c0694dab882",
+      "destination": "/workspace",
+      "pin_origin": "public_head_snapshot",
+      "public_access": {
+        "method": "git ls-remote with credentials disabled",
+        "verified_at": "2026-11-16T10:34:01.853300+00:00",
+        "head": "d6308b438496a975d74fc6664da56c0694dab882"
+      }
+    },
+    "submission": "main.py",
+    "negative_remove_paths": [
+      "main.py"
+    ],
+    "negative_expected": {
+      "valid": false,
+      "nonempty_reason": true
+    },
+    "positive_expected": {
+      "valid": true
+    },
+    "execution_status": "proposed_not_run"
+  },
+  {
+    "arena": "gomoku",
+    "native_module": "codeclash.arenas.gomoku.gomoku",
+    "native_class": "GomokuArena",
+    "source": {
+      "kind": "repository",
+      "repository": "https://github.com/CodeClash-ai/Gomoku.git",
+      "commit": "923c141699319d0de6de6bccb347cff599e5ac98",
+      "destination": "/workspace",
+      "pin_origin": "public_head_snapshot",
+      "public_access": {
+        "method": "git ls-remote with credentials disabled",
+        "verified_at": "2026-11-16T10:34:01.853300+00:00",
+        "head": "923c141699319d0de6de6bccb347cff599e5ac98"
+      }
+    },
+    "submission": "main.py",
+    "negative_remove_paths": [
+      "main.py"
+    ],
+    "negative_expected": {
+      "valid": false,
+      "nonempty_reason": true
+    },
+    "positive_expected": {
+      "valid": true
+    },
+    "execution_status": "proposed_not_run"
+  },
+  {
+    "arena": "halite",
+    "native_module": "codeclash.arenas.halite.halite",
+    "native_class": "HaliteArena",
+    "source": {
+      "kind": "repository",
+      "repository": "https://github.com/CodeClash-ai/Halite.git",
+      "commit": "173ef1a63ea9987d9df3439d4d34b3346a5cadad",
+      "destination": "/workspace",
+      "pin_origin": "public_head_snapshot",
+      "public_access": {
+        "method": "git ls-remote with credentials disabled",
+        "verified_at": "2026-11-16T10:34:01.853300+00:00",
+        "head": "173ef1a63ea9987d9df3439d4d34b3346a5cadad"
+      }
+    },
+    "submission": "submission",
+    "negative_remove_paths": [
+      "submission"
+    ],
+    "negative_expected": {
+      "valid": false,
+      "nonempty_reason": true
+    },
+    "positive_expected": {
+      "valid": true
+    },
+    "execution_status": "proposed_not_run"
+  },
+  {
+    "arena": "halite2",
+    "native_module": "codeclash.arenas.halite2.halite2",
+    "native_class": "Halite2Arena",
+    "source": {
+      "kind": "repository",
+      "repository": "https://github.com/CodeClash-ai/Halite2.git",
+      "commit": "a0753f48c5e060be08d38216b497e8905551e363",
+      "destination": "/workspace",
+      "pin_origin": "public_head_snapshot",
+      "public_access": {
+        "method": "git ls-remote with credentials disabled",
+        "verified_at": "2026-11-16T10:34:01.853300+00:00",
+        "head": "a0753f48c5e060be08d38216b497e8905551e363"
+      }
+    },
+    "submission": "submission",
+    "negative_remove_paths": [
+      "submission"
+    ],
+    "negative_expected": {
+      "valid": false,
+      "nonempty_reason": true
+    },
+    "positive_expected": {
+      "valid": true
+    },
+    "execution_status": "proposed_not_run"
+  },
+  {
+    "arena": "halite3",
+    "native_module": "codeclash.arenas.halite3.halite3",
+    "native_class": "Halite3Arena",
+    "source": {
+      "kind": "repository",
+      "repository": "https://github.com/CodeClash-ai/Halite3.git",
+      "commit": "385265d708758b2446bfc4dc60537628ad564d4f",
+      "destination": "/workspace",
+      "pin_origin": "public_head_snapshot",
+      "public_access": {
+        "method": "git ls-remote with credentials disabled",
+        "verified_at": "2026-11-16T10:34:01.853300+00:00",
+        "head": "385265d708758b2446bfc4dc60537628ad564d4f"
+      }
+    },
+    "submission": "submission",
+    "negative_remove_paths": [
+      "submission"
+    ],
+    "negative_expected": {
+      "valid": false,
+      "nonempty_reason": true
+    },
+    "positive_expected": {
+      "valid": true
+    },
+    "execution_status": "proposed_not_run"
+  },
+  {
+    "arena": "huskybench",
+    "native_module": "codeclash.arenas.huskybench.huskybench",
+    "native_class": "HuskyBenchArena",
+    "source": {
+      "kind": "repository",
+      "repository": "https://github.com/CodeClash-ai/HuskyBench.git",
+      "commit": "9963f13b2d545cbdb12d716ad0c603e9219d46a1",
+      "destination": "/workspace",
+      "pin_origin": "public_head_snapshot",
+      "public_access": {
+        "method": "git ls-remote with credentials disabled",
+        "verified_at": "2026-11-16T10:34:01.853300+00:00",
+        "head": "9963f13b2d545cbdb12d716ad0c603e9219d46a1"
+      }
+    },
+    "submission": "client/player.py",
+    "negative_remove_paths": [
+      "client/player.py"
+    ],
+    "negative_expected": {
+      "valid": false,
+      "nonempty_reason": true
+    },
+    "positive_expected": {
+      "valid": true
+    },
+    "execution_status": "proposed_not_run"
+  },
+  {
+    "arena": "lightcycles",
+    "native_module": "codeclash.arenas.lightcycles.lightcycles",
+    "native_class": "LightCyclesArena",
+    "source": {
+      "kind": "repository",
+      "repository": "https://github.com/CodeClash-ai/LightCycles.git",
+      "commit": "32e4218844805340371e9fe11902a49e5a1e40a6",
+      "destination": "/workspace",
+      "pin_origin": "public_head_snapshot",
+      "public_access": {
+        "method": "git ls-remote with credentials disabled",
+        "verified_at": "2026-11-16T10:34:01.853300+00:00",
+        "head": "32e4218844805340371e9fe11902a49e5a1e40a6"
+      }
+    },
+    "submission": "main.py",
+    "negative_remove_paths": [
+      "main.py"
+    ],
+    "negative_expected": {
+      "valid": false,
+      "nonempty_reason": true
+    },
+    "positive_expected": {
+      "valid": true
+    },
+    "execution_status": "proposed_not_run"
+  },
+  {
+    "arena": "paintvolley",
+    "native_module": "codeclash.arenas.paintvolley.paintvolley",
+    "native_class": "PaintVolleyArena",
+    "source": {
+      "kind": "repository",
+      "repository": "https://github.com/CodeClash-ai/PaintVolley.git",
+      "commit": "eda3a1485c3628392a0e35ffabbb45a79d33ae2b",
+      "destination": "/workspace",
+      "pin_origin": "public_head_snapshot",
+      "public_access": {
+        "method": "git ls-remote with credentials disabled",
+        "verified_at": "2026-11-16T10:34:01.853300+00:00",
+        "head": "eda3a1485c3628392a0e35ffabbb45a79d33ae2b"
+      }
+    },
+    "submission": "main.py",
+    "negative_remove_paths": [
+      "main.py"
+    ],
+    "negative_expected": {
+      "valid": false,
+      "nonempty_reason": true
+    },
+    "positive_expected": {
+      "valid": true
+    },
+    "execution_status": "proposed_not_run"
+  },
+  {
+    "arena": "robocode",
+    "native_module": "codeclash.arenas.robocode.robocode",
+    "native_class": "RoboCodeArena",
+    "source": {
+      "kind": "repository",
+      "repository": "https://github.com/CodeClash-ai/RoboCode.git",
+      "commit": "1f360189e50a2cbab25e8ac7ef280736610753a7",
+      "destination": "/workspace",
+      "pin_origin": "public_head_snapshot",
+      "public_access": {
+        "method": "git ls-remote with credentials disabled",
+        "verified_at": "2026-11-16T10:34:01.853300+00:00",
+        "head": "1f360189e50a2cbab25e8ac7ef280736610753a7"
+      }
+    },
+    "submission": "robots/custom/",
+    "negative_remove_paths": [
+      "robots/custom/MyTank.java"
+    ],
+    "negative_expected": {
+      "valid": false,
+      "nonempty_reason": true
+    },
+    "positive_expected": {
+      "valid": true
+    },
+    "execution_status": "proposed_not_run"
+  },
+  {
+    "arena": "robotrumble",
+    "native_module": "codeclash.arenas.robotrumble.robotrumble",
+    "native_class": "RobotRumbleArena",
+    "source": {
+      "kind": "repository",
+      "repository": "https://github.com/CodeClash-ai/RobotRumble.git",
+      "commit": "4f019c91e6854242f5e247ca82fee7b66833b227",
+      "destination": "/workspace",
+      "pin_origin": "public_head_snapshot",
+      "public_access": {
+        "method": "git ls-remote with credentials disabled",
+        "verified_at": "2026-11-16T10:34:01.853300+00:00",
+        "head": "4f019c91e6854242f5e247ca82fee7b66833b227"
+      }
+    },
+    "submission": "robot.js",
+    "negative_remove_paths": [
+      "robot.js",
+      "robot.py"
+    ],
+    "negative_expected": {
+      "valid": false,
+      "nonempty_reason": true
+    },
+    "positive_expected": {
+      "valid": true
+    },
+    "execution_status": "proposed_not_run"
+  },
+  {
+    "arena": "scml",
+    "native_module": "codeclash.arenas.scml.scml",
+    "native_class": "SCMLOneShotArena",
+    "source": {
+      "kind": "repository",
+      "repository": "https://github.com/CodeClash-ai/SCML.git",
+      "commit": "024a39dfcf2d466f119b4d794b69d625ead1d2cd",
+      "destination": "/workspace",
+      "pin_origin": "public_head_snapshot",
+      "public_access": {
+        "method": "git ls-remote with credentials disabled",
+        "verified_at": "2026-11-16T10:34:01.853300+00:00",
+        "head": "024a39dfcf2d466f119b4d794b69d625ead1d2cd"
+      }
+    },
+    "submission": "scml_agent.py",
+    "negative_remove_paths": [
+      "scml_agent.py"
+    ],
+    "negative_expected": {
+      "valid": false,
+      "nonempty_reason": true
+    },
+    "positive_expected": {
+      "valid": true
+    },
+    "execution_status": "proposed_not_run"
+  }
+]
