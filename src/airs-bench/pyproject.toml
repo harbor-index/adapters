@@ -1,0 +1,20 @@
+[project]
+name = "harbor-airs-bench-adapter"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Jiankai-Sun", email = "sjkai1@126.com" }
+]
+requires-python = ">=3.13"
+dependencies = ["pyyaml>=6.0"]
+
+[project.scripts]
+airs-bench = "airs_bench.main:main"
+
+[build-system]
+requires = ["uv_build>=0.10.6,<0.11.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "airs_bench"

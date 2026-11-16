@@ -1,0 +1,30 @@
+[
+  {
+    "adapter_name": "airs-bench",
+    "adapter_builders": ["Jiankai Sun (sjkai1@126.com)"],
+    "original_benchmark": [
+      {
+        "split": "test",
+        "size": 20,
+        "harness": "agentic",
+        "supported_agents": ["MLGym (ReAct)", "aira-dojo (One-Shot, Greedy)"],
+        "adaptable": true,
+        "notes": "20 ML research tasks on public HuggingFace datasets, each scored by the task's evaluate.py and normalized against literature SOTA. No reference solutions are released. License CC BY-NC 4.0."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "test",
+        "adapted_benchmark_size": 20,
+        "parity_benchmark_size": null,
+        "parity_sampling_rate": null,
+        "registry_benchmark_size": 20,
+        "added_agents": [],
+        "parity_matching_agents": [],
+        "parity_unmatching_agents": null,
+        "parity_costs": null,
+        "notes": "All 20 upstream rad/ tasks adapted. Oracle submits gold test labels. Reward is the paper's normalized score clipped to [0, 1]. Parity not run yet; Kaggle web traffic, rideshare and APPS oracles not yet verified locally."
+      }
+    ]
+  }
+]
