@@ -1,0 +1,38 @@
+[
+  {
+    "adapter_name": "robodojo",
+    "adapter_builders": ["Jia Guo (jia@green.microsoft.com)"],
+    "original_benchmark": [
+      {
+        "split": "simulation",
+        "size": 42,
+        "harness": "agent",
+        "supported_agents": ["None"],
+        "adaptable": true,
+        "notes": "Native XPolicyLab embodied policies; no standard Harbor CLI compatibility is claimed. RoboDojo revision f57e1633ffed59761bc8e568cfe7530c4b33381c. There are 42 canonical tasks and 54 runtime configurations including randomized variants."
+      },
+      {
+        "split": "real-world",
+        "size": 18,
+        "harness": "agent",
+        "supported_agents": ["None"],
+        "adaptable": false,
+        "notes": "Excluded: physical hardware, scene resets, and the remote real-world evaluation service are not packaged."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "simulation",
+        "adapted_benchmark_size": 42,
+        "parity_benchmark_size": 0,
+        "parity_sampling_rate": 0.0,
+        "registry_benchmark_size": 0,
+        "added_agents": ["EndpointPolicyAgent@0.1.0"],
+        "parity_matching_agents": ["None"],
+        "parity_unmatching_agents": ["None"],
+        "parity_costs": null,
+        "notes": "Draft endpoint-policy integration. GPU execution, a passing oracle, standard CLI embodied integration, parity experiments, and registry publication are pending. No score matching is established. None parity-agent entries mean no experiments, not evidence of matching."
+      }
+    ]
+  }
+]

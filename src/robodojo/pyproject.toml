@@ -1,0 +1,21 @@
+[project]
+name = "harbor-robodojo-adapter"
+version = "0.1.0"
+description = "Draft Harbor adapter for native RoboDojo simulation policy evaluation"
+readme = "README.md"
+authors = [{ name = "Jia Guo", email = "jia@green.microsoft.com" }]
+requires-python = ">=3.12"
+dependencies = []
+
+[project.optional-dependencies]
+harbor = ["harbor==0.26.0"]
+
+[project.scripts]
+robodojo = "robodojo.main:main"
+
+[build-system]
+requires = ["uv_build>=0.12.13,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "robodojo"

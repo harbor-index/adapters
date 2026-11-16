@@ -1,0 +1,24 @@
+# Run from the adapters repository root after generating datasets/robodojo.
+# Install this adapter in the same Python environment as Harbor.
+jobs_dir: jobs
+n_attempts: 1
+datasets:
+  - path: datasets/robodojo
+
+# No validated oracle exists. This agent submits an already running native policy
+# endpoint; it does not launch or implement a robot policy. Replace the hostname.
+agents:
+  - import_path: robodojo.policy_agent:EndpointPolicyAgent
+    kwargs:
+      policy_name: GR00T_N17
+      host: policy-server.example.invalid
+      port: 9999
+
+environment:
+  type: docker
+  delete: true
+
+# A stateful policy server must not be shared by concurrent trials.
+orchestrator:
+  type: local
+  n_concurrent_trials: 1

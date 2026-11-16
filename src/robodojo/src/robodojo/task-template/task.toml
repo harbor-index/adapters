@@ -1,0 +1,28 @@
+version = "1.0"
+
+[task]
+name = "$harbor_name"
+authors = [{ name = "Tianxing Chen" }, { name = "Yue Chen" }, { name = "Zixuan Li" }, { name = "Junyuan Tang" }, { name = "Kailun Su" }, { name = "Weijie Wan" }, { name = "Baijun Chen" }, { name = "Haoran Lu" }, { name = "Haowen Yan" }, { name = "Honghao Su" }]
+
+[metadata]
+difficulty = "hard"
+category = "robotics"
+tags = ["robodojo", "bimanual-manipulation", "$dimension"]
+upstream_task_id = "$task_id"
+upstream_revision = "$upstream_revision"
+dimension = "$dimension"
+seed = $seed
+validation_status = "draft-not-gpu-validated"
+
+[agent]
+timeout_sec = 300.0
+
+[verifier]
+timeout_sec = 75600.0
+
+[environment]
+build_timeout_sec = 1200.0
+cpus = 8
+memory_mb = 65536
+storage_mb = 307200
+gpus = 1
