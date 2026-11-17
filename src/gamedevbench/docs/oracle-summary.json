@@ -1,0 +1,34 @@
+{
+  "benchmark": "waynchi/gamedevbench",
+  "upstream_revision": "54589a477d6c1a15255707a861db6b01126797aa",
+  "harbor_revision": "99218a4611e3bd76e49ce3b5f977e8c8134ad3ac",
+  "evaluation_id": "gdb-harbor-final-20261117-f1718e9d",
+  "tasks": 333,
+  "passed": 333,
+  "exceptions": 0,
+  "mean_reward": 1.0,
+  "reward_counts": {
+    "1.0": 333
+  },
+  "formal_verifier_hashes_unchanged": true,
+  "confinement": "strict",
+  "godot_version": "4.4.1.stable.official.49a5bc7b6",
+  "harbor_runtime": "27m45s",
+  "task_package_sha256": "2d6e4abc5d1e23c896f08bbfa0e13ccd3525dcb43a29c3b152db98793185fdec",
+  "artifact_sha256": "ecaa513eaad0a0b42268e03292e60d8ffc9270ca9cb23bb72957cac97367aea4",
+  "upstream_reference_fix_pr": "https://github.com/waynchi/gamedevbench/pull/16",
+  "upstream_fix_status": "open; not merged",
+  "model_parity_performed": false,
+  "terminal_capture": {
+    "type": "Actual xterm screenshot captured with XGetImage on Xvfb",
+    "saved_run_output": true,
+    "new_evaluation": false,
+    "stdout_sha256": "7e95f2ed267ae8028053ac28ed6d0b4009e46a3fd95f05b1a22b3f375b2be880",
+    "screenshot_sha256": "c8f454216d636649811a2bf9f7b4eadcce59a01b4074f784ddddf44b2335dcd0"
+  },
+  "full_run_runtime": "verified shared Godot runtime",
+  "public_docker_source_build_smoke": {
+    "passed": 1,
+    "tasks": 1
+  }
+}
