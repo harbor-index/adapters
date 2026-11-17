@@ -19,6 +19,22 @@ class EvaluationError(RuntimeError):
     """A run cannot yield a trustworthy, complete native evaluation result."""
 
 
+class ResultsDirectoryError(EvaluationError):
+    """Startup failed before this process owned its results directory."""
+
+
+def reserve_results(directory: Path) -> None:
+    """Claim an empty results directory before writing any part of this run."""
+    try:
+        directory.mkdir(parents=True, exist_ok=True)
+        if any(directory.iterdir()):
+            raise ResultsDirectoryError("Results directory must be empty at startup")
+        # mkdir is exclusive even when two processes pass the empty check together.
+        (directory / "logs").mkdir()
+    except OSError as exc:
+        raise ResultsDirectoryError(f"Cannot reserve {directory}: {exc}") from exc
+
+
 @dataclass(frozen=True)
 class Variant:
     name: str

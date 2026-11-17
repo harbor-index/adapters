@@ -121,6 +121,9 @@ class Broker:
         if (self.ledger_dir / "episodes.jsonl").exists():
             # A restarted policy server could not tell which decisions ran.
             raise RuntimeError("Broker ledger already exists; refusing to continue an earlier run")
+        self.attempt_id = uuid.uuid4().hex
+        with (self.ledger_dir / "attempt.json").open("x", encoding="utf-8") as marker:
+            json.dump({"attempt_id": self.attempt_id}, marker)
         self._condition = threading.Condition()
         self._poll_interval = poll_interval
         self._state = "idle"
@@ -380,6 +383,7 @@ class Broker:
     def _status(self) -> dict[str, Any]:
         return {
             "state": self._state,
+            "attempt_id": self.attempt_id,
             "run": self._run_state()["status"],
             "episodes_started": self._episodes_started,
             "episodes_ended": self._episodes_ended,
@@ -437,7 +441,11 @@ def make_server(broker: Broker, host: str, port: int) -> ThreadingHTTPServer:
                     raise ValueError("Request body must be a JSON object")
                 path = urlparse(self.path).path
                 if path == "/observe":
-                    self._json(200, broker.observe(body.get("wait", 0)))
+                    result = broker.observe(body.get("wait", 0))
+                    self._json(200, result)
+                    if result["status"] in ("finished", "failed"):
+                        # Standalone teardown can release the server after this response.
+                        (broker.ledger_dir / "verdict-delivered").touch()
                 elif path == "/act":
                     self._json(200, broker.act(body["response"], body.get("wait", 0)))
                 elif path == "/abort":

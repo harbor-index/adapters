@@ -1,11 +1,15 @@
 """Checks of the simulator-container supervisor with mocked native commands."""
 
+from concurrent.futures import ThreadPoolExecutor
 import json
 import os
 from pathlib import Path
+import socket
 import subprocess
+import sys
 import tempfile
 import unittest
+import urllib.request
 from unittest.mock import patch
 
 from robodojo.catalog import UPSTREAM_REVISION, XPOLICYLAB_REVISION
@@ -66,7 +70,7 @@ class SupervisorTests(unittest.TestCase):
             return run(command, **kwargs)
         return supervisor.supervise(
             self.spec_path, self.root, self.results, POLICY,
-            popen=self.popen, run=recorded, wait=lambda *args: None,
+            popen=self.popen, run=recorded, wait=lambda *args: "test-attempt",
         )
 
     def test_native_server_and_client_commands_are_unchanged_entry_points(self):
@@ -95,6 +99,7 @@ class SupervisorTests(unittest.TestCase):
         self.assertNotEqual(kwargs["env"]["ROBODOJO_RUN_ID"], "old-run")
         self.assertNotIn("shell", kwargs)
         self.assertEqual(verdict["status"], "completed")
+        self.assertEqual(verdict["attempt_id"], "test-attempt")
         self.assertEqual(verdict["policy_name"], "HarborDirect")
         self.assertEqual(verdict["variants"][0]["episodes"], 50)
         copied = json.loads((self.results / "native" / "insert_tubes" / "_result.json").read_text())
@@ -194,15 +199,58 @@ class SupervisorTests(unittest.TestCase):
         with self.assertRaisesRegex(EvaluationError, "Policy server exited"):
             self.supervise(run)
 
-    def test_main_records_the_verdict_for_the_agent_and_verifier(self):
-        with patch.object(supervisor, "supervise", side_effect=EvaluationError("simulator crashed")):
-            code = supervisor.main([
-                "--spec", str(self.spec_path), "--root", str(self.root),
-                "--results-dir", str(self.results), "--policy-source", str(POLICY), "--exit-when-done",
-            ])
-        self.assertEqual(code, 1)
-        self.assertEqual(json.loads((self.results / "supervisor.json").read_text()),
-                         {"status": "failed", "error": "simulator crashed"})
+    def test_main_records_failure_only_if_it_owns_the_destination(self):
+        args = ["--spec", str(self.spec_path), "--root", str(self.root),
+                "--results-dir", str(self.results), "--policy-source", str(POLICY), "--exit-when-done"]
+        self.spec_path.unlink()
+        self.assertEqual(supervisor.main(args), 1)
+        verdict = self.results / "supervisor.json"
+        self.assertEqual(json.loads(verdict.read_text())["status"], "failed")
+        previous = b'{"status":"completed","variants":[]}\n'
+        verdict.write_bytes(previous)
+        self.assertEqual(supervisor.main(args), 1)
+        self.assertEqual(verdict.read_bytes(), previous)
+
+    def test_two_standalone_runs_release_server_and_policy_after_delivery(self):
+        with socket.socket() as probe:
+            probe.bind(("127.0.0.1", 0))
+            port = probe.getsockname()[1]
+
+        def launch(command, **kwargs):
+            self.assertEqual(kwargs["env"]["HARBOR_ROBODOJO_BRIDGE_HOST"], "127.0.0.1")
+            program = (
+                "import os; from robodojo.direct.broker import Broker, make_server; "
+                "env = os.environ; broker = Broker(env['HARBOR_ROBODOJO_RESULTS']); "
+                "make_server(broker, env['HARBOR_ROBODOJO_BRIDGE_HOST'], "
+                "int(env['HARBOR_ROBODOJO_BRIDGE_PORT'])).serve_forever()"
+            )
+            process = subprocess.Popen([sys.executable, "-c", program], **kwargs)
+            self.addCleanup(process.kill)
+            self.servers.append(process)
+            return process
+
+        def observe():
+            with urllib.request.urlopen(f"http://127.0.0.1:{port}/observe", b'{"wait": 10}', timeout=12) as reply:
+                return json.load(reply)["status"]
+
+        with ThreadPoolExecutor(max_workers=1) as pool, patch.object(supervisor, "BRIDGE_PORT", port):
+            received = []
+
+            def run(command, **kwargs):
+                received.append(pool.submit(observe))
+                self.write_result(command, kwargs, native_result())
+
+            for attempt in ("first", "second"):
+                results = self.directory / attempt
+                verdict = supervisor.supervise(
+                    self.spec_path, self.root, results, POLICY, standalone=True,
+                    popen=launch, run=run,
+                )
+                self.assertEqual(verdict["status"], "completed")
+                self.assertEqual(received[-1].result(), "finished")
+                self.assertTrue((results / "broker" / "verdict-delivered").exists())
+                self.assertIsNotNone(self.servers[-1].poll())
+                self.assertFalse((self.root / "XPolicyLab" / "policy" / "HarborDirect").exists())
 
 
 if __name__ == "__main__":

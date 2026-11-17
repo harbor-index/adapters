@@ -15,6 +15,8 @@ from __future__ import annotations
 
 import argparse
 from collections.abc import Callable
+from contextlib import ExitStack
+import json
 import os
 from pathlib import Path
 import shutil
@@ -28,7 +30,7 @@ import urllib.request
 import uuid
 
 from ..catalog import XPOLICYLAB_REVISION
-from ..runtime import EvaluationError, TaskSpec, load_spec, read_json, write_json
+from ..runtime import EvaluationError, TaskSpec, load_spec, read_json, reserve_results, write_json
 
 POLICY_NAME = "HarborDirect"
 CHECKPOINT_LABEL = "direct"
@@ -76,48 +78,79 @@ def verify_image(root: Path, spec: TaskSpec) -> None:
         raise EvaluationError("Simulator entry point scripts/robodojo.sh is missing")
 
 
-def install_policy(root: Path, source: Path) -> Path:
+def install_policy(root: Path, source: Path, cleanup: ExitStack | None) -> Path:
     """Install the policy next to the native ones. It adds files and changes none."""
     target = root / "XPolicyLab" / "policy" / POLICY_NAME
     if target.exists() or target.is_symlink():
         raise EvaluationError(f"Policy directory already exists: {target}")
     if not target.parent.is_dir():
         raise EvaluationError("XPolicyLab policy directory is missing from the image")
-    shutil.copytree(source, target, ignore=shutil.ignore_patterns("__pycache__"))
+    target.mkdir()
+    if cleanup is not None:
+        cleanup.callback(shutil.rmtree, target)
+    shutil.copytree(source, target, dirs_exist_ok=True, ignore=shutil.ignore_patterns("__pycache__"))
     return target
 
 
-def wait_for_bridge(server: subprocess.Popen, port: int, timeout: float) -> None:
+def wait_for_bridge(server: subprocess.Popen, port: int, timeout: float, results_dir: Path) -> str:
     deadline = time.monotonic() + timeout
     while time.monotonic() < deadline:
         if server.poll() is not None:
             raise EvaluationError(f"Policy server exited early with code {server.returncode}")
         try:
             with urllib.request.urlopen(f"http://127.0.0.1:{port}/status", timeout=5) as response:
-                if response.status == 200:
-                    return
-        except (OSError, urllib.error.URLError):
-            time.sleep(1)
+                status = json.load(response)
+                marker = read_json(results_dir / "broker" / "attempt.json")
+                if status["attempt_id"] == marker["attempt_id"]:
+                    return marker["attempt_id"]
+        except (OSError, ValueError, KeyError, EvaluationError):
+            pass
+        time.sleep(1)
     raise EvaluationError("Policy server did not open the bridge in time")
+
+
+def _run_client(command: list[str], *, timeout: float, **kwargs: Any) -> None:
+    with subprocess.Popen(command, start_new_session=True, **kwargs) as client:
+        try:
+            code = client.wait(timeout=timeout)
+        except BaseException:
+            _terminate(client)
+            raise
+        if code:
+            raise subprocess.CalledProcessError(code, command)
 
 
 def supervise(
     spec_path: Path, root: Path, results_dir: Path, policy_source: Path,
-    *, popen: Callable[..., Any] = subprocess.Popen, run: Callable[..., Any] = subprocess.run,
-    wait: Callable[..., None] = wait_for_bridge,
+    *, popen: Callable[..., Any] = subprocess.Popen, run: Callable[..., Any] = _run_client,
+    wait: Callable[..., str] = wait_for_bridge, standalone: bool = False,
 ) -> dict[str, Any]:
-    """Run every native variant and return the provenance written on success."""
+    """Own one results directory, publish its verdict, then release standalone resources."""
     root, results_dir = root.resolve(), results_dir.resolve()
-    if results_dir.exists() and any(results_dir.iterdir()):
-        raise EvaluationError("Results directory must be empty at startup")
-    results_dir.mkdir(parents=True, exist_ok=True)
+    reserve_results(results_dir)
+    with ExitStack() as cleanup:
+        try:
+            verdict = _run_native(
+                spec_path, root, results_dir, policy_source, cleanup if standalone else None,
+                popen, run, wait,
+            )
+        except (EvaluationError, OSError) as exc:
+            write_json(results_dir / "supervisor.json", {"status": "failed", "error": str(exc)})
+            raise
+        write_json(results_dir / "supervisor.json", verdict)
+        return verdict
+
+
+def _run_native(
+    spec_path: Path, root: Path, results_dir: Path, policy_source: Path, cleanup: ExitStack | None,
+    popen: Callable[..., Any], run: Callable[..., Any], wait: Callable[..., str],
+) -> dict[str, Any]:
     logs = results_dir / "logs"
-    logs.mkdir()
     spec = load_spec(spec_path)
     if spec.mock:
         raise EvaluationError("The mock task runs in the mock service, not in the native simulator")
     verify_image(root, spec)
-    policy_dir = install_policy(root, policy_source)
+    policy_dir = install_policy(root, policy_source, cleanup)
 
     environment = os.environ.copy()
     environment.update(
@@ -125,6 +158,8 @@ def supervise(
         HARBOR_ROBODOJO_BRIDGE_PORT=str(BRIDGE_PORT),
         EVAL_NUM="native",
     )
+    if cleanup is not None:
+        environment["HARBOR_ROBODOJO_BRIDGE_HOST"] = "127.0.0.1"
     server_command = [
         "bash", str(root / "scripts" / "robodojo.sh"), "server",
         "--policy-dir", str(policy_dir), "--task", spec.task_id, "--ckpt", CHECKPOINT_LABEL,
@@ -137,8 +172,10 @@ def supervise(
             server_command, cwd=root, env=environment, stdout=server_log,
             stderr=subprocess.STDOUT, start_new_session=True,
         )
+        if cleanup is not None:
+            cleanup.callback(_stop_standalone_server, server, results_dir)
         try:
-            wait(server, BRIDGE_PORT, SERVER_START_TIMEOUT)
+            attempt_id = wait(server, BRIDGE_PORT, SERVER_START_TIMEOUT, results_dir)
             for variant in spec.variants:
                 run_id = f"harbor_{uuid.uuid4().hex}"
                 if native_result_path(root, variant.name, spec.seed, run_id).parent.exists():
@@ -158,7 +195,7 @@ def supervise(
                     with (logs / f"{variant.name}.log").open("w", encoding="utf-8") as log:
                         run(
                             command, cwd=root, env={**environment, "ROBODOJO_RUN_ID": run_id},
-                            stdout=log, stderr=subprocess.STDOUT, check=True, timeout=VARIANT_TIMEOUT,
+                            stdout=log, stderr=subprocess.STDOUT, timeout=VARIANT_TIMEOUT,
                         )
                 except (OSError, subprocess.SubprocessError) as exc:
                     raise EvaluationError(f"Native simulator client failed for {variant.name}: {exc}") from exc
@@ -175,28 +212,54 @@ def supervise(
             # Keep the broker reachable so that the agent can read the failure.
             raise
         except BaseException:
-            _terminate(server)
+            if cleanup is None:
+                _terminate(server)
             raise
     # The policy server keeps running so that the agent can read the final status.
     return {
-        "status": "completed", "task_id": spec.task_id, "dimension": spec.dimension,
+        "status": "completed", "attempt_id": attempt_id, "task_id": spec.task_id, "dimension": spec.dimension,
         "seed": spec.seed, "upstream_revision": spec.upstream_revision,
         "xpolicylab_revision": XPOLICYLAB_REVISION, "policy_name": POLICY_NAME,
         "variants": variants,
     }
 
 
-def _terminate(process: Any) -> None:
-    if process.poll() is not None:
+def _stop_standalone_server(server: subprocess.Popen, results_dir: Path) -> None:
+    # Give the waiting player time to receive the terminal HTTP response.
+    broker = results_dir / "broker"
+    try:
+        if (broker / "attempt.json").exists() and (results_dir / "supervisor.json").exists():
+            deadline = time.monotonic() + 30
+            while server.poll() is None and time.monotonic() < deadline:
+                if (broker / "verdict-delivered").exists() or (broker / "abort.json").exists():
+                    break
+                time.sleep(0.1)
+    finally:
+        _terminate(server)
+
+
+def _terminate(process: subprocess.Popen) -> None:
+    # Native launchers spawn children. Stop the whole session's process group.
+    if process.pid <= 1:
+        raise ValueError("Expected a child process group")
+    try:
+        os.killpg(process.pid, signal.SIGTERM)
+    except ProcessLookupError:
+        process.wait()
         return
-    # The server runs in its own session, so its group holds only its children.
-    if isinstance(process.pid, int) and process.pid > 1:
+    deadline = time.monotonic() + 5
+    while time.monotonic() < deadline:
+        process.poll()  # Reap the group leader if it has already exited.
         try:
-            os.killpg(process.pid, signal.SIGTERM)
+            os.killpg(process.pid, 0)
+        except ProcessLookupError:
             return
-        except OSError:
-            pass
-    process.terminate()
+        time.sleep(0.05)
+    try:
+        os.killpg(process.pid, signal.SIGKILL)
+    except ProcessLookupError:
+        pass
+    process.wait()
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -210,20 +273,20 @@ def main(argv: list[str] | None = None) -> int:
                         help="Exit instead of idling for artifact collection")
     args = parser.parse_args(argv)
     try:
-        verdict = supervise(args.spec, args.root, args.results_dir, args.policy_source)
+        supervise(args.spec, args.root, args.results_dir, args.policy_source, standalone=args.exit_when_done)
+        code = 0
     except (EvaluationError, OSError) as exc:
         print(f"RoboDojo Direct evaluation failed: {exc}", file=sys.stderr, flush=True)
-        verdict = {"status": "failed", "error": str(exc)}
-    try:
-        args.results_dir.mkdir(parents=True, exist_ok=True)
-        write_json(args.results_dir / "supervisor.json", verdict)
-    except OSError as exc:
-        print(f"Cannot write the supervisor verdict: {exc}", file=sys.stderr, flush=True)
+        code = 1
     if not args.exit_when_done:
         while True:
             time.sleep(3600)
-    return 0 if verdict["status"] == "completed" else 1
+    return code
 
 
 if __name__ == "__main__":
+    def stop(signum, frame):
+        raise SystemExit(128 + signum)
+
+    signal.signal(signal.SIGTERM, stop)
     raise SystemExit(main())

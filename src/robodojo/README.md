@@ -65,9 +65,10 @@ The model gets one tool, `robodojo_act`, and no shell, file, or image tools. An 
 | `history_window` | `0` | Number of most recent observations kept in the prompt; `0` keeps the whole episode. |
 | `max_invalid_responses` | `5` | Consecutive invalid answers before the scaffold holds both arms for one step. The hold is recorded as a scaffold action, not a model decision. |
 | `max_decisions_per_episode` | `0` | Safety limit; `0` is unlimited. Reaching it aborts the run. |
-| `max_cost_usd` | none | Safety limit. Reaching it aborts the run. It refuses to run if the model's price is unknown. |
+| `max_cost_usd` | none | After each response, abort before sending its action if the accumulated cost reaches the limit or the price is unknown. The provider may already have charged for that response. |
 | `temperature`, `reasoning_effort`, `max_output_tokens`, `model_seed` | none | Passed to the model API when set. |
 | `tool_choice` | `required` | Use `auto` for models that reject a forced tool call. |
+| `api_retries` | `4` | Number of additional attempts per completion. Set to zero for one attempt. The player records API attempts and successful model calls separately. |
 | `api_base`, `api_key_env` | none | Endpoint override and the name of the environment variable that holds the API key. |
 
 The model, the prompt hash, the contract version, and these settings are recorded in each trial's agent metadata. An aborted run has no reward: a limit that stops an episode early is never reported as a native failure.
@@ -75,7 +76,7 @@ The model, the prompt hash, the contract version, and these settings are recorde
 The metadata also records where the requests went, without credentials:
 
 - `endpoint.api_base` is the configured `api_base`, reduced to scheme, host, port, and path. User names, passwords, query strings, and API keys are never recorded.
-- `endpoint.environment` holds the `<PROVIDER>_API_BASE` and `<PROVIDER>_BASE_URL` variables of the model's provider prefix, when they are set and no `api_base` is configured.
+- `endpoint.environment` holds the `<PROVIDER>_API_BASE` and `<PROVIDER>_BASE_URL` variables for the model's provider when set without an explicit `api_base`. For an unprefixed model such as `gpt-4o`, LiteLLM resolves the provider.
 - `served` holds what the responses reported: the model identifiers that answered and, where LiteLLM states them, the provider and endpoint.
 
 For parity runs, set `api_base` explicitly. A redirect made in any other way, such as a provider variable with a different name or a proxy behind the same host, is only visible if it changes the served model identifier.
@@ -216,43 +217,29 @@ No parity experiments have run. `parity_experiment.json` is an empty array, not 
 
 RoboDojo's published results are for learned policies, and the GPT-as-Policy paper evaluates a different scaffold (a Codex agent with shell, image, and note tools) on a 60-case panel of 10 tasks. Neither is a baseline for this scaffold. Parity here means the same `DirectAgent`, model, prompt, settings, pinned sources, layout seed group, and episode counts, once outside Harbor and once through Harbor. Agree the subset and the number of runs with the Harbor team before spending on model calls. The adapter contract requires at least two runs per side.
 
-On the original side, the simulator half needs no Harbor code. In an installed checkout of the [pinned upstream repository](https://github.com/RoboDojo-Benchmark/RoboDojo/tree/f57e1633ffed59761bc8e568cfe7530c4b33381c), copy `src/robodojo/src/robodojo` to a directory such as `/opt/harbor-robodojo/robodojo`, copy `direct/policy` to `XPolicyLab/policy/HarborDirect`, and start the native server and client:
+For the original side, generate a fresh task with this adapter version. In the first terminal on the GPU host, activate the native RoboDojo environment and start its supervisor. Use the pinned upstream checkout with its assets and the two revision markers created by the image preparation script. Set `HARBOR_ROBODOJO_HOME` to the generated task's `environment/simulator` directory. It contains the matching spec, supervisor, and policy.
 
 ```bash
-export HARBOR_ROBODOJO_HOME=/opt/harbor-robodojo
-export HARBOR_ROBODOJO_RESULTS=/path/to/empty/results
-
-bash scripts/robodojo.sh server \
-  --policy-dir XPolicyLab/policy/HarborDirect --task stack_bowls --ckpt direct \
-  --policy-env RoboDojo --policy-port 19000 --bind-host 127.0.0.1 --action-type joint --seed 0
-
-env -u EVAL_NUM bash scripts/robodojo.sh client \
-  --task stack_bowls --policy-name HarborDirect \
-  --policy-host 127.0.0.1 --policy-port 19000 \
-  --env-cfg arx_x5 --seed 0 --ckpt direct --action-type joint --eval-num native
+export HARBOR_ROBODOJO_HOME=/absolute/path/to/generated-task/environment/simulator
+export HARBOR_ROBODOJO_RESULTS=/absolute/path/to/attempt-01-results
+PYTHONPATH="$HARBOR_ROBODOJO_HOME${PYTHONPATH:+:$PYTHONPATH}" python -m robodojo.direct.supervisor \
+  --root /absolute/path/to/RoboDojo --results-dir "$HARBOR_ROBODOJO_RESULTS" --exit-when-done
 ```
 
-Run the client again with `--task stack_bowls_random` for the second half of a Generalization task.
+The supervisor installs the policy for the attempt, runs each native variant, and serves the driver on loopback. At completion it waits up to 30 seconds for delivery of the final verdict, stops its policy server, and removes the policy it installed. Use a fresh results directory for each repetition. A pre-existing installation at `XPolicyLab/policy/HarborDirect` prevents startup.
 
-The model half is `robodojo.original`. It runs `DirectPlayer`, the same class that `DirectAgent` runs inside Harbor, so both sides share the prompt, the tool, the validation, the retries, and the limits. It needs the model client but not Harbor, and the bridge client is the same file, run in the driver's process:
+In a second terminal on the same host, run the model driver from the adapter directory. Use the same absolute spec and results paths as the supervisor and a separate empty output directory.
 
 ```bash
 cd src/robodojo
-uv run --extra original python -m robodojo.original \
+uv run --frozen --extra original python -m robodojo.original \
   --model provider/model-name --api-base https://api.provider.example/v1 \
-  --bridge-url http://127.0.0.1:19100 --output /path/to/new-directory \
-  --spec /path/to/task_spec.json --results-dir /path/to/results
+  --bridge-url http://127.0.0.1:19100 --output /absolute/path/to/attempt-01-player \
+  --spec /absolute/path/to/generated-task/environment/simulator/task_spec.json \
+  --results-dir /absolute/path/to/attempt-01-results
 ```
 
-Every `DirectAgent` option of the table above is a flag of the driver, for example `--image-history 1`, with the same default. The API key is read from the environment. The driver writes `robodojo_direct/decisions.jsonl` and `robodojo_direct/run.json` as the Harbor agent does. With `--spec` and `--results-dir` it also validates the finished run with the checks of the Harbor verifier and writes `original_side.json`, which holds the provenance, the totals of every native `_result.json` as the native code wrote them, and the comparable reward. A failed or incomplete run ends with a nonzero exit code and no result.
-
-The driver stops when the bridge reports that the native run is finished. The bridge learns that from `supervisor.json` in the results directory, which the two native commands above do not write. `robodojo.direct.supervisor` does: it starts those same native commands for every variant, copies each `_result.json` to `native/<variant>/`, and writes the verdict. It uses no Harbor code. Outside the image it needs the two revision marker files that `scripts/prepare_image.sh` writes into the checkout, `HARBOR_ROBODOJO_HOME` on `PYTHONPATH`, no existing `XPolicyLab/policy/HarborDirect` directory, and the `task_spec.json` of the generated task:
-
-```bash
-PYTHONPATH="$HARBOR_ROBODOJO_HOME" python -m robodojo.direct.supervisor \
-  --spec /path/to/task_spec.json --root "$PWD" --results-dir "$HARBOR_ROBODOJO_RESULTS" \
-  --policy-source "$HARBOR_ROBODOJO_HOME/robodojo/direct/policy" --exit-when-done
-```
+Both sides use `DirectPlayer` with the same prompt, tool, and option defaults. The driver reads its API key from the environment. Before inference, it matches the live bridge's attempt ID to the results directory. Before grading, it matches accepted requests and episode ends in the player's log to the broker ledger. After successful verification, `original_side.json` records the attempt ID, model provenance, native totals, and comparable reward.
 
 No original-side command has run against the real simulator. On the CPU mock, a Harbor trial in Docker and the driver outside Harbor were run with the same seed and the fake model endpoint: the recorded provenance and counters were identical, the six decisions were identical, and both rewards were 1.0. This checks that the two sides execute the same loop. It is not a parity result.
 

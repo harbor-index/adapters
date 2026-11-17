@@ -25,7 +25,7 @@ from ..catalog import MOCK_LABEL, MOCK_POLICY_NAME
 from ..direct.broker import Broker, make_server
 from ..direct.episode import DirectAbort, run_episode
 from ..direct.policy.model import Model
-from ..runtime import EvaluationError, load_spec, write_json
+from ..runtime import EvaluationError, ResultsDirectoryError, load_spec, reserve_results, write_json
 from .scene import MockEnv, MockKinematics
 
 BRIDGE_PORT = 19100
@@ -34,9 +34,7 @@ BRIDGE_PORT = 19100
 def run(spec_path: Path, results_dir: Path, *, host: str = "0.0.0.0", port: int = BRIDGE_PORT) -> dict[str, Any]:
     """Serve the bridge and play every mock episode. Returns the final verdict."""
     results_dir = results_dir.resolve()
-    if results_dir.exists() and any(results_dir.iterdir()):
-        raise EvaluationError("Results directory must be empty at startup")
-    results_dir.mkdir(parents=True, exist_ok=True)
+    reserve_results(results_dir)
     spec = load_spec(spec_path)
     if not spec.mock:
         raise EvaluationError("The mock service only runs the mock task")
@@ -73,7 +71,8 @@ def run(spec_path: Path, results_dir: Path, *, host: str = "0.0.0.0", port: int 
             "name": variant.name, "episodes": variant.episodes, "run_id": f"mock_{uuid.uuid4().hex}",
         })
     return {
-        "status": "completed", "mock": True, "task_id": spec.task_id, "dimension": spec.dimension,
+        "status": "completed", "attempt_id": model.broker.attempt_id, "mock": True,
+        "task_id": spec.task_id, "dimension": spec.dimension,
         "seed": spec.seed, "upstream_revision": spec.upstream_revision,
         "xpolicylab_revision": MOCK_LABEL, "policy_name": MOCK_POLICY_NAME, "variants": variants,
     }
@@ -83,6 +82,9 @@ def evaluate(spec_path: Path, results_dir: Path, *, host: str = "0.0.0.0", port:
     """Run the mock evaluation and always leave a verdict for the bridge to report."""
     try:
         verdict = run(spec_path, results_dir, host=host, port=port)
+    except ResultsDirectoryError as exc:
+        print(f"Cannot start mock evaluation: {exc}", file=sys.stderr, flush=True)
+        return {"status": "failed", "mock": True, "error": str(exc)}
     except DirectAbort as exc:  # The agent side stopped the run.
         verdict = {"status": "failed", "mock": True, "error": f"aborted: {exc}"}
     except (EvaluationError, OSError) as exc:
@@ -90,7 +92,6 @@ def evaluate(spec_path: Path, results_dir: Path, *, host: str = "0.0.0.0", port:
     if verdict["status"] != "completed":
         print(f"RoboDojo mock evaluation failed: {verdict['error']}", file=sys.stderr, flush=True)
     try:
-        results_dir.mkdir(parents=True, exist_ok=True)
         write_json(results_dir / "supervisor.json", verdict)
     except OSError as exc:
         print(f"Cannot write the mock verdict: {exc}", file=sys.stderr, flush=True)

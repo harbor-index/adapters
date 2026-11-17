@@ -137,7 +137,6 @@ class FakeOpenAI:
         self.flawed_first_answer = flawed_first_answer
         self.requests: list[dict[str, Any]] = []
         self.rejections: list[str] = []
-        self._targets: dict[str, tuple[float, float]] = {}
         self._lock = threading.Lock()
 
     def handle(self, path: str, authorization: str | None, raw: bytes) -> tuple[int, dict[str, Any]]:
@@ -153,11 +152,9 @@ class FakeOpenAI:
             body = json.loads(raw)
             check_request(body)
             observation, pictures = newest_observation(body["messages"])
+            _expect(bool(pictures), "The observation has no pictures")
+            decision = solver.plan(observation, solver.locate(pictures[0]))
             with self._lock:
-                if observation["step_id"] == 0:
-                    _expect(bool(pictures), "The first observation of an episode has no pictures")
-                    self._targets = solver.locate(pictures[0])
-                decision = solver.plan(observation, self._targets)
                 if self.flawed_first_answer and not self.requests:
                     # Farther than the action contract allows; the agent must hand it back.
                     decision["target"]["left"]["position"][2] += 0.5

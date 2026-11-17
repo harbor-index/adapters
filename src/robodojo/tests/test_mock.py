@@ -164,6 +164,12 @@ class IsolationTests(unittest.TestCase):
 
     def test_mock_results_cannot_be_graded_or_aggregated_as_benchmark_results(self):
         output = self.run_mock(self.directory / "run")
+        verdict_path = output / "results" / "supervisor.json"
+        previous = verdict_path.read_bytes()
+        with contextlib.redirect_stderr(io.StringIO()):
+            repeat = service.evaluate(output / "task_spec.json", output / "results")
+        self.assertEqual(repeat["status"], "failed")
+        self.assertEqual(verdict_path.read_bytes(), previous)
         report = json.loads((output / "verifier" / "evaluation.json").read_text())
         self.assertEqual((report["mock"], report["policy_name"], report["upstream_revision"]),
                          (True, "HarborDirectMock", "mock"))
@@ -453,6 +459,23 @@ class OpenAIWireFormatTests(unittest.TestCase):
         self.assertEqual(retry[2]["tool_calls"][0]["id"], retry[3]["tool_call_id"])
         self.assertIn("rejected", retry[3]["content"])
 
+        # Replay A's later request around B's first frame on a shared fake server.
+        first, later = [], []
+        for body in self.fake.requests:
+            observation, _ = fake_openai.newest_observation(body["messages"])
+            (first if observation["step_id"] == 0 else later).append(body)
+        fake = fake_openai.FakeOpenAI("test")
+
+        def answer(body):
+            code, reply = fake.handle("/v1/chat/completions", "Bearer test", json.dumps(body).encode())
+            self.assertEqual(code, 200)
+            return reply["choices"][0]["message"]["tool_calls"][0]["function"]["arguments"]
+
+        answer(first[0])
+        before = answer(later[0])
+        answer(first[-1])
+        self.assertEqual(answer(later[0]), before)
+
     def test_a_refused_api_key_fails_the_run_without_a_reward(self):
         with self.assertRaisesRegex(DirectRunError, "Model API failed"):
             self.play("wrong-key")
@@ -461,6 +484,25 @@ class OpenAIWireFormatTests(unittest.TestCase):
         self.assertEqual(self.context.metadata["robodojo_direct"]["stats"]["decisions"], 0)
         with self.assertRaises(EvaluationError):
             verify(self.spec_path, self.directory / "results", self.directory / "verifier")
+
+    def test_zero_retries_sends_one_http_request_on_server_error(self):
+        with mock.patch.object(self.fake, "handle", return_value=(500, {"error": {"message": "busy"}})) as post:
+            with self.assertRaisesRegex(DirectRunError, "after 1 attempts"):
+                self.play("fake-key-for-wire-test")
+        self.assertEqual(post.call_count, 1)
+        stats = self.context.metadata["robodojo_direct"]["stats"]
+        self.assertEqual((stats["api_attempts"], stats["model_calls"]), (1, 0))
+
+    def test_unprefixed_model_records_the_endpoint_that_received_the_request(self):
+        with mock.patch.dict("os.environ", {"OPENAI_BASE_URL": self.api_base}), \
+                mock.patch.object(self.fake, "handle", return_value=(500, {"error": {"message": "busy"}})) as post:
+            agent = DirectAgent(logs_dir=self.directory, model_name="gpt-4o", api_retries=0,
+                                api_key_env=self.KEY_VARIABLE)
+            with mock.patch.dict("os.environ", {self.KEY_VARIABLE: "throwaway"}), \
+                    self.assertRaises(DirectRunError):
+                asyncio.run(agent.player._complete([{"role": "user", "content": "test"}]))
+            self.assertEqual(post.call_count, 1)
+            self.assertEqual(agent.provenance()["endpoint"]["environment"]["OPENAI_BASE_URL"], self.api_base)
 
     def test_malformed_requests_are_refused_like_the_real_endpoint_would(self):
         tool = {"type": "function", "function": {"name": "robodojo_act", "parameters": {"type": "object"}}}

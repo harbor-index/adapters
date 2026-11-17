@@ -7,6 +7,7 @@ import re
 import tempfile
 import tomllib
 import unittest
+from unittest.mock import patch
 
 from robodojo.adapter import RoboDojoAdapter
 from robodojo.catalog import DIMENSION_TASKS, UPSTREAM_REVISION
@@ -32,6 +33,20 @@ class AdapterTests(unittest.TestCase):
             str(path.relative_to(directory)): path.read_bytes()
             for path in directory.rglob("*") if path.is_file()
         }
+
+    def test_task_published_after_preflight_survives_without_overwrite(self):
+        first = RoboDojoAdapter(self.output, mock=True, seed=1)
+        second = RoboDojoAdapter(self.output, mock=True, seed=2)
+        fill = second._fill_mock
+
+        def publish_first(staging):
+            first.run()
+            fill(staging)
+
+        with patch.object(second, "_fill_mock", publish_first), self.assertRaises(OSError):
+            second.run()
+        spec = self.output / "mock-reach-targets" / "tests" / "task_spec.json"
+        self.assertEqual(json.loads(spec.read_text())["seed"], 1)
 
     def test_full_generation_preserves_canonical_counts_and_episode_protocol(self):
         tasks = self.generate(seed=2)

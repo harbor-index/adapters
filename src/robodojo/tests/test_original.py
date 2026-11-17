@@ -10,6 +10,7 @@ import contextlib
 import io
 import json
 from pathlib import Path
+import shutil
 import socket
 import subprocess
 import sys
@@ -157,6 +158,42 @@ class OriginalSideTests(unittest.TestCase):
         self.assertEqual(code, 1)
         self.assertIn("did not become reachable", errors)
 
+    def test_finished_bridge_and_crossed_results_cannot_earn_a_score(self):
+        url_a, results_a = self.simulator("a")
+        valid = self.directory / "played-a"
+        self.assertEqual(self.drive(url_a, results_a, valid)[0], 0)
+        calls = len(self.fake.requests)
+        url_b, results_b = self.simulator("b")
+
+        for name, bridge, results, reason in (
+            ("replay", url_a, results_a, "live attempt"),
+            ("crossed", url_b, results_a, "different attempts"),
+        ):
+            with self.subTest(name=name):
+                out = self.directory / name
+                code, _, error = self.drive(bridge, results, out)
+                self.assertEqual(code, 1)
+                self.assertIn(reason, error)
+                self.assertEqual(len(self.fake.requests), calls)
+                self.assertFalse((out / "original_side.json").exists())
+                self.assertFalse((out / "verifier" / "reward.json").exists())
+
+        # A rejected mismatch leaves both the old evidence and the fresh bridge usable.
+        out_b = self.directory / "played-b"
+        self.assertEqual(self.drive(url_b, results_b, out_b)[0], 0)
+        mismatch = self.directory / "swapped" / "robodojo_direct"
+        mismatch.mkdir(parents=True)
+        shutil.copy(out_b / "robodojo_direct" / "attempt.json", mismatch)
+        shutil.copy(valid / "robodojo_direct" / "decisions.jsonl", mismatch)
+        with self.assertRaisesRegex(original.EvaluationError, "actions or episode IDs"):
+            original.grade(self.spec_path, results_b, mismatch.parent)
+        self.assertFalse((mismatch.parent / "verifier" / "reward.json").exists())
+        verdict_path = results_b / "supervisor.json"
+        verdict = json.loads(verdict_path.read_text())
+        verdict_path.write_text(json.dumps({**verdict, "attempt_id": "different-attempt"}))
+        with self.assertRaisesRegex(original.EvaluationError, "Supervisor verdict"):
+            original.grade(self.spec_path, results_b, out_b)
+
     def test_command_line_is_checked_before_anything_runs(self):
         for arguments in (
             ["--spec", str(self.spec_path)],  # Without its results directory.
@@ -183,7 +220,8 @@ class SharedPlayerTests(unittest.TestCase):
                 logs_dir=Path(directory), model_name="fake/model", image_history=2, history_window=3,
                 max_cost_usd=1.5, save_images=True,
             )
-            player = DirectPlayer("fake/model", Path(directory) / "player", image_history=2, history_window=3)
+            player = DirectPlayer("fake/model", Path(directory) / "player", image_history=2, history_window=3,
+                                  max_cost_usd=1.5)
             self.assertIsInstance(agent.player, DirectPlayer)
             self.assertEqual(agent.player.settings, player.settings)
             self.assertEqual((agent.player.max_cost_usd, agent.player.save_images), (1.5, True))

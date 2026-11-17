@@ -13,6 +13,7 @@ leaves no reward.
 from __future__ import annotations
 
 import argparse
+from collections.abc import Iterator
 import json
 from pathlib import Path
 import sys
@@ -24,21 +25,18 @@ from .runtime import EvaluationError, load_spec, read_json, validate_result, wri
 POLICY_NAME = "HarborDirect"
 
 
-def read_ledger(path: Path) -> list[dict[str, Any]]:
+def ledger_entries(path: Path) -> Iterator[dict[str, Any]]:
     try:
-        lines = path.read_text(encoding="utf-8").splitlines()
+        with path.open(encoding="utf-8") as stream:
+            for line in stream:
+                record = json.loads(line)
+                if not isinstance(record, dict):
+                    raise EvaluationError("Broker ledger entries must be objects")
+                yield record
+    except ValueError as exc:
+        raise EvaluationError(f"Broker ledger is corrupt: {exc}") from exc
     except OSError as exc:
         raise EvaluationError(f"Cannot read the broker ledger: {exc}") from exc
-    episodes = []
-    for line in lines:
-        try:
-            record = json.loads(line)
-        except ValueError as exc:
-            raise EvaluationError(f"Broker ledger is corrupt: {exc}") from exc
-        if not isinstance(record, dict):
-            raise EvaluationError("Broker ledger entries must be objects")
-        episodes.append(record)
-    return episodes
 
 
 def check_variant(native: dict[str, Any], ledger: list[dict[str, Any]], variant: str, seed: int) -> dict[str, int]:
@@ -104,7 +102,7 @@ def verify(spec_path: Path, results_dir: Path, output_dir: Path) -> dict[str, fl
         for item in reported
     ] != wanted:
         raise EvaluationError("Simulator run does not cover the complete native protocol")
-    ledger = read_ledger(results_dir / "broker" / "episodes.jsonl")
+    ledger = list(ledger_entries(results_dir / "broker" / "episodes.jsonl"))
     successes, total_score, total_episodes = 0, 0.0, 0
     variants = []
     for variant, item in zip(spec.variants, reported, strict=True):

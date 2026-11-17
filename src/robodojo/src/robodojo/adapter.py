@@ -114,7 +114,7 @@ class RoboDojoAdapter:
                     self._fill_native(staging, name, f"robodojo/{target.name}")
                 for script in staging.rglob("*.sh"):
                     script.chmod(0o755)
-                if target.exists():
+                if self.overwrite and target.exists():
                     shutil.rmtree(target)
                 staging.rename(target)
         return targets

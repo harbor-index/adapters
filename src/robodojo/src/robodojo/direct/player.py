@@ -19,6 +19,7 @@ and no task-specific hints. See ``prompts.py`` for the exact prompt.
 from __future__ import annotations
 
 import asyncio
+from collections import deque
 from collections.abc import Awaitable, Callable, Sequence
 import inspect
 import json
@@ -36,7 +37,7 @@ from .contract import CONTRACT_VERSION, TOOL_NAME, DecisionError, hold_decision,
 from .prompts import PROMPT_SHA256, build_messages, observation_text, tool_definition
 
 AGENT_NAME = "robodojo-direct"
-AGENT_VERSION = "0.2.1"
+AGENT_VERSION = "0.2.2"
 # Seconds to wait for the simulator's bridge before giving up.
 SETUP_TIMEOUT_SEC = 1740.0
 
@@ -103,6 +104,8 @@ def public_endpoint(url: Any) -> str | None:
         return "unrecognized"
     if not host:
         return "unrecognized"
+    if ":" in host:
+        host = f"[{host}]"  # Preserve the IPv6 port boundary.
     scheme = f"{parts.scheme.lower()}://" if parts.scheme else ""
     return f"{scheme}{host}{f':{port}' if port else ''}{parts.path.rstrip('/')}"
 
@@ -178,6 +181,11 @@ class DirectPlayer:
             "max_output_tokens": max_output_tokens,
             "model_seed": model_seed,
             "tool_choice": tool_choice,
+            "max_cost_usd": max_cost_usd,
+            "api_retries": api_retries,
+            "api_timeout_sec": api_timeout_sec,
+            "wait_sec": wait_sec,
+            "max_idle_sec": max_idle_sec,
         }
         self.max_cost_usd = max_cost_usd
         self.api_base = api_base
@@ -198,7 +206,7 @@ class DirectPlayer:
         self._sleep = asyncio.sleep
         self.logger = logger or logging.getLogger(__name__)
         self.stats: dict[str, Any] = {
-            "episodes": 0, "decisions": 0, "model_calls": 0, "invalid_responses": 0,
+            "episodes": 0, "decisions": 0, "model_calls": 0, "api_attempts": 0, "invalid_responses": 0,
             "fallback_holds": 0, "input_tokens": 0, "cached_tokens": 0, "output_tokens": 0,
             "cost_usd": 0.0, "cost_known": True,
         }
@@ -210,12 +218,16 @@ class DirectPlayer:
         Without an explicit ``api_base`` the provider's own environment variables
         can redirect the requests, so their values are part of the identity. Only
         the usual ``<PROVIDER>_API_BASE`` and ``<PROVIDER>_BASE_URL`` names of the
-        model's provider prefix are read; API keys are never recorded.
+        resolved provider are read; API keys are never recorded.
         """
         overrides: dict[str, str | None] = {}
-        prefix, separator, _ = self.model_name.partition("/")
-        if self.api_base is None and separator:
-            stem = re.sub(r"[^A-Z0-9]", "_", prefix.upper())
+        if self.api_base is None:
+            provider, separator, _ = self.model_name.partition("/")
+            if not separator:
+                from litellm import get_llm_provider
+
+                _, provider, _, _ = get_llm_provider(self.model_name)
+            stem = re.sub(r"[^A-Z0-9]", "_", provider.upper())
             for name in (f"{stem}_API_BASE", f"{stem}_BASE_URL"):
                 if os.environ.get(name):
                     overrides[name] = public_endpoint(os.environ[name])
@@ -291,7 +303,7 @@ class DirectPlayer:
             "tool_choice": self.settings["tool_choice"], "timeout": self.api_timeout_sec,
             # One decision per turn. Providers without this switch drop it, so
             # _parse still rejects any answer that is not exactly one call.
-            "parallel_tool_calls": False, "drop_params": True,
+            "parallel_tool_calls": False, "drop_params": True, "max_retries": 0,
         }
         for key, option in (
             ("temperature", "temperature"), ("reasoning_effort", "reasoning_effort"),
@@ -308,6 +320,7 @@ class DirectPlayer:
             arguments["api_key"] = key
         # Retrying is safe: physics is paused and nothing was sent to the robot.
         for attempt in range(self.api_retries + 1):
+            self.stats["api_attempts"] += 1
             try:
                 response = await self._completion_fn(**arguments)
                 break
@@ -389,15 +402,14 @@ class DirectPlayer:
         """Ask the model until one decision is accepted, then return its outcome."""
         invalid = 0
         while True:
-            reason = self._check_budget()
-            if reason is not None:
-                await self._abort(bridge, reason)
-                raise DirectRunError(f"Run stopped: {reason}")
             started = time.monotonic()
             response = await self._complete(build_messages(
                 turns, image_history=self.settings["image_history"],
                 history_window=self.settings["history_window"],
             ))
+            reason = self._check_budget()
+            if reason is not None:
+                raise DirectRunError(f"Run stopped: {reason}")
             turn, decision, error = self._parse(response)
             result = None
             if error is None:
@@ -455,14 +467,13 @@ class DirectPlayer:
 
     # ----- run ------------------------------------------------------------
 
-    async def setup(self, bridge: Bridge, timeout_sec: float = SETUP_TIMEOUT_SEC) -> None:
+    async def setup(self, bridge: Bridge, timeout_sec: float = SETUP_TIMEOUT_SEC) -> dict[str, Any]:
         """Wait until the broker in the simulator answers."""
         self.work_dir.mkdir(parents=True, exist_ok=True)
         deadline = time.monotonic() + timeout_sec
         while True:
             try:
-                await self._bridge(bridge, "status")
-                return
+                return await self._bridge(bridge, "status")
             except DirectRunError as error:
                 if time.monotonic() >= deadline:
                     raise DirectRunError(f"Simulator bridge did not become reachable: {error}") from error
@@ -470,11 +481,19 @@ class DirectPlayer:
 
     async def _episode(self, bridge: Bridge, result: dict[str, Any]) -> None:
         turns: list[dict[str, Any]] = []
+        image_limit = self.settings["image_history"]
+        if self.settings["history_window"]:
+            image_limit = min(image_limit, self.settings["history_window"])
+        recent_images: deque[dict[str, Any]] = deque()
         decisions = 0
         limit = self.settings["max_decisions_per_episode"]
         while True:
             observation, images = await self._fetch(bridge, result)
-            turns.append({"kind": "observation", "text": observation_text(observation), "images": images})
+            turn = {"kind": "observation", "text": observation_text(observation), "images": images}
+            turns.append(turn)
+            recent_images.append(turn)
+            if len(recent_images) > image_limit:
+                del recent_images.popleft()["images"]
             if limit and decisions >= limit:
                 reason = f"decision limit of {limit} per episode reached"
                 await self._abort(bridge, reason)

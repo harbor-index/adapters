@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+from itertools import zip_longest
 import json
 from pathlib import Path
 import sys
@@ -31,7 +32,7 @@ from typing import Any
 
 from .direct.player import DirectPlayer, DirectRunError, LocalBridge, SETUP_TIMEOUT_SEC
 from .runtime import EvaluationError, load_spec, read_json, write_json
-from .verifier import verify
+from .verifier import ledger_entries, verify
 
 DEFAULT_BRIDGE_URL = "http://127.0.0.1:19100"
 # Player options on the command line. Defaults are the player's own, so the
@@ -46,23 +47,73 @@ OPTIONS: dict[str, type] = {
 
 
 def play(
-    model: str, bridge_url: str, output: Path, *, setup_timeout_sec: float = SETUP_TIMEOUT_SEC,
+    model: str, bridge_url: str, output: Path, *, results_dir: Path | None = None,
+    setup_timeout_sec: float = SETUP_TIMEOUT_SEC,
     **options: Any,
 ) -> dict[str, Any]:
     """Run the player against a bridge and return its provenance and counters."""
     player = DirectPlayer(model, output / "robodojo_direct", **options)
+    player.work_dir.mkdir(parents=True)  # Exclusively reserve this invocation's player log.
     bridge = LocalBridge(bridge_url, output / "bridge")
 
     async def run() -> None:
-        await player.setup(bridge, setup_timeout_sec)
+        status = await player.setup(bridge, setup_timeout_sec)
+        if status.get("run") != "running" or status.get("aborted"):
+            raise DirectRunError("The bridge does not have a live attempt")
+        attempt_id = status.get("attempt_id")
+        if not isinstance(attempt_id, str) or not attempt_id:
+            raise DirectRunError("Missing bridge attempt ID. Regenerate the simulator task.")
+        if results_dir is not None:
+            check_attempt(results_dir, attempt_id)
+        write_json(player.work_dir / "attempt.json", {"attempt_id": attempt_id})
         await player.run(bridge)
 
     asyncio.run(run())
     return player.summary()
 
 
+def check_attempt(results_dir: Path, attempt_id: str) -> None:
+    if read_json(results_dir / "broker" / "attempt.json").get("attempt_id") != attempt_id:
+        raise EvaluationError("Bridge and results directory belong to different attempts")
+
+
+def check_player_ledger(results_dir: Path, player_log: Path) -> None:
+    """Match accepted decisions and episode ends in order, including scaffold holds."""
+    def player_events():
+        if player_log.exists():
+            for row in ledger_entries(player_log):
+                if "episode_end" in row:
+                    end = row["episode_end"]
+                    yield end["episode_index"], "end", end["episode_id"]
+                elif row.get("error") is None:
+                    yield row["episode_index"], "act", row["request_id"]
+
+    def broker_events():
+        directory = results_dir / "broker"
+        for episode in ledger_entries(directory / "episodes.jsonl"):
+            if episode["decisions"] == 0:
+                continue  # No player action or act response for this native episode.
+            index = episode["episode_index"]
+            count = 0
+            for row in ledger_entries(directory / "decisions" / f"{index:04d}.jsonl"):
+                if row["event"] == "accepted":
+                    count += 1
+                    yield index, "act", row["request_id"]
+            if count != episode["decisions"]:
+                raise EvaluationError("Incomplete broker decision ledger")
+            yield index, "end", episode["episode_id"]
+
+    if any(player != broker for player, broker in zip_longest(player_events(), broker_events())):
+        raise EvaluationError("Player actions or episode IDs do not match the broker ledger")
+
+
 def grade(spec_path: Path, results_dir: Path, output: Path) -> dict[str, Any]:
     """Validate the native results and return them next to the comparable reward."""
+    attempt_id = read_json(output / "robodojo_direct" / "attempt.json")["attempt_id"]
+    check_attempt(results_dir, attempt_id)
+    if read_json(results_dir / "supervisor.json").get("attempt_id") != attempt_id:
+        raise EvaluationError("Supervisor verdict belongs to a different attempt")
+    check_player_ledger(results_dir, output / "robodojo_direct" / "decisions.jsonl")
     verify(spec_path, results_dir, output / "verifier")
     evaluation = read_json(output / "verifier" / "evaluation.json")
     native = {}
@@ -98,15 +149,19 @@ def main(argv: list[str] | None = None) -> int:
         name: getattr(args, name) for name in (*OPTIONS, "save_images") if getattr(args, name) is not None
     }
     try:
+        if args.spec is not None:
+            load_spec(args.spec)
         direct = play(
-            args.model, args.bridge_url, output, setup_timeout_sec=args.setup_timeout_sec, **options,
+            args.model, args.bridge_url, output, results_dir=args.results_dir,
+            setup_timeout_sec=args.setup_timeout_sec, **options,
         )
     except ValueError as error:
         parser.error(str(error))
-    except DirectRunError as error:
+    except (DirectRunError, EvaluationError, OSError) as error:
         print(f"Original-side run failed and has no result: {error}", file=sys.stderr)
         return 1
-    report: dict[str, Any] = {"runner": "original", "direct": direct}
+    attempt = read_json(output / "robodojo_direct" / "attempt.json")
+    report: dict[str, Any] = {"runner": "original", "attempt_id": attempt["attempt_id"], "direct": direct}
     if args.spec is not None:
         try:
             report.update(grade(args.spec, args.results_dir, output))

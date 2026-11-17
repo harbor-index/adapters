@@ -1,6 +1,6 @@
 [project]
 name = "harbor-robodojo-adapter"
-version = "0.2.1"
+version = "0.2.2"
 description = "Draft Harbor adapter for RoboDojo simulation tasks controlled by a vision model"
 readme = "README.md"
 authors = [{ name = "Jia Guo", email = "jia@green.microsoft.com" }]

@@ -25,7 +25,7 @@ def main() -> None:
         parser.error("--assets-dir is required unless --mock is given")
     try:
         tasks = RoboDojoAdapter(**vars(args)).run()
-    except (ValueError, FileExistsError) as exc:
+    except (ValueError, OSError) as exc:
         parser.error(str(exc))
     kind = "mock task (not a benchmark task)" if args.mock else "RoboDojo tasks"
     print(f"Generated {len(tasks)} {kind} in {args.output_dir}")

@@ -300,6 +300,29 @@ class LifecycleTests(unittest.TestCase):
             self.run_agent(agent)
         self.assertIsNone(self.context.cost_usd)
 
+    def test_final_response_over_budget_never_reaches_the_robot(self):
+        self.simulator(episodes=1, step_lim=1, succeed=lambda layout: False)
+        agent = self.agent(lambda messages: tool_response(hold(current_observation(messages))),
+                           max_cost_usd=0.5, cost_fn=lambda response: 1.0)
+        with self.assertRaisesRegex(DirectRunError, "spending limit"):
+            self.run_agent(agent)
+        self.assertEqual(self.context.cost_usd, 1.0)
+        self.assertFalse((self.results / "broker" / "decisions").exists())
+        self.assertTrue((self.results / "broker" / "abort.json").exists())
+
+    def test_old_frames_are_released_even_with_full_text_history(self):
+        self.simulator(episodes=1, step_lim=12, succeed=lambda layout: False)
+        retained = []
+
+        def render(turns, **options):
+            retained.append(sum(len(turn.get("images", {})) for turn in turns))
+            return build_messages(turns, **options)
+
+        with mock.patch("robodojo.direct.player.build_messages", side_effect=render):
+            self.run_agent(self.agent(lambda messages: tool_response(hold(current_observation(messages)))))
+        self.assertEqual(retained, [3, 3, 3])
+        self.assertGreater(len(self.prompts[-1]["messages"]), len(self.prompts[0]["messages"]))
+
     def test_decision_limit_aborts_the_run(self):
         self.simulator(step_lim=30, succeed=lambda layout: False)
         agent = self.agent(
@@ -399,6 +422,7 @@ class AgentConfigurationTests(unittest.TestCase):
                     self.assertNotIn("hunter2", text)
                     self.assertNotIn("sk-secret", text)
             self.assertEqual(public_endpoint("localhost:8000/v1/"), "localhost:8000/v1")
+            self.assertEqual(public_endpoint("http://[::1]:8000/v1/"), "http://[::1]:8000/v1")
             self.assertEqual(public_endpoint("https://"), "unrecognized")
             self.assertEqual(public_endpoint("http://host:port/"), "unrecognized")
             self.assertIsNone(public_endpoint(None))
