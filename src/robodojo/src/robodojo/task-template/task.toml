@@ -14,6 +14,11 @@ dimension = "$dimension"
 seed = $seed
 control_mode = "direct-eef"
 validation_status = "draft-not-gpu-validated"
+# Provisional limits of the simulator service, enforced in docker-compose.yaml.
+simulator_cpus = $simulator_cpus
+simulator_memory_mb = $simulator_memory_mb
+simulator_storage_mb = $simulator_storage_mb
+simulator_gpus = $simulator_gpus
 
 # The whole 50-episode evaluation runs while the agent acts. This budget is
 # provisional: no wall time has been measured yet.
@@ -32,13 +37,14 @@ memory_mb = 2048
 storage_mb = 10240
 gpus = 0
 
-# Resources of the simulator service; the agent container itself is small.
+# Harbor applies these to the agent container, which only runs the bridge
+# client. The simulator service has its own limits in docker-compose.yaml.
 [environment]
 build_timeout_sec = 1200.0
-cpus = 8
-memory_mb = 65536
-storage_mb = 307200
-gpus = 1
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
 
 [[artifacts]]
 source = "/harbor-robodojo/results"

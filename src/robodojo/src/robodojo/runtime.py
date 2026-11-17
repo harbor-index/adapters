@@ -12,7 +12,7 @@ import math
 from pathlib import Path
 from typing import Any
 
-from .catalog import DIMENSION_TASKS, UPSTREAM_REVISION
+from .catalog import DIMENSION_TASKS, MOCK_TASK_ID, UPSTREAM_REVISION, mock_task_spec
 
 
 class EvaluationError(RuntimeError):
@@ -32,6 +32,8 @@ class TaskSpec:
     seed: int
     upstream_revision: str
     variants: tuple[Variant, ...]
+    # True only for the CPU mock, which is not a benchmark task.
+    mock: bool = False
 
 
 def _unique_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
@@ -61,8 +63,32 @@ def read_json(path: Path) -> dict[str, Any]:
     return value
 
 
+def _load_mock_spec(value: dict[str, Any]) -> TaskSpec:
+    """Accept only the exact mock specification, with a free episode count."""
+    seed, variants = value.get("seed"), value.get("variants")
+    if type(seed) is not int or seed < 0:
+        raise EvaluationError("Task seed must be a nonnegative integer")
+    episodes = variants[0].get("episodes") if (
+        isinstance(variants, list) and len(variants) == 1 and isinstance(variants[0], dict)
+    ) else None
+    try:
+        expected = mock_task_spec(seed, episodes)
+    except ValueError as exc:
+        raise EvaluationError(str(exc)) from exc
+    if value != expected:
+        raise EvaluationError("Mock task specification is not the expected one")
+    return TaskSpec(
+        MOCK_TASK_ID, expected["dimension"], seed, expected["upstream_revision"],
+        (Variant(MOCK_TASK_ID, episodes),), mock=True,
+    )
+
+
 def load_spec(path: Path) -> TaskSpec:
     value = read_json(path)
+    if "mock" in value:
+        if value["mock"] is not True:
+            raise EvaluationError("A task specification is either a mock or has no mock field")
+        return _load_mock_spec(value)
     task_id, dimension = value.get("task_id"), value.get("dimension")
     if not isinstance(dimension, str) or dimension not in DIMENSION_TASKS:
         raise EvaluationError("Task specification has an unknown dimension")

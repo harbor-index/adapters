@@ -16,6 +16,7 @@ import threading
 import time
 from types import SimpleNamespace
 import unittest
+from unittest import mock
 
 from harbor.models.agent.context import AgentContext
 
@@ -24,7 +25,7 @@ from robodojo.direct import bridge_client
 from robodojo.direct.broker import Broker, make_server
 from robodojo.direct.episode import DirectAbort, run_episode
 from robodojo.direct.prompts import PROMPT_SHA256, SYSTEM_PROMPT, build_messages
-from robodojo.direct_agent import BRIDGE_COMMAND, DirectAgent, DirectRunError
+from robodojo.direct_agent import BRIDGE_COMMAND, DirectAgent, DirectRunError, public_endpoint
 from robodojo.runtime import EvaluationError, write_json
 from robodojo.verifier import verify
 
@@ -62,6 +63,8 @@ def tool_response(arguments, call_id="call_1", tokens=(100, 20)):
         ]}}],
         "usage": {"prompt_tokens": tokens[0], "completion_tokens": tokens[1],
                   "prompt_tokens_details": {"cached_tokens": 10}},
+        "model": "vision-model-2026-01-01",
+        "_hidden_params": {"custom_llm_provider": "fake", "api_base": "https://api.fake.test/v1/"},
     }
 
 
@@ -189,6 +192,12 @@ class LifecycleTests(unittest.TestCase):
         self.assertEqual(direct["stats"]["model_calls"], 91)
         self.assertEqual(direct["prompt_sha256"], PROMPT_SHA256)
         self.assertEqual(direct["model"], "fake/vision-model")
+        # What the responses reported, with the endpoint reduced to its public part.
+        self.assertEqual(direct["served"], {
+            "models": ["vision-model-2026-01-01"], "providers": ["fake"],
+            "api_bases": ["https://api.fake.test/v1"],
+        })
+        self.assertEqual(direct["endpoint"]["api_base"], None)
         self.assertEqual(context.n_input_tokens, 91 * 100)
         self.assertEqual(context.n_output_tokens, 91 * 20)
         self.assertEqual(context.n_cache_tokens, 91 * 10)
@@ -242,6 +251,49 @@ class LifecycleTests(unittest.TestCase):
                     (self.results / "broker" / "decisions" / "0000.jsonl").read_text().splitlines()]
         self.assertEqual(accepted[0]["response"]["steps"], 1)
         self.assertIn("Scaffold hold", accepted[0]["response"]["reason"])
+        verify(self.spec_path, self.results, self.directory / "verifier")
+
+    def test_wrong_tool_name_and_multiple_calls_execute_nothing(self):
+        """A well-formed decision is still refused unless it is the only call of ``robodojo_act``."""
+        thread = self.simulator(succeed=lambda layout: False)
+        answers = iter(["wrong name", "two calls"])
+
+        def completion(messages):
+            # Every answer carries a decision that the action contract would accept.
+            response = tool_response(hold(current_observation(messages)))
+            call = response["choices"][0]["message"]["tool_calls"][0]
+            answer = next(answers, "valid")
+            if answer == "wrong name":
+                call["function"]["name"] = "unregistered_tool"
+            elif answer == "two calls":
+                response["choices"][0]["message"]["tool_calls"].append({**call, "id": "call_2"})
+            return response
+
+        context = self.run_agent(self.agent(completion))
+        thread.join(20)
+        stats = context.metadata["robodojo_direct"]["stats"]
+        self.assertEqual((stats["invalid_responses"], stats["fallback_holds"]), (2, 0))
+        log = [json.loads(line) for line in
+               (self.directory / "agent-logs" / "robodojo_direct" / "decisions.jsonl").read_text().splitlines()]
+        self.assertIn("unknown tool: 'unregistered_tool'", log[0]["error"])
+        self.assertEqual(log[0]["tool_names"], ["unregistered_tool"])
+        self.assertIn("2 tool calls", log[1]["error"])
+        self.assertEqual(log[1]["tool_names"], ["robodojo_act", "robodojo_act"])
+        self.assertIsNone(log[2]["error"])
+        # Both refusals belong to the first request; the broker saw neither.
+        self.assertEqual(len({record["request_id"] for record in log[:3]}), 1)
+        accepted = [json.loads(line) for line in
+                    (self.results / "broker" / "decisions" / "0000.jsonl").read_text().splitlines()]
+        self.assertEqual(accepted[0]["request_id"], log[2]["request_id"])
+        self.assertEqual(sum("act" in shlex.split(command)[2:3] for command in self.environment.commands),
+                         stats["decisions"])
+        # The model is told why nothing ran, in a form every chat API accepts.
+        retry = self.prompts[1]["messages"]
+        self.assertEqual([message["role"] for message in retry], ["system", "user", "assistant", "user"])
+        self.assertNotIn("tool_calls", retry[2])
+        self.assertIn("unknown tool", retry[3]["content"])
+        # Parallel calls are also switched off at the API.
+        self.assertTrue(all(prompt["parallel_tool_calls"] is False for prompt in self.prompts))
         verify(self.spec_path, self.results, self.directory / "verifier")
 
     def test_spending_limit_aborts_and_leaves_no_reward(self):
@@ -313,6 +365,65 @@ class AgentConfigurationTests(unittest.TestCase):
             agent = DirectAgent(logs_dir=Path(directory), model_name="fake/model", temperature=0.0)
             self.assertEqual(agent.name(), "robodojo-direct")
             self.assertEqual(agent.provenance()["settings"]["temperature"], 0.0)
+
+    def test_tool_call_must_be_the_only_call_of_the_offered_tool(self):
+        def response(*names):
+            return {"choices": [{"message": {"content": None, "tool_calls": [
+                {"id": f"call_{index}", "function": {"name": name, "arguments": "{}"}}
+                for index, name in enumerate(names)
+            ]}}]}
+
+        turn, decision, error = DirectAgent._parse(response("robodojo_act"))
+        self.assertEqual((turn["kind"], decision, error), ("attempt", {}, None))
+        for names, message in (
+            ((), "did not call"), (("unregistered_tool",), "unknown tool"),
+            (("robodojo_act", "robodojo_act"), "2 tool calls"),
+            (("robodojo_act", "unregistered_tool"), "2 tool calls"),
+        ):
+            with self.subTest(names=names):
+                turn, decision, error = DirectAgent._parse(response(*names))
+                self.assertEqual((turn["kind"], decision), ("reply", None))
+                self.assertIn(message, error)
+                self.assertNotIn("arguments", turn)
+
+    def test_endpoint_is_part_of_provenance_without_secrets(self):
+        with tempfile.TemporaryDirectory() as directory:
+            def agent(**options):
+                return DirectAgent(logs_dir=Path(directory), model_name="fake/model", **options)
+
+            with mock.patch.dict("os.environ", clear=False) as environ:
+                environ.pop("FAKE_API_BASE", None)
+                environ.pop("FAKE_BASE_URL", None)
+                default = agent()
+                first = agent(api_base="https://one.example.test/v1")
+                second = agent(api_base="https://two.example.test/v1")
+                # The same model alias on two endpoints is not the same scaffold.
+                self.assertNotEqual(first.provenance(), second.provenance())
+                self.assertNotEqual(first.provenance(), default.provenance())
+                self.assertEqual(default.provenance()["endpoint"], {"api_base": None, "environment": {}})
+                self.assertEqual(first.provenance()["model"], second.provenance()["model"])
+                # A provider variable redirects requests when no endpoint is configured.
+                environ["FAKE_API_BASE"] = "https://user:hunter2@proxy.example.test:8443/v1/?key=sk-secret"
+                environ["FAKE_API_KEY"] = "sk-secret"
+                redirected = agent(api_key_env="FAKE_API_KEY")
+                self.assertEqual(redirected.provenance()["endpoint"], {
+                    "api_base": None,
+                    "environment": {"FAKE_API_BASE": "https://proxy.example.test:8443/v1"},
+                })
+                self.assertNotEqual(redirected.provenance(), default.provenance())
+                explicit = agent(api_base="https://user:hunter2@One.Example.test/v1?key=sk-secret#x")
+                self.assertEqual(explicit.provenance()["endpoint"],
+                                 {"api_base": "https://one.example.test/v1", "environment": {}})
+                for item in (redirected, explicit):
+                    text = json.dumps(item.provenance())
+                    self.assertNotIn("hunter2", text)
+                    self.assertNotIn("sk-secret", text)
+            self.assertEqual(public_endpoint("localhost:8000/v1/"), "localhost:8000/v1")
+            self.assertEqual(public_endpoint("https://"), "unrecognized")
+            self.assertEqual(public_endpoint("http://host:port/"), "unrecognized")
+            self.assertIsNone(public_endpoint(None))
+            with self.assertRaisesRegex(ValueError, "api_base"):
+                agent(api_base="https://")
 
     def test_history_window_drops_old_turns_and_keeps_tool_pairs(self):
         turns = []

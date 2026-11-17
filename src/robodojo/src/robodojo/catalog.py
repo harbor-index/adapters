@@ -76,3 +76,25 @@ def task_spec(task_id: str, seed: int = 0) -> dict:
         "upstream_revision": UPSTREAM_REVISION,
         "variants": [{"name": name, "episodes": 50 // len(names)} for name in names],
     }
+
+
+# The CPU mock is not part of the benchmark. Its identifiers are kept apart
+# from the canonical ones so that a mock result can never pass for a real one.
+MOCK_TASK_ID = "mock_reach_targets"
+MOCK_LABEL = "mock"
+MOCK_POLICY_NAME = "HarborDirectMock"
+MOCK_MAX_EPISODES = 50
+
+
+def mock_task_spec(seed: int = 0, episodes: int = 2) -> dict:
+    """Return the settings of the mock task; ``episodes`` is free, unlike the native 50."""
+    if type(episodes) is not int or not 1 <= episodes <= MOCK_MAX_EPISODES:
+        raise ValueError(f"Mock episodes must be an integer from 1 through {MOCK_MAX_EPISODES}")
+    return {
+        "mock": True,
+        "task_id": MOCK_TASK_ID,
+        "dimension": MOCK_LABEL,
+        "seed": seed,
+        "upstream_revision": MOCK_LABEL,
+        "variants": [{"name": MOCK_TASK_ID, "episodes": episodes}],
+    }

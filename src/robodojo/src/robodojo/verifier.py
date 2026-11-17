@@ -18,7 +18,7 @@ from pathlib import Path
 import sys
 from typing import Any
 
-from .catalog import XPOLICYLAB_REVISION
+from .catalog import MOCK_LABEL, MOCK_POLICY_NAME, XPOLICYLAB_REVISION
 from .runtime import EvaluationError, load_spec, read_json, validate_result, write_json
 
 POLICY_NAME = "HarborDirect"
@@ -88,6 +88,12 @@ def verify(spec_path: Path, results_dir: Path, output_dir: Path) -> dict[str, fl
         "upstream_revision": spec.upstream_revision, "xpolicylab_revision": XPOLICYLAB_REVISION,
         "policy_name": POLICY_NAME,
     }
+    if spec.mock:
+        # The CPU mock is graded by the same checks but labelled throughout,
+        # so that its reward cannot be taken for a benchmark result.
+        expected.update(mock=True, xpolicylab_revision=MOCK_LABEL, policy_name=MOCK_POLICY_NAME)
+    elif "mock" in verdict:
+        raise EvaluationError("A mock simulator cannot grade a benchmark task")
     for field, value in expected.items():
         if verdict.get(field) != value:
             raise EvaluationError(f"Simulator run reports an unexpected {field}")
@@ -113,7 +119,7 @@ def verify(spec_path: Path, results_dir: Path, output_dir: Path) -> dict[str, fl
         successes += variant_successes
         total_score += variant_score
         total_episodes += variant.episodes
-    if total_episodes != 50:
+    if not spec.mock and total_episodes != 50:
         raise EvaluationError("A canonical RoboDojo task must have exactly 50 evaluation episodes")
     reward = {"success_rate": successes / total_episodes, "score": total_score / total_episodes}
     contracts = {record.get("contract_version") for record in ledger}

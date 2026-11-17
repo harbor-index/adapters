@@ -119,7 +119,8 @@ def build_messages(turns: list[dict[str, Any]], *, image_history: int, history_w
     """Render the episode so far in the chat-completions tool-calling format.
 
     ``turns`` holds ``observation`` turns (text plus frames), ``attempt`` turns
-    (one tool call and its result), ``reply`` turns (text without a tool call)
+    (one tool call and its result), ``reply`` turns (an answer that is not exactly
+    one call of the tool)
     and scaffold ``note`` turns. Only the last ``image_history``
     observations keep their frames. With a positive ``history_window`` only
     that many most recent observations and their attempts are kept.
@@ -151,7 +152,7 @@ def build_messages(turns: list[dict[str, Any]], *, image_history: int, history_w
         elif turn["kind"] == "note":
             messages.append({"role": "user", "content": turn["text"]})
         elif turn["kind"] == "reply":
-            # The model answered in text without calling the tool.
+            # Not exactly one call of the tool: replayed as text, with the reason.
             messages.append({"role": "assistant", "content": turn["text"] or "(no content)"})
             messages.append({"role": "user", "content": turn["result"]})
         else:

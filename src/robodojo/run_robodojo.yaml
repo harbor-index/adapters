@@ -16,6 +16,9 @@ agents:
       image_history: 1
       history_window: 0
       max_invalid_responses: 5
+      # Set the endpoint explicitly for parity runs; it is recorded without
+      # credentials and must match across the trials of one aggregate.
+      # api_base: https://api.provider.example/v1
       # Safety limits. Reaching one aborts the run and yields no reward.
       # max_cost_usd: 50.0
       # max_decisions_per_episode: 400

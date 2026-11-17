@@ -18,9 +18,12 @@ class AggregateTests(unittest.TestCase):
         self.addCleanup(self.temporary.cleanup)
         self.job = Path(self.temporary.name) / "job"
         self.direct = {
-            "agent": "robodojo-direct", "agent_version": "0.2.0", "model": "provider/vision-model",
+            "agent": "robodojo-direct", "agent_version": "0.2.1", "model": "provider/vision-model",
             "contract_version": "direct-eef-v1", "prompt_sha256": "a" * 64,
             "settings": {"image_history": 1, "temperature": None},
+            "endpoint": {"api_base": "https://one.example.test/v1", "environment": {}},
+            "served": {"models": ["vision-model-2026-01-01"], "providers": ["provider"],
+                       "api_bases": ["https://one.example.test/v1"]},
             "stats": {"episodes": 50},
         }
         self.records = {}
@@ -97,6 +100,11 @@ class AggregateTests(unittest.TestCase):
         for field, value in (
             ("model", "provider/other-model"), ("prompt_sha256", "b" * 64),
             ("agent_version", "0.3.0"), ("settings", {"image_history": 2, "temperature": None}),
+            # The same model alias on another endpoint, or answered by another snapshot.
+            ("endpoint", {"api_base": "https://two.example.test/v1", "environment": {}}),
+            ("endpoint", {"api_base": None, "environment": {"PROVIDER_API_BASE": "https://two.example.test"}}),
+            ("served", {**self.direct["served"], "api_bases": ["https://two.example.test/v1"]}),
+            ("served", {**self.direct["served"], "models": ["vision-model-2026-06-01"]}),
         ):
             with self.subTest(field=field):
                 original = direct[field]
@@ -109,6 +117,27 @@ class AggregateTests(unittest.TestCase):
         direct["stats"] = {"episodes": 50, "decisions": 12345}
         self.save("insert_tubes")
         self.assertEqual(aggregate(self.job)["tasks"], 42)
+
+    def test_endpoint_and_one_served_model_are_required(self):
+        _, trial, _ = self.records["insert_tubes"]
+        direct = trial["agent_result"]["metadata"]["robodojo_direct"]
+        for field, value, message in (
+            ("endpoint", None, "Incomplete"),
+            ("served", None, "Incomplete"),
+            ("endpoint", {"api_base": "https://one.example.test/v1"}, "Malformed"),
+            ("served", {"models": "vision-model-2026-01-01", "providers": [], "api_bases": []}, "Malformed"),
+            ("served", {**self.direct["served"], "models": []}, "exactly one model"),
+            ("served", {**self.direct["served"], "models": ["snapshot-a", "snapshot-b"]}, "exactly one model"),
+        ):
+            with self.subTest(field=field, value=value):
+                original = direct[field]
+                direct[field] = value
+                self.save("insert_tubes")
+                with self.assertRaisesRegex(EvaluationError, message):
+                    aggregate(self.job)
+                direct[field] = original
+        self.save("insert_tubes")
+        self.assertEqual(aggregate(self.job)["direct"]["endpoint"], self.direct["endpoint"])
 
     def test_direct_provenance_is_required(self):
         _, trial, report = self.records["insert_tubes"]

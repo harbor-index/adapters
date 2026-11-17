@@ -1,5 +1,6 @@
 """CPU-only checks of RoboDojo task packaging and generation boundaries."""
 
+import asyncio
 import json
 from pathlib import Path
 import re
@@ -70,7 +71,16 @@ class AdapterTests(unittest.TestCase):
                 names.add(name)
                 self.assertEqual(config["version"], "1.0")
                 self.assertTrue(config["task"]["authors"])
-                self.assertEqual(config["environment"]["gpus"], 1)
+                # Harbor applies [environment] to the agent container, which is small.
+                self.assertEqual(
+                    {key: config["environment"][key] for key in ("cpus", "memory_mb", "gpus")},
+                    {"cpus": 1, "memory_mb": 2048, "gpus": 0},
+                )
+                self.assertEqual(
+                    {key: value for key, value in config["metadata"].items() if key.startswith("simulator_")},
+                    {"simulator_cpus": 8, "simulator_memory_mb": 65536,
+                     "simulator_storage_mb": 307200, "simulator_gpus": 1},
+                )
                 # The verifier grades collected simulator files in its own small container.
                 self.assertEqual(config["verifier"]["environment_mode"], "separate")
                 self.assertEqual(config["verifier"]["environment"]["gpus"], 0)
@@ -196,6 +206,7 @@ class AdapterTests(unittest.TestCase):
         self.assertEqual(devices, [
             {"driver": "nvidia", "count": 1, "capabilities": ["gpu"]},
         ])
+        self.assertEqual((service["cpus"], service["mem_limit"]), (8.0, "65536m"))
 
     def test_missing_or_interpolated_assets_paths_are_rejected(self):
         with self.assertRaisesRegex(ValueError, "does not exist"):
@@ -247,7 +258,41 @@ class AdapterTests(unittest.TestCase):
             config = TaskConfig.model_validate_toml((task / "task.toml").read_text())
             self.assertEqual(config.verifier.environment_mode.value, "separate")
             self.assertEqual(config.artifacts[0].service, "simulator")
-            self.assertEqual(config.environment.gpus, 1)
+            self.assertEqual(config.environment.gpus, 0)
+
+    def test_harbor_resource_overlay_keeps_simulator_limits_on_the_simulator(self):
+        """Harbor writes the [environment] resources onto ``main`` only.
+
+        The effective configuration is the generated Compose file plus the
+        overlay that Harbor's Docker environment really writes for this task.
+        """
+        try:
+            from harbor.environments.docker.docker import DockerEnvironment
+            from harbor.models.task.config import TaskConfig
+            from harbor.models.trial.paths import TrialPaths
+        except ImportError:
+            self.skipTest("Harbor is not installed")
+        task = self.generate(task_ids=["insert_tubes"])[0]
+        config = TaskConfig.model_validate_toml((task / "task.toml").read_text())
+        trial = TrialPaths(trial_dir=self.directory / "trial")
+        trial.mkdir()
+        environment = DockerEnvironment(
+            environment_dir=task / "environment", environment_name="robodojo-test",
+            session_id="session", trial_paths=trial, task_env_config=config.environment,
+        )
+        self.addCleanup(environment._cleanup_resources_compose_file)
+        overlay = json.loads(asyncio.run(environment._write_resources_compose_file()).read_text())
+        # Harbor cannot move the simulator's limits to the agent container...
+        self.assertEqual(overlay, {"services": {"main": {"cpus": 1.0, "mem_limit": "2048m"}}})
+        # ...and merging its overlay leaves the simulator service as generated.
+        services = json.loads((task / "environment/docker-compose.yaml").read_text())["services"]
+        effective = {**services, "main": {**services["main"], **overlay["services"]["main"]}}
+        self.assertEqual(effective["main"], {"platform": "linux/amd64", "cpus": 1.0, "mem_limit": "2048m"})
+        simulator = effective["simulator"]
+        self.assertEqual((simulator["cpus"], simulator["mem_limit"]), (8.0, "65536m"))
+        self.assertEqual(simulator["deploy"]["resources"]["reservations"]["devices"], [
+            {"driver": "nvidia", "count": 1, "capabilities": ["gpu"]},
+        ])
 
 
 if __name__ == "__main__":

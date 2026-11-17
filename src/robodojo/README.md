@@ -33,6 +33,8 @@ Each task starts two containers on a private Compose network:
 | `main` | `python:3.12-slim` plus `bridge_client.py` | The only place Harbor executes agent commands. It has no assets, no simulator code, and no grading output. |
 | `simulator` | Pinned RoboDojo image plus this adapter's policy, broker, and supervisor | Runs the native policy server and the native simulator client on the GPU, and owns all results. |
 
+Harbor applies the `[environment]` resources of `task.toml` to `main` only, so they describe the small agent container: 1 CPU, 2 GB of memory, and no GPU. The simulator's limits are set on the `simulator` service in the generated `docker-compose.yaml`: 8 CPUs, 64 GB of memory, and one NVIDIA GPU. The same values are repeated under `[metadata]` in `task.toml` for reference. They are provisional.
+
 1. The supervisor in `simulator` starts the native policy server for `HarborDirect`, then the native simulator client once per variant, with `--eval-num native`.
 2. For each episode the native loop calls the policy's `eval_one_episode` hook. The hook posts the native observation to a broker inside the policy server and waits for a decision. Physics advances only while an accepted decision is executing.
 3. `DirectAgent` runs on the Harbor host. It fetches the observation through `bridge_client.py` in `main`, calls the vision model, and submits the decision. Model credentials stay on the host.
@@ -55,7 +57,7 @@ The contract and the inverse kinematics follow the public Direct controller of [
 
 ### Model scaffold
 
-The model gets one tool, `robodojo_act`, and no shell, file, or image tools. The system prompt in `direct/prompts.py` explains the robot, the observation fields, and the action limits. It adds no task-specific hints; the task instruction is the native one, passed through unchanged. Model history is reset at the start of every episode.
+The model gets one tool, `robodojo_act`, and no shell, file, or image tools. An answer counts as a decision only if it is exactly one call of that tool; a call of any other name, or more than one call, executes nothing and is returned to the model as an invalid answer. Parallel tool calls are also switched off in the API request where the provider supports it. The system prompt in `direct/prompts.py` explains the robot, the observation fields, and the action limits. It adds no task-specific hints; the task instruction is the native one, passed through unchanged. Model history is reset at the start of every episode.
 
 | `DirectAgent` option | Default | Meaning |
 |----------------------|---------|---------|
@@ -69,6 +71,14 @@ The model gets one tool, `robodojo_act`, and no shell, file, or image tools. The
 | `api_base`, `api_key_env` | none | Endpoint override and the name of the environment variable that holds the API key. |
 
 The model, the prompt hash, the contract version, and these settings are recorded in each trial's agent metadata. An aborted run has no reward: a limit that stops an episode early is never reported as a native failure.
+
+The metadata also records where the requests went, without credentials:
+
+- `endpoint.api_base` is the configured `api_base`, reduced to scheme, host, port, and path. User names, passwords, query strings, and API keys are never recorded.
+- `endpoint.environment` holds the `<PROVIDER>_API_BASE` and `<PROVIDER>_BASE_URL` variables of the model's provider prefix, when they are set and no `api_base` is configured.
+- `served` holds what the responses reported: the model identifiers that answered and, where LiteLLM states them, the provider and endpoint.
+
+For parity runs, set `api_base` explicitly. A redirect made in any other way, such as a provider variable with a different name or a proxy behind the same host, is only visible if it changes the served model identifier.
 
 ## Generated Task Structure
 
@@ -112,7 +122,7 @@ Set the model in `src/robodojo/run_robodojo.yaml`, export the provider's API key
 uv run --project src/robodojo --extra harbor harbor run -c src/robodojo/run_robodojo.yaml
 ```
 
-The model name in the configuration is a placeholder and must be replaced with a vision model that supports tool calls. The configuration uses one concurrent trial because each trial needs the GPU. Its default is the Direct agent rather than oracle: no validated oracle is available, so the standard oracle-default template cannot honestly be used.
+The model name in the configuration is a placeholder and must be replaced with a vision model that supports tool calls. The configuration uses one concurrent trial because each trial needs the GPU. Because the GPU is requested by the `simulator` service and not through `task.toml`, Harbor does not check for it in advance: on a host without a usable NVIDIA runtime the trial fails when Docker starts the simulator. Its default is the Direct agent rather than oracle: no validated oracle is available, so the standard oracle-default template cannot honestly be used.
 
 Tasks need a Compose-capable Harbor environment with an NVIDIA GPU, because the verifier reads artifacts from the `simulator` service.
 
@@ -123,7 +133,37 @@ cd src/robodojo
 uv run python -m robodojo.aggregate /path/to/harbor-job --output /path/to/summary.json
 ```
 
-Aggregation requires exactly 42 unique completed tasks that share the layout seed group, the model, the prompt hash, and the scaffold settings. It rejects failed or incomplete trials and does not report a full-benchmark score for a subset. Aggregate repeated runs separately before calculating parity mean and sample SEM. A flat average of 42 Harbor task rewards is not the official overall RoboDojo score.
+Aggregation requires exactly 42 unique completed tasks that share the layout seed group, the model, the inference endpoint, the prompt hash, and the scaffold settings. Every trial must have been answered by exactly one served model identifier, and that identifier must be the same for all trials. It rejects failed or incomplete trials and does not report a full-benchmark score for a subset. Aggregate repeated runs separately before calculating parity mean and sample SEM. A flat average of 42 Harbor task rewards is not the official overall RoboDojo score.
+
+### CPU mock without the simulator
+
+The adapter includes a mock for checking the plumbing on a machine with no GPU. It is **not a RoboDojo task**. A small service draws an invented table scene with NumPy: two grippers, a red disc, and a blue disc, seen by a top-down head camera and two wrist cameras. The task is to put each gripper over its disc, lower it, and close it.
+
+The mock replaces only the simulator. The broker, the bridge client, the action contract, the episode loop, `DirectAgent`, and the verifier are the real ones.
+
+Run it on one machine, with no Docker and no API key, using the scripted solver:
+
+```bash
+cd src/robodojo
+uv run --extra harbor --group dev python -m robodojo.mock.local --episodes 2 --output /path/to/new-directory
+```
+
+The command prints the mock reward and saves the pictures of every observation under `observations/` in the output directory. To let a real vision model play, add `--model provider/model-name`, and optionally `--api-base` and `--max-cost-usd`. This calls the model API and costs money; the key is read from the environment as in a Harbor run. Two episodes need roughly 6 to 40 model calls with three small pictures each.
+
+To exercise Harbor and Docker Compose as well, generate the mock task and run it. Neither command has been run for this draft, because no Docker host was available:
+
+```bash
+uv run robodojo --output-dir ../../datasets/robodojo-mock --mock --mock-episodes 2
+uv run --extra harbor harbor run -p ../../datasets/robodojo-mock/mock-reach-targets -a oracle
+uv run --extra harbor harbor run -p ../../datasets/robodojo-mock/mock-reach-targets \
+  -a robodojo.direct_agent:DirectAgent -m provider/model-name
+```
+
+The oracle of the mock task is the scripted solver, so the first `harbor run` needs no model.
+
+What the mock does not cover: Isaac Sim, the pinned image and its GPU setup, the native policy WebSocket, the robot's inverse kinematics, native recovery from invalid layouts, and the difficulty of any real task. A model that solves the mock has shown nothing about RoboDojo.
+
+Mock results are kept apart from benchmark results. The task is named `robodojo-mock/reach-targets`, its specification and its results carry `"mock": true`, the native supervisor refuses the mock task, the verifier refuses mock output for a benchmark task, and aggregation rejects mock trials. Do not register the mock task or use it as parity evidence.
 
 ## Usage: Create Task Directories
 
@@ -225,7 +265,7 @@ Run the local adapter checks from `src/robodojo`:
 uv run --extra harbor --group dev python -m unittest discover -s tests -v
 ```
 
-These checks cover generation, the action contract, kinematics on a synthetic arm, the broker, the episode loop, the agent, and result validation. They use a fake simulator and a fake model, so they do not prove that the GPU simulator runs or that any model can solve a task.
+These checks cover generation, the action contract, kinematics on a synthetic arm, the broker, the episode loop, the agent, result validation, and the CPU mock. They use a fake or mock simulator and a fake model, so they do not prove that the GPU simulator runs or that any model can solve a task.
 
 ## Troubleshooting
 

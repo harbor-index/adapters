@@ -114,6 +114,8 @@ def supervise(
     logs = results_dir / "logs"
     logs.mkdir()
     spec = load_spec(spec_path)
+    if spec.mock:
+        raise EvaluationError("The mock task runs in the mock service, not in the native simulator")
     verify_image(root, spec)
     policy_dir = install_policy(root, policy_source)
 

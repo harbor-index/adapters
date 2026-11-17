@@ -14,8 +14,10 @@ from .runtime import EvaluationError, read_json
 def aggregate(job_dir: Path) -> dict:
     """Require one successful trial per canonical task, with matching provenance.
 
-    All trials must share the layout seed group, the model, the prompt and the
-    scaffold settings; otherwise their scores are not one benchmark result.
+    All trials must share the layout seed group, the model, the inference
+    endpoint, the prompt and the scaffold settings; otherwise their scores are
+    not one benchmark result. Every trial must also have been answered by one
+    model identifier, as reported by the responses themselves.
     """
     expected = {task: dimension for dimension, tasks in DIMENSION_TASKS.items() for task in tasks}
     trials: dict[str, dict] = {}
@@ -28,6 +30,8 @@ def aggregate(job_dir: Path) -> dict:
         if trial.get("exception_info") is not None:
             raise EvaluationError(f"Trial failed: {path.parent.name}")
         report = read_json(path.parent / "verifier" / "evaluation.json")
+        if "mock" in report:
+            raise EvaluationError(f"Mock results are not benchmark results: {path.parent.name}")
         task_id = report.get("task_id")
         if not isinstance(task_id, str) or task_id not in expected or task_id in trials:
             raise EvaluationError("Job contains an unknown or repeated canonical task")
@@ -59,9 +63,25 @@ def aggregate(job_dir: Path) -> dict:
             raise EvaluationError(f"Missing Direct agent provenance: {path.parent.name}")
         scaffold = {key: direct.get(key) for key in (
             "agent", "agent_version", "model", "contract_version", "prompt_sha256", "settings",
+            "endpoint", "served",
         )}
         if any(value is None for value in scaffold.values()):
             raise EvaluationError(f"Incomplete Direct agent provenance: {path.parent.name}")
+        endpoint, served = scaffold["endpoint"], scaffold["served"]
+        if (
+            not isinstance(endpoint, dict) or set(endpoint) != {"api_base", "environment"}
+            or not isinstance(endpoint["environment"], dict) or not isinstance(served, dict)
+            or set(served) != {"models", "providers", "api_bases"}
+            or any(
+                not isinstance(values, list) or any(not isinstance(value, str) for value in values)
+                for values in served.values()
+            )
+        ):
+            raise EvaluationError(f"Malformed inference endpoint provenance: {path.parent.name}")
+        if len(served["models"]) != 1:
+            raise EvaluationError(
+                f"Trial was not answered by exactly one model identifier: {path.parent.name}"
+            )
         if scaffold["contract_version"] != report["contract_version"]:
             raise EvaluationError("Agent and simulator used different action contracts")
         provenance.add(json.dumps({"seed": seed, "direct": scaffold}, sort_keys=True))
@@ -79,7 +99,9 @@ def aggregate(job_dir: Path) -> dict:
         missing = ", ".join(sorted(set(expected) - set(trials)))
         raise EvaluationError(f"Full benchmark requires 42 tasks; missing: {missing}")
     if len(provenance) != 1:
-        raise EvaluationError("Aggregate each layout seed group, model and scaffold separately")
+        raise EvaluationError(
+            "Aggregate each layout seed group, model, inference endpoint and scaffold separately"
+        )
     dimensions = {
         dimension: {
             metric: math.fsum(trials[task][metric] for task in tasks) / len(tasks)

@@ -15,19 +15,24 @@ from __future__ import annotations
 import asyncio
 from collections.abc import Awaitable, Callable
 import json
+import os
 from pathlib import Path
+import re
 import shlex
 import shutil
 import time
 from typing import Any
+from urllib.parse import urlsplit
 
 from harbor.agents.base import BaseAgent
 
-from .direct.contract import CONTRACT_VERSION, DecisionError, hold_decision, validate_decision
+from .direct.contract import (
+    CONTRACT_VERSION, TOOL_NAME, DecisionError, hold_decision, validate_decision,
+)
 from .direct.prompts import PROMPT_SHA256, build_messages, observation_text, tool_definition
 
 BRIDGE_COMMAND = "python3 /opt/robodojo/bridge_client.py"
-AGENT_VERSION = "0.2.0"
+AGENT_VERSION = "0.2.1"
 
 
 class DirectRunError(RuntimeError):
@@ -39,6 +44,26 @@ def _get(value: Any, key: str, default: Any = None) -> Any:
     if isinstance(value, dict):
         return value.get(key, default)
     return getattr(value, key, default)
+
+
+def public_endpoint(url: Any) -> str | None:
+    """Reduce an endpoint URL to its non-secret identity: scheme, host, port and path.
+
+    User information, query strings and fragments can carry credentials and are
+    dropped. A value without a recognizable host yields ``"unrecognized"``.
+    """
+    if not isinstance(url, str) or not url.strip():
+        return None
+    url = url.strip()
+    try:
+        parts = urlsplit(url if "://" in url else "//" + url)
+        host, port = (parts.hostname or "").lower(), parts.port
+    except ValueError:
+        return "unrecognized"
+    if not host:
+        return "unrecognized"
+    scheme = f"{parts.scheme.lower()}://" if parts.scheme else ""
+    return f"{scheme}{host}{f':{port}' if port else ''}{parts.path.rstrip('/')}"
 
 
 async def _litellm_completion(**kwargs: Any) -> Any:
@@ -114,6 +139,11 @@ class DirectAgent(BaseAgent):
         }
         self.max_cost_usd = max_cost_usd
         self.api_base = api_base
+        if api_base is not None and public_endpoint(api_base) in (None, "unrecognized"):
+            raise ValueError("api_base must be a URL with a host")
+        self.endpoint = self._configured_endpoint()
+        # What the responses themselves report, collected while the run goes on.
+        self._served: dict[str, set[str]] = {"models": set(), "providers": set(), "api_bases": set()}
         self.api_key_env = api_key_env
         self.api_retries = api_retries
         self.api_timeout_sec = api_timeout_sec
@@ -137,12 +167,35 @@ class DirectAgent(BaseAgent):
     def version(self) -> str:
         return AGENT_VERSION
 
+    def _configured_endpoint(self) -> dict[str, Any]:
+        """Where the model requests are sent, as far as the configuration shows.
+
+        Without an explicit ``api_base`` the provider's own environment variables
+        can redirect the requests, so their values are part of the identity. Only
+        the usual ``<PROVIDER>_API_BASE`` and ``<PROVIDER>_BASE_URL`` names of the
+        model's provider prefix are read; API keys are never recorded.
+        """
+        overrides: dict[str, str | None] = {}
+        prefix, separator, _ = self.model_name.partition("/")
+        if self.api_base is None and separator:
+            stem = re.sub(r"[^A-Z0-9]", "_", prefix.upper())
+            for name in (f"{stem}_API_BASE", f"{stem}_BASE_URL"):
+                if os.environ.get(name):
+                    overrides[name] = public_endpoint(os.environ[name])
+        return {"api_base": public_endpoint(self.api_base), "environment": overrides}
+
     def provenance(self) -> dict[str, Any]:
-        """Everything that must be identical for two runs to be comparable."""
+        """Everything that must be identical for two runs to be comparable.
+
+        ``endpoint`` is the configured destination. ``served`` holds what the
+        responses reported: the model identifiers that answered and, where the
+        client library states them, the provider and endpoint it used.
+        """
         return {
             "agent": self.name(), "agent_version": AGENT_VERSION, "model": self.model_name,
             "contract_version": CONTRACT_VERSION, "prompt_sha256": PROMPT_SHA256,
-            "settings": self.settings,
+            "settings": self.settings, "endpoint": self.endpoint,
+            "served": {key: sorted(values) for key, values in self._served.items()},
         }
 
     # ----- bridge ---------------------------------------------------------
@@ -196,7 +249,9 @@ class DirectAgent(BaseAgent):
         arguments: dict[str, Any] = {
             "model": self.model_name, "messages": messages, "tools": [tool],
             "tool_choice": self.settings["tool_choice"], "timeout": self.api_timeout_sec,
-            "drop_params": True,
+            # One decision per turn. Providers without this switch drop it, so
+            # _parse still rejects any answer that is not exactly one call.
+            "parallel_tool_calls": False, "drop_params": True,
         }
         for key, option in (
             ("temperature", "temperature"), ("reasoning_effort", "reasoning_effort"),
@@ -223,6 +278,14 @@ class DirectAgent(BaseAgent):
                 await self._sleep(min(60, 2 ** (attempt + 1)))
         usage = _get(response, "usage")
         details = _get(usage, "prompt_tokens_details")
+        hidden = _get(response, "_hidden_params")
+        for key, value in (
+            ("models", _get(response, "model")),
+            ("providers", _get(hidden, "custom_llm_provider")),
+            ("api_bases", public_endpoint(_get(hidden, "api_base"))),
+        ):
+            if isinstance(value, str) and value:
+                self._served[key].add(value)
         self.stats["model_calls"] += 1
         self.stats["input_tokens"] += int(_get(usage, "prompt_tokens", 0) or 0)
         self.stats["output_tokens"] += int(_get(usage, "completion_tokens", 0) or 0)
@@ -250,11 +313,20 @@ class DirectAgent(BaseAgent):
         message = _get(choices[0], "message") if choices else None
         text = _get(message, "content") or ""
         calls = _get(message, "tool_calls") or []
-        if not calls:
+        names = [str(_get(_get(call, "function"), "name"))[:64] for call in calls]
+        # Only one call of the one offered tool is a decision. Anything else is
+        # answered as text, so no part of it can reach the robot.
+        if names != [TOOL_NAME]:
+            if not calls:
+                error = "The model did not call the tool"
+            elif len(calls) > 1:
+                error = f"The model made {len(calls)} tool calls; exactly one is allowed"
+            else:
+                error = f"The model called an unknown tool: {names[0]!r}"
             return (
-                {"kind": "reply", "text": text if isinstance(text, str) else "",
-                 "result": "No action was executed. Call the tool exactly once."},
-                None, "The model did not call the tool",
+                {"kind": "reply", "text": text if isinstance(text, str) else "", "tool_names": names,
+                 "result": f"No action was executed: {error}. Call `{TOOL_NAME}` exactly once."},
+                None, error,
             )
         function = _get(calls[0], "function")
         raw = _get(function, "arguments") or ""
@@ -303,7 +375,8 @@ class DirectAgent(BaseAgent):
             self._log({
                 "episode_index": observation["episode"]["episode_index"],
                 "request_id": observation["request_id"], "step_id": observation["step_id"],
-                "arguments": turn.get("arguments"), "error": error,
+                "arguments": turn.get("arguments"), "tool_names": turn.get("tool_names"),
+                "error": error,
                 "model_seconds": round(time.monotonic() - started, 3),
             })
             if error is None:
