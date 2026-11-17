@@ -1,0 +1,28 @@
+Tip: There are many benchmarks available in Harbor's registry.
+Run `harbor datasets list` to see all available datasets.
+
+  333/333 Mean: 1.000 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0:27:37 0:00:00
+tasks • oracle
+┏━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━┓
+┃ Trials ┃ Exceptions ┃  Mean ┃
+┡━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━┩
+│    333 │          0 │ 1.000 │
+└────────┴────────────┴───────┘
+
+┏━━━━━━━━┳━━━━━━━┓
+┃ Reward ┃ Count ┃
+┡━━━━━━━━╇━━━━━━━┩
+│ 1.0    │   333 │
+└────────┴───────┘
+
+Job Info
+Total runtime: 27m 45s
+Results written to 
+/ap_data/shared/gdb-harbor-gdb-harbor-final-20261117-f1718e9d/jobs/gdb-harbor-fi
+nal-20261117-f1718e9d/result.json
+Inspect results by running `harbor view 
+/ap_data/shared/gdb-harbor-gdb-harbor-final-20261117-f1718e9d/jobs`
+Share results by running `harbor upload 
+/ap_data/shared/gdb-harbor-gdb-harbor-final-20261117-f1718e9d/jobs/gdb-harbor-fi
+nal-20261117-f1718e9d`
+

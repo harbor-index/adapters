@@ -1,0 +1,12 @@
+--- a/scripts/weapon_manager.gd
++++ b/scripts/weapon_manager.gd
+@@ -3,9 +3,6 @@
+ const SHADER_PATH := "res://shaders/weapon_clip_and_fov_shader.gdshader"
+ 
+ @onready var view_model_container: Node3D = $ViewModel
+-
+-func _ready() -> void:
+-	apply_clip_and_fov_shader_to_view_model(view_model_container, 54.0)
+ 
+ ## Apply the weapon clip shader to every mesh inside the view model hierarchy.
+ func apply_clip_and_fov_shader_to_view_model(node3d: Node3D, fov_or_negative_for_unchanged := -1.0) -> void:
