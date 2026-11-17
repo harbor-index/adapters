@@ -1,7 +1,7 @@
 [project]
 name = "harbor-robodojo-adapter"
-version = "0.1.0"
-description = "Draft Harbor adapter for native RoboDojo simulation policy evaluation"
+version = "0.2.0"
+description = "Draft Harbor adapter for RoboDojo simulation tasks controlled by a vision model"
 readme = "README.md"
 authors = [{ name = "Jia Guo", email = "jia@green.microsoft.com" }]
 requires-python = ">=3.12"
@@ -9,6 +9,11 @@ dependencies = []
 
 [project.optional-dependencies]
 harbor = ["harbor==0.26.0"]
+
+# NumPy and SciPy are needed only inside the simulator image, which provides
+# them, and by the kinematics tests.
+[dependency-groups]
+dev = ["numpy>=1.26", "scipy>=1.11"]
 
 [project.scripts]
 robodojo = "robodojo.main:main"

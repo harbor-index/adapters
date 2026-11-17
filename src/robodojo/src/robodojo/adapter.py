@@ -12,10 +12,17 @@ import tempfile
 from .catalog import DIMENSION_TASKS, UPSTREAM_REVISION, task_spec
 
 DEFAULT_IMAGE = "robodojo-harbor:f57e1633ffed"
+# Package files copied into each generated task, by the container that runs them.
+SIMULATOR_MODULES = (
+    "__init__.py", "catalog.py", "runtime.py", "UPSTREAM_LICENSE",
+    "direct/__init__.py", "direct/contract.py", "direct/broker.py", "direct/episode.py",
+    "direct/kinematics.py", "direct/supervisor.py", "direct/GPT_AS_POLICY_LICENSE",
+)
+VERIFIER_MODULES = ("__init__.py", "catalog.py", "runtime.py", "verifier.py", "UPSTREAM_LICENSE")
 
 
 class RoboDojoAdapter:
-    """Package native simulation evaluations of an external XPolicyLab policy."""
+    """Package native RoboDojo simulation tasks for model control in Direct mode."""
 
     def __init__(
         self,
@@ -76,16 +83,26 @@ class RoboDojoAdapter:
                     "upstream_revision": UPSTREAM_REVISION,
                     "image": self.image,
                 }
-                for relative in ("task.toml", "instruction.md", "environment/Dockerfile"):
+                environment = staging / "environment"
+                for relative in ("task.toml", "instruction.md", "environment/simulator.Dockerfile"):
                     file = staging / relative
                     file.write_text(Template(file.read_text()).substitute(values))
+                spec_text = json.dumps(spec, indent=2) + "\n"
+                # Agent container: the bridge client only.
+                shutil.copy2(self.package_dir / "direct" / "bridge_client.py", environment)
+                # Simulator container: native policy, broker and supervisor.
+                self._copy_modules(environment / "simulator" / "robodojo", SIMULATOR_MODULES)
+                shutil.copytree(
+                    self.package_dir / "direct" / "policy",
+                    environment / "simulator" / "robodojo" / "direct" / "policy",
+                    ignore=shutil.ignore_patterns("__pycache__"),
+                )
+                (environment / "simulator" / "task_spec.json").write_text(spec_text)
+                # Verifier container: validation of the collected results only.
                 tests = staging / "tests"
-                (tests / "task_spec.json").write_text(json.dumps(spec, indent=2) + "\n")
-                runtime_package = tests / "robodojo"
-                runtime_package.mkdir()
-                for module in ("__init__.py", "catalog.py", "runtime.py", "UPSTREAM_LICENSE"):
-                    shutil.copy2(self.package_dir / module, runtime_package / module)
-                self._write_compose(staging / "environment/docker-compose.yaml")
+                self._copy_modules(tests / "robodojo", VERIFIER_MODULES)
+                (tests / "task_spec.json").write_text(spec_text)
+                self._write_compose(environment / "docker-compose.yaml")
                 for script in staging.rglob("*.sh"):
                     script.chmod(0o755)
                 if target.exists():
@@ -93,21 +110,34 @@ class RoboDojoAdapter:
                 staging.rename(target)
         return targets
 
+    def _copy_modules(self, destination: Path, modules: tuple[str, ...]) -> None:
+        for module in modules:
+            target = destination / module
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(self.package_dir / module, target)
+
     def _write_compose(self, path: Path) -> None:
         mounts = [{
             "type": "bind", "source": str(self.assets_dir),
             "target": "/workspace/RoboDojo/Assets", "read_only": True,
             "bind": {"create_host_path": False},
         }]
+        # Planner configurations can embed the original absolute asset path.
         if str(self.assets_dir) != "/workspace/RoboDojo/Assets":
             mounts.append({**mounts[0], "target": str(self.assets_dir)})
         # JSON is valid YAML, and preserves spaces and punctuation in bind paths.
-        compose = {"services": {"main": {
-            "platform": "linux/amd64",
-            "shm_size": "16gb",
-            "volumes": mounts,
-            "deploy": {"resources": {"reservations": {"devices": [{
-                "driver": "nvidia", "count": 1, "capabilities": ["gpu"],
-            }]}}},
-        }}}
+        # No port is published: the agent container reaches the bridge on the
+        # private Compose network, and only Harbor reads the simulator's files.
+        compose = {"services": {
+            "main": {"platform": "linux/amd64"},
+            "simulator": {
+                "build": {"context": "${CONTEXT_DIR}", "dockerfile": "simulator.Dockerfile"},
+                "platform": "linux/amd64",
+                "shm_size": "16gb",
+                "volumes": mounts,
+                "deploy": {"resources": {"reservations": {"devices": [{
+                    "driver": "nvidia", "count": 1, "capabilities": ["gpu"],
+                }]}}},
+            },
+        }}
         path.write_text(json.dumps(compose, indent=2) + "\n")

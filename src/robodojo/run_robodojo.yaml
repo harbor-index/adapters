@@ -5,20 +5,28 @@ n_attempts: 1
 datasets:
   - path: datasets/robodojo
 
-# No validated oracle exists. This agent submits an already running native policy
-# endpoint; it does not launch or implement a robot policy. Replace the hostname.
+# No validated oracle exists, so this configuration uses the Direct agent: a
+# vision model that controls the robot through one bounded-action tool.
+# Replace the model with a vision model that supports tool calls, and export
+# its API key in the shell that runs Harbor.
 agents:
-  - import_path: robodojo.policy_agent:EndpointPolicyAgent
+  - import_path: robodojo.direct_agent:DirectAgent
+    model_name: provider/vision-model
     kwargs:
-      policy_name: GR00T_N17
-      host: policy-server.example.invalid
-      port: 9999
+      image_history: 1
+      history_window: 0
+      max_invalid_responses: 5
+      # Safety limits. Reaching one aborts the run and yields no reward.
+      # max_cost_usd: 50.0
+      # max_decisions_per_episode: 400
 
+# The simulator runs in a sidecar service, and the verifier reads its files,
+# so a Compose-capable environment with an NVIDIA GPU is required.
 environment:
   type: docker
   delete: true
 
-# A stateful policy server must not be shared by concurrent trials.
+# Each trial uses the GPU for the whole evaluation.
 orchestrator:
   type: local
   n_concurrent_trials: 1

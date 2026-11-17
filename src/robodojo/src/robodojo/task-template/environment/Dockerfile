@@ -1,7 +1,6 @@
-FROM $image
-USER root
-SHELL ["/bin/bash", "-c"]
-RUN test "$$(cat /workspace/RoboDojo/.harbor-upstream-revision)" = "$upstream_revision"
-# Docker exec does not inherit activation performed by the image entrypoint.
-ENV PATH=/root/miniconda3/envs/RoboDojo/bin:/root/miniconda3/bin:$${PATH}
-WORKDIR /workspace/RoboDojo
+# Agent container. It holds only the bridge client; the simulator, its assets
+# and all grading output live in the separate simulator service.
+FROM python:3.12-slim
+COPY bridge_client.py /opt/robodojo/bridge_client.py
+ENV ROBODOJO_BRIDGE_URL=http://simulator:19100
+WORKDIR /workspace

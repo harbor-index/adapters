@@ -12,17 +12,34 @@ upstream_task_id = "$task_id"
 upstream_revision = "$upstream_revision"
 dimension = "$dimension"
 seed = $seed
+control_mode = "direct-eef"
 validation_status = "draft-not-gpu-validated"
 
+# The whole 50-episode evaluation runs while the agent acts. This budget is
+# provisional: no wall time has been measured yet.
 [agent]
-timeout_sec = 300.0
+timeout_sec = 604800.0
 
+# The verifier only reads results collected from the simulator service.
 [verifier]
-timeout_sec = 75600.0
+timeout_sec = 600.0
+environment_mode = "separate"
 
+[verifier.environment]
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+
+# Resources of the simulator service; the agent container itself is small.
 [environment]
 build_timeout_sec = 1200.0
 cpus = 8
 memory_mb = 65536
 storage_mb = 307200
 gpus = 1
+
+[[artifacts]]
+source = "/harbor-robodojo/results"
+service = "simulator"

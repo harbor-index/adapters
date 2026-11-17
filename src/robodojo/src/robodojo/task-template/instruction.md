@@ -1,28 +1,51 @@
 # RoboDojo: $task_id
 
-Evaluate your already-running XPolicyLab robot policy on the native RoboDojo
-`$task_id` task in the `$dimension` dimension, with simulator seed `$seed`.
-The simulator supplies the original language instructions, camera observations,
-robot state, and reset/action protocol to your policy server.
+Control a bimanual ARX X5 robot in the RoboDojo simulator on the native
+`$task_id` task of the `$dimension` dimension, layout seed group `$seed`.
 
-Write `/workspace/submission.json` containing exactly these fields:
+The evaluation has 50 episodes. In every episode the simulator supplies the
+original language instruction, one RGB frame per camera, and the measured robot
+state. You answer each observation with one bounded end-effector motion for
+both arms. The simulator decides success with its own task conditions and ends
+each episode by itself.
 
-```json
-{"policy_name": "YOUR_XPOLICYLAB_MODULE", "host": "YOUR_POLICY_SERVER", "port": 9999}
+Use the bridge client in this container:
+
+```bash
+python3 /opt/robodojo/bridge_client.py observe --wait 600
+python3 /opt/robodojo/bridge_client.py act --wait 600 --response '<decision JSON>'
 ```
 
-`policy_name` must name an existing module in
-`/workspace/RoboDojo/XPolicyLab/policy/`, with its original `deploy.py` and
-`deploy.yml`. The server must already be running and reachable from this
-container. Use a network address reachable from Docker; `127.0.0.1` refers to
-this container. Keep the same policy checkpoint and policy RNG settings across
-all tasks and repetitions. The seed above selects simulator layouts, not the
-server's RNG seed.
+`observe` waits for the next observation and saves it under
+`/tmp/robodojo-direct/<request_id>/` as `observation.json` plus one PNG per
+camera. It reports `finished` once all episodes are done. `act` executes one
+decision and returns the next observation, or `episode_end`.
 
-The verifier runs the official simulator against this endpoint. Each canonical
-task evaluates 50 episodes; Generalization combines 25 base and 25 randomized
-episodes. It reports native success rate and normalized partial-progress score.
-Do not write result files or change the simulator, assets, or deployment adapters.
+A decision is a JSON object:
 
-This draft adapter evaluates external robot policies. The Harbor agent submits
-the endpoint; the external policy performs the robot manipulation.
+```json
+{
+  "request_id": "<from the current observation>",
+  "mode": "eef",
+  "steps": 5,
+  "reason": "Visible evidence and purpose of this motion.",
+  "target": {
+    "left": {"position": [0.0, 0.0, 0.0], "quaternion_wxyz": [1.0, 0.0, 0.0, 0.0], "gripper_closed": false},
+    "right": {"position": [0.0, 0.0, 0.0], "quaternion_wxyz": [1.0, 0.0, 0.0, 0.0], "gripper_closed": false}
+  }
+}
+```
+
+- Positions are in meters and orientations are unit quaternions in w, x, y, z
+  order. Both refer to each arm's `link6` in the shared environment-origin
+  frame, the same frame as `current_eef` in the observation.
+- Each target must stay within 0.05 m and 0.35 rad of that arm's current
+  measured pose. `steps` is 1 to 5 control steps at 25 Hz.
+- `gripper_closed` commands the gripper. The reported gripper value is the last
+  command, not a measured gap.
+- A rejected decision executes nothing and can be corrected. There is no reset,
+  rollback, or early stop, and object poses and rewards are not available.
+
+Each canonical task evaluates 50 episodes; Generalization tasks combine 25
+standard and 25 randomized episodes. The result is the native success rate and
+the normalized native partial-progress score over all 50 episodes.

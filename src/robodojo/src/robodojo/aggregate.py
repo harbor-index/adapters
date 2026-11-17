@@ -12,7 +12,11 @@ from .runtime import EvaluationError, read_json
 
 
 def aggregate(job_dir: Path) -> dict:
-    """Require one successful trial per canonical task, with matching provenance."""
+    """Require one successful trial per canonical task, with matching provenance.
+
+    All trials must share the layout seed group, the model, the prompt and the
+    scaffold settings; otherwise their scores are not one benchmark result.
+    """
     expected = {task: dimension for dimension, tasks in DIMENSION_TASKS.items() for task in tasks}
     trials: dict[str, dict] = {}
     provenance: set[str] = set()
@@ -46,10 +50,21 @@ def aggregate(job_dir: Path) -> dict:
             raise EvaluationError("Unexpected simulator revision")
         if report.get("xpolicylab_revision") != XPOLICYLAB_REVISION:
             raise EvaluationError("Unexpected XPolicyLab revision")
-        submission = report.get("submission")
-        if not isinstance(submission, dict) or set(submission) != {"policy_name", "host", "port"}:
-            raise EvaluationError("Missing policy endpoint provenance")
-        provenance.add(json.dumps({"seed": seed, "submission": submission}, sort_keys=True))
+        if report.get("policy_name") != "HarborDirect" or not isinstance(report.get("contract_version"), str):
+            raise EvaluationError("Missing Direct controller provenance")
+        agent = trial.get("agent_result")
+        metadata = agent.get("metadata") if isinstance(agent, dict) else None
+        direct = metadata.get("robodojo_direct") if isinstance(metadata, dict) else None
+        if not isinstance(direct, dict):
+            raise EvaluationError(f"Missing Direct agent provenance: {path.parent.name}")
+        scaffold = {key: direct.get(key) for key in (
+            "agent", "agent_version", "model", "contract_version", "prompt_sha256", "settings",
+        )}
+        if any(value is None for value in scaffold.values()):
+            raise EvaluationError(f"Incomplete Direct agent provenance: {path.parent.name}")
+        if scaffold["contract_version"] != report["contract_version"]:
+            raise EvaluationError("Agent and simulator used different action contracts")
+        provenance.add(json.dumps({"seed": seed, "direct": scaffold}, sort_keys=True))
         verifier = trial.get("verifier_result")
         rewards = verifier.get("rewards") if isinstance(verifier, dict) else None
         if rewards != report.get("rewards") or not isinstance(rewards, dict):
@@ -64,7 +79,7 @@ def aggregate(job_dir: Path) -> dict:
         missing = ", ".join(sorted(set(expected) - set(trials)))
         raise EvaluationError(f"Full benchmark requires 42 tasks; missing: {missing}")
     if len(provenance) != 1:
-        raise EvaluationError("Aggregate each simulator seed and policy endpoint separately")
+        raise EvaluationError("Aggregate each layout seed group, model and scaffold separately")
     dimensions = {
         dimension: {
             metric: math.fsum(trials[task][metric] for task in tasks) / len(tasks)

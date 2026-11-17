@@ -1,32 +1,18 @@
-"""Run native RoboDojo evaluation against an existing XPolicyLab policy server.
+"""Validation shared by the simulator supervisor, the verifier and aggregation.
 
-This bridge reads simulator-produced artifacts; it never accepts submitted scores.
-Infrastructure and incomplete-run errors produce no Harbor reward.
+Rewards are derived only from native simulator result files. Infrastructure
+errors and incomplete runs raise ``EvaluationError`` and produce no reward.
 """
 
 from __future__ import annotations
 
-import argparse
 from dataclasses import dataclass
-import ipaddress
 import json
-import keyword
 import math
-import os
 from pathlib import Path
-import re
-import shutil
-import subprocess
-import sys
-import time
-from typing import Any, Callable
-import uuid
+from typing import Any
 
-
-from .catalog import DIMENSION_TASKS, UPSTREAM_REVISION, XPOLICYLAB_REVISION
-
-
-SIMULATOR_TIMEOUT = 36_000
+from .catalog import DIMENSION_TASKS, UPSTREAM_REVISION
 
 
 class EvaluationError(RuntimeError):
@@ -46,13 +32,6 @@ class TaskSpec:
     seed: int
     upstream_revision: str
     variants: tuple[Variant, ...]
-
-
-@dataclass(frozen=True)
-class Submission:
-    policy_name: str
-    host: str
-    port: int
 
 
 def _unique_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
@@ -111,36 +90,6 @@ def load_spec(path: Path) -> TaskSpec:
     )
 
 
-def load_submission(path: Path) -> Submission:
-    value = read_json(path)
-    if set(value) != {"policy_name", "host", "port"}:
-        raise EvaluationError("Submission must contain only policy_name, host, and port")
-    policy = value["policy_name"]
-    if (
-        not isinstance(policy, str)
-        or not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", policy)
-        or keyword.iskeyword(policy)
-    ):
-        raise EvaluationError("policy_name must be a safe Python module identifier")
-    host = value["host"]
-    if not isinstance(host, str) or not host or len(host) > 253:
-        raise EvaluationError("host must be an IPv4 address or DNS hostname")
-    if re.fullmatch(r"[0-9.]+", host):
-        try:
-            ipaddress.IPv4Address(host)
-        except ipaddress.AddressValueError as exc:
-            raise EvaluationError("host is not a valid IPv4 address") from exc
-    elif not all(
-        re.fullmatch(r"[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?", label)
-        for label in host.removesuffix(".").split(".")
-    ):
-        raise EvaluationError("host must be an IPv4 address or DNS hostname")
-    port = value["port"]
-    if type(port) is not int or not 1 <= port <= 65535:
-        raise EvaluationError("port must be an integer from 1 through 65535")
-    return Submission(policy, host, port)
-
-
 def _number(value: Any, field: str, upper: float = 1.0) -> float:
     if type(value) not in (int, float) or not 0 <= value <= upper or not math.isfinite(value):
         raise EvaluationError(f"{field} must be a finite number in [0, {upper:g}]")
@@ -192,135 +141,8 @@ def validate_result(value: dict[str, Any], episodes: int) -> tuple[int, float]:
     return successes, total_score
 
 
-def result_path(root: Path, variant: Variant, submission: Submission, seed: int, run_id: str) -> Path:
-    return (
-        root / "eval_result" / "RoboDojo" / variant.name / submission.policy_name
-        / "arx_x5" / f"{seed}_ckpt_name=external,action_type=ee" / run_id / "_result.json"
-    )
-
-
-def find_result(
-    root: Path, variant: Variant, submission: Submission, seed: int,
-    run_id: str, started_ns: int,
-) -> Path:
-    """Locate only this invocation's artifact, rejecting stale or ambiguous output."""
-    scope = root / "eval_result" / "RoboDojo" / variant.name / submission.policy_name
-    candidates = [path for path in scope.rglob("_result.json") if run_id in path.parts]
-    expected = result_path(root, variant, submission, seed, run_id)
-    if len(candidates) != 1 or candidates[0] != expected:
-        raise EvaluationError("Expected exactly one native result for this task, policy, seed, and run ID")
-    if expected.is_symlink() or expected.resolve() != expected.absolute():
-        raise EvaluationError("Native result path must not contain symlinks")
-    if expected.stat().st_mtime_ns < started_ns:
-        raise EvaluationError("Native result is stale")
-    return expected
-
-
-def _write_json(path: Path, value: Any) -> None:
-    path.write_text(json.dumps(value, indent=2, allow_nan=False) + "\n", encoding="utf-8")
-
-
-def evaluate(
-    spec_path: Path, submission_path: Path, root: Path, output_dir: Path,
-    *, runner: Callable[..., subprocess.CompletedProcess] | None = None,
-) -> dict[str, float]:
-    """Run each native variant sequentially and publish a reward only on completion."""
-    runner = runner or subprocess.run
-    root, output_dir = root.resolve(), output_dir.resolve()
-    output_dir.mkdir(parents=True, exist_ok=True)
-    # A retry must never leave a previous successful reward after a failed run.
-    for filename in ("reward.json", "reward.txt", "evaluation.json"):
-        (output_dir / filename).unlink(missing_ok=True)
-    spec, submission = load_spec(spec_path), load_submission(submission_path)
-    for filename, expected_revision in (
-        (".harbor-upstream-revision", spec.upstream_revision),
-        (".harbor-xpolicylab-revision", XPOLICYLAB_REVISION),
-    ):
-        try:
-            revision = (root / filename).read_text(encoding="utf-8").strip()
-        except OSError as exc:
-            raise EvaluationError(f"Cannot verify image revision marker {filename}: {exc}") from exc
-        if revision != expected_revision:
-            raise EvaluationError(f"Image marker {filename} does not match the pinned upstream revision")
-    script = root / "scripts" / "robodojo.sh"
-    deploy = root / "XPolicyLab" / "policy" / submission.policy_name / "deploy.py"
-    if not script.is_file() or not deploy.is_file():
-        raise EvaluationError("Simulator entry point or installed policy deploy adapter is missing")
-    successes, total_score, total_episodes = 0, 0.0, 0
-    evaluated_variants = []
-    for variant in spec.variants:
-        run_id = f"harbor_{uuid.uuid4().hex}"
-        expected = result_path(root, variant, submission, spec.seed, run_id)
-        if expected.parent.exists():
-            raise EvaluationError("Invocation run directory already exists")
-        command = [
-            "bash", str(script), "client", "--task", variant.name,
-            "--policy-name", submission.policy_name, "--policy-host", submission.host,
-            "--policy-port", str(submission.port), "--seed", str(spec.seed),
-            "--eval-num", "native", "--ckpt", "external", "--action-type", "ee",
-        ]
-        environment = os.environ.copy()
-        environment.update(EVAL_NUM="native", ROBODOJO_RUN_ID=run_id)
-        started_ns = time.time_ns()
-        _write_json(output_dir / f"{variant.name}.run.json", {
-            "command": command, "run_id": run_id, "started_ns": started_ns,
-            "expected_result": str(expected), "upstream_revision": spec.upstream_revision,
-        })
-        try:
-            with (output_dir / f"{variant.name}.log").open("w", encoding="utf-8") as log:
-                runner(
-                    command, cwd=root, env=environment, stdout=log,
-                    stderr=subprocess.STDOUT, check=True, timeout=SIMULATOR_TIMEOUT,
-                )
-        except (OSError, subprocess.SubprocessError) as exc:
-            raise EvaluationError(f"Simulator failed for {variant.name}: {exc}") from exc
-        artifact = find_result(root, variant, submission, spec.seed, run_id, started_ns)
-        # Preserve the raw run artifacts before validating them for diagnosis.
-        if any(path.is_symlink() for path in artifact.parent.rglob("*")):
-            raise EvaluationError("Native artifacts must not contain symlinks")
-        destination = output_dir / "artifacts" / variant.name / run_id
-        shutil.copytree(artifact.parent, destination)
-        variant_successes, variant_score = validate_result(read_json(artifact), variant.episodes)
-        evaluated_variants.append({
-            "name": variant.name, "episodes": variant.episodes,
-            "run_id": run_id, "result_path": str(destination / "_result.json"),
-        })
-        successes += variant_successes
-        total_score += variant_score
-        total_episodes += variant.episodes
-    if total_episodes != 50:
-        raise EvaluationError("A canonical RoboDojo task must have exactly 50 evaluation episodes")
-    reward = {"success_rate": successes / total_episodes, "score": total_score / total_episodes}
-    provenance = {
-        "task_id": spec.task_id, "dimension": spec.dimension, "seed": spec.seed,
-        "upstream_revision": spec.upstream_revision,
-        "xpolicylab_revision": XPOLICYLAB_REVISION,
-        "submission": {"policy_name": submission.policy_name, "host": submission.host, "port": submission.port},
-        "variants": evaluated_variants, "rewards": reward,
-    }
-    evaluation_temporary = output_dir / "evaluation.json.tmp"
-    _write_json(evaluation_temporary, provenance)
-    evaluation_temporary.replace(output_dir / "evaluation.json")
-    temporary = output_dir / "reward.json.tmp"
-    _write_json(temporary, reward)
-    temporary.replace(output_dir / "reward.json")
-    return reward
-
-
-def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--spec", type=Path, default=Path("/tests/task_spec.json"))
-    parser.add_argument("--submission", type=Path, default=Path("/workspace/submission.json"))
-    parser.add_argument("--root", type=Path, default=Path("/workspace/RoboDojo"))
-    parser.add_argument("--output-dir", type=Path, default=Path("/logs/verifier"))
-    args = parser.parse_args(argv)
-    try:
-        evaluate(args.spec, args.submission, args.root, args.output_dir)
-    except (EvaluationError, OSError) as exc:
-        print(f"RoboDojo verification failed: {exc}", file=sys.stderr)
-        return 1
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())
+def write_json(path: Path, value: Any) -> None:
+    """Write JSON atomically so that readers never see a partial file."""
+    temporary = path.with_name(path.name + ".tmp")
+    temporary.write_text(json.dumps(value, indent=2, allow_nan=False) + "\n", encoding="utf-8")
+    temporary.replace(path)

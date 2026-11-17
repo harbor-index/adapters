@@ -42,9 +42,22 @@ class AdapterTests(unittest.TestCase):
         )
         required = {
             "task.toml", "instruction.md", "environment/Dockerfile",
-            "environment/docker-compose.yaml", "solution/solve.sh", "tests/test.sh",
+            "environment/simulator.Dockerfile", "environment/bridge_client.py",
+            "environment/docker-compose.yaml", "environment/simulator/task_spec.json",
+            "environment/simulator/robodojo/catalog.py", "environment/simulator/robodojo/runtime.py",
+            "environment/simulator/robodojo/direct/broker.py",
+            "environment/simulator/robodojo/direct/contract.py",
+            "environment/simulator/robodojo/direct/episode.py",
+            "environment/simulator/robodojo/direct/kinematics.py",
+            "environment/simulator/robodojo/direct/supervisor.py",
+            "environment/simulator/robodojo/direct/GPT_AS_POLICY_LICENSE",
+            "environment/simulator/robodojo/direct/policy/deploy.py",
+            "environment/simulator/robodojo/direct/policy/deploy.yml",
+            "environment/simulator/robodojo/direct/policy/model.py",
+            "environment/simulator/robodojo/direct/policy/setup_eval_policy_server.sh",
+            "solution/solve.sh", "tests/test.sh", "tests/Dockerfile",
             "tests/task_spec.json", "tests/robodojo/__init__.py",
-            "tests/robodojo/catalog.py", "tests/robodojo/runtime.py",
+            "tests/robodojo/catalog.py", "tests/robodojo/runtime.py", "tests/robodojo/verifier.py",
         }
         names, runtime_variants, total_episodes = set(), 0, 0
         for task in tasks:
@@ -58,7 +71,17 @@ class AdapterTests(unittest.TestCase):
                 self.assertEqual(config["version"], "1.0")
                 self.assertTrue(config["task"]["authors"])
                 self.assertEqual(config["environment"]["gpus"], 1)
+                # The verifier grades collected simulator files in its own small container.
+                self.assertEqual(config["verifier"]["environment_mode"], "separate")
+                self.assertEqual(config["verifier"]["environment"]["gpus"], 0)
+                self.assertEqual(config["artifacts"], [
+                    {"source": "/harbor-robodojo/results", "service": "simulator"},
+                ])
+                self.assertGreater(config["agent"]["timeout_sec"], config["verifier"]["timeout_sec"])
                 spec = json.loads((task / "tests/task_spec.json").read_text())
+                self.assertEqual(
+                    json.loads((task / "environment/simulator/task_spec.json").read_text()), spec,
+                )
                 self.assertEqual(config["metadata"]["upstream_task_id"], spec["task_id"])
                 self.assertEqual(spec["upstream_revision"], UPSTREAM_REVISION)
                 self.assertEqual(spec["seed"], 2)
@@ -154,7 +177,12 @@ class AdapterTests(unittest.TestCase):
     def test_assets_mounts_preserve_spaces_and_are_read_only(self):
         task = self.generate(task_ids=["insert_tubes"])[0]
         compose = json.loads((task / "environment/docker-compose.yaml").read_text())
-        service = compose["services"]["main"]
+        self.assertEqual(set(compose["services"]), {"main", "simulator"})
+        # The agent container gets no assets, no GPU and no published port.
+        self.assertEqual(compose["services"]["main"], {"platform": "linux/amd64"})
+        service = compose["services"]["simulator"]
+        self.assertNotIn("ports", service)
+        self.assertEqual(service["build"], {"context": "${CONTEXT_DIR}", "dockerfile": "simulator.Dockerfile"})
         self.assertEqual(service["platform"], "linux/amd64")
         self.assertEqual(
             {mount["target"] for mount in service["volumes"]},
@@ -181,16 +209,45 @@ class AdapterTests(unittest.TestCase):
 
     def test_rendered_templates_keep_shell_expressions_and_no_adapter_placeholders(self):
         task = self.generate(task_ids=["play_Xylophone"])[0]
-        dockerfile = (task / "environment/Dockerfile").read_text()
+        dockerfile = (task / "environment/simulator.Dockerfile").read_text()
         self.assertIn("FROM robodojo-harbor:f57e1633ffed\n", dockerfile)
         self.assertIn('"$(cat /workspace/RoboDojo/.harbor-upstream-revision)"', dockerfile)
         self.assertIn(UPSTREAM_REVISION, dockerfile)
-        self.assertIn(":${PATH}\n", dockerfile)
-        for relative in ("task.toml", "instruction.md", "environment/Dockerfile"):
+        self.assertIn('CMD ["python", "-m", "robodojo.direct.supervisor"]', dockerfile)
+        main = (task / "environment/Dockerfile").read_text()
+        self.assertIn("COPY bridge_client.py /opt/robodojo/bridge_client.py", main)
+        self.assertNotIn("robodojo-harbor", main)
+        self.assertIn("COPY . /tests", (task / "tests/Dockerfile").read_text())
+        for relative in (
+            "task.toml", "instruction.md", "environment/Dockerfile", "environment/simulator.Dockerfile",
+        ):
             text = (task / relative).read_text()
             self.assertFalse(re.search(
                 r"\$(?:task_id|harbor_name|dimension|seed|upstream_revision|image)\b", text,
             ), relative)
+
+    def test_agent_container_code_uses_only_the_standard_library(self):
+        task = self.generate(task_ids=["insert_tubes"])[0]
+        allowed = {
+            "__future__", "argparse", "json", "os", "pathlib", "shutil", "sys", "urllib",
+        }
+        imported = set(re.findall(
+            r"^(?:import|from) ([a-z_]+)", (task / "environment/bridge_client.py").read_text(), re.MULTILINE,
+        ))
+        self.assertTrue(imported <= allowed, imported - allowed)
+        # The verifier never imports simulator-side or agent-side modules.
+        self.assertFalse((task / "tests/robodojo/direct").exists())
+
+    def test_generated_tasks_parse_with_harbor(self):
+        try:
+            from harbor.models.task.config import TaskConfig
+        except ImportError:
+            self.skipTest("Harbor is not installed")
+        for task in self.generate(task_ids=["insert_tubes", "stack_bowls"]):
+            config = TaskConfig.model_validate_toml((task / "task.toml").read_text())
+            self.assertEqual(config.verifier.environment_mode.value, "separate")
+            self.assertEqual(config.artifacts[0].service, "simulator")
+            self.assertEqual(config.environment.gpus, 1)
 
 
 if __name__ == "__main__":

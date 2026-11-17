@@ -17,7 +17,12 @@ class AggregateTests(unittest.TestCase):
         self.temporary = tempfile.TemporaryDirectory()
         self.addCleanup(self.temporary.cleanup)
         self.job = Path(self.temporary.name) / "job"
-        self.endpoint = {"policy_name": "test_policy", "host": "policy.example.org", "port": 9999}
+        self.direct = {
+            "agent": "robodojo-direct", "agent_version": "0.2.0", "model": "provider/vision-model",
+            "contract_version": "direct-eef-v1", "prompt_sha256": "a" * 64,
+            "settings": {"image_history": 1, "temperature": None},
+            "stats": {"episodes": 50},
+        }
         self.records = {}
         index = 0
         for dimension, names in DIMENSION_TASKS.items():
@@ -27,19 +32,19 @@ class AggregateTests(unittest.TestCase):
                 rewards = {"success_rate": reward, "score": reward}
                 report = task_spec(task_id, 0)
                 report.update(
-                    xpolicylab_revision=XPOLICYLAB_REVISION,
-                    submission=deepcopy(self.endpoint), rewards=rewards,
+                    xpolicylab_revision=XPOLICYLAB_REVISION, policy_name="HarborDirect",
+                    contract_version="direct-eef-v1", rewards=rewards,
                 )
                 report["variants"] = [
                     {**variant, "run_id": f"harbor_{index:032x}_{variant_index}",
-                     "result_path": str(trial_dir / "verifier" / "artifacts" /
-                                        variant["name"] / f"run-{index}-{variant_index}" /
-                                        "_result.json")}
+                     "layout_ids": list(range(variant["episodes"])),
+                     "decisions": 100, "control_steps": 500}
                     for variant_index, variant in enumerate(report["variants"])
                 ]
                 trial = {
                     "task_name": f"robodojo/{task_id.lower().replace('_', '-')}",
                     "exception_info": None, "verifier_result": {"rewards": rewards},
+                    "agent_result": {"metadata": {"robodojo_direct": deepcopy(self.direct)}},
                 }
                 self.records[task_id] = (trial_dir, trial, report)
                 self.save(task_id)
@@ -61,7 +66,8 @@ class AggregateTests(unittest.TestCase):
         for dimension in ("memory", "precision", "long-horizon", "open"):
             self.assertEqual(result["dimensions"][dimension], {"success_rate": 0, "score": 0})
         self.assertEqual(result["seed"], 0)
-        self.assertEqual(result["submission"], self.endpoint)
+        expected = {key: value for key, value in self.direct.items() if key != "stats"}
+        self.assertEqual(result["direct"], expected)
         self.assertEqual(result["upstream_revision"], UPSTREAM_REVISION)
 
     def test_incomplete_or_repeated_task_cannot_produce_full_benchmark_score(self):
@@ -80,17 +86,51 @@ class AggregateTests(unittest.TestCase):
         with self.assertRaisesRegex(EvaluationError, "No Harbor trial"):
             aggregate(empty)
 
-    def test_seed_and_policy_endpoint_must_match_across_tasks(self):
-        _, _, report = self.records["insert_tubes"]
+    def test_seed_model_and_scaffold_must_match_across_tasks(self):
+        _, trial, report = self.records["insert_tubes"]
         report["seed"] = 1
         self.save("insert_tubes")
         with self.assertRaisesRegex(EvaluationError, "separately"):
             aggregate(self.job)
         report["seed"] = 0
-        report["submission"]["host"] = "different-policy.example.org"
+        direct = trial["agent_result"]["metadata"]["robodojo_direct"]
+        for field, value in (
+            ("model", "provider/other-model"), ("prompt_sha256", "b" * 64),
+            ("agent_version", "0.3.0"), ("settings", {"image_history": 2, "temperature": None}),
+        ):
+            with self.subTest(field=field):
+                original = direct[field]
+                direct[field] = value
+                self.save("insert_tubes")
+                with self.assertRaisesRegex(EvaluationError, "separately"):
+                    aggregate(self.job)
+                direct[field] = original
+        # Usage statistics differ per task and are not part of the identity.
+        direct["stats"] = {"episodes": 50, "decisions": 12345}
         self.save("insert_tubes")
-        with self.assertRaisesRegex(EvaluationError, "separately"):
-            aggregate(self.job)
+        self.assertEqual(aggregate(self.job)["tasks"], 42)
+
+    def test_direct_provenance_is_required(self):
+        _, trial, report = self.records["insert_tubes"]
+        original_trial, original_report = deepcopy(trial), deepcopy(report)
+        mutations = (
+            lambda: trial.pop("agent_result"),
+            lambda: trial["agent_result"]["metadata"].pop("robodojo_direct"),
+            lambda: trial["agent_result"]["metadata"]["robodojo_direct"].pop("prompt_sha256"),
+            lambda: trial["agent_result"]["metadata"]["robodojo_direct"].update(contract_version="other"),
+            lambda: report.update(policy_name="demo_policy"),
+            lambda: report.pop("contract_version"),
+        )
+        for index, mutate in enumerate(mutations):
+            with self.subTest(index=index):
+                trial.clear()
+                trial.update(deepcopy(original_trial))
+                report.clear()
+                report.update(deepcopy(original_report))
+                mutate()
+                self.save("insert_tubes")
+                with self.assertRaises(EvaluationError):
+                    aggregate(self.job)
 
     def test_failed_trial_is_not_averaged_as_policy_failure(self):
         _, trial, _ = self.records["insert_tubes"]
