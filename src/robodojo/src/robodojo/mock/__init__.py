@@ -8,6 +8,7 @@ the episode loop, the action contract and the verifier are the real ones.
 - ``scene``   The mock environment, its picture renderer and its motion model.
 - ``service`` Entry point of the mock simulator container.
 - ``solver``  A scripted player that needs no model. It is also the oracle.
+- ``fake_openai`` A local fake of the OpenAI Chat Completions endpoint.
 - ``local``   Runs the whole mock on one machine without Docker.
 
 Mock results carry ``"mock": true`` and a task name outside the benchmark, and

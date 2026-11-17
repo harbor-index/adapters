@@ -1,12 +1,15 @@
 """Run the mock task on this machine, without Docker, a GPU or the simulator.
 
     python -m robodojo.mock.local                       # scripted solver, no API key
+    python -m robodojo.mock.local --fake-openai         # real agent, fake OpenAI endpoint
     python -m robodojo.mock.local --model provider/name # a real vision model
 
 The mock service, the bridge client, the player and the verifier run as they
 do in the generated task, but in one process. With ``--model`` the real
 ``DirectAgent`` calls the model, which costs money; the API key is read from
-the environment exactly as in a Harbor run.
+the environment exactly as in a Harbor run. With ``--fake-openai`` the same
+agent and the real LiteLLM client talk to a local fake of the OpenAI Chat
+Completions endpoint instead: no key, no network and no cost.
 
 The result describes an invented task. It is not a RoboDojo score.
 """
@@ -16,6 +19,7 @@ from __future__ import annotations
 import argparse
 import asyncio
 import json
+import os
 from pathlib import Path
 import shlex
 import shutil
@@ -31,7 +35,9 @@ from ..catalog import mock_task_spec
 from ..direct import bridge_client
 from ..runtime import EvaluationError, read_json
 from ..verifier import verify
-from . import service, solver
+from . import fake_openai, service, solver
+
+FAKE_KEY_VARIABLE = "ROBODOJO_FAKE_OPENAI_KEY"
 
 
 def _free_port() -> int:
@@ -73,7 +79,19 @@ def _play_with_model(environment: LocalEnvironment, output: Path, args: argparse
     except ImportError as error:
         raise SystemExit(f"--model needs Harbor: run with `uv run --extra harbor` ({error})") from error
     options = {name: getattr(args, name) for name in ("api_base", "max_cost_usd") if getattr(args, name) is not None}
-    agent = DirectAgent(logs_dir=output / "agent", model_name=args.model, **options)
+    model = args.model
+    if args.fake_openai:
+        # A throwaway key for the local fake; it is checked like a real one.
+        os.environ.setdefault(FAKE_KEY_VARIABLE, "fake-key-for-local-mock")
+        fake = fake_openai.FakeOpenAI(os.environ[FAKE_KEY_VARIABLE])
+        server = fake_openai.make_server(fake, "127.0.0.1", 0)
+        threading.Thread(target=server.serve_forever, name="fake-openai", daemon=True).start()
+        model = "openai/fake-vision-model"
+        options = {
+            "api_base": f"http://127.0.0.1:{server.server_address[1]}/v1",
+            "api_key_env": FAKE_KEY_VARIABLE, "api_retries": 0,
+        }
+    agent = DirectAgent(logs_dir=output / "agent", model_name=model, **options)
     context = AgentContext()
 
     async def play() -> None:
@@ -90,9 +108,13 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--output", type=Path, help="New or empty directory for all files of this run")
     parser.add_argument("--model", help="Vision model for DirectAgent; the scripted solver plays if omitted")
+    parser.add_argument("--fake-openai", action="store_true",
+                        help="Run DirectAgent and LiteLLM against a local fake of the OpenAI endpoint")
     parser.add_argument("--api-base", help="Model endpoint, recorded without credentials")
     parser.add_argument("--max-cost-usd", type=float, help="Abort once this much has been spent")
     args = parser.parse_args(argv)
+    if args.fake_openai and (args.model or args.api_base):
+        parser.error("--fake-openai chooses its own model and endpoint")
     output = (args.output or Path(tempfile.mkdtemp(prefix="robodojo-mock-"))).resolve()
     if output.exists() and any(output.iterdir()):
         parser.error(f"Output directory is not empty: {output}")
@@ -117,7 +139,7 @@ def main(argv: list[str] | None = None) -> int:
             raise SystemExit("The mock service did not start")
         time.sleep(0.1)
 
-    if args.model:
+    if args.model or args.fake_openai:
         summary = _play_with_model(environment, output, args)
         print(json.dumps({"model": summary["model"], "served": summary["served"], **summary["stats"]}, indent=2))
     else:

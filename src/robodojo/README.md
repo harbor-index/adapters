@@ -150,6 +150,8 @@ uv run --extra harbor --group dev python -m robodojo.mock.local --episodes 2 --o
 
 The command prints the mock reward and saves the pictures of every observation under `observations/` in the output directory. To let a real vision model play, add `--model provider/model-name`, and optionally `--api-base` and `--max-cost-usd`. This calls the model API and costs money; the key is read from the environment as in a Harbor run. Two episodes need roughly 6 to 40 model calls with three small pictures each.
 
+To also test the model API path without a key, add `--fake-openai` instead of `--model`. The real `DirectAgent` and the real LiteLLM client then talk over HTTP to a local fake of the OpenAI Chat Completions endpoint. The fake checks every request as the real endpoint would (tool definition, forced tool call, PNG data URLs, tool-call and tool-message pairing, no unknown parameters, the bearer key) and answers in the OpenAI response format with a move planned by the scripted solver. It shows that the request and response formats fit. It is not a model, so it says nothing about real token counts, prices, or whether a model can read the pictures.
+
 To exercise Harbor and Docker Compose as well, generate the mock task and run it. Neither command has been run for this draft, because no Docker host was available:
 
 ```bash

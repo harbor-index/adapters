@@ -19,6 +19,7 @@ import threading
 import time
 import tomllib
 import unittest
+from unittest import mock
 
 from harbor.models.agent.context import AgentContext
 
@@ -29,8 +30,8 @@ from robodojo.direct import supervisor
 from robodojo.direct.broker import encode_png
 from robodojo.direct.contract import STEP_TRANSLATION_M
 from robodojo.direct.episode import joint_action
-from robodojo.direct_agent import DirectAgent
-from robodojo.mock import local, scene, service, solver
+from robodojo.direct_agent import DirectAgent, DirectRunError
+from robodojo.mock import fake_openai, local, scene, service, solver
 from robodojo.runtime import EvaluationError, load_spec
 from robodojo.verifier import verify
 
@@ -245,6 +246,7 @@ class GeneratedMockTaskTests(unittest.TestCase):
         self.addCleanup(process.kill)
         self.addCleanup(process.stdout.close)
         # Agent container: the oracle and the bridge client, standard library only.
+        # It starts at once, as in Compose, and must wait for the bridge itself.
         solved = subprocess.run(
             [sys.executable, "-I", str(self.task / "solution" / "solve.py"),
              "--bridge", str(self.task / "environment" / "bridge_client.py"),
@@ -330,6 +332,134 @@ class RealAgentOnMockTests(unittest.TestCase):
             self.assertEqual(set(pictures), {3})  # Every prompt carried the three camera pictures.
             self.assertEqual(verify(spec_path, directory / "results", directory / "verifier"),
                              {"success_rate": 1.0, "score": 1.0})
+
+
+class LocalRunnerTests(unittest.TestCase):
+    def test_fake_openai_mode_runs_the_agent_without_a_key(self):
+        with tempfile.TemporaryDirectory() as directory, mock.patch.dict("os.environ"):
+            output, printed = Path(directory) / "run", io.StringIO()
+            with contextlib.redirect_stdout(printed):
+                self.assertEqual(local.main(["--fake-openai", "--episodes", "1", "--output", str(output)]), 0)
+            self.assertIn(fake_openai.SERVED_MODEL, printed.getvalue())
+            self.assertIn("not a RoboDojo score", printed.getvalue())
+            run = json.loads((output / "agent" / "robodojo_direct" / "run.json").read_text())
+            self.assertEqual((run["model"], run["stats"]["episodes"]), ("openai/fake-vision-model", 1))
+            self.assertTrue(any((output / "observations").iterdir()))
+        for arguments in (["--fake-openai", "--model", "openai/x"], ["--fake-openai", "--api-base", "http://x"]):
+            with self.subTest(arguments=arguments), contextlib.redirect_stderr(io.StringIO()), \
+                    self.assertRaises(SystemExit):
+                local.main(arguments)
+
+
+class OpenAIWireFormatTests(unittest.TestCase):
+    """The real agent and the real LiteLLM client against a fake OpenAI endpoint.
+
+    Nothing is replaced inside the agent: requests leave over HTTP in the OpenAI
+    Chat Completions format and the responses are parsed by the client library.
+    """
+
+    KEY_VARIABLE = "ROBODOJO_FAKE_OPENAI_KEY"
+
+    def setUp(self):
+        self.temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temporary.cleanup)
+        self.directory = Path(self.temporary.name)
+        self.spec_path = self.directory / "task_spec.json"
+        self.spec_path.write_text(json.dumps(mock_task_spec(episodes=2)))
+        port = free_port()
+        threading.Thread(
+            target=service.evaluate, args=(self.spec_path, self.directory / "results"),
+            kwargs={"host": "127.0.0.1", "port": port}, daemon=True,
+        ).start()
+        self.environment = local.LocalEnvironment(f"http://127.0.0.1:{port}", self.directory / "bridge")
+        deadline = time.monotonic() + 30
+        while self.environment.call("status").get("status") == "transport_error":
+            self.assertLess(time.monotonic(), deadline)
+            time.sleep(0.05)
+        self.fake = fake_openai.FakeOpenAI("fake-key-for-wire-test", flawed_first_answer=True)
+        self.server = fake_openai.make_server(self.fake, "127.0.0.1", 0)
+        threading.Thread(target=self.server.serve_forever, daemon=True).start()
+        self.addCleanup(self.server.server_close)
+        self.addCleanup(self.server.shutdown)
+        self.api_base = f"http://127.0.0.1:{self.server.server_address[1]}/v1"
+
+    def play(self, key):
+        agent = DirectAgent(
+            logs_dir=self.directory / "agent", model_name="openai/fake-vision-model",
+            api_base=self.api_base, api_key_env=self.KEY_VARIABLE, api_retries=0, wait_sec=30,
+        )
+        context = AgentContext()
+
+        async def run():
+            await agent.setup(self.environment)
+            await agent.run("unused", self.environment, context)
+
+        with mock.patch.dict("os.environ", {self.KEY_VARIABLE: key}), \
+                contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+            try:
+                asyncio.run(run())
+            finally:
+                self.context = context
+        return context
+
+    def test_agent_plays_the_mock_through_the_openai_wire_format(self):
+        direct = self.play("fake-key-for-wire-test").metadata["robodojo_direct"]
+        self.assertEqual(self.fake.rejections, [])
+        self.assertEqual(verify(self.spec_path, self.directory / "results", self.directory / "verifier"),
+                         {"success_rate": 1.0, "score": 1.0})
+        calls = len(self.fake.requests)
+        stats = direct["stats"]
+        # The first answer was out of bounds, so one call more than accepted decisions.
+        self.assertEqual((stats["model_calls"], stats["invalid_responses"], stats["decisions"]),
+                         (calls, 1, calls - 1))
+        # Usage is read from the response body by the client library.
+        self.assertEqual((stats["input_tokens"], stats["output_tokens"]),
+                         (calls * fake_openai.PROMPT_TOKENS, calls * fake_openai.COMPLETION_TOKENS))
+        # The served model and the endpoint come from the response, without the key.
+        self.assertEqual(direct["served"]["models"], [fake_openai.SERVED_MODEL])
+        self.assertEqual(direct["endpoint"], {"api_base": self.api_base, "environment": {}})
+        self.assertEqual(direct["served"]["api_bases"], [self.api_base])
+        self.assertNotIn("fake-key-for-wire-test", json.dumps(direct))
+        for request in self.fake.requests:
+            self.assertEqual(request["model"], "fake-vision-model")
+            self.assertEqual((request["tool_choice"], request["parallel_tool_calls"]), ("required", False))
+            self.assertEqual(request["tools"][0]["function"]["name"], "robodojo_act")
+            _, pictures = fake_openai.newest_observation(request["messages"])
+            self.assertEqual(len(pictures), 3)
+        # The refused decision goes back as an assistant tool call and its tool message.
+        retry = self.fake.requests[1]["messages"]
+        self.assertEqual([message["role"] for message in retry], ["system", "user", "assistant", "tool"])
+        self.assertEqual(retry[2]["tool_calls"][0]["id"], retry[3]["tool_call_id"])
+        self.assertIn("rejected", retry[3]["content"])
+
+    def test_a_refused_api_key_fails_the_run_without_a_reward(self):
+        with self.assertRaisesRegex(DirectRunError, "Model API failed"):
+            self.play("wrong-key")
+        self.assertEqual(self.fake.requests, [])
+        self.assertIn("Incorrect API key", self.fake.rejections[0])
+        self.assertEqual(self.context.metadata["robodojo_direct"]["stats"]["decisions"], 0)
+        with self.assertRaises(EvaluationError):
+            verify(self.spec_path, self.directory / "results", self.directory / "verifier")
+
+    def test_malformed_requests_are_refused_like_the_real_endpoint_would(self):
+        tool = {"type": "function", "function": {"name": "robodojo_act", "parameters": {"type": "object"}}}
+        valid = {
+            "model": "fake-vision-model", "tools": [tool], "tool_choice": "required",
+            "messages": [{"role": "system", "content": "s"}, {"role": "user", "content": "u"}],
+        }
+        fake_openai.check_request(valid)
+        call = {"id": "c1", "type": "function", "function": {"name": "robodojo_act", "arguments": "{}"}}
+        for change in (
+            {"api_base": "http://leaked"}, {"tools": []}, {"tool_choice": "none"}, {"stream": True},
+            {"parallel_tool_calls": "no"},
+            {"messages": [{"role": "user", "content": "u"}, {"role": "user", "content": "u"}]},
+            {"messages": valid["messages"] + [{"role": "assistant", "content": None, "tool_calls": [call]}]},
+            {"messages": valid["messages"] + [{"role": "tool", "tool_call_id": "c1", "content": "x"}]},
+            {"messages": valid["messages"] + [{"role": "user", "content": [
+                {"type": "image_url", "image_url": {"url": "https://example.test/picture.png"}}]}]},
+        ):
+            with self.subTest(change=list(change)), self.assertRaises(fake_openai.RequestError):
+                fake_openai.check_request({**valid, **change})
 
 
 if __name__ == "__main__":

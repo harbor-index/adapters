@@ -20,6 +20,7 @@ from pathlib import Path
 import struct
 import subprocess
 import sys
+import time
 import zlib
 
 # Camera geometry and colors of ``scene.py``; a test keeps the two in step.
@@ -30,6 +31,7 @@ TARGET_COLORS = {"left": (220, 30, 30), "right": (30, 60, 220)}
 GOAL_HEIGHT_M = 0.10
 MOVE_M = 0.045  # Below the 0.05 m limit of the action contract.
 WAIT_SECONDS = "600"
+STARTUP_SECONDS = 300.0
 
 
 def decode_png(data: bytes) -> tuple[int, int, bytes]:
@@ -99,8 +101,14 @@ def plan(observation: dict, targets: dict[str, tuple[float, float]]) -> dict:
     }
 
 
-def solve(call: Callable[..., dict]) -> int:
+def solve(call: Callable[..., dict], startup_seconds: float = STARTUP_SECONDS) -> int:
     """Play until the bridge reports the end. ``call`` runs one bridge command."""
+    # The agent container can start before the service has opened its bridge.
+    deadline = time.monotonic() + startup_seconds
+    while call("status").get("status") == "transport_error":
+        if time.monotonic() >= deadline:
+            raise SystemExit("Mock solver stopped: the bridge did not become reachable")
+        time.sleep(0.5)
     targets: dict[str, tuple[float, float]] = {}
     decisions = 0
     result = call("observe", "--wait", WAIT_SECONDS)
