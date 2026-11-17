@@ -4,7 +4,7 @@
 
 This draft adapts the [RoboDojo](https://robodojo-benchmark.com/) simulation track to Harbor in **Direct mode**: a vision model controls the robot. For every observation the model sees the native task instruction, the camera frames and the measured robot state, and answers with one bounded end-effector motion for both arms. The adapter generates 42 canonical task directories.
 
-Nothing in this adapter has run on a GPU yet. The code is exercised by CPU tests with a fake simulator and a fake model. GPU execution, a passing oracle, parity experiments, and registry publication are pending, and no score is claimed.
+Nothing in this adapter has run on a GPU yet. The code is exercised by CPU tests with a fake simulator and a fake model, and the CPU mock task has run through Harbor and Docker Compose. GPU execution, a passing oracle, parity experiments, and registry publication are pending, and no score is claimed.
 
 The simulator is pinned to [RoboDojo `f57e1633ffed59761bc8e568cfe7530c4b33381c`](https://github.com/RoboDojo-Benchmark/RoboDojo/tree/f57e1633ffed59761bc8e568cfe7530c4b33381c), whose XPolicyLab gitlink is `5d0be1499634d3176258c8f2e31f5fe816497b0a`.
 
@@ -152,7 +152,7 @@ The command prints the mock reward and saves the pictures of every observation u
 
 To also test the model API path without a key, add `--fake-openai` instead of `--model`. The real `DirectAgent` and the real LiteLLM client then talk over HTTP to a local fake of the OpenAI Chat Completions endpoint. The fake checks every request as the real endpoint would (tool definition, forced tool call, PNG data URLs, tool-call and tool-message pairing, no unknown parameters, the bearer key) and answers in the OpenAI response format with a move planned by the scripted solver. It shows that the request and response formats fit. It is not a model, so it says nothing about real token counts, prices, or whether a model can read the pictures.
 
-To exercise Harbor and Docker Compose as well, generate the mock task and run it. Neither command has been run for this draft, because no Docker host was available:
+To exercise Harbor and Docker Compose as well, generate the mock task and run it:
 
 ```bash
 uv run robodojo --output-dir ../../datasets/robodojo-mock --mock --mock-episodes 2
@@ -161,7 +161,21 @@ uv run --extra harbor harbor run -p ../../datasets/robodojo-mock/mock-reach-targ
   -a robodojo.direct_agent:DirectAgent -m provider/model-name
 ```
 
-The oracle of the mock task is the scripted solver, so the first `harbor run` needs no model.
+The oracle of the mock task is the scripted solver, so the first `harbor run` needs no model. The second calls a real model. To run `DirectAgent` in Harbor without a key, serve the fake endpoint in another terminal and point the agent at it:
+
+```bash
+export ROBODOJO_FAKE_OPENAI_KEY=any-throwaway-value
+uv run --extra harbor --group dev python -m robodojo.mock.fake_openai --port 8765
+```
+
+```bash
+export ROBODOJO_FAKE_OPENAI_KEY=any-throwaway-value
+uv run --extra harbor harbor run -p ../../datasets/robodojo-mock/mock-reach-targets \
+  -a robodojo.direct_agent:DirectAgent -m openai/fake-vision-model \
+  --ak api_base=http://127.0.0.1:8765/v1 --ak api_key_env=ROBODOJO_FAKE_OPENAI_KEY --ak api_retries=0
+```
+
+On November 17, 2026 the oracle run and the fake-endpoint run both completed on an Apple M1 with Docker 29.5.2 under Colima and Harbor 0.26.0: one trial each, two episodes, six decisions, no exception, mock reward 1.0 from the separate verifier container. The run with a real model has not been done. These runs show that the three containers build, start, reach each other, and hand their files to Harbor. They are not benchmark evidence.
 
 What the mock does not cover: Isaac Sim, the pinned image and its GPU setup, the native policy WebSocket, the robot's inverse kinematics, native recovery from invalid layouts, and the difficulty of any real task. A model that solves the mock has shown nothing about RoboDojo.
 
@@ -218,7 +232,29 @@ env -u EVAL_NUM bash scripts/robodojo.sh client \
   --env-cfg arx_x5 --seed 0 --ckpt direct --action-type joint --eval-num native
 ```
 
-Run the client again with `--task stack_bowls_random` for the second half of a Generalization task. The model half of the original side is not written yet: it needs a small driver that runs the `DirectAgent` loop against `http://127.0.0.1:19100` without Harbor. Until that driver exists, the original side cannot be run.
+Run the client again with `--task stack_bowls_random` for the second half of a Generalization task.
+
+The model half is `robodojo.original`. It runs `DirectPlayer`, the same class that `DirectAgent` runs inside Harbor, so both sides share the prompt, the tool, the validation, the retries, and the limits. It needs the model client but not Harbor, and the bridge client is the same file, run in the driver's process:
+
+```bash
+cd src/robodojo
+uv run --extra original python -m robodojo.original \
+  --model provider/model-name --api-base https://api.provider.example/v1 \
+  --bridge-url http://127.0.0.1:19100 --output /path/to/new-directory \
+  --spec /path/to/task_spec.json --results-dir /path/to/results
+```
+
+Every `DirectAgent` option of the table above is a flag of the driver, for example `--image-history 1`, with the same default. The API key is read from the environment. The driver writes `robodojo_direct/decisions.jsonl` and `robodojo_direct/run.json` as the Harbor agent does. With `--spec` and `--results-dir` it also validates the finished run with the checks of the Harbor verifier and writes `original_side.json`, which holds the provenance, the totals of every native `_result.json` as the native code wrote them, and the comparable reward. A failed or incomplete run ends with a nonzero exit code and no result.
+
+The driver stops when the bridge reports that the native run is finished. The bridge learns that from `supervisor.json` in the results directory, which the two native commands above do not write. `robodojo.direct.supervisor` does: it starts those same native commands for every variant, copies each `_result.json` to `native/<variant>/`, and writes the verdict. It uses no Harbor code. Outside the image it needs the two revision marker files that `scripts/prepare_image.sh` writes into the checkout, `HARBOR_ROBODOJO_HOME` on `PYTHONPATH`, no existing `XPolicyLab/policy/HarborDirect` directory, and the `task_spec.json` of the generated task:
+
+```bash
+PYTHONPATH="$HARBOR_ROBODOJO_HOME" python -m robodojo.direct.supervisor \
+  --spec /path/to/task_spec.json --root "$PWD" --results-dir "$HARBOR_ROBODOJO_RESULTS" \
+  --policy-source "$HARBOR_ROBODOJO_HOME/robodojo/direct/policy" --exit-when-done
+```
+
+No original-side command has run against the real simulator. On the CPU mock, a Harbor trial in Docker and the driver outside Harbor were run with the same seed and the fake model endpoint: the recorded provenance and counters were identical, the six decisions were identical, and both rewards were 1.0. This checks that the two sides execute the same loop. It is not a parity result.
 
 For the Harbor side, regenerate tasks with the matching seed, run `run_robodojo.yaml`, and use `robodojo.aggregate`. Preserve raw per-episode results on both sides, then populate the parity JSON, raw run arrays, the comparison table, and artifact links.
 

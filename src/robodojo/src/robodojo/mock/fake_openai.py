@@ -12,9 +12,11 @@ response formats fit, not that any model can read the pictures.
 
 from __future__ import annotations
 
+import argparse
 import base64
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
+import os
 import threading
 import time
 from typing import Any
@@ -201,3 +203,27 @@ def make_server(fake: FakeOpenAI, host: str, port: int) -> ThreadingHTTPServer:
             pass
 
     return ThreadingHTTPServer((host, port), Handler)
+
+
+def main(argv: list[str] | None = None) -> int:
+    """Serve the fake endpoint on its own, for a Harbor run of the mock task."""
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("--host", default="127.0.0.1")
+    parser.add_argument("--port", type=int, default=8765)
+    parser.add_argument("--key-env", default="ROBODOJO_FAKE_OPENAI_KEY",
+                        help="Environment variable holding the throwaway key that requests must carry")
+    args = parser.parse_args(argv)
+    key = os.environ.get(args.key_env)
+    if not key:
+        parser.error(f"Set {args.key_env} to any throwaway value; requests must carry it")
+    server = make_server(FakeOpenAI(key), args.host, args.port)
+    print(f"Fake OpenAI endpoint (not a model): http://{args.host}:{server.server_address[1]}/v1", flush=True)
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        pass
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

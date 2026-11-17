@@ -1022,6 +1022,9 @@ source = { editable = "." }
 harbor = [
     { name = "harbor" },
 ]
+original = [
+    { name = "litellm" },
+]
 
 [package.dev-dependencies]
 dev = [
@@ -1030,8 +1033,11 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "harbor", marker = "extra == 'harbor'", specifier = "==0.26.0" }]
-provides-extras = ["harbor"]
+requires-dist = [
+    { name = "harbor", marker = "extra == 'harbor'", specifier = "==0.26.0" },
+    { name = "litellm", marker = "extra == 'original'", specifier = ">=1.109.1" },
+]
+provides-extras = ["harbor", "original"]
 
 [package.metadata.requires-dev]
 dev = [

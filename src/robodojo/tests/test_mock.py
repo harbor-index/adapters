@@ -30,7 +30,7 @@ from robodojo.direct import supervisor
 from robodojo.direct.broker import encode_png
 from robodojo.direct.contract import STEP_TRANSLATION_M
 from robodojo.direct.episode import joint_action
-from robodojo.direct_agent import DirectAgent, DirectRunError
+from robodojo.direct_agent import DirectAgent, DirectRunError, HarborBridge
 from robodojo.mock import fake_openai, local, scene, service, solver
 from robodojo.runtime import EvaluationError, load_spec
 from robodojo.verifier import verify
@@ -347,7 +347,7 @@ class LocalRunnerTests(unittest.TestCase):
             self.assertEqual(json.loads(done.stdout)["status"], "transport_error")
             agent = DirectAgent(logs_dir=Path(directory) / "agent", model_name="fake/vision-model")
             with self.assertRaisesRegex(DirectRunError, "failed with code 3"):
-                asyncio.run(agent._bridge(environment, "status"))
+                asyncio.run(agent.player._bridge(HarborBridge(environment), "status"))
             # Wrong usage ends the real program with code 2; nothing else may run here.
             with contextlib.redirect_stderr(io.StringIO()):
                 self.assertEqual(asyncio.run(environment.exec(command=f"{command} act")).return_code, 2)

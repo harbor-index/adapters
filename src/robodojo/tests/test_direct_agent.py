@@ -22,6 +22,7 @@ from robodojo.catalog import XPOLICYLAB_REVISION
 from robodojo.direct.broker import Broker, make_server
 from robodojo.direct.episode import DirectAbort, run_episode
 from robodojo.direct.prompts import PROMPT_SHA256, SYSTEM_PROMPT, build_messages
+from robodojo.direct.player import DirectPlayer
 from robodojo.direct_agent import BRIDGE_COMMAND, DirectAgent, DirectRunError, public_endpoint
 from robodojo.mock.local import LocalEnvironment
 from robodojo.runtime import EvaluationError, write_json
@@ -124,7 +125,7 @@ class LifecycleTests(unittest.TestCase):
         )
         async def no_sleep(seconds):
             return None
-        agent._sleep = no_sleep
+        agent.player._sleep = no_sleep
         return agent
 
     def run_agent(self, agent):
@@ -352,7 +353,7 @@ class AgentConfigurationTests(unittest.TestCase):
                 for index, name in enumerate(names)
             ]}}]}
 
-        turn, decision, error = DirectAgent._parse(response("robodojo_act"))
+        turn, decision, error = DirectPlayer._parse(response("robodojo_act"))
         self.assertEqual((turn["kind"], decision, error), ("attempt", {}, None))
         for names, message in (
             ((), "did not call"), (("unregistered_tool",), "unknown tool"),
@@ -360,7 +361,7 @@ class AgentConfigurationTests(unittest.TestCase):
             (("robodojo_act", "unregistered_tool"), "2 tool calls"),
         ):
             with self.subTest(names=names):
-                turn, decision, error = DirectAgent._parse(response(*names))
+                turn, decision, error = DirectPlayer._parse(response(*names))
                 self.assertEqual((turn["kind"], decision), ("reply", None))
                 self.assertIn(message, error)
                 self.assertNotIn("arguments", turn)

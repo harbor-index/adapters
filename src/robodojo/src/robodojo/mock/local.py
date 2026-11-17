@@ -32,7 +32,7 @@ from types import SimpleNamespace
 from typing import Any
 
 from ..catalog import mock_task_spec
-from ..direct import bridge_client
+from ..direct.player import run_bridge_client
 from ..runtime import EvaluationError, read_json
 from ..verifier import verify
 from . import fake_openai, service, solver
@@ -60,18 +60,14 @@ class LocalEnvironment:
 
     def _client(self, *arguments: str) -> tuple[int, str]:
         """Run one bridge command; return its exit code and its output."""
-        lines: list[str] = []
-        try:
-            code = bridge_client.main(["--url", self.url, "--out", str(self.out), *arguments], lines.append)
-        except SystemExit as stop:  # Wrong usage ends the real program with a nonzero code.
-            code = stop.code if type(stop.code) is int else 1
+        code, output = run_bridge_client(self.url, self.out, arguments)
         if self.keep is not None and code == 0:
-            result = json.loads(lines[-1])
+            result = json.loads(output.splitlines()[-1])
             if result.get("status") == "observation":
                 # The bridge client keeps only the open observation; save every one.
                 source = Path(result["observation_dir"])
                 shutil.copytree(source, self.keep / f"{len(list(self.keep.iterdir())):04d}_{source.name}")
-        return code, "\n".join(lines)
+        return code, output
 
     def call(self, *arguments: str) -> dict[str, Any]:
         """One bridge command for the scripted solver, which reads only the answer."""
