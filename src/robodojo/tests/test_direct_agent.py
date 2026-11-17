@@ -10,48 +10,26 @@ import importlib.util
 import json
 from pathlib import Path
 import shlex
-import shutil
 import tempfile
 import threading
 import time
-from types import SimpleNamespace
 import unittest
 from unittest import mock
 
 from harbor.models.agent.context import AgentContext
 
 from robodojo.catalog import XPOLICYLAB_REVISION
-from robodojo.direct import bridge_client
 from robodojo.direct.broker import Broker, make_server
 from robodojo.direct.episode import DirectAbort, run_episode
 from robodojo.direct.prompts import PROMPT_SHA256, SYSTEM_PROMPT, build_messages
 from robodojo.direct_agent import BRIDGE_COMMAND, DirectAgent, DirectRunError, public_endpoint
+from robodojo.mock.local import LocalEnvironment
 from robodojo.runtime import EvaluationError, write_json
 from robodojo.verifier import verify
 
 from helpers import FakeEnv, FakeKinematics, hold, model_call, task_spec_dict
 
 POLICY = Path(__file__).parents[1] / "src" / "robodojo" / "direct" / "policy"
-
-
-class FakeEnvironment:
-    """Stand-in for the agent container: runs the real bridge client in-process."""
-
-    def __init__(self, url, out):
-        self.url, self.out, self.commands = url, out, []
-
-    async def exec(self, command, timeout_sec=None, **kwargs):
-        self.commands.append(command)
-        assert command.startswith(BRIDGE_COMMAND + " ")
-        arguments = shlex.split(command[len(BRIDGE_COMMAND):])
-        lines = []
-        code = await asyncio.to_thread(
-            bridge_client.main, ["--url", self.url, "--out", str(self.out), *arguments], lines.append,
-        )
-        return SimpleNamespace(return_code=code, stdout="\n".join(lines), stderr="")
-
-    async def download_dir(self, source_dir, target_dir):
-        shutil.copytree(source_dir, target_dir, dirs_exist_ok=True)
 
 
 def tool_response(arguments, call_id="call_1", tokens=(100, 20)):
@@ -91,7 +69,8 @@ class LifecycleTests(unittest.TestCase):
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
         self.call = model_call(module.Model({}, broker=self.broker, serve=False))
-        self.environment = FakeEnvironment(
+        # The agent container is replaced by the bridge client run in-process.
+        self.environment = LocalEnvironment(
             f"http://127.0.0.1:{self.server.server_address[1]}", self.directory / "container-out",
         )
         self.spec_path = self.directory / "task_spec.json"

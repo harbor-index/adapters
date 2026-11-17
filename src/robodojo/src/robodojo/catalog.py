@@ -62,9 +62,17 @@ DIMENSION_TASKS: dict[str, tuple[str, ...]] = {
     ),
 }
 
+# Episodes per canonical task. Generalization splits them evenly between its
+# standard and its randomized configuration.
+NATIVE_EPISODES = 50
+
 
 def task_spec(task_id: str, seed: int = 0) -> dict:
-    """Return the immutable evaluation settings for one canonical task."""
+    """Return the immutable evaluation settings for one canonical task.
+
+    This is the only definition of the variants and their episode counts.
+    Generation writes it out, and ``runtime.load_spec`` accepts nothing else.
+    """
     dimension = next((d for d, names in DIMENSION_TASKS.items() if task_id in names), None)
     if dimension is None:
         raise ValueError(f"Unknown canonical RoboDojo task: {task_id}")
@@ -74,7 +82,7 @@ def task_spec(task_id: str, seed: int = 0) -> dict:
         "dimension": dimension,
         "seed": seed,
         "upstream_revision": UPSTREAM_REVISION,
-        "variants": [{"name": name, "episodes": 50 // len(names)} for name in names],
+        "variants": [{"name": name, "episodes": NATIVE_EPISODES // len(names)} for name in names],
     }
 
 

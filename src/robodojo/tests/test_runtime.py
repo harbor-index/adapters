@@ -6,7 +6,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from robodojo import runtime
+from robodojo import catalog, runtime
 
 from helpers import native_result, task_spec_dict
 
@@ -74,12 +74,41 @@ class RuntimeTests(unittest.TestCase):
             {"seed": True}, {"seed": -1}, {"upstream_revision": "main"},
             {"variants": [{"name": "insert_tubes", "episodes": 1}]},
             {"variants": [{"name": "insert_tubes", "episodes": 50.0}]},
+            {"variants": [{"name": "insert_tubes", "episodes": 50, "layouts": [0]}]},
+            {"variants": [{"name": "insert_tubes", "episodes": 25}, {"name": "insert_tubes_random", "episodes": 25}]},
+            {"task_id": ["insert_tubes"]}, {"task_id": None}, {"seed": 0.0},
+            # A field the catalog does not define could change how a reader interprets the task.
+            {"episodes": 1},
         )
         for changed in invalid:
             with self.subTest(changed=changed):
                 self.spec_path.write_text(json.dumps({**self.spec, **changed}))
                 with self.assertRaises(runtime.EvaluationError):
                     runtime.load_spec(self.spec_path)
+        self.spec_path.write_text(json.dumps({**self.spec, "dimension": "memory"}))
+        with self.assertRaisesRegex(runtime.EvaluationError, "pinned native protocol in: dimension$"):
+            runtime.load_spec(self.spec_path)
+
+    def test_every_catalog_specification_is_the_one_that_loads(self):
+        """Generation and validation share one definition, so they cannot drift apart."""
+        for dimension, names in catalog.DIMENSION_TASKS.items():
+            for name in names:
+                written = catalog.task_spec(name, 3)
+                self.spec_path.write_text(json.dumps(written))
+                spec = runtime.load_spec(self.spec_path)
+                self.assertEqual((spec.task_id, spec.dimension, spec.seed, spec.mock), (name, dimension, 3, False))
+                self.assertEqual(
+                    [(variant.name, variant.episodes) for variant in spec.variants],
+                    [(variant["name"], variant["episodes"]) for variant in written["variants"]],
+                )
+                self.assertEqual(sum(variant.episodes for variant in spec.variants), catalog.NATIVE_EPISODES)
+        # The counts themselves are pinned here, independently of the catalog's arithmetic.
+        self.assertEqual(catalog.NATIVE_EPISODES, 50)
+        self.assertEqual(
+            catalog.task_spec("stack_bowls")["variants"],
+            [{"name": "stack_bowls", "episodes": 25}, {"name": "stack_bowls_random", "episodes": 25}],
+        )
+        self.assertEqual(catalog.task_spec("insert_tubes")["variants"], [{"name": "insert_tubes", "episodes": 50}])
 
     def test_json_reader_rejects_ambiguous_or_nonstandard_input(self):
         path = self.directory / "value.json"

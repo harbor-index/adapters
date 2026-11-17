@@ -12,7 +12,7 @@ import math
 from pathlib import Path
 from typing import Any
 
-from .catalog import DIMENSION_TASKS, MOCK_TASK_ID, UPSTREAM_REVISION, mock_task_spec
+from .catalog import mock_task_spec, task_spec
 
 
 class EvaluationError(RuntimeError):
@@ -63,56 +63,53 @@ def read_json(path: Path) -> dict[str, Any]:
     return value
 
 
-def _load_mock_spec(value: dict[str, Any]) -> TaskSpec:
-    """Accept only the exact mock specification, with a free episode count."""
-    seed, variants = value.get("seed"), value.get("variants")
-    if type(seed) is not int or seed < 0:
-        raise EvaluationError("Task seed must be a nonnegative integer")
-    episodes = variants[0].get("episodes") if (
-        isinstance(variants, list) and len(variants) == 1 and isinstance(variants[0], dict)
-    ) else None
-    try:
-        expected = mock_task_spec(seed, episodes)
-    except ValueError as exc:
-        raise EvaluationError(str(exc)) from exc
-    if value != expected:
-        raise EvaluationError("Mock task specification is not the expected one")
-    return TaskSpec(
-        MOCK_TASK_ID, expected["dimension"], seed, expected["upstream_revision"],
-        (Variant(MOCK_TASK_ID, episodes),), mock=True,
-    )
+def _identical(left: Any, right: Any) -> bool:
+    """Equal in value and in JSON type, so that 50.0 is not 50 and true is not 1."""
+    if type(left) is not type(right):
+        return False
+    if isinstance(left, dict):
+        return left.keys() == right.keys() and all(_identical(left[key], right[key]) for key in left)
+    if isinstance(left, list):
+        return len(left) == len(right) and all(map(_identical, left, right))
+    return left == right
 
 
 def load_spec(path: Path) -> TaskSpec:
+    """Accept only the specification that the catalog defines for this task and seed.
+
+    The catalog is the single definition of the native protocol. A file that
+    differs from it in any field, value or type is refused.
+    """
     value = read_json(path)
-    if "mock" in value:
-        if value["mock"] is not True:
-            raise EvaluationError("A task specification is either a mock or has no mock field")
-        return _load_mock_spec(value)
-    task_id, dimension = value.get("task_id"), value.get("dimension")
-    if not isinstance(dimension, str) or dimension not in DIMENSION_TASKS:
-        raise EvaluationError("Task specification has an unknown dimension")
-    if task_id not in DIMENSION_TASKS[dimension]:
-        raise EvaluationError("Task is not canonical for its capability dimension")
+    mock = "mock" in value
+    if mock and value["mock"] is not True:
+        raise EvaluationError("A task specification is either a mock or has no mock field")
     seed = value.get("seed")
     if type(seed) is not int or seed < 0:
         raise EvaluationError("Task seed must be a nonnegative integer")
-    if value.get("upstream_revision") != UPSTREAM_REVISION:
-        raise EvaluationError("Task specification does not use the pinned upstream revision")
-    expected = (
-        [{"name": task_id, "episodes": 25}, {"name": f"{task_id}_random", "episodes": 25}]
-        if dimension == "generalization"
-        else [{"name": task_id, "episodes": 50}]
+    try:
+        if mock:
+            # Only the mock may choose its episode count, within its own limits.
+            variants = value.get("variants")
+            single = isinstance(variants, list) and len(variants) == 1 and isinstance(variants[0], dict)
+            expected = mock_task_spec(seed, variants[0].get("episodes") if single else None)
+        else:
+            expected = task_spec(value.get("task_id"), seed)
+    except ValueError as exc:
+        raise EvaluationError(str(exc)) from exc
+    missing = object()
+    different = sorted(
+        key for key in value.keys() | expected.keys()
+        if not _identical(value.get(key, missing), expected.get(key, missing))
     )
-    variants = value.get("variants")
-    if variants != expected or not isinstance(variants, list):
-        raise EvaluationError("Task variants must match the complete native evaluation protocol")
-    for variant in variants:
-        if type(variant["episodes"]) is not int:
-            raise EvaluationError("Episode count must be an integer")
+    if different:
+        kind = "Mock task" if mock else "Task"
+        raise EvaluationError(
+            f"{kind} specification does not match the pinned native protocol in: {', '.join(different)}"
+        )
     return TaskSpec(
-        task_id, dimension, seed, UPSTREAM_REVISION,
-        tuple(Variant(**variant) for variant in variants),
+        expected["task_id"], expected["dimension"], seed, expected["upstream_revision"],
+        tuple(Variant(**variant) for variant in expected["variants"]), mock=mock,
     )
 
 

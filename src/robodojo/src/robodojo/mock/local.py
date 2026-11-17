@@ -47,25 +47,47 @@ def _free_port() -> int:
 
 
 class LocalEnvironment:
-    """Stand-in for the agent container: runs the bridge client in this process."""
+    """Stand-in for the agent container: runs the real bridge client in this process.
+
+    The exit code and the printed lines are passed on as a container would
+    report them, so a transport failure looks the same as in a Harbor run.
+    The tests of the agent use this class too.
+    """
 
     def __init__(self, url: str, out: Path, keep: Path | None = None) -> None:
         self.url, self.out, self.keep = url, out, keep
+        self.commands: list[str] = []  # Every command passed to ``exec``.
 
-    def call(self, *command: str) -> dict[str, Any]:
+    def _client(self, *arguments: str) -> tuple[int, str]:
+        """Run one bridge command; return its exit code and its output."""
         lines: list[str] = []
-        bridge_client.main(["--url", self.url, "--out", str(self.out), *command], lines.append)
-        result = json.loads(lines[-1])
-        if self.keep is not None and result.get("status") == "observation":
-            # The bridge client keeps only the open observation; save every one.
-            source = Path(result["observation_dir"])
-            shutil.copytree(source, self.keep / f"{len(list(self.keep.iterdir())):04d}_{source.name}")
-        return result
+        try:
+            code = bridge_client.main(["--url", self.url, "--out", str(self.out), *arguments], lines.append)
+        except SystemExit as stop:  # Wrong usage ends the real program with a nonzero code.
+            code = stop.code if type(stop.code) is int else 1
+        if self.keep is not None and code == 0:
+            result = json.loads(lines[-1])
+            if result.get("status") == "observation":
+                # The bridge client keeps only the open observation; save every one.
+                source = Path(result["observation_dir"])
+                shutil.copytree(source, self.keep / f"{len(list(self.keep.iterdir())):04d}_{source.name}")
+        return code, "\n".join(lines)
+
+    def call(self, *arguments: str) -> dict[str, Any]:
+        """One bridge command for the scripted solver, which reads only the answer."""
+        code, output = self._client(*arguments)
+        try:
+            return json.loads(output.splitlines()[-1])
+        except (IndexError, ValueError):
+            raise SystemExit(f"Bridge client failed ({code})") from None
 
     async def exec(self, command: str, timeout_sec: int | None = None, **_: Any) -> SimpleNamespace:
-        arguments = shlex.split(command)[2:]  # Drop "python3 /opt/robodojo/bridge_client.py".
-        result = await asyncio.to_thread(self.call, *arguments)
-        return SimpleNamespace(return_code=0, stdout=json.dumps(result), stderr="")
+        program = shlex.split(command)
+        if program[:1] != ["python3"] or Path(*program[1:2]).name != "bridge_client.py":
+            raise ValueError(f"Only the bridge client runs in the agent container: {command[:200]}")
+        self.commands.append(command)
+        code, output = await asyncio.to_thread(self._client, *program[2:])
+        return SimpleNamespace(return_code=code, stdout=output, stderr="")
 
     async def download_dir(self, source_dir: str, target_dir: Path) -> None:
         shutil.copytree(source_dir, target_dir, dirs_exist_ok=True)

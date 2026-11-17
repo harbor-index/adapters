@@ -85,16 +85,18 @@ class RoboDojoAdapter:
 
     def run(self) -> list[Path]:
         if self.mock:
-            return [self._run_mock()]
-        names = sorted(name for tasks in DIMENSION_TASKS.values() for name in tasks)
-        if self.task_ids is not None:
-            unknown = set(self.task_ids) - set(names)
-            if unknown:
-                raise ValueError(f"Unknown canonical task IDs: {', '.join(sorted(unknown))}")
-            names = [name for name in names if name in self.task_ids]
-        if self.limit is not None:
-            names = names[:self.limit]
+            names = [MOCK_TASK_ID]
+        else:
+            names = sorted(name for tasks in DIMENSION_TASKS.values() for name in tasks)
+            if self.task_ids is not None:
+                unknown = set(self.task_ids) - set(names)
+                if unknown:
+                    raise ValueError(f"Unknown canonical task IDs: {', '.join(sorted(unknown))}")
+                names = [name for name in names if name in self.task_ids]
+            if self.limit is not None:
+                names = names[:self.limit]
         targets = [self.output_dir / name.lower().replace("_", "-") for name in names]
+        # Every target is checked before the first task is written.
         for target in targets:
             if target.is_symlink():
                 raise ValueError(f"Refusing to replace a symbolic link: {target}")
@@ -102,42 +104,14 @@ class RoboDojoAdapter:
                 raise FileExistsError(f"Task exists: {target}; use --overwrite to replace it")
         self.output_dir.mkdir(parents=True, exist_ok=True)
         for name, target in zip(names, targets, strict=True):
-            spec = task_spec(name, self.seed)
+            # A task is built in a staging directory and published in one rename.
             with tempfile.TemporaryDirectory(dir=self.output_dir, prefix=".robodojo-") as work:
                 staging = Path(work) / "task"
                 shutil.copytree(self.package_dir / "task-template", staging)
-                values = {
-                    "task_id": name,
-                    "harbor_name": f"robodojo/{target.name}",
-                    "dimension": spec["dimension"],
-                    "seed": str(self.seed),
-                    "upstream_revision": UPSTREAM_REVISION,
-                    "image": self.image,
-                    "simulator_cpus": str(SIMULATOR_CPUS),
-                    "simulator_memory_mb": str(SIMULATOR_MEMORY_MB),
-                    "simulator_storage_mb": str(SIMULATOR_STORAGE_MB),
-                    "simulator_gpus": str(SIMULATOR_GPUS),
-                }
-                environment = staging / "environment"
-                for relative in ("task.toml", "instruction.md", "environment/simulator.Dockerfile"):
-                    file = staging / relative
-                    file.write_text(Template(file.read_text()).substitute(values))
-                spec_text = json.dumps(spec, indent=2) + "\n"
-                # Agent container: the bridge client only.
-                shutil.copy2(self.package_dir / "direct" / "bridge_client.py", environment)
-                # Simulator container: native policy, broker and supervisor.
-                self._copy_modules(environment / "simulator" / "robodojo", SIMULATOR_MODULES)
-                shutil.copytree(
-                    self.package_dir / "direct" / "policy",
-                    environment / "simulator" / "robodojo" / "direct" / "policy",
-                    ignore=shutil.ignore_patterns("__pycache__"),
-                )
-                (environment / "simulator" / "task_spec.json").write_text(spec_text)
-                # Verifier container: validation of the collected results only.
-                tests = staging / "tests"
-                self._copy_modules(tests / "robodojo", VERIFIER_MODULES)
-                (tests / "task_spec.json").write_text(spec_text)
-                self._write_compose(environment / "docker-compose.yaml")
+                if self.mock:
+                    self._fill_mock(staging)
+                else:
+                    self._fill_native(staging, name, f"robodojo/{target.name}")
                 for script in staging.rglob("*.sh"):
                     script.chmod(0o755)
                 if target.exists():
@@ -145,49 +119,69 @@ class RoboDojoAdapter:
                 staging.rename(target)
         return targets
 
-    def _run_mock(self) -> Path:
-        """Generate the CPU mock task: same agent, bridge and verifier, invented scene."""
-        target = self.output_dir / MOCK_TASK_ID.replace("_", "-")
-        if target.is_symlink():
-            raise ValueError(f"Refusing to replace a symbolic link: {target}")
-        if target.exists() and not self.overwrite:
-            raise FileExistsError(f"Task exists: {target}; use --overwrite to replace it")
-        self.output_dir.mkdir(parents=True, exist_ok=True)
+    def _fill_native(self, staging: Path, name: str, harbor_name: str) -> None:
+        """One canonical task: the pinned GPU simulator with the native policy."""
+        spec = task_spec(name, self.seed)
+        self._render(staging, ("task.toml", "instruction.md", "environment/simulator.Dockerfile"), {
+            "task_id": name,
+            "harbor_name": harbor_name,
+            "dimension": spec["dimension"],
+            "seed": str(self.seed),
+            "upstream_revision": UPSTREAM_REVISION,
+            "image": self.image,
+            "simulator_cpus": str(SIMULATOR_CPUS),
+            "simulator_memory_mb": str(SIMULATOR_MEMORY_MB),
+            "simulator_storage_mb": str(SIMULATOR_STORAGE_MB),
+            "simulator_gpus": str(SIMULATOR_GPUS),
+        })
+        # Simulator container: native policy, broker and supervisor.
+        self._install(staging, spec, SIMULATOR_MODULES)
+        environment = staging / "environment"
+        shutil.copytree(
+            self.package_dir / "direct" / "policy",
+            environment / "simulator" / "robodojo" / "direct" / "policy",
+            ignore=shutil.ignore_patterns("__pycache__"),
+        )
+        self._write_compose(environment / "docker-compose.yaml")
+
+    def _fill_mock(self, staging: Path) -> None:
+        """The CPU mock task: same agent, bridge and verifier, invented scene."""
         spec = self.mock_spec
-        with tempfile.TemporaryDirectory(dir=self.output_dir, prefix=".robodojo-") as work:
-            staging = Path(work) / "task"
-            shutil.copytree(self.package_dir / "task-template", staging)
-            # The mock keeps the agent container and the verifier files of the
-            # real template and replaces everything that names the benchmark.
-            shutil.copytree(self.package_dir / "mock-template", staging, dirs_exist_ok=True)
-            values = {
-                "harbor_name": MOCK_HARBOR_NAME, "seed": str(spec["seed"]),
-                "episodes": str(spec["variants"][0]["episodes"]),
-            }
-            for relative in ("task.toml", "instruction.md"):
-                file = staging / relative
-                file.write_text(Template(file.read_text()).substitute(values))
-            spec_text = json.dumps(spec, indent=2) + "\n"
-            environment, tests = staging / "environment", staging / "tests"
-            shutil.copy2(self.package_dir / "direct" / "bridge_client.py", environment)
-            self._copy_modules(environment / "simulator" / "robodojo", MOCK_SIMULATOR_MODULES)
-            (environment / "simulator" / "task_spec.json").write_text(spec_text)
-            self._copy_modules(tests / "robodojo", VERIFIER_MODULES)
-            (tests / "task_spec.json").write_text(spec_text)
-            # The scripted player is the oracle; it runs in the agent container.
-            shutil.copy2(self.package_dir / "mock" / "solver.py", staging / "solution" / "solve.py")
-            # No GPU, no assets and no fixed platform: this runs on any Docker host.
-            compose = {"services": {"simulator": {
-                "build": {"context": "${CONTEXT_DIR}", "dockerfile": "simulator.Dockerfile"},
-                "cpus": 2.0, "mem_limit": "2048m",
-            }}}
-            (environment / "docker-compose.yaml").write_text(json.dumps(compose, indent=2) + "\n")
-            for script in staging.rglob("*.sh"):
-                script.chmod(0o755)
-            if target.exists():
-                shutil.rmtree(target)
-            staging.rename(target)
-        return target
+        # The mock keeps the agent container and the verifier files of the
+        # real template and replaces everything that names the benchmark.
+        shutil.copytree(self.package_dir / "mock-template", staging, dirs_exist_ok=True)
+        self._render(staging, ("task.toml", "instruction.md"), {
+            "harbor_name": MOCK_HARBOR_NAME, "seed": str(spec["seed"]),
+            "episodes": str(spec["variants"][0]["episodes"]),
+        })
+        self._install(staging, spec, MOCK_SIMULATOR_MODULES)
+        # The scripted player is the oracle; it runs in the agent container.
+        shutil.copy2(self.package_dir / "mock" / "solver.py", staging / "solution" / "solve.py")
+        # No GPU, no assets and no fixed platform: this runs on any Docker host.
+        compose = {"services": {"simulator": {
+            "build": {"context": "${CONTEXT_DIR}", "dockerfile": "simulator.Dockerfile"},
+            "cpus": 2.0, "mem_limit": "2048m",
+        }}}
+        (staging / "environment" / "docker-compose.yaml").write_text(json.dumps(compose, indent=2) + "\n")
+
+    @staticmethod
+    def _render(staging: Path, files: tuple[str, ...], values: dict[str, str]) -> None:
+        for relative in files:
+            file = staging / relative
+            file.write_text(Template(file.read_text()).substitute(values))
+
+    def _install(self, staging: Path, spec: dict, simulator_modules: tuple[str, ...]) -> None:
+        """Give each container its own files and nothing else."""
+        spec_text = json.dumps(spec, indent=2) + "\n"
+        environment, tests = staging / "environment", staging / "tests"
+        # Agent container: the bridge client only.
+        shutil.copy2(self.package_dir / "direct" / "bridge_client.py", environment)
+        # Simulator container: the modules of the real or the mock simulator.
+        self._copy_modules(environment / "simulator" / "robodojo", simulator_modules)
+        (environment / "simulator" / "task_spec.json").write_text(spec_text)
+        # Verifier container: validation of the collected results only.
+        self._copy_modules(tests / "robodojo", VERIFIER_MODULES)
+        (tests / "task_spec.json").write_text(spec_text)
 
     def _copy_modules(self, destination: Path, modules: tuple[str, ...]) -> None:
         for module in modules:

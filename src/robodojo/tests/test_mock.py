@@ -335,6 +335,27 @@ class RealAgentOnMockTests(unittest.TestCase):
 
 
 class LocalRunnerTests(unittest.TestCase):
+    def test_local_environment_reports_failures_like_a_container(self):
+        """A bridge that cannot be reached must not look like a definite answer."""
+        with tempfile.TemporaryDirectory() as directory:
+            environment = local.LocalEnvironment(f"http://127.0.0.1:{free_port()}", Path(directory) / "bridge")
+            # The scripted solver reads the printed answer, as its subprocess version does.
+            self.assertEqual(environment.call("status")["status"], "transport_error")
+            command = "python3 /opt/robodojo/bridge_client.py"
+            done = asyncio.run(environment.exec(command=f"{command} status"))
+            self.assertEqual(done.return_code, 3)
+            self.assertEqual(json.loads(done.stdout)["status"], "transport_error")
+            agent = DirectAgent(logs_dir=Path(directory) / "agent", model_name="fake/vision-model")
+            with self.assertRaisesRegex(DirectRunError, "failed with code 3"):
+                asyncio.run(agent._bridge(environment, "status"))
+            # Wrong usage ends the real program with code 2; nothing else may run here.
+            with contextlib.redirect_stderr(io.StringIO()):
+                self.assertEqual(asyncio.run(environment.exec(command=f"{command} act")).return_code, 2)
+            with self.assertRaises(ValueError):
+                asyncio.run(environment.exec(command="sh -c 'echo unsafe'"))
+            # Two direct calls and the agent's own; the refused command was not recorded.
+            self.assertEqual(len(environment.commands), 3)
+
     def test_fake_openai_mode_runs_the_agent_without_a_key(self):
         with tempfile.TemporaryDirectory() as directory, mock.patch.dict("os.environ"):
             output, printed = Path(directory) / "run", io.StringIO()

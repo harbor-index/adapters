@@ -18,7 +18,7 @@ from pathlib import Path
 import sys
 from typing import Any
 
-from .catalog import MOCK_LABEL, MOCK_POLICY_NAME, XPOLICYLAB_REVISION
+from .catalog import MOCK_LABEL, MOCK_POLICY_NAME, NATIVE_EPISODES, XPOLICYLAB_REVISION
 from .runtime import EvaluationError, load_spec, read_json, validate_result, write_json
 
 POLICY_NAME = "HarborDirect"
@@ -119,8 +119,10 @@ def verify(spec_path: Path, results_dir: Path, output_dir: Path) -> dict[str, fl
         successes += variant_successes
         total_score += variant_score
         total_episodes += variant.episodes
-    if not spec.mock and total_episodes != 50:
-        raise EvaluationError("A canonical RoboDojo task must have exactly 50 evaluation episodes")
+    if not spec.mock and total_episodes != NATIVE_EPISODES:
+        raise EvaluationError(
+            f"A canonical RoboDojo task must have exactly {NATIVE_EPISODES} evaluation episodes"
+        )
     reward = {"success_rate": successes / total_episodes, "score": total_score / total_episodes}
     contracts = {record.get("contract_version") for record in ledger}
     if len(contracts) != 1:

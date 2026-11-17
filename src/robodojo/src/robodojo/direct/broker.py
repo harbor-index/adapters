@@ -218,14 +218,7 @@ class Broker:
                 "ended_by": "native_termination",
                 "native_success_observed": bool(summary["native_success_observed"]),
             }
-            _append_line(self.ledger_dir / "episodes.jsonl", record)
-            self._last_episode = record
-            self._episodes_ended += 1
-            self._episode = self._request = self._decision = None
-            self._images = {}
-            self._state = "idle"
-            self._condition.notify_all()
-            return {"episode_index": record["episode_index"]}
+            return self._close_episode(record)
 
     def abandon_episode(self, episode_id: str, error: str) -> dict[str, Any]:
         """Close an episode that native code interrupted. It can never be scored."""
@@ -235,14 +228,7 @@ class Broker:
                 **episode, "ended_unix": time.time(), "ended_by": "native_exception",
                 "error": str(error)[:2000],
             }
-            _append_line(self.ledger_dir / "episodes.jsonl", record)
-            self._last_episode = record
-            self._episodes_ended += 1
-            self._episode = self._request = self._decision = None
-            self._images = {}
-            self._state = "idle"
-            self._condition.notify_all()
-            return {"episode_index": record["episode_index"]}
+            return self._close_episode(record)
 
     # ----- agent side -----------------------------------------------------
 
@@ -351,6 +337,21 @@ class Broker:
         if self._episode is None or self._episode["episode_id"] != episode_id:
             raise BrokerConflict("Call does not match the open episode")
         return self._episode
+
+    def _close_episode(self, record: dict[str, Any]) -> dict[str, Any]:
+        """Write the final ledger record of the open episode and return to idle.
+
+        The caller holds the lock. The record is on disk before any waiter can
+        see the episode as ended.
+        """
+        _append_line(self.ledger_dir / "episodes.jsonl", record)
+        self._last_episode = record
+        self._episodes_ended += 1
+        self._episode = self._request = self._decision = None
+        self._images = {}
+        self._state = "idle"
+        self._condition.notify_all()
+        return {"episode_index": record["episode_index"]}
 
     def _decisions_path(self) -> Path:
         assert self._episode is not None
