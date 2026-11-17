@@ -1,0 +1,43 @@
+# Refer to https://harborframework.com/docs/task-format for more details.
+
+schema_version = "1.0"
+
+[task]
+name = "futurehouse/ether0-benchmark__{{TASK_ID}}"
+# Authors of "Training a Scientific Reasoning Model for Chemistry" (arXiv:2506.17238),
+# which introduced ether0-benchmark.
+authors = [
+    { name = "Siddharth M. Narayanan" },
+    { name = "James D. Braza" },
+    { name = "Ryan-Rhys Griffiths" },
+    { name = "Albert Bou" },
+    { name = "Geemi Wellawatte" },
+    { name = "Mayk Caldas Ramos" },
+    { name = "Ludovico Mitchener" },
+    { name = "Samuel G. Rodriques" },
+    { name = "Andrew D. White" },
+]
+keywords = ["chemistry", "molecules", "smiles", "ether0", {{CATEGORY}}]
+
+[metadata]
+difficulty = "medium"
+category = "chemistry"
+problem_type = {{PROBLEM_TYPE}}
+upstream_id = {{UPSTREAM_ID}}
+
+[verifier]
+# The verifier installs ether0's reward code and locked dependencies before scoring.
+network_mode = "public"
+timeout_sec = 900.0
+
+[agent]
+network_mode = "public"
+timeout_sec = 1800.0
+
+[environment]
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+{{DOCKER_IMAGE_LINE}}

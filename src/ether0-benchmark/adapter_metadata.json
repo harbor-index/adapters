@@ -1,0 +1,30 @@
+[
+  {
+    "adapter_name": "ether0-benchmark",
+    "adapter_builders": ["Yi Jiang (lloyd_jahn@sjtu.edu.cn)"],
+    "original_benchmark": [
+      {
+        "split": "test",
+        "size": 325,
+        "harness": "llm",
+        "supported_agents": ["None"],
+        "adaptable": true,
+        "notes": "Hugging Face futurehouse/ether0-benchmark (test split, revision c7d5e59960087f360bc32a5006bb994324b38c35). The published baseline prompts an LLM directly with ether0's LOOSE_XML_ANSWER_USER_PROMPT and scores the extracted <answer> with ether0's reward functions (Future-House/ether0 @ b77e0d8eb06f62c8528da72bff22d4c7fee11371). 75 of the 325 problems (molecule-completion, oracle-solubility, retro-synthesis) do not ship a reference answer and are not adapted."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "test",
+        "adapted_benchmark_size": 250,
+        "parity_benchmark_size": 250,
+        "parity_sampling_rate": 1.0,
+        "registry_benchmark_size": 250,
+        "added_agents": ["None"],
+        "parity_matching_agents": [],
+        "parity_unmatching_agents": ["None"],
+        "parity_costs": null,
+        "notes": "Parity experiments pending; the agent/model and run count will be agreed with the Harbor team. Parity is planned on all 250 adapted tasks."
+      }
+    ]
+  }
+]

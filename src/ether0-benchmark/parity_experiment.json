@@ -1,0 +1,28 @@
+[
+  {
+    "adapter_name": "ether0-benchmark",
+    "agent": "<agent>@<version>",
+    "model": "<model>",
+    "date": "YYYY-MM-DD",
+    "adapted_benchmark_size": 250,
+    "parity_benchmark_size": 250,
+    "number_of_runs": null,
+    "notes": "Parity experiments pending; to be filled after the runs agreed with the Harbor team.",
+    "original_parity_repo": null,
+    "adapter_pr": [
+      "https://github.com/harbor-index/adapters/pull/13"
+    ],
+    "dataset_pr": [],
+    "parity_pr": [],
+    "metrics": [
+      {
+        "benchmark_name": "ether0-benchmark",
+        "metric": "Accuracy",
+        "original": "<mean +/- sample_SEM>",
+        "harbor": "<mean +/- sample_SEM>",
+        "original_runs": [],
+        "harbor_runs": []
+      }
+    ]
+  }
+]
