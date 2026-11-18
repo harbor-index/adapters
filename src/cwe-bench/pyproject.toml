@@ -1,0 +1,20 @@
+[project]
+name = "harbor-cwe-bench-adapter"
+version = "0.1.0"
+description = "Copy authorized CWE-Bench Harbor tasks for adapter workflows"
+readme = "README.md"
+authors = [
+    { name = "Eli Chandler", email = "eli.chandler@gmail.com" }
+]
+requires-python = ">=3.11"
+dependencies = ["huggingface-hub>=0.20.0", "pyyaml>=6.0"]
+
+[project.scripts]
+cwe-bench = "cwe_bench.main:main"
+
+[build-system]
+requires = ["uv_build>=0.11.21,<0.12.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "cwe_bench"

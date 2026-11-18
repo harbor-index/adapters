@@ -1,0 +1,30 @@
+[
+  {
+    "adapter_name": "cwe-bench",
+    "adapter_builders": ["Eli Chandler (eli.chandler@gmail.com)"],
+    "original_benchmark": [
+      {
+        "split": "public",
+        "size": 100,
+        "harness": "agent",
+        "supported_agents": ["None"],
+        "adaptable": true,
+        "notes": "The upstream public split already consists of Harbor tasks."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "public",
+        "adapted_benchmark_size": 100,
+        "parity_benchmark_size": 0,
+        "parity_sampling_rate": 0,
+        "registry_benchmark_size": 0,
+        "added_agents": ["None"],
+        "parity_matching_agents": [],
+        "parity_unmatching_agents": ["None"],
+        "parity_costs": null,
+        "notes": "All 100 tasks passed the Daytona oracle across the initial run and targeted reruns after adapter fixes. Parity and publication are pending. The upstream gated repository has its own Harbor registry entry."
+      }
+    ]
+  }
+]

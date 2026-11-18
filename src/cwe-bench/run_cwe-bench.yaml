@@ -1,0 +1,22 @@
+datasets:
+  - path: datasets/cwe-bench
+
+agents:
+  - name: oracle
+
+# For model runs, replace the oracle entry with a pinned agent and model:
+# agents:
+#   - name: codex
+#     model_name: openai/<model-id>
+#
+# agents:
+#   - name: claude-code
+#     model_name: anthropic/<model-id>
+
+environment:
+  type: daytona
+  delete: true
+
+orchestrator:
+  type: local
+  n_concurrent_trials: 4

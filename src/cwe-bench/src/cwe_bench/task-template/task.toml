@@ -1,0 +1,13 @@
+# This scaffold is unused. The adapter copies and updates each upstream task.toml.
+schema_version = "1.0"
+
+[task]
+name = "collinear-ai/cwe-bench-scaffold"
+authors = [
+    { name = "Gonzalo Gonzalez-Pumariega" },
+    { name = "Ajay Jagannath" },
+    { name = "Adit Jain" },
+    { name = "Guram Gogia" },
+    { name = "Soumyadeep Bakshi" },
+    { name = "Nazneen Rajani" },
+]
