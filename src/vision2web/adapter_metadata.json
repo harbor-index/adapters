@@ -1,0 +1,42 @@
+[
+  {
+    "adapter_name": "vision2web",
+    "adapter_builders": [
+      "Shuting Zhao (68221091+stzoozz@users.noreply.github.com)"
+    ],
+    "original_benchmark": [
+      {
+        "split": "full",
+        "size": 193,
+        "harness": "agent",
+        "supported_agents": [
+          "claude-code@2.1.221",
+          "codex@0.170.0",
+          "gemini-cli@0.68.0"
+        ],
+        "adaptable": true,
+        "notes": "100 L1 / 66 L2 / 27 L3. Versions reflect the inspected local runtime, not completed model runs."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "full",
+        "adapted_benchmark_size": 193,
+        "parity_benchmark_size": 0,
+        "parity_sampling_rate": 0,
+        "registry_benchmark_size": 0,
+        "added_agents": [
+          "None"
+        ],
+        "parity_matching_agents": [
+          "None"
+        ],
+        "parity_unmatching_agents": [
+          "None"
+        ],
+        "parity_costs": null,
+        "notes": "WIP full-catalog conversion target. Generation exercised on three real projects; full asset/generation validation, certified oracles, live judges, parity and registry are pending."
+      }
+    ]
+  }
+]

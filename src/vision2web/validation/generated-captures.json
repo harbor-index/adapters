@@ -1,0 +1,73 @@
+{
+  "scope": "Generated separate-verifier contexts. Capture-only; no benchmark rewards or model calls.",
+  "captures": [
+    {
+      "mode": "capture-only",
+      "task": "frontend/anomali",
+      "deployed": true,
+      "captures": [
+        {
+          "workflow": 0,
+          "names": [
+            "Homepage"
+          ],
+          "exit_code": 0
+        }
+      ],
+      "benchmark_reward": null,
+      "model_calls": 0,
+      "wall_seconds": 8.18,
+      "container_image": "v2w-draft-vision2web-frontend-anomali:capture"
+    },
+    {
+      "mode": "capture-only",
+      "task": "webpage/recipecloud",
+      "deployed": true,
+      "captures": [
+        {
+          "workflow": 0,
+          "names": [
+            "desktop"
+          ],
+          "exit_code": 0
+        },
+        {
+          "workflow": 1,
+          "names": [
+            "tablet"
+          ],
+          "exit_code": 0
+        },
+        {
+          "workflow": 2,
+          "names": [
+            "mobile"
+          ],
+          "exit_code": 0
+        }
+      ],
+      "benchmark_reward": null,
+      "model_calls": 0,
+      "wall_seconds": 6.25,
+      "container_image": "v2w-draft-vision2web-webpage-recipecloud:capture"
+    },
+    {
+      "mode": "capture-only",
+      "task": "website/filmmovement",
+      "deployed": true,
+      "captures": [
+        {
+          "workflow": 0,
+          "names": [
+            "home"
+          ],
+          "exit_code": 0
+        }
+      ],
+      "benchmark_reward": null,
+      "model_calls": 0,
+      "wall_seconds": 13.92,
+      "container_image": "v2w-draft-vision2web-website-filmmovement:capture"
+    }
+  ]
+}

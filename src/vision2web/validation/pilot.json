@@ -1,0 +1,164 @@
+{
+  "upstream_revision": "d80a4a3d0ea7326541ad87314294269a633789e4",
+  "dataset_revision": "8f03299d92b9bd852e93852d0c21e8a4848ab661",
+  "candidate_revision": "dd464e60b02f836e768fd9d21baa49c97a53edf6",
+  "host": "Apple M4 / Linux ARM64 Docker, 32 GiB host, approximately 3.8 GiB Docker VM",
+  "models_called": false,
+  "scope": "Deployment and rendering only; no official oracle scores or parity.",
+  "attempts": [
+    {
+      "task": "webpage/recipecloud",
+      "candidate_submission": "ClaudeCode+Claude-Opus-5",
+      "status": "deployment_and_capture_complete",
+      "deploy_seconds": 5.6,
+      "views": [
+        {
+          "name": "desktop",
+          "path": "/",
+          "http_status": 200,
+          "page_errors": 0
+        },
+        {
+          "name": "tablet",
+          "path": "/",
+          "http_status": 200,
+          "page_errors": 0
+        },
+        {
+          "name": "mobile",
+          "path": "/",
+          "http_status": 200,
+          "page_errors": 0
+        }
+      ],
+      "database_tables": [],
+      "failure_reason": null,
+      "benchmark_reward": null
+    },
+    {
+      "task": "frontend/anomali",
+      "candidate_submission": "ClaudeCode+Claude-Opus-5",
+      "status": "deployment_and_capture_complete",
+      "deploy_seconds": 7.12,
+      "views": [
+        {
+          "name": "Homepage",
+          "path": "/",
+          "http_status": 200,
+          "page_errors": 0
+        },
+        {
+          "name": "Agentic-SOC-Platform",
+          "path": "/products/agentic-soc-platform",
+          "http_status": 200,
+          "page_errors": 0
+        },
+        {
+          "name": "Unified-Security-Data-Lake",
+          "path": "/products/unified-security-data-lake",
+          "http_status": 200,
+          "page_errors": 0
+        },
+        {
+          "name": "ThreatStream",
+          "path": "/products/threatstream-next-gen",
+          "http_status": 200,
+          "page_errors": 0
+        },
+        {
+          "name": "Agentic-AI",
+          "path": "/products/agentic-ai",
+          "http_status": 200,
+          "page_errors": 0
+        },
+        {
+          "name": "Resources",
+          "path": "/resources",
+          "http_status": 200,
+          "page_errors": 0
+        }
+      ],
+      "database_tables": [],
+      "failure_reason": null,
+      "benchmark_reward": null
+    },
+    {
+      "task": "website/filmmovement",
+      "candidate_submission": "ClaudeCode+Claude-Opus-5",
+      "status": "deployment_failed",
+      "deploy_seconds": null,
+      "views": [],
+      "database_tables": [],
+      "failure_reason": "Public submission lacks src/data; start.sh fails at db:seed with MODULE_NOT_FOUND ../data/helpers.",
+      "benchmark_reward": null
+    },
+    {
+      "task": "website/filmmovement",
+      "candidate_submission": "Codex+GPT-5.6-Sol",
+      "status": "deployment_and_capture_complete",
+      "deploy_seconds": 13.06,
+      "views": [
+        {
+          "name": "home",
+          "path": "/",
+          "http_status": 200,
+          "page_errors": 0
+        },
+        {
+          "name": "in-theatres",
+          "path": "/in-theatres",
+          "http_status": 200,
+          "page_errors": 0
+        },
+        {
+          "name": "at-home",
+          "path": "/watch-at-home",
+          "http_status": 200,
+          "page_errors": 0
+        },
+        {
+          "name": "coming-soon",
+          "path": "/coming-soon",
+          "http_status": 200,
+          "page_errors": 0
+        },
+        {
+          "name": "film",
+          "path": "/films/happy-holidays",
+          "http_status": 200,
+          "page_errors": 0
+        },
+        {
+          "name": "dvd-category",
+          "path": "/shop/documentary",
+          "http_status": 200,
+          "page_errors": 0
+        },
+        {
+          "name": "dvd",
+          "path": "/dvd/a-life-for-ballet",
+          "http_status": 200,
+          "page_errors": 0
+        }
+      ],
+      "database_tables": [
+        "awards",
+        "categories",
+        "collections",
+        "film_collections",
+        "film_photos",
+        "films",
+        "press_assets",
+        "product_categories",
+        "product_recommendations",
+        "products",
+        "reviews",
+        "schema_migrations",
+        "screenings",
+        "site_sections"
+      ],
+      "failure_reason": null,
+      "benchmark_reward": null
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+version = "1.0"
+
+[[artifacts]]
+source = "/workspace"
+destination = "website"
+exclude = ["./test_results", "./.playwright-cli"]
+
+[task]
+name = "{{TASK_NAME}}"
+authors = [
+    { name = "Zehai He" }, { name = "Wenyi Hong" }, { name = "Zhen Yang" },
+    { name = "Ziyang Pan" }, { name = "Mingdao Liu" }, { name = "Xiaotao Gu" },
+    { name = "Jie Tang" },
+]
+keywords = ["vision2web", "web-development", "multimodal", "agentic"]
+
+[metadata]
+category = "web_development"
+level = "{{LEVEL}}"
+upstream_revision = "d80a4a3d0ea7326541ad87314294269a633789e4"
+dataset_revision = "8f03299d92b9bd852e93852d0c21e8a4848ab661"
+
+[agent]
+timeout_sec = 36000
+
+[verifier]
+timeout_sec = 36000
+environment_mode = "separate"
+
+[verifier.env]
+VISION2WEB_ENABLE_MODEL_GRADING = "${VISION2WEB_ENABLE_MODEL_GRADING:-0}"
+VISION2WEB_FUNCTIONAL_MODEL = "${VISION2WEB_FUNCTIONAL_MODEL:-claude-sonnet-4-5-20250929}"
+VISION2WEB_FUNCTIONAL_API_KEY = "${VISION2WEB_FUNCTIONAL_API_KEY:-}"
+VISION2WEB_FUNCTIONAL_BASE_URL = "${VISION2WEB_FUNCTIONAL_BASE_URL:-}"
+VISION2WEB_VISUAL_MODEL = "${VISION2WEB_VISUAL_MODEL:-gemini-3-pro-preview}"
+VISION2WEB_VISUAL_API_KEY = "${VISION2WEB_VISUAL_API_KEY:-}"
+VISION2WEB_VISUAL_BASE_URL = "${VISION2WEB_VISUAL_BASE_URL:-}"
+
+[verifier.environment]
+build_timeout_sec = 1800
+cpus = 2
+memory_mb = 8192
+storage_mb = 20480
+allow_internet = true
+
+[environment]
+build_timeout_sec = 1800
+cpus = 2
+memory_mb = 8192
+storage_mb = 20480
+allow_internet = true

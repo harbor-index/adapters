@@ -1,0 +1,14 @@
+datasets:
+  - path: datasets/vision2web
+agents:
+  - name: oracle
+# After team coordination, an alternative agent can be selected:
+# agents:
+#   - name: claude-code
+#     model_name: claude-sonnet-4-5-20250929
+environment:
+  type: docker
+  delete: false
+orchestrator:
+  type: local
+  n_concurrent_trials: 1
