@@ -1,0 +1,2854 @@
+{
+  "source": "https://huggingface.co/datasets/zai-org/Vision2Web",
+  "revision": "8f03299d92b9bd852e93852d0c21e8a4848ab661",
+  "tasks": [
+    {
+      "task_name": "abc",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 20,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/abc"
+    },
+    {
+      "task_name": "aihw",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 0,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/aihw"
+    },
+    {
+      "task_name": "alberta_alis",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 0,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/alberta_alis"
+    },
+    {
+      "task_name": "ani",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 16,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/ani"
+    },
+    {
+      "task_name": "aspose",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 5,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/aspose"
+    },
+    {
+      "task_name": "aws",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 1,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/aws"
+    },
+    {
+      "task_name": "backupassist",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 50,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/backupassist"
+    },
+    {
+      "task_name": "bayleys",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 19,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/bayleys"
+    },
+    {
+      "task_name": "broadcastpro",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 110,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/broadcastpro"
+    },
+    {
+      "task_name": "brother",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 63,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/brother"
+    },
+    {
+      "task_name": "busride",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 10,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/busride"
+    },
+    {
+      "task_name": "butting",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 27,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/butting"
+    },
+    {
+      "task_name": "cahill",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 4,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/cahill"
+    },
+    {
+      "task_name": "cake",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 23,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/cake"
+    },
+    {
+      "task_name": "capitalandmain",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 1,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/capitalandmain"
+    },
+    {
+      "task_name": "cesium",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 15,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/cesium"
+    },
+    {
+      "task_name": "classic-clashes",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 106,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/classic-clashes"
+    },
+    {
+      "task_name": "clickatell",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 2,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/clickatell"
+    },
+    {
+      "task_name": "cloudera",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 0,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/cloudera"
+    },
+    {
+      "task_name": "cms",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 2,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/cms"
+    },
+    {
+      "task_name": "collector_store",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 74,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/collector_store"
+    },
+    {
+      "task_name": "deals",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 18,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/deals"
+    },
+    {
+      "task_name": "dermstore",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 87,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/dermstore"
+    },
+    {
+      "task_name": "dokfest",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 8,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/dokfest"
+    },
+    {
+      "task_name": "ebay",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 3,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/ebay"
+    },
+    {
+      "task_name": "edpsciences",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 1,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/edpsciences"
+    },
+    {
+      "task_name": "egginfo",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 9,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/egginfo"
+    },
+    {
+      "task_name": "emailable",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 21,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/emailable"
+    },
+    {
+      "task_name": "espn_wruf",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 12,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/espn_wruf"
+    },
+    {
+      "task_name": "eventbrite",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 9,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/eventbrite"
+    },
+    {
+      "task_name": "eventgroove",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 34,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/eventgroove"
+    },
+    {
+      "task_name": "fairfax-county",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 842,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/fairfax-county"
+    },
+    {
+      "task_name": "fastrawviewer",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 4,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/fastrawviewer"
+    },
+    {
+      "task_name": "gdacs",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 14,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/gdacs"
+    },
+    {
+      "task_name": "general_assembly",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 8,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/general_assembly"
+    },
+    {
+      "task_name": "github",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 17,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/github"
+    },
+    {
+      "task_name": "golfonline",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 71,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/golfonline"
+    },
+    {
+      "task_name": "hachette",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 12,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/hachette"
+    },
+    {
+      "task_name": "hcss",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 0,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/hcss"
+    },
+    {
+      "task_name": "home_instead",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 47,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/home_instead"
+    },
+    {
+      "task_name": "hugedomains",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 18,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/hugedomains"
+    },
+    {
+      "task_name": "humankinetics",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 19,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/humankinetics"
+    },
+    {
+      "task_name": "ima",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 15,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/ima"
+    },
+    {
+      "task_name": "imdb",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 11,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/imdb"
+    },
+    {
+      "task_name": "imma",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 3,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/imma"
+    },
+    {
+      "task_name": "informatica",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 0,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/informatica"
+    },
+    {
+      "task_name": "intershop",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 59,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/intershop"
+    },
+    {
+      "task_name": "intrepid",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 30,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/intrepid"
+    },
+    {
+      "task_name": "jotform",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 73,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/jotform"
+    },
+    {
+      "task_name": "kashiwabara",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 1,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/kashiwabara"
+    },
+    {
+      "task_name": "klamath",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 24,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/klamath"
+    },
+    {
+      "task_name": "kyte",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 29,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/kyte"
+    },
+    {
+      "task_name": "labelzone",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 86,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/labelzone"
+    },
+    {
+      "task_name": "larry_alder",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 1,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/larry_alder"
+    },
+    {
+      "task_name": "legistify",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 39,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/legistify"
+    },
+    {
+      "task_name": "liebherr",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 22,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/liebherr"
+    },
+    {
+      "task_name": "lightingindia",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 53,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/lightingindia"
+    },
+    {
+      "task_name": "linkedin_learning",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 5,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/linkedin_learning"
+    },
+    {
+      "task_name": "makeshift",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 13,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/makeshift"
+    },
+    {
+      "task_name": "monash",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 0,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/monash"
+    },
+    {
+      "task_name": "mtv",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 141,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/mtv"
+    },
+    {
+      "task_name": "mymovierack",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 5,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/mymovierack"
+    },
+    {
+      "task_name": "nakivo",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 18,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/nakivo"
+    },
+    {
+      "task_name": "netflix",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 21,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/netflix"
+    },
+    {
+      "task_name": "nintex",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 34,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/nintex"
+    },
+    {
+      "task_name": "nugs",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 115,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/nugs"
+    },
+    {
+      "task_name": "nxp",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 7,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/nxp"
+    },
+    {
+      "task_name": "optica",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 22,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/optica"
+    },
+    {
+      "task_name": "ortec",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 4,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/ortec"
+    },
+    {
+      "task_name": "pagerduty",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 9,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/pagerduty"
+    },
+    {
+      "task_name": "payscale",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 22,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/payscale"
+    },
+    {
+      "task_name": "paytm",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 21,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/paytm"
+    },
+    {
+      "task_name": "peoplehum",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 57,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/peoplehum"
+    },
+    {
+      "task_name": "pluralsight",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 16,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/pluralsight"
+    },
+    {
+      "task_name": "rane",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 16,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/rane"
+    },
+    {
+      "task_name": "recipecloud",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 5,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/recipecloud"
+    },
+    {
+      "task_name": "reventals",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 26,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/reventals"
+    },
+    {
+      "task_name": "rottentomatoes",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 13,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/rottentomatoes"
+    },
+    {
+      "task_name": "salamanca",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 17,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/salamanca"
+    },
+    {
+      "task_name": "saskatoon",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 4,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/saskatoon"
+    },
+    {
+      "task_name": "sinomede",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 23,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/sinomede"
+    },
+    {
+      "task_name": "splunk",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 11,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/splunk"
+    },
+    {
+      "task_name": "stackexchange",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 4,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/stackexchange"
+    },
+    {
+      "task_name": "statista",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 23,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/statista"
+    },
+    {
+      "task_name": "teenink",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 9,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/teenink"
+    },
+    {
+      "task_name": "tefcu",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 75,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/tefcu"
+    },
+    {
+      "task_name": "tengmr",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 10,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/tengmr"
+    },
+    {
+      "task_name": "the_inn_at_union_square",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 49,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/the_inn_at_union_square"
+    },
+    {
+      "task_name": "totalcs",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 8,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/totalcs"
+    },
+    {
+      "task_name": "ultra_digital_studio",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 2,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/ultra_digital_studio"
+    },
+    {
+      "task_name": "usgs",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 51,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/usgs"
+    },
+    {
+      "task_name": "visitseoul",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 10,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/visitseoul"
+    },
+    {
+      "task_name": "vouchercodes",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 6,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/vouchercodes"
+    },
+    {
+      "task_name": "waynesburg_university",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 0,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/waynesburg_university"
+    },
+    {
+      "task_name": "weill-cornell-medicine",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 0,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/weill-cornell-medicine"
+    },
+    {
+      "task_name": "wikipedia",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 0,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/wikipedia"
+    },
+    {
+      "task_name": "wildspiritwolfsanctuary",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 33,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/wildspiritwolfsanctuary"
+    },
+    {
+      "task_name": "windpower_monthly",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 22,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/windpower_monthly"
+    },
+    {
+      "task_name": "wix",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 18,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/wix"
+    },
+    {
+      "task_name": "zoom",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 11,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "level": "webpage",
+      "id": "webpage/zoom"
+    },
+    {
+      "task_name": "1daycloud",
+      "workflow_steps": 7,
+      "num_test_cases": 6,
+      "resources_count": 35,
+      "prototypes": [
+        "academy.jpg",
+        "clickapp.jpg",
+        "contact.jpg",
+        "digital_cards.jpg",
+        "home.jpg",
+        "services.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/1daycloud"
+    },
+    {
+      "task_name": "401trucksource",
+      "workflow_steps": 6,
+      "num_test_cases": 6,
+      "resources_count": 79,
+      "prototypes": [
+        "Body_Shop.jpg",
+        "Homepage.jpg",
+        "New_Trucks_Inventory.jpg",
+        "Parts_Department.jpg",
+        "Service_Center.jpg",
+        "Used_Trucks_Inventory.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/401trucksource"
+    },
+    {
+      "task_name": "6abc",
+      "workflow_steps": 6,
+      "num_test_cases": 8,
+      "resources_count": 185,
+      "prototypes": [
+        "homepage.jpg",
+        "live_watch.jpg",
+        "local_news.jpg",
+        "sports.jpg",
+        "traffic.jpg",
+        "weather.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/6abc"
+    },
+    {
+      "task_name": "aap",
+      "workflow_steps": 7,
+      "num_test_cases": 20,
+      "resources_count": 46,
+      "prototypes": [
+        "career_resources.jpg",
+        "homepage.jpg",
+        "neonatal_resuscitation_program.jpg",
+        "news_room.jpg",
+        "pedialink_education.jpg",
+        "practice_management.jpg",
+        "shopaap.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/aap"
+    },
+    {
+      "task_name": "abat",
+      "workflow_steps": 6,
+      "num_test_cases": 24,
+      "resources_count": 82,
+      "prototypes": [
+        "blog_posts.jpg",
+        "careers.jpg",
+        "customer_success_stories.jpg",
+        "homepage.jpg",
+        "job_openings.jpg",
+        "knowledge_hub.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/abat"
+    },
+    {
+      "task_name": "abilities",
+      "workflow_steps": 6,
+      "num_test_cases": 7,
+      "resources_count": 412,
+      "prototypes": [
+        "community_news.jpg",
+        "contact_page.jpg",
+        "expos_list.jpg",
+        "homepage.jpg",
+        "speakers_directory.jpg",
+        "specific_expo_details.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/abilities"
+    },
+    {
+      "task_name": "about_gitlab",
+      "workflow_steps": 6,
+      "num_test_cases": 4,
+      "resources_count": 109,
+      "prototypes": [
+        "company.jpg",
+        "customers.jpg",
+        "gitlab_duo.jpg",
+        "homepage.jpg",
+        "platform.jpg",
+        "pricing.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/about_gitlab"
+    },
+    {
+      "task_name": "academy_govloop",
+      "workflow_steps": 6,
+      "num_test_cases": 5,
+      "resources_count": 160,
+      "prototypes": [
+        "career_category.jpg",
+        "cloud_category.jpg",
+        "cybersecurity_category.jpg",
+        "data_analytics_category.jpg",
+        "homepage.jpg",
+        "search_results.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/academy_govloop"
+    },
+    {
+      "task_name": "adventuremotors",
+      "workflow_steps": 6,
+      "num_test_cases": 9,
+      "resources_count": 102,
+      "prototypes": [
+        "can_am_shop.jpg",
+        "financing_application.jpg",
+        "homepage.jpg",
+        "inventory_page.jpg",
+        "sea_doo_shop.jpg",
+        "ski_doo_shop.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/adventuremotors"
+    },
+    {
+      "task_name": "afl",
+      "workflow_steps": 5,
+      "num_test_cases": 5,
+      "resources_count": 167,
+      "prototypes": [
+        "fixture.jpg",
+        "homepage.jpg",
+        "ladder.jpg",
+        "stats.jpg",
+        "team_page.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/afl"
+    },
+    {
+      "task_name": "anomali",
+      "workflow_steps": 6,
+      "num_test_cases": 5,
+      "resources_count": 397,
+      "prototypes": [
+        "Agentic AI Capabilities.jpg",
+        "Agentic SOC Platform.jpg",
+        "Homepage.jpg",
+        "Resources Library.jpg",
+        "ThreatStream Intelligence.jpg",
+        "Unified Security Data Lake.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/anomali"
+    },
+    {
+      "task_name": "atlascopcogroup",
+      "workflow_steps": 6,
+      "num_test_cases": 5,
+      "resources_count": 424,
+      "prototypes": [
+        "about_us.jpg",
+        "business_areas.jpg",
+        "careers.jpg",
+        "investors.jpg",
+        "media.jpg",
+        "sustainability.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/atlascopcogroup"
+    },
+    {
+      "task_name": "balancingbirthbaby",
+      "workflow_steps": 6,
+      "num_test_cases": 5,
+      "resources_count": 18,
+      "prototypes": [
+        "Birth Doula Services.jpg",
+        "Blog.jpg",
+        "Class Calendar.jpg",
+        "Homepage.jpg",
+        "Prenatal Classes.jpg",
+        "Shop.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/balancingbirthbaby"
+    },
+    {
+      "task_name": "baltimorebaseball",
+      "workflow_steps": 5,
+      "num_test_cases": 6,
+      "resources_count": 224,
+      "prototypes": [
+        "About_Us.jpg",
+        "Bird_Tapes_Podcast.jpg",
+        "Calling_the_Pen.jpg",
+        "Homepage.jpg",
+        "Peter_Schmuck_Columns.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/baltimorebaseball"
+    },
+    {
+      "task_name": "beyondbordersnews",
+      "workflow_steps": 6,
+      "num_test_cases": 7,
+      "resources_count": 165,
+      "prototypes": [
+        "about.jpg",
+        "business.jpg",
+        "homepage.jpg",
+        "legal.jpg",
+        "politics.jpg",
+        "regional_news.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/beyondbordersnews"
+    },
+    {
+      "task_name": "blackbeltacandelectric",
+      "workflow_steps": 6,
+      "num_test_cases": 12,
+      "resources_count": 78,
+      "prototypes": [
+        "about_us.jpg",
+        "ac_repair_service.jpg",
+        "blog.jpg",
+        "contact_us.jpg",
+        "homepage.jpg",
+        "services.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/blackbeltacandelectric"
+    },
+    {
+      "task_name": "brighthr",
+      "workflow_steps": 6,
+      "num_test_cases": 17,
+      "resources_count": 106,
+      "prototypes": [
+        "employment_law_advice.jpg",
+        "homepage.jpg",
+        "hr_software.jpg",
+        "payroll_software.jpg",
+        "pricing.jpg",
+        "support.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/brighthr"
+    },
+    {
+      "task_name": "caplugs",
+      "workflow_steps": 6,
+      "num_test_cases": 8,
+      "resources_count": 70,
+      "prototypes": [
+        "contact_us.jpg",
+        "homepage.jpg",
+        "industry_search.jpg",
+        "material_specifications.jpg",
+        "product_catalog.jpg",
+        "product_detail.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/caplugs"
+    },
+    {
+      "task_name": "casefox",
+      "workflow_steps": 7,
+      "num_test_cases": 9,
+      "resources_count": 251,
+      "prototypes": [
+        "About_Company.jpg",
+        "Blog_Resources.jpg",
+        "Contact_Support.jpg",
+        "Homepage.jpg",
+        "LEDES_Invoicing.jpg",
+        "Legal_Billing.jpg",
+        "Online_Payments.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/casefox"
+    },
+    {
+      "task_name": "chauffeurdriven",
+      "workflow_steps": 6,
+      "num_test_cases": 1,
+      "resources_count": 2,
+      "prototypes": [
+        "Cover_Stories.jpg",
+        "Homepage.jpg",
+        "Industry_Calendar.jpg",
+        "Industry_News.jpg",
+        "Safety_Articles.jpg",
+        "Technology_Reviews.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/chauffeurdriven"
+    },
+    {
+      "task_name": "comicbookroundup",
+      "workflow_steps": 6,
+      "num_test_cases": 9,
+      "resources_count": 141,
+      "prototypes": [
+        "homepage.jpg",
+        "issue_page.jpg",
+        "publisher_directory.jpg",
+        "publisher_page_marvel.jpg",
+        "series_page.jpg",
+        "trades_page.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/comicbookroundup"
+    },
+    {
+      "task_name": "community_constantcontact",
+      "workflow_steps": 6,
+      "num_test_cases": 5,
+      "resources_count": 79,
+      "prototypes": [
+        "academy.jpg",
+        "ask_the_community.jpg",
+        "email_marketing.jpg",
+        "help_center.jpg",
+        "homepage.jpg",
+        "ideas.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/community_constantcontact"
+    },
+    {
+      "task_name": "community_dynamics",
+      "workflow_steps": 5,
+      "num_test_cases": 6,
+      "resources_count": 48,
+      "prototypes": [
+        "blogs.jpg",
+        "business_central_forum.jpg",
+        "homepage.jpg",
+        "sales_customer_experience_forum.jpg",
+        "supply_chain_forum.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/community_dynamics"
+    },
+    {
+      "task_name": "community_hpe",
+      "workflow_steps": 4,
+      "num_test_cases": 7,
+      "resources_count": 45,
+      "prototypes": [
+        "ai_unlocked_blog.jpg",
+        "greenlake_community.jpg",
+        "homepage.jpg",
+        "storage_forum.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/community_hpe"
+    },
+    {
+      "task_name": "copenhagenmarathon",
+      "workflow_steps": 6,
+      "num_test_cases": 5,
+      "resources_count": 169,
+      "prototypes": [
+        "elite_program.jpg",
+        "homepage.jpg",
+        "race_day_info.jpg",
+        "race_route.jpg",
+        "training_resources.jpg",
+        "volunteer_signup.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/copenhagenmarathon"
+    },
+    {
+      "task_name": "cosmicshambles",
+      "workflow_steps": 6,
+      "num_test_cases": 5,
+      "resources_count": 7,
+      "prototypes": [
+        "About.jpg",
+        "Contact.jpg",
+        "Events.jpg",
+        "Films.jpg",
+        "Homepage.jpg",
+        "Podcasts.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/cosmicshambles"
+    },
+    {
+      "task_name": "cpr",
+      "workflow_steps": 6,
+      "num_test_cases": 6,
+      "resources_count": 201,
+      "prototypes": [
+        "Homepage.jpg",
+        "Indie_102.3_Station.jpg",
+        "KRCC_Southern_Colorado.jpg",
+        "News_Section.jpg",
+        "Politics_Category.jpg",
+        "Shows_and_Podcasts.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/cpr"
+    },
+    {
+      "task_name": "croninfordnorth",
+      "workflow_steps": 6,
+      "num_test_cases": 5,
+      "resources_count": 96,
+      "prototypes": [
+        "Financing.jpg",
+        "Homepage.jpg",
+        "New_Inventory.jpg",
+        "Service_Center.jpg",
+        "Trade_In_Valuation.jpg",
+        "Used_Inventory.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/croninfordnorth"
+    },
+    {
+      "task_name": "dentalnews",
+      "workflow_steps": 6,
+      "num_test_cases": 5,
+      "resources_count": 71,
+      "prototypes": [
+        "blogs.jpg",
+        "homepage.jpg",
+        "international_news.jpg",
+        "interviews.jpg",
+        "latest_news.jpg",
+        "national_news.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/dentalnews"
+    },
+    {
+      "task_name": "developer_android",
+      "workflow_steps": 6,
+      "num_test_cases": 10,
+      "resources_count": 286,
+      "prototypes": [
+        "android_studio_download.jpg",
+        "api_reference.jpg",
+        "code_samples.jpg",
+        "getting_started_guide.jpg",
+        "homepage.jpg",
+        "jetpack_compose.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/developer_android"
+    },
+    {
+      "task_name": "elections_bc",
+      "workflow_steps": 6,
+      "num_test_cases": 5,
+      "resources_count": 37,
+      "prototypes": [
+        "2024_provincial_election.jpg",
+        "2026_local_elections.jpg",
+        "homepage.jpg",
+        "local_election_forms.jpg",
+        "resources_and_reports.jpg",
+        "voter_registration.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/elections_bc"
+    },
+    {
+      "task_name": "en_wuzhen",
+      "workflow_steps": 6,
+      "num_test_cases": 5,
+      "resources_count": 0,
+      "prototypes": [
+        "Celebrities.jpg",
+        "Cultural_Activities.jpg",
+        "History_Overview.jpg",
+        "Homepage.jpg",
+        "News.jpg",
+        "Vacation_Accommodation.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/en_wuzhen"
+    },
+    {
+      "task_name": "ewif",
+      "workflow_steps": 6,
+      "num_test_cases": 5,
+      "resources_count": 452,
+      "prototypes": [
+        "about_page.jpg",
+        "awards_page.jpg",
+        "homepage.jpg",
+        "member_directory.jpg",
+        "regional_meetings.jpg",
+        "resource_library.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/ewif"
+    },
+    {
+      "task_name": "finalsite",
+      "workflow_steps": 6,
+      "num_test_cases": 5,
+      "resources_count": 220,
+      "prototypes": [
+        "company_info.jpg",
+        "customer_segments.jpg",
+        "homepage.jpg",
+        "learning_center.jpg",
+        "products_and_services.jpg",
+        "school_districts_solutions.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/finalsite"
+    },
+    {
+      "task_name": "foerstergroup",
+      "workflow_steps": 6,
+      "num_test_cases": 5,
+      "resources_count": 67,
+      "prototypes": [
+        "company_about.jpg",
+        "homepage.jpg",
+        "industries_overview.jpg",
+        "product_detail.jpg",
+        "products_catalog.jpg",
+        "services.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/foerstergroup"
+    },
+    {
+      "task_name": "forum_vectorworks",
+      "workflow_steps": 6,
+      "num_test_cases": 7,
+      "resources_count": 68,
+      "prototypes": [
+        "activity_stream.jpg",
+        "discussion_thread.jpg",
+        "forum_category.jpg",
+        "homepage.jpg",
+        "marionette_gallery.jpg",
+        "search.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/forum_vectorworks"
+    },
+    {
+      "task_name": "fsb",
+      "workflow_steps": 6,
+      "num_test_cases": 4,
+      "resources_count": 68,
+      "prototypes": [
+        "About FSB.jpg",
+        "Climate-related Risks.jpg",
+        "Consultations.jpg",
+        "Homepage.jpg",
+        "Press.jpg",
+        "Publications.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/fsb"
+    },
+    {
+      "task_name": "git_drupalcode",
+      "workflow_steps": 6,
+      "num_test_cases": 5,
+      "resources_count": 4,
+      "prototypes": [
+        "branches_list.jpg",
+        "commits_history.jpg",
+        "explore_projects.jpg",
+        "homepage.jpg",
+        "project_overview.jpg",
+        "tags_releases.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/git_drupalcode"
+    },
+    {
+      "task_name": "gourmania",
+      "workflow_steps": 6,
+      "num_test_cases": 4,
+      "resources_count": 50,
+      "prototypes": [
+        "cookbooks.jpg",
+        "culinary_solutions.jpg",
+        "homepage.jpg",
+        "recipe_detail.jpg",
+        "tips.jpg",
+        "videos.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/gourmania"
+    },
+    {
+      "task_name": "habitatetc",
+      "workflow_steps": 6,
+      "num_test_cases": 21,
+      "resources_count": 1,
+      "prototypes": [
+        "article_detail.jpg",
+        "events_listing.jpg",
+        "guide_detail.jpg",
+        "guides_listing.jpg",
+        "homepage.jpg",
+        "news_listing.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/habitatetc"
+    },
+    {
+      "task_name": "holyoke",
+      "workflow_steps": 6,
+      "num_test_cases": 5,
+      "resources_count": 24,
+      "prototypes": [
+        "Calendar.jpg",
+        "City Council.jpg",
+        "Contact Directory.jpg",
+        "Departments.jpg",
+        "Homepage.jpg",
+        "News.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/holyoke"
+    },
+    {
+      "task_name": "jansport",
+      "workflow_steps": 6,
+      "num_test_cases": 7,
+      "resources_count": 241,
+      "prototypes": [
+        "all_backpacks_collection.jpg",
+        "best_sellers_collection.jpg",
+        "campus_backpacks_collection.jpg",
+        "homepage.jpg",
+        "product_detail.jpg",
+        "warranty_page.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/jansport"
+    },
+    {
+      "task_name": "kitten",
+      "workflow_steps": 6,
+      "num_test_cases": 7,
+      "resources_count": 121,
+      "prototypes": [
+        "About_Company.jpg",
+        "Filtration_Products.jpg",
+        "Food_Industry.jpg",
+        "Homepage.jpg",
+        "Jobs_and_Careers.jpg",
+        "Pharmaceutical_Industry.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/kitten"
+    },
+    {
+      "task_name": "maxviewrealty",
+      "workflow_steps": 6,
+      "num_test_cases": 7,
+      "resources_count": 171,
+      "prototypes": [
+        "apartment_listings.jpg",
+        "compound_detail.jpg",
+        "compounds_directory.jpg",
+        "homepage.jpg",
+        "property_detail.jpg",
+        "villa_listings.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/maxviewrealty"
+    },
+    {
+      "task_name": "mojarto",
+      "workflow_steps": 6,
+      "num_test_cases": 6,
+      "resources_count": 144,
+      "prototypes": [
+        "art_advisory.jpg",
+        "artist_directory.jpg",
+        "homepage.jpg",
+        "paintings_gallery.jpg",
+        "photography_gallery.jpg",
+        "sculpture_gallery.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/mojarto"
+    },
+    {
+      "task_name": "myimmitracker",
+      "workflow_steps": 5,
+      "num_test_cases": 6,
+      "resources_count": 37,
+      "prototypes": [
+        "analytical_reports.jpg",
+        "homepage.jpg",
+        "immigration_services.jpg",
+        "immigration_trackers.jpg",
+        "immihome_housing.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/myimmitracker"
+    },
+    {
+      "task_name": "ndm",
+      "workflow_steps": 6,
+      "num_test_cases": 10,
+      "resources_count": 71,
+      "prototypes": [
+        "academics.jpg",
+        "community_programs.jpg",
+        "financial_aid.jpg",
+        "homepage.jpg",
+        "student_life.jpg",
+        "undergraduate_admissions.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/ndm"
+    },
+    {
+      "task_name": "newsday_co_tt",
+      "workflow_steps": 6,
+      "num_test_cases": 10,
+      "resources_count": 61,
+      "prototypes": [
+        "article_page.jpg",
+        "business_section.jpg",
+        "homepage.jpg",
+        "news_section.jpg",
+        "special_publications.jpg",
+        "sports_section.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/newsday_co_tt"
+    },
+    {
+      "task_name": "nga",
+      "workflow_steps": 4,
+      "num_test_cases": 10,
+      "resources_count": 21,
+      "prototypes": [
+        "collection_search.jpg",
+        "exhibitions.jpg",
+        "homepage.jpg",
+        "visit_plan.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/nga"
+    },
+    {
+      "task_name": "open_spotify",
+      "workflow_steps": 6,
+      "num_test_cases": 5,
+      "resources_count": 244,
+      "prototypes": [
+        "album_page.jpg",
+        "artist_page.jpg",
+        "genre_charts.jpg",
+        "homepage.jpg",
+        "playlist_page.jpg",
+        "search_and_browse.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/open_spotify"
+    },
+    {
+      "task_name": "orchira",
+      "workflow_steps": 6,
+      "num_test_cases": 7,
+      "resources_count": 540,
+      "prototypes": [
+        "Blog.jpg",
+        "Bridal Collection.jpg",
+        "Cool Silver Color Collection.jpg",
+        "Homepage.jpg",
+        "Pearl Necklaces Category.jpg",
+        "Product Detail Page.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/orchira"
+    },
+    {
+      "task_name": "oxford-flow",
+      "workflow_steps": 6,
+      "num_test_cases": 10,
+      "resources_count": 179,
+      "prototypes": [
+        "homepage.jpg",
+        "insights_resources.jpg",
+        "product_detail.jpg",
+        "products_catalog.jpg",
+        "sector_detail.jpg",
+        "sectors_overview.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/oxford-flow"
+    },
+    {
+      "task_name": "pdb101_rcsb",
+      "workflow_steps": 6,
+      "num_test_cases": 10,
+      "resources_count": 152,
+      "prototypes": [
+        "browse_by_topic.jpg",
+        "homepage.jpg",
+        "learning_resources.jpg",
+        "molecule_of_the_month.jpg",
+        "topic_page_diabetes.jpg",
+        "training_guide.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/pdb101_rcsb"
+    },
+    {
+      "task_name": "relaxingjourneys",
+      "workflow_steps": 4,
+      "num_test_cases": 24,
+      "resources_count": 20,
+      "prototypes": [
+        "about_us.jpg",
+        "contact.jpg",
+        "homepage.jpg",
+        "tours_listing.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/relaxingjourneys"
+    },
+    {
+      "task_name": "sbs",
+      "workflow_steps": 6,
+      "num_test_cases": 5,
+      "resources_count": 1233,
+      "prototypes": [
+        "Food_Recipes.jpg",
+        "Languages.jpg",
+        "Movies.jpg",
+        "News.jpg",
+        "On_Demand_Streaming.jpg",
+        "TV_Programs.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/sbs"
+    },
+    {
+      "task_name": "shopnshine",
+      "workflow_steps": 6,
+      "num_test_cases": 7,
+      "resources_count": 189,
+      "prototypes": [
+        "Blog_News.jpg",
+        "Brand_Collection_Gtechniq.jpg",
+        "Homepage.jpg",
+        "Product_Category_Clean.jpg",
+        "Product_Detail_Page.jpg",
+        "Sale_Products.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/shopnshine"
+    },
+    {
+      "task_name": "smartrecruiters",
+      "workflow_steps": 6,
+      "num_test_cases": 8,
+      "resources_count": 325,
+      "prototypes": [
+        "about_us.jpg",
+        "careers.jpg",
+        "customers.jpg",
+        "homepage.jpg",
+        "pricing.jpg",
+        "winston_ai.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/smartrecruiters"
+    },
+    {
+      "task_name": "southcarolinaparks",
+      "workflow_steps": 6,
+      "num_test_cases": 5,
+      "resources_count": 124,
+      "prototypes": [
+        "camping_and_lodging.jpg",
+        "deals.jpg",
+        "homepage.jpg",
+        "individual_park_page.jpg",
+        "park_finder.jpg",
+        "see_and_do.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/southcarolinaparks"
+    },
+    {
+      "task_name": "tcm",
+      "workflow_steps": 6,
+      "num_test_cases": 8,
+      "resources_count": 130,
+      "prototypes": [
+        "Film Noir Articles.jpg",
+        "Homepage.jpg",
+        "International Cinema Articles.jpg",
+        "Scorsese Screens Articles.jpg",
+        "Search.jpg",
+        "Silent Films Articles.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/tcm"
+    },
+    {
+      "task_name": "teacherserver",
+      "workflow_steps": 6,
+      "num_test_cases": 1,
+      "resources_count": 12,
+      "prototypes": [
+        "Community Support Forum.jpg",
+        "Homepage.jpg",
+        "Research Tools for College Faculty.jpg",
+        "Science Tools.jpg",
+        "Social Studies Tools.jpg",
+        "Teaching Tools for College Faculty.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/teacherserver"
+    },
+    {
+      "task_name": "theaccnz",
+      "workflow_steps": 6,
+      "num_test_cases": 5,
+      "resources_count": 53,
+      "prototypes": [
+        "Homepage.jpg",
+        "Listen_Live.jpg",
+        "Live_Events.jpg",
+        "Playlists.jpg",
+        "Podcast_Series_Page.jpg",
+        "Podcasts_Listing.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/theaccnz"
+    },
+    {
+      "task_name": "theperfumespot",
+      "workflow_steps": 6,
+      "num_test_cases": 8,
+      "resources_count": 138,
+      "prototypes": [
+        "homepage.jpg",
+        "mens_fragrances.jpg",
+        "outlet.jpg",
+        "product_detail.jpg",
+        "shop_by_brand.jpg",
+        "womens_fragrances.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/theperfumespot"
+    },
+    {
+      "task_name": "uk_ixl",
+      "workflow_steps": 6,
+      "num_test_cases": 9,
+      "resources_count": 119,
+      "prototypes": [
+        "Analytics_Dashboard.jpg",
+        "Diagnostic_Assessment.jpg",
+        "Subject_Skills_Listing_English.jpg",
+        "Subject_Skills_Listing_Maths.jpg",
+        "Subject_Skills_Listing_Science.jpg",
+        "Year_Level_Skills_Maths.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/uk_ixl"
+    },
+    {
+      "task_name": "wildapricot",
+      "workflow_steps": 6,
+      "num_test_cases": 6,
+      "resources_count": 77,
+      "prototypes": [
+        "blog.jpg",
+        "features.jpg",
+        "homepage.jpg",
+        "integrations.jpg",
+        "member_management.jpg",
+        "pricing.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/wildapricot"
+    },
+    {
+      "task_name": "winecompanion",
+      "workflow_steps": 6,
+      "num_test_cases": 5,
+      "resources_count": 44,
+      "prototypes": [
+        "distilleries_browse.jpg",
+        "distillery_profile.jpg",
+        "homepage.jpg",
+        "wine_academy.jpg",
+        "wineries_by_region.jpg",
+        "winery_profile.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/winecompanion"
+    },
+    {
+      "task_name": "yeacamp",
+      "workflow_steps": 6,
+      "num_test_cases": 6,
+      "resources_count": 196,
+      "prototypes": [
+        "About Us.jpg",
+        "Blog.jpg",
+        "Contact.jpg",
+        "Homepage.jpg",
+        "Testimonials.jpg",
+        "What You Can Do.jpg"
+      ],
+      "level": "frontend",
+      "id": "frontend/yeacamp"
+    },
+    {
+      "task_name": "act",
+      "workflow_steps": 9,
+      "num_test_cases": 37,
+      "resources_count": 10,
+      "prototypes": [
+        "calendar.jpg",
+        "companies.jpg",
+        "contacts.jpg",
+        "create_activity.jpg",
+        "create_company.jpg",
+        "create_contact.jpg",
+        "home.jpg",
+        "login.jpg"
+      ],
+      "level": "website",
+      "id": "website/act"
+    },
+    {
+      "task_name": "agendrix",
+      "workflow_steps": 12,
+      "num_test_cases": 46,
+      "resources_count": 26,
+      "prototypes": [
+        "add_employee.jpg",
+        "add_shift.jpg",
+        "employee_info.jpg",
+        "employee_profile.jpg",
+        "employees.jpg",
+        "home.jpg",
+        "login.jpg",
+        "recurrence.jpg",
+        "register.jpg",
+        "schedule.jpg",
+        "settings.jpg"
+      ],
+      "level": "website",
+      "id": "website/agendrix"
+    },
+    {
+      "task_name": "bettys",
+      "workflow_steps": 11,
+      "num_test_cases": 42,
+      "resources_count": 219,
+      "prototypes": [
+        "account.jpg",
+        "basket.jpg",
+        "category.jpg",
+        "checkout.jpg",
+        "delivery.jpg",
+        "home.jpg",
+        "login.jpg",
+        "menu.jpg",
+        "order.jpg",
+        "product.jpg",
+        "products.jpg",
+        "register.jpg"
+      ],
+      "level": "website",
+      "id": "website/bettys"
+    },
+    {
+      "task_name": "biblio",
+      "workflow_steps": 11,
+      "num_test_cases": 37,
+      "resources_count": 165,
+      "prototypes": [
+        "basket.jpg",
+        "book.jpg",
+        "browse.jpg",
+        "checkout.jpg",
+        "editions.jpg",
+        "home.jpg",
+        "search.jpg",
+        "sell.jpg",
+        "sign.jpg",
+        "subject.jpg"
+      ],
+      "level": "website",
+      "id": "website/biblio"
+    },
+    {
+      "task_name": "brandeis",
+      "workflow_steps": 7,
+      "num_test_cases": 11,
+      "resources_count": 37,
+      "prototypes": [
+        "about.jpg",
+        "academics.jpg",
+        "admissions_aid.jpg",
+        "home.jpg",
+        "our_story.jpg",
+        "research.jpg",
+        "summer_programs.jpg"
+      ],
+      "level": "website",
+      "id": "website/brandeis"
+    },
+    {
+      "task_name": "cognitoforms",
+      "workflow_steps": 7,
+      "num_test_cases": 33,
+      "resources_count": 26,
+      "prototypes": [
+        "add_field.jpg",
+        "build.jpg",
+        "entries.jpg",
+        "fill.jpg",
+        "home.jpg",
+        "login.jpg",
+        "preview.jpg",
+        "publish.jpg",
+        "setting.jpg"
+      ],
+      "level": "website",
+      "id": "website/cognitoforms"
+    },
+    {
+      "task_name": "enzazaden",
+      "workflow_steps": 5,
+      "num_test_cases": 13,
+      "resources_count": 54,
+      "prototypes": [
+        "home.jpg",
+        "product.jpg",
+        "products.jpg",
+        "products_services.jpg",
+        "varieties.jpg"
+      ],
+      "level": "website",
+      "id": "website/enzazaden"
+    },
+    {
+      "task_name": "filmmovement",
+      "workflow_steps": 5,
+      "num_test_cases": 20,
+      "resources_count": 259,
+      "prototypes": [
+        "at_home.jpg",
+        "coming_soon.jpg",
+        "dvd.jpg",
+        "dvd_type.jpg",
+        "film.jpg",
+        "home.jpg",
+        "in_theatres.jpg"
+      ],
+      "level": "website",
+      "id": "website/filmmovement"
+    },
+    {
+      "task_name": "forbesmiddleeast",
+      "workflow_steps": 9,
+      "num_test_cases": 31,
+      "resources_count": 385,
+      "prototypes": [
+        "all_lists.jpg",
+        "article.jpg",
+        "author.jpg",
+        "billionaires.jpg",
+        "bookmarks.jpg",
+        "home.jpg",
+        "list.jpg",
+        "science_list.jpg",
+        "search.jpg"
+      ],
+      "level": "website",
+      "id": "website/forbesmiddleeast"
+    },
+    {
+      "task_name": "frauzinnie",
+      "workflow_steps": 6,
+      "num_test_cases": 15,
+      "resources_count": 81,
+      "prototypes": [
+        "about.jpg",
+        "article.jpg",
+        "home.jpg",
+        "micro_food.jpg",
+        "older_posts.jpg",
+        "photography.jpg",
+        "subscribe.jpg"
+      ],
+      "level": "website",
+      "id": "website/frauzinnie"
+    },
+    {
+      "task_name": "gallup",
+      "workflow_steps": 6,
+      "num_test_cases": 21,
+      "resources_count": 64,
+      "prototypes": [
+        "article.jpg",
+        "home.jpg",
+        "statistics.jpg",
+        "subscribe.jpg",
+        "success.jpg",
+        "topic.jpg",
+        "trend.jpg"
+      ],
+      "level": "website",
+      "id": "website/gallup"
+    },
+    {
+      "task_name": "infineon",
+      "workflow_steps": 11,
+      "num_test_cases": 32,
+      "resources_count": 96,
+      "prototypes": [
+        "blog.jpg",
+        "blogs.jpg",
+        "change_password.jpg",
+        "course.jpg",
+        "discussion.jpg",
+        "forum.jpg",
+        "forums.jpg",
+        "home.jpg",
+        "login.jpg",
+        "register.jpg",
+        "training.jpg"
+      ],
+      "level": "website",
+      "id": "website/infineon"
+    },
+    {
+      "task_name": "invoicera",
+      "workflow_steps": 8,
+      "num_test_cases": 33,
+      "resources_count": 170,
+      "prototypes": [
+        "add_product.jpg",
+        "category.jpg",
+        "clients.jpg",
+        "dashboard.jpg",
+        "invoices.jpg",
+        "login.jpg",
+        "new_client.jpg",
+        "new_invoice.jpg",
+        "products.jpg",
+        "register.jpg"
+      ],
+      "level": "website",
+      "id": "website/invoicera"
+    },
+    {
+      "task_name": "learnvern",
+      "workflow_steps": 13,
+      "num_test_cases": 51,
+      "resources_count": 222,
+      "prototypes": [
+        "course.jpg",
+        "courses.jpg",
+        "dashboard.jpg",
+        "enter_quiz.jpg",
+        "home.jpg",
+        "learn.jpg",
+        "login_signup.jpg",
+        "my_courses.jpg",
+        "profile.jpg",
+        "quiz.jpg",
+        "settings.jpg"
+      ],
+      "level": "website",
+      "id": "website/learnvern"
+    },
+    {
+      "task_name": "luxurycleaning",
+      "workflow_steps": 7,
+      "num_test_cases": 21,
+      "resources_count": 117,
+      "prototypes": [
+        "apartment.jpg",
+        "book.jpg",
+        "deep_cleaning.jpg",
+        "home.jpg",
+        "housekeeping.jpg",
+        "post_renovation.jpg",
+        "price.jpg"
+      ],
+      "level": "website",
+      "id": "website/luxurycleaning"
+    },
+    {
+      "task_name": "marketingprofs",
+      "workflow_steps": 10,
+      "num_test_cases": 21,
+      "resources_count": 58,
+      "prototypes": [
+        "article.jpg",
+        "class.jpg",
+        "dashboard.jpg",
+        "event.jpg",
+        "events.jpg",
+        "home.jpg",
+        "home_login.jpg",
+        "login.jpg",
+        "resources.jpg"
+      ],
+      "level": "website",
+      "id": "website/marketingprofs"
+    },
+    {
+      "task_name": "minneapolismn",
+      "workflow_steps": 6,
+      "num_test_cases": 17,
+      "resources_count": 88,
+      "prototypes": [
+        "contact_mayor.jpg",
+        "fill_form.jpg",
+        "government.jpg",
+        "home.jpg",
+        "property_housing.jpg",
+        "resident.jpg"
+      ],
+      "level": "website",
+      "id": "website/minneapolismn"
+    },
+    {
+      "task_name": "nrcs",
+      "workflow_steps": 7,
+      "num_test_cases": 15,
+      "resources_count": 0,
+      "prototypes": [
+        "getting_assistance.jpg",
+        "home.jpg",
+        "soil_health.jpg",
+        "soil_science.jpg",
+        "soil_tools.jpg",
+        "spatial_tools.jpg",
+        "technical_assistance.jpg"
+      ],
+      "level": "website",
+      "id": "website/nrcs"
+    },
+    {
+      "task_name": "permanent",
+      "workflow_steps": 6,
+      "num_test_cases": 29,
+      "resources_count": 216,
+      "prototypes": [
+        "article.jpg",
+        "categories.jpg",
+        "category.jpg",
+        "home.jpg",
+        "menu.jpg",
+        "results.jpg",
+        "search.jpg",
+        "video.jpg"
+      ],
+      "level": "website",
+      "id": "website/permanent"
+    },
+    {
+      "task_name": "piedmont",
+      "workflow_steps": 11,
+      "num_test_cases": 33,
+      "resources_count": 253,
+      "prototypes": [
+        "application.jpg",
+        "applications.jpg",
+        "branch.jpg",
+        "branches.jpg",
+        "contact.jpg",
+        "home.jpg",
+        "industries.jpg",
+        "industry.jpg",
+        "menu.jpg",
+        "product.jpg",
+        "products.jpg"
+      ],
+      "level": "website",
+      "id": "website/piedmont"
+    },
+    {
+      "task_name": "scenario",
+      "workflow_steps": 8,
+      "num_test_cases": 24,
+      "resources_count": 191,
+      "prototypes": [
+        "collections.jpg",
+        "create.jpg",
+        "create_explore.jpg",
+        "explore.jpg",
+        "home.jpg",
+        "info.jpg",
+        "login.jpg",
+        "model.jpg"
+      ],
+      "level": "website",
+      "id": "website/scenario"
+    },
+    {
+      "task_name": "stjohnsschool",
+      "workflow_steps": 5,
+      "num_test_cases": 7,
+      "resources_count": 69,
+      "prototypes": [
+        "about.jpg",
+        "approach.jpg",
+        "auxiliary_programs.jpg",
+        "home.jpg",
+        "school_life.jpg"
+      ],
+      "level": "website",
+      "id": "website/stjohnsschool"
+    },
+    {
+      "task_name": "storytel",
+      "workflow_steps": 11,
+      "num_test_cases": 30,
+      "resources_count": 411,
+      "prototypes": [
+        "audiobooks.jpg",
+        "book.jpg",
+        "categories.jpg",
+        "category.jpg",
+        "ebooks.jpg",
+        "home.jpg",
+        "login.jpg",
+        "register.jpg",
+        "search.jpg",
+        "viewall.jpg"
+      ],
+      "level": "website",
+      "id": "website/storytel"
+    },
+    {
+      "task_name": "swica",
+      "workflow_steps": 10,
+      "num_test_cases": 35,
+      "resources_count": 95,
+      "prototypes": [
+        "add_cart.jpg",
+        "add_person.jpg",
+        "basic.jpg",
+        "cart.jpg",
+        "choose.jpg",
+        "closure.jpg",
+        "company.jpg",
+        "detail.jpg",
+        "home.jpg",
+        "insurance_solutions.jpg",
+        "summary.jpg"
+      ],
+      "level": "website",
+      "id": "website/swica"
+    },
+    {
+      "task_name": "sykescottages",
+      "workflow_steps": 15,
+      "num_test_cases": 54,
+      "resources_count": 210,
+      "prototypes": [
+        "bookings.jpg",
+        "dashboard.jpg",
+        "details.jpg",
+        "extras.jpg",
+        "favourites.jpg",
+        "home.jpg",
+        "login.jpg",
+        "offers.jpg",
+        "payment.jpg",
+        "place.jpg",
+        "property.jpg",
+        "register.jpg",
+        "search.jpg"
+      ],
+      "level": "website",
+      "id": "website/sykescottages"
+    },
+    {
+      "task_name": "trailrunnerstore",
+      "workflow_steps": 6,
+      "num_test_cases": 29,
+      "resources_count": 233,
+      "prototypes": [
+        "cart.jpg",
+        "checkout.jpg",
+        "home.jpg",
+        "product.jpg",
+        "products.jpg"
+      ],
+      "level": "website",
+      "id": "website/trailrunnerstore"
+    },
+    {
+      "task_name": "withairbnb",
+      "workflow_steps": 8,
+      "num_test_cases": 23,
+      "resources_count": 68,
+      "prototypes": [
+        "conversation.jpg",
+        "home.jpg",
+        "login_signup.jpg",
+        "post.jpg",
+        "topic.jpg",
+        "user.jpg"
+      ],
+      "level": "website",
+      "id": "website/withairbnb"
+    }
+  ]
+}

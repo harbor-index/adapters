@@ -1,0 +1,30 @@
+{
+  "revision": "d80a4a3d0ea7326541ad87314294269a633789e4",
+  "files": {
+    "vision2web/__init__.py": "406791dba8f8b21adf1a346751c7cceacd16aa00f0a8034655a2b5f5261de67d",
+    "vision2web/analyze/__init__.py": "91f79add1afd32d1bfdf614a82217590dc29357241846552cbfa578b3df3e0f0",
+    "vision2web/analyze/analyzer.py": "c0ad3903be0039b4e1424cce975057e78196b236f4a7c39598284245ca88c051",
+    "vision2web/cli.py": "4d25f443755f65d35e632c17a1a08abc1eaa45f549be9dab10602c852dab92ba",
+    "vision2web/core/__init__.py": "a62f2a146a582ac2ae87d1e4387c430c467cb83e3fc6a22c82c4675059bd43c1",
+    "vision2web/core/config.py": "6fbdbcdbc18c47f38fe716fc7eaf996aa4780f509759212874ec27ba9d202a86",
+    "vision2web/core/constants.py": "7062342a74a5c35b6b96a06a8d87cbe492cacfec1b8274baa502c57dc3121a31",
+    "vision2web/core/dataset.py": "b829d17d9d26741b53fd301338fca54e4d7896e7c921eae5533042a64904f55c",
+    "vision2web/core/logger.py": "d3bbf864944e8d3180d967aec4322eeabba7616de88ac4a0d96dd7d29599e30a",
+    "vision2web/core/sandbox.py": "2ce24cee6e2f737072fcc45dc06db691dad1a816488991f83fc601ba27174c26",
+    "vision2web/core/utils.py": "d49aeae5132abe10883749f672d6bef215dbd0f4247a5e29b2a791980f639738",
+    "vision2web/evaluation/__init__.py": "925b794071d7bc0afe32723c1a55e6222cdd0d98da3fc3dec9aab0a19b25b9f8",
+    "vision2web/evaluation/engine.py": "b38e9b57268412e5ee1380f0c2aa2057c48528e674a7aac4068e920277262cac",
+    "vision2web/evaluation/functional_tester.py": "05a40084073bb9e1465b83bdde95d898ea9730c62c13acd4ba5954e9f70857f8",
+    "vision2web/evaluation/prompts.py": "a9bddd101c74a379a1f063eb799a9ca3464b566a0504c43e6b84ca6ef275c627",
+    "vision2web/evaluation/visual_scorer.py": "91fc2303163176a170f97f323aa72e49b5f454ca24af299f6b353f21cb01e826",
+    "vision2web/inference/__init__.py": "89fbf41dad01ed9db8c92a0fceeb7cfc907931bb495ac10bf7153ad4b0d8e3b2",
+    "vision2web/inference/adapters/__init__.py": "f4111a985f42d7e483927ead5b28b63e3d15d2d4900d5397f049b0116d8c3b4b",
+    "vision2web/inference/adapters/base.py": "d3645b5b1deaac4598fd548f56da817d0ad17447ca784cdbd8526863dc2cc042",
+    "vision2web/inference/adapters/claude_code.py": "ff41ff7f8a3d1146a0fe0ae869986dd734f38b25974327fd32719112b9883b29",
+    "vision2web/inference/adapters/codex.py": "a8015cc3a7b9e07c3a50a44bfa364e9668a14854f40b5ebc53625d5058ff7046",
+    "vision2web/inference/adapters/gemini_cli.py": "a3e88a82f6f8940465dff48472077b91e578c1a9f52234f2afb01fa9e292fbcc",
+    "vision2web/inference/adapters/openhands.py": "6f4bdcae6b94d51c346754c3990c0e61e42a28ab1db3c384d8a98fde369e2a70",
+    "vision2web/inference/engine.py": "9bb066b186d704349636752f6dd33677016a4ce7ef09ba564bbffab2a46c635e",
+    "vision2web/inference/prompts.py": "1471e85dda7c21c2e91445c7df8a8fcd2d40401521165caaa72b26f1ccbd19a9"
+  }
+}
