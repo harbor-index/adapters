@@ -1,0 +1,31 @@
+[project]
+name = "harbor-rle-bench-adapter"
+version = "0.1.0"
+description = "Portable CPU-only Harbor tasks from pinned RLE-Bench sources"
+readme = "README.md"
+authors = [
+    { name = "Dongzhikang", email = "darrendong@qq.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "harbor==0.21.0",
+    "mujoco==3.5.0",
+    "numpy==2.5.1",
+    "scipy==1.18.0",
+    "matplotlib==3.11.0",
+    "python-fcl==0.7.0.11",
+]
+
+[dependency-groups]
+dev = ["pytest==9.1.1"]
+
+[project.scripts]
+rle-bench = "rle_bench.main:main"
+rle-bench-compare = "rle_bench.compare:main"
+
+[build-system]
+requires = ["uv_build>=0.13.8,<0.14.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "rle_bench"

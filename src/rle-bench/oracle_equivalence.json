@@ -1,0 +1,86 @@
+{
+  "upstream_commit": "c6bf572283b5453c0ee76eaa3054f23d691e433d",
+  "kind": "oracle_equivalence",
+  "passed": true,
+  "tasks": [
+    {
+      "task_id": "task06-rgb-only",
+      "passed": true,
+      "original_reward": 0.1081,
+      "harbor_reward": 0.1082,
+      "deterministic_differences": [],
+      "errors": [],
+      "original_timing": {
+        "inference_wall_s": 472.1051742383279,
+        "inference_hz": 1.4827204576381667,
+        "efficiency_deduction": 0.18927287871915188,
+        "raw_reward": 0.1081
+      },
+      "harbor_timing": {
+        "inference_wall_s": 471.88009024132043,
+        "inference_hz": 1.4834277064794545,
+        "efficiency_deduction": 0.18925716207823434,
+        "raw_reward": 0.1082
+      },
+      "original_accuracy_reward": 0.2974174159335837,
+      "harbor_accuracy_reward": 0.2974174159335837,
+      "original_trial": "/home/darren/Documents/rlebench-oracle-results/round1/task06/rgb-only/oracle/oracle/rgb-only__Tu8DRB5/result.json",
+      "harbor_trial": "/home/darren/Documents/rlebench-oracle-results/adapted/task06-rgb-only/oracle/task06-rgb-only__Nj6TvFp/result.json"
+    },
+    {
+      "task_id": "task06-rgb-depth",
+      "passed": true,
+      "original_reward": 0.0964,
+      "harbor_reward": 0.0966,
+      "deterministic_differences": [],
+      "errors": [],
+      "original_timing": {
+        "inference_wall_s": 588.2487775655463,
+        "inference_hz": 1.1899727236101254,
+        "efficiency_deduction": 0.19577838391977498,
+        "raw_reward": 0.0964
+      },
+      "harbor_timing": {
+        "inference_wall_s": 584.1254003765061,
+        "inference_hz": 1.198372814379935,
+        "efficiency_deduction": 0.19559171523600147,
+        "raw_reward": 0.0966
+      },
+      "original_accuracy_reward": 0.292222651588023,
+      "harbor_accuracy_reward": 0.292222651588023,
+      "original_trial": "/home/darren/Documents/rlebench-oracle-results/round1/task06/rgb-depth/oracle/oracle/rgb-depth__37qbZyk/result.json",
+      "harbor_trial": "/home/darren/Documents/rlebench-oracle-results/adapted/task06-rgb-depth/oracle/task06-rgb-depth__DeCnC8n/result.json"
+    },
+    {
+      "task_id": "task07",
+      "passed": true,
+      "original_reward": 0.0572,
+      "harbor_reward": 0.0572,
+      "deterministic_differences": [],
+      "errors": [],
+      "original_trial": "/home/darren/Documents/rlebench-oracle-results/round1/task07/oracle/oracle/task07__MU8A9mT/result.json",
+      "harbor_trial": "/home/darren/Documents/rlebench-oracle-results/adapted/task07/oracle/task07__tU5D3qh/result.json"
+    },
+    {
+      "task_id": "task08",
+      "passed": true,
+      "original_reward": 0.7564,
+      "harbor_reward": 0.7564,
+      "deterministic_differences": [],
+      "errors": [],
+      "original_trial": "/home/darren/Documents/rlebench-oracle-results/round1/task08/oracle/oracle/task08__mTMtxqT/result.json",
+      "harbor_trial": "/home/darren/Documents/rlebench-oracle-results/adapted/task08/oracle/task08__VwLGDyi/result.json"
+    },
+    {
+      "task_id": "task09",
+      "passed": true,
+      "original_reward": 0.7154333333333334,
+      "harbor_reward": 0.7154333333333334,
+      "deterministic_differences": [],
+      "errors": [],
+      "original_trial": "/home/darren/Documents/rlebench-oracle-results/round1/task09/oracle/oracle/task09__EZRcpBb/result.json",
+      "harbor_trial": "/home/darren/Documents/rlebench-oracle-results/adapted/task09/oracle/task09__rVBgBct/result.json"
+    }
+  ],
+  "notes": "Acceptance: exact deterministic scores; task06 raw timing penalties retained and checked separately. No LLM-agent parity claim."
+}

@@ -1,0 +1,149 @@
+[
+  {
+    "adapter_name": "rle-bench",
+    "agent": "oracle@harbor-0.21.0",
+    "model": "None",
+    "date": "2026-11-16",
+    "kind": "oracle_equivalence",
+    "adapted_benchmark_size": 5,
+    "parity_benchmark_size": 5,
+    "number_of_runs": 1,
+    "notes": "Oracle equivalence only, not statistical LLM-agent parity. One complete native/adapted run per task; sample SEM is undefined, never estimated as zero. All five CPU tasks pass exact comparison of complete reports excluding only measured wall-clock diagnostics. Fixed source c6bf572283b5453c0ee76eaa3054f23d691e433d; Harbor 0.21.0; original CPU/memory/time budgets, hidden seeds and scoring. RLEBENCH_MEDIA=0 on both sides. Native baselines accepted per organizer coordination reported by user on 2026-11-16. Task06 deterministic accuracy is exact; original measured timing penalty and raw reward are checked separately. Task07 runs all eight hidden episodes; task08 and task09 reports match in full. No model API calls, original-benchmark fork, dataset registry publication or experiment uploads.",
+    "original_parity_repo": "https://github.com/RLE-Bench/RLE-Bench",
+    "adapter_pr": [
+      "https://github.com/harbor-index/adapters/pull/15"
+    ],
+    "dataset_pr": null,
+    "parity_pr": null,
+    "metrics": [
+      {
+        "benchmark_name": "RLE-Bench CPU",
+        "metric": "task06-rgb-only accuracy_reward",
+        "original": "0.2974174159335837 \u00b1 undefined (n=1)",
+        "harbor": "0.2974174159335837 \u00b1 undefined (n=1)",
+        "original_runs": [
+          0.2974174159335837
+        ],
+        "harbor_runs": [
+          0.2974174159335837
+        ],
+        "original_sample_sem": null,
+        "harbor_sample_sem": null
+      },
+      {
+        "benchmark_name": "RLE-Bench CPU",
+        "metric": "task06-rgb-depth accuracy_reward",
+        "original": "0.292222651588023 \u00b1 undefined (n=1)",
+        "harbor": "0.292222651588023 \u00b1 undefined (n=1)",
+        "original_runs": [
+          0.292222651588023
+        ],
+        "harbor_runs": [
+          0.292222651588023
+        ],
+        "original_sample_sem": null,
+        "harbor_sample_sem": null
+      },
+      {
+        "benchmark_name": "RLE-Bench CPU",
+        "metric": "task07 reward",
+        "original": "0.0572 \u00b1 undefined (n=1)",
+        "harbor": "0.0572 \u00b1 undefined (n=1)",
+        "original_runs": [
+          0.0572
+        ],
+        "harbor_runs": [
+          0.0572
+        ],
+        "original_sample_sem": null,
+        "harbor_sample_sem": null
+      },
+      {
+        "benchmark_name": "RLE-Bench CPU",
+        "metric": "task08 reward",
+        "original": "0.7564 \u00b1 undefined (n=1)",
+        "harbor": "0.7564 \u00b1 undefined (n=1)",
+        "original_runs": [
+          0.7564
+        ],
+        "harbor_runs": [
+          0.7564
+        ],
+        "original_sample_sem": null,
+        "harbor_sample_sem": null
+      },
+      {
+        "benchmark_name": "RLE-Bench CPU",
+        "metric": "task09 reward",
+        "original": "0.7154333333333334 \u00b1 undefined (n=1)",
+        "harbor": "0.7154333333333334 \u00b1 undefined (n=1)",
+        "original_runs": [
+          0.7154333333333334
+        ],
+        "harbor_runs": [
+          0.7154333333333334
+        ],
+        "original_sample_sem": null,
+        "harbor_sample_sem": null
+      }
+    ]
+  },
+  {
+    "adapter_name": "rle-bench",
+    "agent": "oracle@harbor-0.21.0",
+    "model": "None",
+    "date": "2026-11-17",
+    "kind": "oracle_equivalence",
+    "adapted_benchmark_size": 19,
+    "parity_benchmark_size": 4,
+    "notes": "Oracle validation on a single RTX 3080 Ti using two complete native runs and one Harbor run per task. Task03 matched full reward JSON and passed the original ledger, handoff and isolation checks. Task06 method-agnostic matched deterministic metrics and preserved raw timing deductions. The training Oracle used deterministic CUDA settings on both sides and matched all 38 model state tensors and deterministic verifier fields. With one verifier running at a time, the native model replay and the adapted training run both scored 0.0041. Harbor sample SEM is undefined. Full evaluation artifacts and dataset registration are pending publication.",
+    "original_parity_repo": "https://github.com/RLE-Bench/RLE-Bench",
+    "adapter_pr": [
+      "https://github.com/harbor-index/adapters/pull/15"
+    ],
+    "dataset_pr": null,
+    "parity_pr": null,
+    "metrics": [
+      {
+        "benchmark_name": "RLE-Bench GPU",
+        "metric": "task03-01-tower-max-height reward",
+        "original": "0.26419826409000635 (n=2)",
+        "harbor": "0.26419826409000635 (n=1)",
+        "original_runs": [0.26419826409000635, 0.26419826409000635],
+        "harbor_runs": [0.26419826409000635],
+        "original_sample_sem": 0.0,
+        "harbor_sample_sem": null
+      },
+      {
+        "benchmark_name": "RLE-Bench GPU",
+        "metric": "task03-05-hidden-center-of-mass reward",
+        "original": "1.0 (n=2)",
+        "harbor": "1.0 (n=1)",
+        "original_runs": [1.0, 1.0],
+        "harbor_runs": [1.0],
+        "original_sample_sem": 0.0,
+        "harbor_sample_sem": null
+      },
+      {
+        "benchmark_name": "RLE-Bench GPU",
+        "metric": "task06-method-agnostic accuracy_reward",
+        "original": "0.292222651588023 (n=2)",
+        "harbor": "0.292222651588023 (n=1)",
+        "original_runs": [0.292222651588023, 0.292222651588023],
+        "harbor_runs": [0.292222651588023],
+        "original_sample_sem": 0.0,
+        "harbor_sample_sem": null
+      },
+      {
+        "benchmark_name": "RLE-Bench GPU",
+        "metric": "task06-rgb-depth-model-training accuracy_reward (deterministic CUDA)",
+        "original": "0.0041042114936177525 (n=2)",
+        "harbor": "0.0041042114936177525 (n=1)",
+        "original_runs": [0.0041042114936177525, 0.0041042114936177525],
+        "harbor_runs": [0.0041042114936177525],
+        "original_sample_sem": 0.0,
+        "harbor_sample_sem": null
+      }
+    ]
+  }
+]
