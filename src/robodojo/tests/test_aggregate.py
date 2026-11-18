@@ -118,6 +118,18 @@ class AggregateTests(unittest.TestCase):
         self.save("insert_tubes")
         self.assertEqual(aggregate(self.job)["tasks"], 42)
 
+    def test_safety_limits_do_not_split_an_aggregate(self):
+        """A trial rerun with a higher cap or more retries is still the same scaffold."""
+        for index, (task_id, (_, trial, _)) in enumerate(self.records.items()):
+            trial["agent_result"]["metadata"]["robodojo_direct"]["limits"] = {
+                "max_cost_usd": 50.0 if index else 80.0, "api_retries": 4 if index else 6,
+                "api_timeout_sec": 600.0, "wait_sec": 600.0 if index else 300.0, "max_idle_sec": 7200.0,
+            }
+            self.save(task_id)
+        result = aggregate(self.job)
+        self.assertEqual(result["tasks"], 42)
+        self.assertNotIn("limits", result["direct"])
+
     def test_endpoint_and_one_served_model_are_required(self):
         _, trial, _ = self.records["insert_tubes"]
         direct = trial["agent_result"]["metadata"]["robodojo_direct"]

@@ -71,12 +71,12 @@ The model gets one tool, `robodojo_act`, and no shell, file, or image tools. An 
 | `api_retries` | `4` | Number of additional attempts per completion. Set to zero for one attempt. The player records API attempts and successful model calls separately. |
 | `api_base`, `api_key_env` | none | Endpoint override and the name of the environment variable that holds the API key. |
 
-The model, the prompt hash, the contract version, and these settings are recorded in each trial's agent metadata. An aborted run has no reward: a limit that stops an episode early is never reported as a native failure.
+The model, the prompt hash, the contract version, and these settings are recorded in each trial's agent metadata. The spending, retry, and waiting limits (`max_cost_usd`, `api_retries`, `api_timeout_sec`, `wait_sec`, `max_idle_sec`) are recorded separately under `limits`. They can end a run early or repeat a request, but cannot change the decisions of a run that completes, so two trials that differ only in these limits are still comparable. An aborted run has no reward: a limit that stops an episode early is never reported as a native failure.
 
 The metadata also records where the requests went, without credentials:
 
 - `endpoint.api_base` is the configured `api_base`, reduced to scheme, host, port, and path. User names, passwords, query strings, and API keys are never recorded.
-- `endpoint.environment` holds the `<PROVIDER>_API_BASE` and `<PROVIDER>_BASE_URL` variables for the model's provider when set without an explicit `api_base`. For an unprefixed model such as `gpt-4o`, LiteLLM resolves the provider.
+- `endpoint.environment` holds the `<PROVIDER>_API_BASE` and `<PROVIDER>_BASE_URL` variables for the model's provider when set without an explicit `api_base`. For an unprefixed model such as `gpt-4o`, LiteLLM resolves the provider; an unprefixed name that LiteLLM does not know is refused at startup.
 - `served` holds what the responses reported: the model identifiers that answered and, where LiteLLM states them, the provider and endpoint.
 
 For parity runs, set `api_base` explicitly. A redirect made in any other way, such as a provider variable with a different name or a proxy behind the same host, is only visible if it changes the served model identifier.
@@ -134,7 +134,7 @@ cd src/robodojo
 uv run python -m robodojo.aggregate /path/to/harbor-job --output /path/to/summary.json
 ```
 
-Aggregation requires exactly 42 unique completed tasks that share the layout seed group, the model, the inference endpoint, the prompt hash, and the scaffold settings. Every trial must have been answered by exactly one served model identifier, and that identifier must be the same for all trials. It rejects failed or incomplete trials and does not report a full-benchmark score for a subset. Aggregate repeated runs separately before calculating parity mean and sample SEM. A flat average of 42 Harbor task rewards is not the official overall RoboDojo score.
+Aggregation requires exactly 42 unique completed tasks that share the layout seed group, the model, the inference endpoint, the prompt hash, and the scaffold settings. The limits recorded under `limits` may differ between trials. Every trial must have been answered by exactly one served model identifier, and that identifier must be the same for all trials. It rejects failed or incomplete trials and does not report a full-benchmark score for a subset. Aggregate repeated runs separately before calculating parity mean and sample SEM. A flat average of 42 Harbor task rewards is not the official overall RoboDojo score.
 
 ### CPU mock without the simulator
 

@@ -227,6 +227,42 @@ class SharedPlayerTests(unittest.TestCase):
             self.assertEqual((agent.player.max_cost_usd, agent.player.save_images), (1.5, True))
             self.assertEqual(agent.provenance(), player.provenance())
 
+    def test_limits_are_recorded_outside_the_identity_of_a_run(self):
+        """Limits cannot change a completed run, so they must not make two runs incomparable."""
+        with tempfile.TemporaryDirectory() as directory:
+            one = DirectPlayer("fake/model", Path(directory) / "a", max_cost_usd=50, wait_sec=600)
+            two = DirectPlayer(
+                "fake/model", Path(directory) / "b", max_cost_usd=80.0, wait_sec=300.0, api_retries=6,
+                api_timeout_sec=30, max_idle_sec=60,
+            )
+            self.assertEqual(one.provenance(), two.provenance())
+            limits = {"max_cost_usd", "api_retries", "api_timeout_sec", "wait_sec", "max_idle_sec"}
+            self.assertFalse(limits & set(one.settings))
+            self.assertEqual(one.summary()["limits"], {
+                "max_cost_usd": 50.0, "api_retries": 4, "api_timeout_sec": 600.0,
+                "wait_sec": 600.0, "max_idle_sec": 7200.0,
+            })
+            self.assertEqual(set(two.summary()["limits"]), limits)
+            # The limits still apply as given.
+            self.assertEqual((two.max_cost_usd, two.wait_sec, two.api_retries), (80.0, 300.0, 6))
+            # One spelling per number: 600 and 600.0 are recorded as the same text.
+            same = DirectPlayer("fake/model", Path(directory) / "c", max_cost_usd=50.0, wait_sec=600.0)
+            self.assertEqual(json.dumps(one.summary()), json.dumps(same.summary()))
+            self.assertIsNone(DirectPlayer("fake/model", Path(directory) / "d").limits["max_cost_usd"])
+
+    def test_unknown_unprefixed_model_is_refused_with_a_clear_message(self):
+        with tempfile.TemporaryDirectory() as directory:
+            errors = io.StringIO()
+            with contextlib.redirect_stderr(errors), contextlib.redirect_stdout(io.StringIO()), \
+                    self.assertRaises(SystemExit) as stop:
+                original.main(["--model", "my-finetune", "--output", str(Path(directory) / "unused")])
+            self.assertEqual(stop.exception.code, 2)  # A usage error, before anything runs.
+            self.assertIn("write it as provider/model-name", errors.getvalue())
+            self.assertNotIn("Traceback", errors.getvalue())
+            with contextlib.redirect_stdout(io.StringIO()), \
+                    self.assertRaisesRegex(ValueError, "no provider prefix"):
+                DirectAgent(logs_dir=Path(directory), model_name="my-finetune")
+
     def test_the_driver_does_not_import_harbor(self):
         program = (
             "import sys; sys.path.insert(0, sys.argv[1]); import robodojo.original; "

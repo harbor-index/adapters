@@ -110,6 +110,11 @@ def public_endpoint(url: Any) -> str | None:
     return f"{scheme}{host}{f':{port}' if port else ''}{parts.path.rstrip('/')}"
 
 
+def _recorded_number(value: Any) -> Any:
+    """Write 600 and 600.0 the same way, so that equal limits compare equal as text."""
+    return float(value) if type(value) in (int, float) else value
+
+
 async def _litellm_completion(**kwargs: Any) -> Any:
     import litellm
 
@@ -181,11 +186,16 @@ class DirectPlayer:
             "max_output_tokens": max_output_tokens,
             "model_seed": model_seed,
             "tool_choice": tool_choice,
-            "max_cost_usd": max_cost_usd,
+        }
+        # Limits can end a run early or repeat a request, but they cannot change
+        # the decisions of a run that completes. They are recorded, with one
+        # spelling per number, and are not part of the identity of a run.
+        self.limits = {
+            "max_cost_usd": _recorded_number(max_cost_usd),
             "api_retries": api_retries,
-            "api_timeout_sec": api_timeout_sec,
-            "wait_sec": wait_sec,
-            "max_idle_sec": max_idle_sec,
+            "api_timeout_sec": _recorded_number(api_timeout_sec),
+            "wait_sec": _recorded_number(wait_sec),
+            "max_idle_sec": _recorded_number(max_idle_sec),
         }
         self.max_cost_usd = max_cost_usd
         self.api_base = api_base
@@ -226,7 +236,13 @@ class DirectPlayer:
             if not separator:
                 from litellm import get_llm_provider
 
-                _, provider, _, _ = get_llm_provider(self.model_name)
+                try:
+                    _, provider, _, _ = get_llm_provider(self.model_name)
+                except Exception as error:  # LiteLLM cannot route this name either.
+                    raise ValueError(
+                        f"Model {self.model_name!r} has no provider prefix and LiteLLM does not "
+                        "know it; write it as provider/model-name"
+                    ) from error
             stem = re.sub(r"[^A-Z0-9]", "_", provider.upper())
             for name in (f"{stem}_API_BASE", f"{stem}_BASE_URL"):
                 if os.environ.get(name):
@@ -248,8 +264,8 @@ class DirectPlayer:
         }
 
     def summary(self) -> dict[str, Any]:
-        """The record of this run: its provenance and its counters."""
-        return {**self.provenance(), "stats": dict(self.stats)}
+        """The record of this run: its provenance, its limits and its counters."""
+        return {**self.provenance(), "limits": dict(self.limits), "stats": dict(self.stats)}
 
     # ----- bridge ---------------------------------------------------------
 
