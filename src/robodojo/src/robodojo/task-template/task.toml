@@ -1,0 +1,51 @@
+version = "1.0"
+
+[task]
+name = "$harbor_name"
+authors = [{ name = "Tianxing Chen" }, { name = "Yue Chen" }, { name = "Zixuan Li" }, { name = "Junyuan Tang" }, { name = "Kailun Su" }, { name = "Weijie Wan" }, { name = "Baijun Chen" }, { name = "Haoran Lu" }, { name = "Haowen Yan" }, { name = "Honghao Su" }]
+
+[metadata]
+difficulty = "hard"
+category = "robotics"
+tags = ["robodojo", "bimanual-manipulation", "$dimension"]
+upstream_task_id = "$task_id"
+upstream_revision = "$upstream_revision"
+dimension = "$dimension"
+seed = $seed
+control_mode = "direct-eef"
+validation_status = "draft-not-gpu-validated"
+# Provisional limits of the simulator service, enforced in docker-compose.yaml.
+simulator_cpus = $simulator_cpus
+simulator_memory_mb = $simulator_memory_mb
+simulator_storage_mb = $simulator_storage_mb
+simulator_gpus = $simulator_gpus
+
+# The whole 50-episode evaluation runs while the agent acts. This budget is
+# provisional: no wall time has been measured yet.
+[agent]
+timeout_sec = 604800.0
+
+# The verifier only reads results collected from the simulator service.
+[verifier]
+timeout_sec = 600.0
+environment_mode = "separate"
+
+[verifier.environment]
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+
+# Harbor applies these to the agent container, which only runs the bridge
+# client. The simulator service has its own limits in docker-compose.yaml.
+[environment]
+build_timeout_sec = 1200.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+
+[[artifacts]]
+source = "/harbor-robodojo/results"
+service = "simulator"

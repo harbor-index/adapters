@@ -1,0 +1,45 @@
+version = "1.0"
+
+# CPU mock of the RoboDojo adapter. It is not a benchmark task: the scene is
+# invented and its reward only shows that the plumbing works.
+[task]
+name = "$harbor_name"
+authors = [{ name = "Jia Guo" }]
+
+[metadata]
+difficulty = "easy"
+category = "robotics"
+tags = ["robodojo", "mock", "not-a-benchmark-task"]
+mock = true
+seed = $seed
+episodes = $episodes
+control_mode = "direct-eef"
+validation_status = "mock-not-a-benchmark-task"
+
+[agent]
+timeout_sec = 7200.0
+
+# The verifier only reads results collected from the mock simulator service.
+[verifier]
+timeout_sec = 600.0
+environment_mode = "separate"
+
+[verifier.environment]
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+
+# Harbor applies these to the agent container. The mock simulator service has
+# its own small limits in docker-compose.yaml. Nothing here needs a GPU.
+[environment]
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+
+[[artifacts]]
+source = "/harbor-robodojo/results"
+service = "simulator"

@@ -1,0 +1,29 @@
+[project]
+name = "harbor-robodojo-adapter"
+version = "0.2.2"
+description = "Draft Harbor adapter for RoboDojo simulation tasks controlled by a vision model"
+readme = "README.md"
+authors = [{ name = "Jia Guo", email = "jia@green.microsoft.com" }]
+requires-python = ">=3.12"
+dependencies = []
+
+[project.optional-dependencies]
+harbor = ["harbor==0.26.0"]
+# The original-side driver of a parity run needs only the model client. The
+# lock file gives it the version that Harbor uses.
+original = ["litellm>=1.109.1"]
+
+# NumPy and SciPy are needed only inside the simulator image, which provides
+# them, and by the kinematics tests.
+[dependency-groups]
+dev = ["numpy>=1.26", "scipy>=1.11"]
+
+[project.scripts]
+robodojo = "robodojo.main:main"
+
+[build-system]
+requires = ["uv_build>=0.12.13,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "robodojo"
