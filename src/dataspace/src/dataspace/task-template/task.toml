@@ -1,0 +1,29 @@
+schema_version = "1.0"
+
+[task]
+name = "hkustdial/dataspace__{task_id}"
+description = "DataSpace {task_id}: answer an analytical question over a heterogeneous task-local workspace and return the complete result table."
+authors = [{ name = "Boyan Li" }]
+keywords = {keywords}
+
+[metadata]
+difficulty = "medium"
+category = "data-analysis"
+upstream_task_id = "{task_id}"
+upstream_code_revision = "{upstream_code_revision}"
+upstream_data_revision = "{upstream_data_revision}"
+question_language = "{question_language}"
+modalities = {modalities}
+order_sensitive = {order_sensitive}
+
+[agent]
+timeout_sec = 1800.0
+
+[verifier]
+timeout_sec = 300.0
+
+[environment]
+build_timeout_sec = 1800.0
+cpus = 2
+memory_mb = 8192
+storage_mb = 10240

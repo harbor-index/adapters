@@ -1,0 +1,46 @@
+[
+  {
+    "adapter_name": "dataspace",
+    "adapter_builders": [
+      "Houdong Liang (houdongliang84@gmail.com)"
+    ],
+    "original_benchmark": [
+      {
+        "split": "public-reference",
+        "size": 60,
+        "harness": "agent",
+        "supported_agents": [
+          "dataspace-agent",
+          "smolagents@1.26.0",
+          "codex@0.145.0",
+          "claude-code@2.1.217",
+          "grok-build@0.2.106"
+        ],
+        "adaptable": true,
+        "notes": "The release contains 410 tasks; gold results and frozen evaluation configs are public for these 60 tasks only (metadata/public_reference_tasks.json). Code pinned to HKUSTDial/DataSpace@6491caa4c70cc06cacb6103ba73cefb00746abfe, data pinned to HF dataset HKUSTDial/DataSpace@96be19257d7aa251dbce4771d46a26fc36f6dc52."
+      },
+      {
+        "split": "withheld",
+        "size": 350,
+        "harness": "agent",
+        "supported_agents": null,
+        "adaptable": false,
+        "notes": "Inputs are public but gold results and evaluation configs are withheld for official evaluation, so these tasks cannot be verified locally."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "public-reference",
+        "adapted_benchmark_size": 60,
+        "parity_benchmark_size": null,
+        "parity_sampling_rate": null,
+        "registry_benchmark_size": null,
+        "added_agents": [],
+        "parity_matching_agents": [],
+        "parity_unmatching_agents": null,
+        "parity_costs": null,
+        "notes": "Oracle 60/60 and nop 0/60 verified locally with Docker. Parity plan (Claude Code and Codex against the upstream dataspace-baselines runner) is pending approval by the Harbor team."
+      }
+    ]
+  }
+]
