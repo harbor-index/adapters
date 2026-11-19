@@ -1,0 +1,2 @@
+#!/bin/sh
+exec python /opt/shade/shade_runtime.py "$@"

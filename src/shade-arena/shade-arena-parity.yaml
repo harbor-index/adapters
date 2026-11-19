@@ -1,0 +1,14 @@
+datasets:
+  - path: datasets/shade-arena
+
+agents:
+  - import_path: shade_arena.native_agent:ShadeArenaNativeAgent
+    # Pass -a and -m together to select the agreed model at launch.
+
+environment:
+  type: docker
+  delete: true
+
+orchestrator:
+  type: local
+  n_concurrent_trials: 4
