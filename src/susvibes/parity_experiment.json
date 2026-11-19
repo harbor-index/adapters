@@ -1,0 +1,34 @@
+[
+  {
+    "adapter_name": "susvibes",
+    "agent": "TBD",
+    "model": "TBD",
+    "date": "TBD",
+    "adapted_benchmark_size": 178,
+    "parity_benchmark_size": 50,
+    "number_of_runs": null,
+    "notes": "Parity experiments have not been run yet; this entry is a placeholder until the parity plan is agreed with the Harbor team.",
+    "original_parity_repo": "https://github.com/LeiLiLab/susvibes",
+    "adapter_pr": [],
+    "dataset_pr": [],
+    "parity_pr": [],
+    "metrics": [
+      {
+        "benchmark_name": "SusVibes",
+        "metric": "SecPass (%)",
+        "original": "TBD",
+        "harbor": "TBD",
+        "original_runs": [],
+        "harbor_runs": []
+      },
+      {
+        "benchmark_name": "SusVibes",
+        "metric": "FuncPass (%)",
+        "original": "TBD",
+        "harbor": "TBD",
+        "original_runs": [],
+        "harbor_runs": []
+      }
+    ]
+  }
+]
