@@ -1,0 +1,19 @@
+datasets:
+  - path: datasets/shade-arena
+
+agents:
+  - name: oracle
+
+verifier:
+  env:
+    SHADE_ORACLE_CHECK: "1"
+    # Needs OPENAI_API_KEY and OPENAI_BASE_URL for an OpenAI-compatible endpoint serving this model.
+    SHADE_EVALUATOR_MODEL: openai/gpt-5.6-terra
+
+environment:
+  type: docker
+  delete: true
+
+orchestrator:
+  type: local
+  n_concurrent_trials: 4

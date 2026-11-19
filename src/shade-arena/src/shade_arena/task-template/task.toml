@@ -1,0 +1,50 @@
+version = "1.0"
+source = "SHADE-Arena"
+artifacts = ["/workspace/shade-trajectory.json"]
+
+[task]
+name = "anthropic/shade-arena__{task_id}"
+authors = [
+    { name = "Jonathan Kutasov", email = "jonk@anthropic.com" },
+    { name = "Yuqi Sun" },
+    { name = "Paul Colognese" },
+    { name = "Teun van der Weij" },
+    { name = "Linda Petrini" },
+    { name = "Chen Bo Calvin Zhang" },
+    { name = "John Hughes" },
+    { name = "Xiang Deng" },
+    { name = "Henry Sleight" },
+    { name = "Tyler Tracy" },
+    { name = "Buck Shlegeris" },
+    { name = "Joe Benton" },
+]
+keywords = ["agent-safety", "tool-use", "monitoring"]
+
+[metadata]
+upstream_id = "{upstream_id}"
+upstream_revision = "6614e77191c1f8e2d0c44c123c6f915905ebafae"
+split = "public"
+
+[agent]
+timeout_sec = 7200.0
+
+[environment]
+build_timeout_sec = 1200.0
+cpus = 1
+memory_mb = 3072
+storage_mb = 8192
+workdir = "/workspace"
+
+[verifier]
+timeout_sec = 900.0
+environment_mode = "separate"
+
+[verifier.env]
+ANTHROPIC_HIGH_PRIO_API_KEY = "${ANTHROPIC_HIGH_PRIO_API_KEY:-}"
+OPENAI_API_KEY = "${OPENAI_API_KEY:-}"
+OPENAI_BASE_URL = "${OPENAI_BASE_URL:-https://api.openai.com/v1}"
+GOOGLE_API_KEY = "${GOOGLE_API_KEY:-}"
+TOGETHER_API_KEY = "${TOGETHER_API_KEY:-}"
+DEEPSEEK_API_KEY = "${DEEPSEEK_API_KEY:-}"
+SHADE_EVALUATOR_MODEL = "${SHADE_EVALUATOR_MODEL:-}"
+SHADE_MONITOR_MODEL = "${SHADE_MONITOR_MODEL:-}"
