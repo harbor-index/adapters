@@ -23,6 +23,7 @@ language = "{language}"
 cve_id = "{cve_id}"
 cwe_ids = {cwe_ids}
 image_name = "{image_name}"
+image_digest = "{image_digest}"
 
 [agent]
 # The upstream CLI-agent harness gives the agent command 3000 seconds.

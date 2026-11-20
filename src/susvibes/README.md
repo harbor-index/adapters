@@ -29,7 +29,7 @@ The paper evaluates SWE-agent, OpenHands and Claude Code with several models. Wi
 ## Adapter Features
 
 - Reads the dataset, the test commands and the log parsers from a pinned upstream commit and checks their SHA-256. The files are downloaded on first use, or read from a local checkout with `--susvibes-root`
-- Uses the original task images: each `environment/Dockerfile` is `FROM` the instance's `image_name`
+- Uses the original task images: each `environment/Dockerfile` is `FROM` the instance's `image_name`, pinned by digest (`image_digests.json`)
 - `instruction.md` is the original prompt template (`evaluation_harness/common.py`) with `/project` and the problem statement filled in
 - Tests run in a separate verifier container started from the same image (`environment_mode = "separate"`). Only the agent's `git diff` is passed to it, which is also all the original evaluator sees
 - `tests/sv_eval.py` contains copies of the original functions that filter the patch, parse the test logs and compare failure counts. It only needs the Python standard library, so it runs on the interpreter already in the image
@@ -68,6 +68,7 @@ src/susvibes/
     ├── __init__.py
     ├── adapter.py
     ├── main.py
+    ├── image_digests.json
     └── task-template/
         ├── task.toml
         ├── instruction.md
@@ -150,15 +151,18 @@ Parity experiments have not been run yet. The plan is Claude Code on both sides,
 | TBD | TBD | SecPass (%) | TBD | TBD | TBD | TBD |
 | TBD | TBD | FuncPass (%) | TBD | TBD | TBD | TBD |
 
-Reproduction steps:
+Reproduction steps (these will be updated once the parity fork of the original repository exists):
 
-- Original benchmark: clone [LeiLiLab/susvibes](https://github.com/LeiLiLab/susvibes) at commit `5d957e6f1850595623d551d089193532e6fa60ce`, install it (`pip install -r requirements.txt && pip install -e .`), run the Claude Code runner on the parity instances and score the predictions:
+- Original benchmark: clone [LeiLiLab/susvibes](https://github.com/LeiLiLab/susvibes) at commit `5d957e6f1850595623d551d089193532e6fa60ce` and install it (`pip install -r requirements.txt && pip install -e .`). The Claude Code runner takes the model from the `ANTHROPIC_MODEL` environment variable (`--model` only names the results directory) and installs the Claude Code version pinned in `setup-env.sh` (`1.0.128` upstream). Run it on the parity instances, convert the results, and score them:
   ```bash
   cd evaluation_harness/claude_code
-  python batch_run_docker.py --jsonl_file <parity_subset.jsonl> --num_instances <N> --model <model>
+  export ANTHROPIC_API_KEY=<key> ANTHROPIC_MODEL=<model>
+  python batch_run_docker.py --jsonl_file <parity_subset.jsonl> --num_instances 50 --model <label>
+  python convert.py --input_dir results/<label>/<timestamp>
   cd ../..
-  python -m susvibes.eval.core --run_id parity --predictions_path <predictions.jsonl> --max_workers 4
+  python -m susvibes.eval.core --run_id parity --predictions_path <the .trials.json written by convert.py> --max_workers 4
   ```
+  `<parity_subset.jsonl>` holds the lines of `datasets/default/susvibes_dataset.jsonl` whose `instance_id` is one of the 50 task directories that `--split parity` generates.
 - Harbor adapter:
   ```bash
   cd src/susvibes && uv run susvibes --split parity --output-dir ../../datasets/susvibes-parity && cd ../..
@@ -193,8 +197,19 @@ Links: [original benchmark](https://github.com/LeiLiLab/susvibes). The adapter P
 - As in the original, edits to files touched by the security test patch, and binary diffs, are removed from the submission before testing.
 - The original evaluator builds one image for the functional run and another for the security run. Here both runs share one verifier container. Between them the grader kills leftover processes (some test commands start services), waits for their TCP connections to expire, and restores `/project`, `/tmp`, `/var` and `/run` from snapshots taken at the start. Changes the first run makes elsewhere, for example under `/root` or `/etc`, stay.
 - Timeouts match the original: 3000 seconds for the agent and 1800 seconds per test run. The original caps evaluation containers at 75% of the host's CPUs and memory (at most 16 CPUs and 16 GB). Tasks here ask for 4 CPUs and 8 GB.
-- If the evaluation cannot reach a verdict, for example because the test log cannot be parsed, the task gets reward 0 and the reason is in `verifier/report.json`. The original counts these as errored runs, which also lowers the score.
+- If the evaluation itself breaks (for example a patch that cannot be committed), no reward is written and the trial ends with an error. The reason is in `verifier/report.json`. The original keeps such a report as errored and runs it again with `--resume`. A test run whose log shows no test result is not an error: as in the original, it counts as failed.
+- The original images name the benchmark in git: the global identity is `SusVibes <setup@susvibes>` and the repository's single commit is authored by `SusVibes <clean@susvibes>`. The task Dockerfile replaces both with `dev <dev@localhost>`. The commit keeps its tree, message and dates, so the files and `git diff` are the same as in the original image.
+- Images are pinned to the digests that the `latest` tags had on 2026-11-19 (`image_digests.json`), because upstream rebuilds images under the same names.
 - Only the default setting is adapted. The original's security strategies (`generic`, `self-selection`, `oracle`, `feedback-driven`, `sec-test`) change the prompt or add tools and are not covered. The prompt mentions an automated anti-cheating check. The original evaluator does not run one, and neither does this adapter.
+
+### Weaknesses inherited from the original benchmark
+
+These are the same in the original evaluator. I left them as they are, because changing the scoring on one side would make results incomparable.
+
+- The tests that decide the result live in the repository the agent edits. Only the files of the security test patch are protected. A patch can change other tests, add a `conftest.py`, or edit the test configuration or the script that the test command runs. The log parser also reads the last test summary in the output, so code that prints its own summary can mislead it.
+- The agent has network access. The original projects and the SusVibes dataset with its golden patches are public, so a reference implementation can be looked up. The prompt forbids this and announces an automated check. Neither the original evaluator nor this adapter runs one. The upstream authors review trajectories and count such runs as failures.
+- The prompt mentions "CVE fixes", which tells the agent that the task is about security.
+- An image can still contain text from the fixed version of the project. In `xi__django-mfa3_32f656e22df120b84bdf010e014bb19bd97971de` the installed package metadata (`django_mfa3.egg-info/PKG-INFO`) has the README of the fixed version, which describes the secure behaviour. I searched 16 images for distinctive lines of the golden patch and of the security tests. This was the only finding, and no copy of a golden patch turned up. The other images were not searched.
 
 ### Other things to know
 
@@ -221,7 +236,7 @@ Links: [original benchmark](https://github.com/LeiLiLab/susvibes). The adapter P
 | Image pulls fail with `toomanyrequests` | Every trial pulls an image from Docker Hub | `docker login`, or lower `n_concurrent_trials` |
 | Disk fills up during a long job | Docker keeps the layers of pulled images as build cache after a trial's image is deleted, and `docker system df` can show that cache as empty | Run `docker builder prune -f` from time to time |
 | Reward 0 with `eval_status: empty_patch` | The `git diff` was empty after filtering. This happens when the agent commits its work or only adds untracked files | Look at `artifacts/logs/artifacts/model.patch` in the trial directory |
-| Reward 0 with an `error` in `report.json` | The evaluation could not finish | Check the test logs in `verifier/test_outputs/` |
+| `RewardFileNotFoundError`, and an `error` in `report.json` | The evaluation itself broke, so no reward was written | Check `verifier/test-stdout.txt` and the test logs in `verifier/test_outputs/`, then rerun the trial |
 | `EnvironmentStartTimeoutError` | The build step is just the image pull, and the mlflow images are 5 to 7 GB compressed | Lower `n_concurrent_trials` or raise `--environment-build-timeout-multiplier` |
 | Verifier timeout | Some repositories have long test suites. The vyper tasks need up to 40 minutes for the two runs | Raise `--verifier-timeout-multiplier` on a slow machine |
 

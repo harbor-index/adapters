@@ -20,6 +20,8 @@ import json
 import random
 import re
 import shutil
+import tempfile
+import urllib.error
 import urllib.request
 from dataclasses import dataclass
 from pathlib import Path
@@ -45,6 +47,10 @@ UPSTREAM_FILES = {
 }
 
 DEFAULT_CACHE_DIR = Path.home() / ".cache" / "harbor-susvibes-adapter"
+
+# Docker Hub digest of every task image, so that a task keeps building from the
+# image it was validated with even if the `latest` tag moves.
+IMAGE_DIGESTS_PATH = Path(__file__).parent / "image_digests.json"
 
 # Where the repository lives in every task image (WORKSPACE_DIR_NAME upstream).
 WORK_DIR = "/project"
@@ -209,6 +215,7 @@ class SusVibesLoader:
         self._records = {r["instance_id"]: r for r in records}
         self._dockerfiles = json.loads(self._read("dockerfile"))
         self._logs_handlers = json.loads(self._read("logs_handler"))
+        self._image_digests = json.loads(IMAGE_DIGESTS_PATH.read_text(encoding="utf-8"))
 
     def _read(self, key: str) -> bytes:
         rel_path, expected = UPSTREAM_FILES[key]
@@ -220,8 +227,14 @@ class SusVibesLoader:
                 return cached.read_bytes()
             url = f"https://raw.githubusercontent.com/{UPSTREAM_REPO}/{UPSTREAM_COMMIT}/{rel_path}"
             print(f"Downloading {url}")
-            with urllib.request.urlopen(url, timeout=120) as response:
-                data = response.read()
+            try:
+                with urllib.request.urlopen(url, timeout=120) as response:
+                    data = response.read()
+            except (urllib.error.URLError, TimeoutError) as exc:
+                raise RuntimeError(
+                    f"Could not download {url}: {exc}. Check the network, or pass "
+                    "--susvibes-root with a local checkout of the pinned commit."
+                ) from exc
             cached.parent.mkdir(parents=True, exist_ok=True)
             cached.write_bytes(data)
         actual = _sha256(data)
@@ -246,6 +259,12 @@ class SusVibesLoader:
 
     def logs_handler(self, instance_id: str) -> dict:
         return self._logs_handlers[instance_id]
+
+    def image_digest(self, instance_id: str) -> str:
+        digest = self._image_digests.get(instance_id, "")
+        if not re.fullmatch(r"sha256:[0-9a-f]{64}", digest):
+            raise ValueError(f"No pinned image digest for {instance_id}")
+        return digest
 
 
 class SusVibesAdapter:
@@ -274,7 +293,6 @@ class SusVibesAdapter:
         susvibes_root: Path | None = None,
         cache_dir: Path | None = None,
         template_dir: Path | None = None,
-        **kwargs: object,
     ) -> None:
         self.output_dir = Path(output_dir)
         self.limit = limit
@@ -309,6 +327,7 @@ class SusVibesAdapter:
             raise ValueError(f"Unknown split: {self.split!r}")
 
         if self.task_ids is not None:
+            in_split = set(ids)
             by_local_id = {self.make_local_task_id(i): i for i in self.loader.all_ids()}
             selected = []
             excluded = {self.make_local_task_id(i): i for i in EXCLUDED_INSTANCES}
@@ -320,6 +339,8 @@ class SusVibesAdapter:
                 instance_id = by_local_id.get(local_id)
                 if instance_id is None:
                     raise KeyError(f"Unknown task id: {requested}")
+                if instance_id not in in_split:
+                    raise KeyError(f"Task {requested} is not in the {self.split} split")
                 selected.append(instance_id)
             ids = selected
 
@@ -348,12 +369,38 @@ class SusVibesAdapter:
         self._check_supported(rec, logs_handler)
 
         task_id = self.make_local_task_id(instance_id)
-        task_dir = self.output_dir / task_id
-        if task_dir.exists():
-            if not self.overwrite:
-                raise FileExistsError(f"Target already exists: {task_dir}")
-            shutil.rmtree(task_dir)
-        shutil.copytree(self.template_dir, task_dir)
+        final_dir = self.output_dir / task_id
+        if final_dir.exists() and not self.overwrite:
+            raise FileExistsError(f"Target already exists: {final_dir}")
+
+        # Build the task in a scratch directory and move it into place at the
+        # end, so a failure never leaves a half-written task behind.
+        self.output_dir.mkdir(parents=True, exist_ok=True)
+        scratch = Path(tempfile.mkdtemp(prefix=f".{task_id}.", dir=self.output_dir))
+        try:
+            task_dir = scratch / task_id
+            self._write_task(task_dir, task_id, instance_id, rec, logs_handler)
+            if final_dir.exists():
+                shutil.rmtree(final_dir)
+            task_dir.rename(final_dir)
+        finally:
+            shutil.rmtree(scratch, ignore_errors=True)
+        return final_dir
+
+    def _write_task(
+        self,
+        task_dir: Path,
+        task_id: str,
+        instance_id: str,
+        rec: SusVibesRecord,
+        logs_handler: dict,
+    ) -> None:
+        shutil.copytree(
+            self.template_dir,
+            task_dir,
+            ignore=shutil.ignore_patterns("__pycache__", "*.pyc"),
+        )
+        image_digest = self.loader.image_digest(instance_id)
 
         # instruction.md: the upstream prompt template, placeholders filled in
         instruction_path = task_dir / "instruction.md"
@@ -377,6 +424,7 @@ class SusVibesAdapter:
                 cve_id=_toml_string(rec.cve_id),
                 cwe_ids=json.dumps(rec.cwe_ids),
                 image_name=_toml_string(rec.image_name),
+                image_digest=image_digest,
             ),
             encoding="utf-8",
         )
@@ -385,7 +433,8 @@ class SusVibesAdapter:
         dockerfile_path = task_dir / "environment" / "Dockerfile"
         dockerfile_path.write_text(
             _render(
-                dockerfile_path.read_text(encoding="utf-8"), image_name=rec.image_name
+                dockerfile_path.read_text(encoding="utf-8"),
+                image_ref=f"{rec.image_name.partition(':')[0]}@{image_digest}",
             ),
             encoding="utf-8",
         )
@@ -432,7 +481,6 @@ class SusVibesAdapter:
 
         solve_path.chmod(0o755)
         (task_dir / "tests" / "test.sh").chmod(0o755)
-        return task_dir
 
     def run(self) -> None:
         """Generate Harbor tasks under ``self.output_dir``."""

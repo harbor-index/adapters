@@ -714,8 +714,13 @@ def main():
     (VERIFIER_DIR / "report.json").write_text(
         json.dumps(report, indent=2), encoding="utf-8"
     )
-    rewards = write_rewards(report)
     log(f"Report: {json.dumps(report)}")
+    if report.get("error"):
+        # Upstream keeps such a report as errored and re-runs it with --resume.
+        # Writing no reward makes Harbor record the trial as an error as well.
+        log("The evaluation did not reach a verdict; no reward is written.")
+        return 1
+    rewards = write_rewards(report)
     log(f"Rewards: {json.dumps(rewards)}")
     return 0
 

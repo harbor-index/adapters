@@ -56,6 +56,7 @@ diff --git a/tests/test_core.py b/tests/test_core.py
 """
 
 INSTANCE_ID = "acme__widget_0123456789abcdef0123456789abcdef01234567"
+IMAGE_DIGEST = "sha256:" + "ab" * 32
 
 
 @pytest.fixture
@@ -103,6 +104,9 @@ def fake_upstream(tmp_path, monkeypatch):
         path.write_text(contents[key], encoding="utf-8")
         files[key] = (rel_path, hashlib.sha256(contents[key].encode()).hexdigest())
     monkeypatch.setattr(adapter_module, "UPSTREAM_FILES", files)
+    digests = tmp_path / "image_digests.json"
+    digests.write_text(json.dumps({INSTANCE_ID: IMAGE_DIGEST}), encoding="utf-8")
+    monkeypatch.setattr(adapter_module, "IMAGE_DIGESTS_PATH", digests)
     return tmp_path / "upstream"
 
 
@@ -140,6 +144,7 @@ def test_generate_task(fake_upstream, tmp_path):
         "git diff > /logs/artifacts/model.patch"
     )
     assert config["metadata"]["cwe_ids"] == ["CWE-79"]
+    assert config["metadata"]["image_digest"] == IMAGE_DIGEST
 
     instruction = (task_dir / "instruction.md").read_text()
     assert "Implement `f` so that {x} is handled." in instruction
@@ -149,7 +154,11 @@ def test_generate_task(fake_upstream, tmp_path):
     assert "<uploaded_files>\n/project\n</uploaded_files>" in instruction
 
     dockerfile = (task_dir / "environment" / "Dockerfile").read_text()
-    assert "FROM example/susvibes.x86_64.eval_acme_widget_0123" in dockerfile
+    assert (
+        f"FROM example/susvibes.x86_64.eval_acme_widget_0123@{IMAGE_DIGEST}\n"
+        in dockerfile
+    )
+    assert "{image_ref}" not in dockerfile
 
     grader_config = json.loads((task_dir / "tests" / "config.json").read_text())
     assert grader_config["test_cmd"] == {"form": "shell", "value": "pytest -q"}
@@ -160,6 +169,29 @@ def test_generate_task(fake_upstream, tmp_path):
     solve = (task_dir / "solution" / "solve.sh").read_text()
     assert "git add --intent-to-add -- 'pkg/templates/new.html'" in solve
     assert "{register_new_files}" not in solve
+
+    assert not list(task_dir.rglob("__pycache__"))
+    assert [path.name for path in out.iterdir()] == [INSTANCE_ID]
+
+
+def test_failed_generation_leaves_nothing_behind(fake_upstream, tmp_path, monkeypatch):
+    missing = tmp_path / "no_digests.json"
+    missing.write_text("{}", encoding="utf-8")
+    monkeypatch.setattr(adapter_module, "IMAGE_DIGESTS_PATH", missing)
+    out = tmp_path / "out"
+    with pytest.raises(SystemExit):
+        SusVibesAdapter(out, susvibes_root=fake_upstream).run()
+    assert list(out.iterdir()) == []
+
+
+def test_packaged_image_digests_are_well_formed():
+    digests = json.loads(
+        (Path(adapter_module.__file__).parent / "image_digests.json").read_text()
+    )
+    assert len(digests) == 186
+    assert all(
+        len(value) == 71 and value.startswith("sha256:") for value in digests.values()
+    )
 
 
 def test_generate_task_refuses_existing_dir_without_overwrite(fake_upstream, tmp_path):
@@ -185,6 +217,17 @@ def test_task_ids_and_limit(fake_upstream, tmp_path):
         ).select_ids()
         == []
     )
+
+
+def test_task_ids_must_be_in_the_split(fake_upstream, tmp_path, monkeypatch):
+    monkeypatch.setattr(adapter_module, "PARITY_SIZE", 0)
+    with pytest.raises(KeyError, match="not in the parity split"):
+        SusVibesAdapter(
+            tmp_path / "out",
+            susvibes_root=fake_upstream,
+            split="parity",
+            task_ids=[INSTANCE_ID],
+        ).select_ids()
 
 
 def test_checksum_mismatch_is_rejected(fake_upstream, tmp_path):
@@ -347,3 +390,44 @@ def test_grader_waits_for_time_wait_sockets(monkeypatch):
         next(remaining) == 0
     )  # two polls slept, the third saw a quiet network, one more for the log line
     assert isinstance(_load_grader().time_wait_sockets(), int)
+
+
+@pytest.fixture
+def grader_dirs(tmp_path, monkeypatch):
+    config = tmp_path / "config.json"
+    config.write_text(
+        json.dumps({"instance_id": INSTANCE_ID, "upstream_commit": "0" * 40})
+    )
+    verifier = tmp_path / "verifier"
+    monkeypatch.setattr(sv_eval, "CONFIG_PATH", config)
+    monkeypatch.setattr(sv_eval, "MODEL_PATCH_PATH", tmp_path / "model.patch")
+    monkeypatch.setattr(sv_eval, "VERIFIER_DIR", verifier)
+    monkeypatch.chdir(tmp_path)
+    return verifier
+
+
+def test_grader_writes_a_reward_when_it_reaches_a_verdict(grader_dirs, monkeypatch):
+    verdict = {
+        "eval_status": sv_eval.EVAL_TESTED,
+        "run": {"func": {"pass": True}, "sec": {"pass": False}},
+        "error": None,
+    }
+    monkeypatch.setattr(sv_eval, "evaluate", lambda config, patch: dict(verdict))
+    assert sv_eval.main() == 0
+    assert json.loads((grader_dirs / "reward.json").read_text()) == {
+        "reward": 0,
+        "func_pass": 1,
+        "sec_pass": 0,
+    }
+    assert (grader_dirs / "reward.txt").read_text() == "0"
+
+
+def test_grader_writes_no_reward_when_the_evaluation_breaks(grader_dirs, monkeypatch):
+    def broken(config, patch):
+        raise OSError("disk full")
+
+    monkeypatch.setattr(sv_eval, "evaluate", broken)
+    assert sv_eval.main() == 1
+    assert json.loads((grader_dirs / "report.json").read_text())["error"]
+    assert not (grader_dirs / "reward.json").exists()
+    assert not (grader_dirs / "reward.txt").exists()

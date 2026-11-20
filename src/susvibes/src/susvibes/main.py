@@ -17,8 +17,14 @@ if __package__ in (None, ""):
 else:
     from .adapter import SusVibesAdapter
 
-# Default output dir: <repo>/datasets/<adapter_id>
-DEFAULT_OUTPUT_DIR = Path(__file__).resolve().parents[4] / "datasets" / "susvibes"
+
+def _default_output_dir() -> Path:
+    """<repo>/datasets/susvibes when run from a checkout of the adapters repo,
+    otherwise datasets/susvibes under the current directory."""
+    repo_root = Path(__file__).resolve().parents[4]
+    if (repo_root / "src" / "susvibes" / "pyproject.toml").is_file():
+        return repo_root / "datasets" / "susvibes"
+    return Path.cwd() / "datasets" / "susvibes"
 
 
 def main() -> None:
@@ -28,7 +34,7 @@ def main() -> None:
     parser.add_argument(
         "--output-dir",
         type=Path,
-        default=DEFAULT_OUTPUT_DIR,
+        default=_default_output_dir(),
         help="Directory to write generated tasks",
     )
     parser.add_argument(
@@ -52,7 +58,7 @@ def main() -> None:
         "--split",
         choices=["full", "parity"],
         default="full",
-        help="'full' generates all 186 instances; 'parity' the fixed parity subset",
+        help="'full' generates the 178 adapted instances; 'parity' the fixed 50-task subset",
     )
     parser.add_argument(
         "--susvibes-root",
