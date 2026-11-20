@@ -1,0 +1,30 @@
+[
+  {
+    "adapter_name": "agencybench",
+    "adapter_builders": ["Breevio (148452485+Breevio@users.noreply.github.com)"],
+    "original_benchmark": [
+      {
+        "split": "full",
+        "size": 32,
+        "harness": "agent",
+        "supported_agents": ["sii-agent-sdk@0.1.5"],
+        "adaptable": true,
+        "notes": "AgencyBench V2 comprises 32 multi-stage scenarios (138 ordered subtasks) across Backend (3/15), Code (9/29), Frontend (3/15), Game (10/50), MCP (2/10), and Research (5/19). Pinned upstream commit: ec65324be69e81bd4fe394ef6a86d48b8fa5da56."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "implemented",
+        "adapted_benchmark_size": 9,
+        "parity_benchmark_size": 0,
+        "parity_sampling_rate": 0.0,
+        "registry_benchmark_size": 0,
+        "added_agents": ["agencybench-controller@0.1.0"],
+        "parity_matching_agents": ["None"],
+        "parity_unmatching_agents": ["None"],
+        "parity_costs": null,
+        "notes": "Stage C deterministic offline-verifiable scope covering 9 scenarios (37 ordered subtasks) across 4 categories and 7 runner families: Backend/scenario1..3 (15/15 subtasks), Code/scenario1,6,7 (7 subtasks), MCP/scenario2 (5 subtasks), and Research/scenario2,3 (10 subtasks). Paid LLM/vision judge, live GitHub MCP, and agent-sandbox sidecar scenarios await Stage D scope/credential approval."
+      }
+    ]
+  }
+]

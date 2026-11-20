@@ -1,0 +1,21 @@
+jobs_dir: jobs
+n_attempts: 1
+timeout_multiplier: 1.0
+orchestrator:
+  type: local
+  n_concurrent_trials: 2
+  quiet: false
+environment:
+  type: docker
+  force_build: true
+  delete: true
+agents:
+  - name: oracle
+  # Custom multi-stage AgencyBench controller (Scenario 3):
+  # - import_path: agencybench.agent:AgencyBenchAgent
+  #   model_name: <pinned-model-id>
+  #   kwargs:
+  #     upstream_root: /path/to/AgencyBench
+  #     inner_agent: sii
+datasets:
+  - path: datasets/agencybench
