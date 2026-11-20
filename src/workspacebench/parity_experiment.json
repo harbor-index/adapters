@@ -1,0 +1,28 @@
+[
+  {
+    "adapter_name": "workspacebench",
+    "agent": "claude-code@2.1.311",
+    "model": "claude-haiku-4-5",
+    "date": "YYYY-MM-DD",
+    "adapted_benchmark_size": 723,
+    "parity_benchmark_size": 50,
+    "number_of_runs": 4,
+    "notes": null,
+    "original_parity_repo": null,
+    "adapter_pr": [
+      "https://github.com/harbor-index/adapters/pull/26"
+    ],
+    "dataset_pr": [],
+    "parity_pr": [],
+    "metrics": [
+      {
+        "benchmark_name": "Workspace-Bench",
+        "metric": "mean rubric pass rate (%)",
+        "original": "<mean +/- sample_SEM>",
+        "harbor": "<mean +/- sample_SEM>",
+        "original_runs": [],
+        "harbor_runs": []
+      }
+    ]
+  }
+]

@@ -1,0 +1,35 @@
+diff --git a/evaluation/baselines/ClaudeCode.js b/evaluation/baselines/ClaudeCode.js
+index 6de407e..81e34df 100644
+--- a/evaluation/baselines/ClaudeCode.js
++++ b/evaluation/baselines/ClaudeCode.js
+@@ -102,7 +102,11 @@ function matchesPattern(str, pattern) {
+ 
+ function buildEnv(customProvider) {
+   const env = { ...process.env };
+-  if (customProvider) {
++  if (customProvider && customProvider.apiKey === '__SUBSCRIPTION__') {
++    // Harbor adapter: optional Claude subscription auth (CLAUDE_CODE_OAUTH_TOKEN); never set an API key.
++    delete env.ANTHROPIC_AUTH_TOKEN; delete env.ANTHROPIC_API_KEY; delete env.ANTHROPIC_BASE_URL;
++    env.ANTHROPIC_MODEL = customProvider.modelName;
++  } else if (customProvider) {
+     env.ANTHROPIC_AUTH_TOKEN = customProvider.apiKey;
+     env.ANTHROPIC_API_KEY = customProvider.apiKey;
+     env.ANTHROPIC_BASE_URL = customProvider.baseUrl;
+diff --git a/evaluation/src/agents/claudecode.py b/evaluation/src/agents/claudecode.py
+index 6dc0d7e..d3319a7 100644
+--- a/evaluation/src/agents/claudecode.py
++++ b/evaluation/src/agents/claudecode.py
+@@ -220,7 +220,12 @@ def run(
+     runtime_claude_config = _materialize_claude_config(sandbox_dir)
+     if runtime_claude_config:
+         env["WORKSPACE_BENCH_CLAUDE_CONFIG_DIR"] = runtime_claude_config
+-    if isinstance(provider_type, str) and provider_type.strip().lower() == "anthropic":
++    if api_key == "__SUBSCRIPTION__":  # Harbor adapter: optional subscription auth, no API key
++        for k in ("ANTHROPIC_AUTH_TOKEN", "ANTHROPIC_API_KEY", "ANTHROPIC_BASE_URL"):
++            env.pop(k, None)
++        if isinstance(model, str) and model.strip():
++            env["ANTHROPIC_MODEL"] = model.strip()
++    elif isinstance(provider_type, str) and provider_type.strip().lower() == "anthropic":
+         if isinstance(api_key, str) and api_key.strip():
+             env["ANTHROPIC_AUTH_TOKEN"] = api_key.strip()
+             env["ANTHROPIC_API_KEY"] = api_key.strip()
