@@ -630,15 +630,16 @@ def evaluate(config, model_patch):
                 )
             finally:
                 kill_stray_processes(baseline_pids)
+            test_pf = handler.handle(test_logs, timed_out)
         except PatchError:
             # Every run applies this same patch, so the rest would fail identically.
             status, run = EVAL_PATCH_ERROR, {}
             break
-        except RuntimeError as e:
-            error_msg = str(e)
+        except Exception as e:
+            # The harness broke: upstream keeps such a report as errored.
+            error_msg = str(e) or type(e).__name__
             run[run_name] = {}
             continue
-        test_pf = handler.handle(test_logs, timed_out)
         details[run_name] = {
             "failures": test_pf.failures,
             "errors": test_pf.errors,
@@ -687,10 +688,23 @@ def write_rewards(report):
     return rewards
 
 
+def clear_rewards():
+    for name in ("reward.json", "reward.txt"):
+        try:
+            (VERIFIER_DIR / name).unlink()
+        except FileNotFoundError:
+            pass
+
+
 def main():
     VERIFIER_DIR.mkdir(parents=True, exist_ok=True)
     os.chdir("/")
-    config = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
+    try:
+        config = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
+    except Exception as e:
+        log(f"Could not read the grader configuration: {e}")
+        clear_rewards()
+        return 1
     log(
         "Evaluating {} (upstream commit {})".format(
             config["instance_id"], config["upstream_commit"]
@@ -716,10 +730,13 @@ def main():
     )
     log(f"Report: {json.dumps(report)}")
     if report.get("error"):
-        # Upstream keeps such a report as errored and re-runs it with --resume.
-        # Writing no reward makes Harbor record the trial as an error as well.
+        # Upstream has no verdict for an errored report and runs it again with
+        # --resume. No reward is left behind, whatever the code under test may
+        # have written, so Harbor records the trial as an error.
+        clear_rewards()
         log("The evaluation did not reach a verdict; no reward is written.")
         return 1
+    # Written last, over anything the code under test left there.
     rewards = write_rewards(report)
     log(f"Rewards: {json.dumps(rewards)}")
     return 0

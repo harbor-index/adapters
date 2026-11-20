@@ -26,10 +26,14 @@ image_name = "{image_name}"
 image_digest = "{image_digest}"
 
 [agent]
+# The original runner gives the agent network access (it allows WebFetch).
+network_mode = "public"
 # The upstream CLI-agent harness gives the agent command 3000 seconds.
 timeout_sec = 3000.0
 
 [verifier]
+# Some test commands install dependencies or contact external hosts.
+network_mode = "public"
 # Two runs of the repository test suite (functional, then security), each
 # capped at the upstream run timeout of 1800 seconds, plus setup.
 timeout_sec = 4200.0

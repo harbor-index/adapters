@@ -422,12 +422,51 @@ def test_grader_writes_a_reward_when_it_reaches_a_verdict(grader_dirs, monkeypat
     assert (grader_dirs / "reward.txt").read_text() == "0"
 
 
-def test_grader_writes_no_reward_when_the_evaluation_breaks(grader_dirs, monkeypatch):
+def test_grader_leaves_no_reward_when_the_evaluation_breaks(grader_dirs, monkeypatch):
     def broken(config, patch):
         raise OSError("disk full")
 
     monkeypatch.setattr(sv_eval, "evaluate", broken)
+    grader_dirs.mkdir()
+    (grader_dirs / "reward.json").write_text('{"reward": 1}')  # planted by the tests
+    (grader_dirs / "reward.txt").write_text("1")
     assert sv_eval.main() == 1
     assert json.loads((grader_dirs / "report.json").read_text())["error"]
     assert not (grader_dirs / "reward.json").exists()
     assert not (grader_dirs / "reward.txt").exists()
+
+
+def test_grader_leaves_no_reward_for_an_errored_report(grader_dirs, monkeypatch):
+    errored = {"eval_status": None, "run": {"func": {}}, "error": "git commit failed"}
+    monkeypatch.setattr(sv_eval, "evaluate", lambda config, patch: dict(errored))
+    grader_dirs.mkdir()
+    (grader_dirs / "reward.json").write_text('{"reward": 1}')
+    assert sv_eval.main() == 1
+    assert not (grader_dirs / "reward.json").exists()
+    assert not (grader_dirs / "reward.txt").exists()
+
+
+def test_errors_while_testing_the_submission_are_reported_not_raised(
+    monkeypatch, tmp_path
+):
+    """A failure after the submission is applied ends in a report, so it is scored."""
+    config = {
+        "test_patch": TEST_PATCH,
+        "expected_pf": {"func": 0, "sec": 0},
+        "logs_handler": {"count": {"logs_parser": {"FAILED": r"(\d+) failed"}}},
+        "test_cmd": {"form": "shell", "value": "true"},
+    }
+    monkeypatch.setattr(sv_eval, "VERIFIER_DIR", tmp_path)
+    monkeypatch.setattr(sv_eval, "snapshot_dirs", list)
+    monkeypatch.setattr(sv_eval, "list_pids", list)
+    monkeypatch.setattr(sv_eval, "restore_dirs", lambda snapshotted: None)
+    monkeypatch.setattr(sv_eval, "wait_for_quiet_network", lambda: None)
+    monkeypatch.setattr(sv_eval, "kill_stray_processes", lambda baseline: None)
+
+    def build_fails(patches):
+        raise RuntimeError("git commit failed")
+
+    monkeypatch.setattr(sv_eval, "build_instance", build_fails)
+    report = sv_eval.evaluate(config, GOLDEN_PATCH)
+    assert report["eval_status"] is None
+    assert "git commit failed" in report["error"]

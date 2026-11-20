@@ -16,7 +16,13 @@ fi
 
 # -I keeps the task's PYTHONPATH and working directory out of the grader's own
 # imports; the test command it launches still inherits the full environment.
-# sv_eval.py writes the reward whenever it reaches a verdict. If the evaluation
-# itself breaks it writes none and exits non-zero, so the trial shows up as an
-# error instead of a failed submission.
 "${PYTHON_BIN}" -I /tests/sv_eval.py
+status=$?
+
+if [ "${status}" -ne 0 ]; then
+  # The evaluation did not finish with a verdict (it broke, or the grader was
+  # killed). Whatever is in the reward files did not come from a finished
+  # evaluation, so the trial must end as an error, not with a score.
+  rm -f /logs/verifier/reward.txt /logs/verifier/reward.json
+fi
+exit "${status}"
