@@ -1,0 +1,58 @@
+schema_version = "1.0"
+
+[task]
+name = "just-curieous/exp-bench__{task_id}"
+description = "EXP-Bench task {task_id}: {paper_title}"
+authors = [
+    { name = "Patrick Tser Jern Kon" },
+    { name = "Jiachen Liu" },
+    { name = "Xinyi Zhu" },
+    { name = "Qiuyi Ding" },
+    { name = "Jingjia Peng" },
+]
+keywords = ["exp-bench", "ai-research", "experimentation", "{conference}"]
+
+[metadata]
+source = "EXP-Bench"
+conference = "{conference}"
+paper_id = "{paper_id}"
+paper_title = "{paper_title}"
+task_index = {task_index}
+task_type = {task_type}
+repository = "{repo}"
+commit = "{commit}"
+difficulty = "hard"
+category = "ai-research"
+
+[verifier]
+network_mode = "public"
+# Judge calls plus the upstream 1 hour execution check of reproduce_exp_bench.sh.
+timeout_sec = {verifier_timeout_sec}
+
+[verifier.env]
+OPENAI_API_KEY = "${OPENAI_API_KEY}"
+OPENAI_BASE_URL = "${OPENAI_BASE_URL:-}"
+# Upstream judge: o3-mini. Keep identical on both sides of any comparison.
+EXP_BENCH_JUDGE_MODEL = "${EXP_BENCH_JUDGE_MODEL:-o3-mini}"
+EXP_BENCH_EXEC_CHECK = "${EXP_BENCH_EXEC_CHECK:-1}"
+EXP_BENCH_EXEC_TIMEOUT_SEC = "${EXP_BENCH_EXEC_TIMEOUT_SEC:-3600}"
+# Set to 1 only for oracle runs: skips the trajectory monitor and execution check.
+EXP_BENCH_ORACLE_VALIDATION = "${EXP_BENCH_ORACLE_VALIDATION:-0}"
+
+[agent]
+network_mode = "public"
+timeout_sec = {agent_timeout_sec}
+
+[environment]
+build_timeout_sec = 1800.0
+cpus = {cpus}
+memory_mb = {memory_mb}
+storage_mb = {storage_mb}
+gpus = {gpus}
+workdir = "/workspace"
+
+[environment.env]
+# Optional LLM credentials for experiments that call an LLM API. They are exposed to
+# the agent through /workspace/setup_apis_exp/env.sh, as upstream does.
+EXP_BENCH_TASK_OPENAI_API_KEY = "${EXP_BENCH_TASK_OPENAI_API_KEY:-}"
+EXP_BENCH_TASK_OPENAI_BASE_URL = "${EXP_BENCH_TASK_OPENAI_BASE_URL:-}"

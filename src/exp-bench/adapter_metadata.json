@@ -1,0 +1,30 @@
+[
+  {
+    "adapter_name": "exp-bench",
+    "adapter_builders": ["Jingjia Peng (jingjia@umich.edu)"],
+    "original_benchmark": [
+      {
+        "split": "full",
+        "size": 461,
+        "harness": "agent",
+        "supported_agents": ["openhands", "inspectai-iterative-agent"],
+        "adaptable": true,
+        "notes": "461 tasks from 51 ICLR/NeurIPS 2024 papers. 36 tasks fail upstream's own masking step (listed source file absent from the repository, or README.md listed as a source) and are skipped by the upstream harness as invalid_task."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "full",
+        "adapted_benchmark_size": 425,
+        "parity_benchmark_size": 33,
+        "parity_sampling_rate": 0.0776,
+        "registry_benchmark_size": 425,
+        "added_agents": ["None"],
+        "parity_matching_agents": [],
+        "parity_unmatching_agents": ["None"],
+        "parity_costs": null,
+        "notes": "Parity pending. Provisional subset: 33 valid tasks marked MATCH/PARTIAL_MATCH in the dataset's published verification records (verification/status.csv); final stratified selection to be agreed with the Harbor team."
+      }
+    ]
+  }
+]
