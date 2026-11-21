@@ -1,0 +1,18 @@
+{
+  "website": "note",
+  "queries": [
+    1,
+    4
+  ],
+  "modes": {
+    "clean": "",
+    "chaos": "_chaos_medium",
+    "failed": "_failed",
+    "perturbed": "_perturbed",
+    "semanticE": "_semantic_explicit",
+    "semanticS": "_semantic_subtle"
+  },
+  "code_revision": "be52dbf33051c9b86e8e4d3c4e2394548906c75b",
+  "data_revision": "4cda241d145b2026365c3f122cccc44123798327",
+  "selection": "Select the first Note document-creation query and the first Note in-workspace folder-creation query. Pair both across all six published Note website variants."
+}

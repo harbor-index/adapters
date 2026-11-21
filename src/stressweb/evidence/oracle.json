@@ -1,0 +1,231 @@
+{
+  "benchmark": "StressWeb",
+  "website": "Note",
+  "verification": "Harbor oracle and no-action controls",
+  "code_revision": "be52dbf33051c9b86e8e4d3c4e2394548906c75b",
+  "data_revision": "4cda241d145b2026365c3f122cccc44123798327",
+  "task_file_manifest_sha256": "7cb5a4e616c94c34b4948616dd7510add347c074afa297d8b912084b52673cc3",
+  "primary_metric": "upstream overall_success",
+  "oracle": {
+    "agent": "oracle",
+    "provider": "daytona",
+    "harbor_version": "0.26.0",
+    "started_at": "2026-11-21T05:47:12.147287",
+    "finished_at": "2026-11-21T06:02:48.655508",
+    "task_count": 12,
+    "reward_one_count": 12,
+    "checkpoints_passed": 48,
+    "checkpoints_total": 48,
+    "tasks": [
+      {
+        "task": "stressweb/note-q1-chaos",
+        "query_id": 1,
+        "mode": "chaos",
+        "task_digest": "sha256:7244b4f4df450976a79b8c1393794f80d8b6a98c9d1d1b3ec98e1be1aa8f773e",
+        "task_checksum": "96fcf3aa738a6684a59574f23a75a2badd6e84d429d0b93a142e69e4db574698",
+        "reward": 1.0,
+        "checkpoints": {
+          "cp1_document_created": true,
+          "cp2_title_correct": true,
+          "cp3_content_correct": true,
+          "cp4_bold_formatting": true
+        }
+      },
+      {
+        "task": "stressweb/note-q1-clean",
+        "query_id": 1,
+        "mode": "clean",
+        "task_digest": "sha256:5241bf714ea76ca4ab57e9820d2bc13114069ca095347438d4e8fe417aeaafe0",
+        "task_checksum": "6f46647176ade668160f1a319a987233924b09a8fe5125a4c4ded1290631deab",
+        "reward": 1.0,
+        "checkpoints": {
+          "cp1_document_created": true,
+          "cp2_title_correct": true,
+          "cp3_content_correct": true,
+          "cp4_bold_formatting": true
+        }
+      },
+      {
+        "task": "stressweb/note-q1-failed",
+        "query_id": 1,
+        "mode": "failed",
+        "task_digest": "sha256:ec9cbfb34942b67a325fd89dacf42d0bbc282675bf6049a6ce15a11f6f6a9cbc",
+        "task_checksum": "014d5dcb2cec78fad9e6ec3ef59a436ba417d12abf0572c07214b5b036531939",
+        "reward": 1.0,
+        "checkpoints": {
+          "cp1_document_created": true,
+          "cp2_title_correct": true,
+          "cp3_content_correct": true,
+          "cp4_bold_formatting": true
+        }
+      },
+      {
+        "task": "stressweb/note-q1-perturbed",
+        "query_id": 1,
+        "mode": "perturbed",
+        "task_digest": "sha256:0c1a2616b9d0e3b180dca16b8ae7192ef3b2488fbe326625c91680020371f211",
+        "task_checksum": "0f9c3a54b03a6bb1a7a72507599c4c2d03ea60b07b9d744762c2353ad42a8b2c",
+        "reward": 1.0,
+        "checkpoints": {
+          "cp1_document_created": true,
+          "cp2_title_correct": true,
+          "cp3_content_correct": true,
+          "cp4_bold_formatting": true
+        }
+      },
+      {
+        "task": "stressweb/note-q1-semantice",
+        "query_id": 1,
+        "mode": "semanticE",
+        "task_digest": "sha256:934606ed26711ec534a61b7da6420d0e1c93015a094529dbafc90fb031f91862",
+        "task_checksum": "a07d67228e8efaaf94d8c94f9bd599067103714cf2fc638cd30703bf49d8338b",
+        "reward": 1.0,
+        "checkpoints": {
+          "cp1_document_created": true,
+          "cp2_title_correct": true,
+          "cp3_content_correct": true,
+          "cp4_bold_formatting": true
+        }
+      },
+      {
+        "task": "stressweb/note-q1-semantics",
+        "query_id": 1,
+        "mode": "semanticS",
+        "task_digest": "sha256:5c9a00f23d925637962cb0a12f074ec23df4e98f559c49d720e3e64d72b43380",
+        "task_checksum": "a4c9083dc48c4a461be10c0839059e28d81d0c23a4a5200337067913a39fc5e8",
+        "reward": 1.0,
+        "checkpoints": {
+          "cp1_document_created": true,
+          "cp2_title_correct": true,
+          "cp3_content_correct": true,
+          "cp4_bold_formatting": true
+        }
+      },
+      {
+        "task": "stressweb/note-q4-chaos",
+        "query_id": 4,
+        "mode": "chaos",
+        "task_digest": "sha256:975c13e343a49043f64f6b1470ad2aa3f4264b506f4bd2b7c11615f58ca23f1c",
+        "task_checksum": "a3e3c8aa77bf431b3f90f7ba0f55ea250329602c9b1915cbe64520ee04ce2774",
+        "reward": 1.0,
+        "checkpoints": {
+          "cp1_navigated_to_workspace_page": true,
+          "cp2_navigated_to_personal_workspace": true,
+          "cp3_folder_created_successfully": true,
+          "cp4_folder_name_correct": true
+        }
+      },
+      {
+        "task": "stressweb/note-q4-clean",
+        "query_id": 4,
+        "mode": "clean",
+        "task_digest": "sha256:d59a6262e3b72c55fb44967a12e7dd1a3e1e4e07cdaa08a0edbe2038c4aa266e",
+        "task_checksum": "3523b5e519c0bf8a5cb74680aaf18d6b537a2f05cb954824dc39bf3f44615cf7",
+        "reward": 1.0,
+        "checkpoints": {
+          "cp1_navigated_to_workspace_page": true,
+          "cp2_navigated_to_personal_workspace": true,
+          "cp3_folder_created_successfully": true,
+          "cp4_folder_name_correct": true
+        }
+      },
+      {
+        "task": "stressweb/note-q4-failed",
+        "query_id": 4,
+        "mode": "failed",
+        "task_digest": "sha256:5b947e235826f17f4768bd390f0c362274fa44c15af7fcfffac692b41ef3e837",
+        "task_checksum": "f8acef47f948e108bc6bf9590a373aae9653b3635c988b944824283ac0a002e2",
+        "reward": 1.0,
+        "checkpoints": {
+          "cp1_navigated_to_workspace_page": true,
+          "cp2_navigated_to_personal_workspace": true,
+          "cp3_folder_created_successfully": true,
+          "cp4_folder_name_correct": true
+        }
+      },
+      {
+        "task": "stressweb/note-q4-perturbed",
+        "query_id": 4,
+        "mode": "perturbed",
+        "task_digest": "sha256:1e75d744cb410876985f4398bd2af6561574bebf1de190b9159d63f933f945e2",
+        "task_checksum": "24d553023f2fc6ffd35b4cfa65bad1320332b2d8e3e5874cd817adc7eb72fcbd",
+        "reward": 1.0,
+        "checkpoints": {
+          "cp1_navigated_to_workspace_page": true,
+          "cp2_navigated_to_personal_workspace": true,
+          "cp3_folder_created_successfully": true,
+          "cp4_folder_name_correct": true
+        }
+      },
+      {
+        "task": "stressweb/note-q4-semantice",
+        "query_id": 4,
+        "mode": "semanticE",
+        "task_digest": "sha256:2d66c4cc533f47a6b4415e542fafe941d5744ae056caab6956558a7e20db3c47",
+        "task_checksum": "f97d3a7338a10661969b315a346d589fff280873cce8f71386758055cc3fed84",
+        "reward": 1.0,
+        "checkpoints": {
+          "cp1_navigated_to_workspace_page": true,
+          "cp2_navigated_to_personal_workspace": true,
+          "cp3_folder_created_successfully": true,
+          "cp4_folder_name_correct": true
+        }
+      },
+      {
+        "task": "stressweb/note-q4-semantics",
+        "query_id": 4,
+        "mode": "semanticS",
+        "task_digest": "sha256:0c4b3d296c41a1932e6b0cd06806725fb79ae1d020c7941963f07f0e25cf04a3",
+        "task_checksum": "6174d044d43f9bd864a8d610e7c7904c0e4ccd1c25b16849f168da8b5489dc85",
+        "reward": 1.0,
+        "checkpoints": {
+          "cp1_navigated_to_workspace_page": true,
+          "cp2_navigated_to_personal_workspace": true,
+          "cp3_folder_created_successfully": true,
+          "cp4_folder_name_correct": true
+        }
+      }
+    ]
+  },
+  "no_action_controls": {
+    "agent": "nop",
+    "provider": "daytona",
+    "harbor_version": "0.26.0",
+    "started_at": "2026-11-21T05:58:54.071334",
+    "finished_at": "2026-11-21T06:04:38.514350",
+    "task_count": 2,
+    "reward_one_count": 0,
+    "checkpoints_passed": 1,
+    "checkpoints_total": 8,
+    "tasks": [
+      {
+        "task": "stressweb/note-q1-clean",
+        "query_id": 1,
+        "mode": "clean",
+        "task_digest": "sha256:5241bf714ea76ca4ab57e9820d2bc13114069ca095347438d4e8fe417aeaafe0",
+        "task_checksum": "6f46647176ade668160f1a319a987233924b09a8fe5125a4c4ded1290631deab",
+        "reward": 0.0,
+        "checkpoints": {
+          "cp1_document_created": true,
+          "cp2_title_correct": false,
+          "cp3_content_correct": false,
+          "cp4_bold_formatting": false
+        }
+      },
+      {
+        "task": "stressweb/note-q4-clean",
+        "query_id": 4,
+        "mode": "clean",
+        "task_digest": "sha256:d59a6262e3b72c55fb44967a12e7dd1a3e1e4e07cdaa08a0edbe2038c4aa266e",
+        "task_checksum": "3523b5e519c0bf8a5cb74680aaf18d6b537a2f05cb954824dc39bf3f44615cf7",
+        "reward": 0.0,
+        "checkpoints": {
+          "cp1_navigated_to_workspace_page": false,
+          "cp2_navigated_to_personal_workspace": false,
+          "cp3_folder_created_successfully": false,
+          "cp4_folder_name_correct": false
+        }
+      }
+    ]
+  }
+}
