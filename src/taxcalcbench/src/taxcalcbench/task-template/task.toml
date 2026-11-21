@@ -1,0 +1,26 @@
+version = "1.0"
+artifacts = [{ source = "/app/output" }]
+
+[task]
+name = "column-tax/taxcalcbench__{task_id}"
+description = "TaxCalcBench: read a taxpayer's documents and compute the {form_name}; graded line by line against the expected return."
+authors = [{ name = "Michael R. Bock" }, { name = "Kara Molisee" }, { name = "Zachary Ozer" }, { name = "Sumit Shah" }]
+keywords = ["taxcalcbench", "tax", "finance", "document-understanding", "calculation"]
+
+[metadata]
+difficulty = "hard"
+category = "finance"
+tags = ["tax", "pdf", "calculation"]
+
+[agent]
+timeout_sec = 1800.0
+
+[verifier]
+environment_mode = "separate"
+timeout_sec = 120.0
+
+[environment]
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 4096

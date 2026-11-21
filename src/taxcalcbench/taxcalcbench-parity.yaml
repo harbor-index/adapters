@@ -1,0 +1,27 @@
+# Harbor side of the parity experiment: one run over the 20-case parity subset.
+# Generate the subset first:
+#   uv run taxcalcbench --split parity --output-dir ../../datasets/taxcalcbench-parity
+# Run from the repository root with the parity extra installed, three times
+# (run 1 on both sides first, then runs 2 and 3), with a different --job-name each time:
+#   TAXCALCBENCH_ROOT=/path/to/pinned/tax-calc-bench OPENAI_API_KEY=... OPENAI_BASE_URL=... \
+#   OPENAI_API_BASE=$OPENAI_BASE_URL \
+#   uv run --project src/taxcalcbench --extra parity harbor run \
+#     -c src/taxcalcbench/taxcalcbench-parity.yaml --job-name parity-run1
+# The agent runs on the host and calls the API directly; no key enters the task containers.
+jobs_dir: jobs
+n_attempts: 1
+orchestrator:
+  type: local
+  n_concurrent_trials: 4
+environment:
+  type: docker
+  delete: true
+agents:
+  - import_path: taxcalcbench.parity_agent:TaxCalcBenchDirectAgent
+    model_name: openai/gpt-6.2-sol
+    kwargs:
+      thinking_level: high
+    # Upstream's TY25 calls use a 14,400 s timeout; keep Harbor's limit above it.
+    override_timeout_sec: 15000
+datasets:
+  - path: datasets/taxcalcbench-parity

@@ -1,0 +1,36 @@
+[
+  {
+    "adapter_name": "taxcalcbench",
+    "agent": "taxcalcbench-direct@1.0.0",
+    "model": "openai/gpt-6.2-sol",
+    "date": "TBD (runs pending)",
+    "adapted_benchmark_size": 101,
+    "parity_benchmark_size": 20,
+    "number_of_runs": 0,
+    "notes": "Parity runs pending. Both sides send the same request: upstream's OpenAI Responses call through LiteLLM (gpt-6.2-sol, thinking level high, no web search); TY2025 attaches the PDFs and streams with upstream's 14,400 s timeout. Original side: unmodified upstream at fdfe0db via parity/run_original.sh. Harbor side: taxcalcbench-direct@1.0.0 via taxcalcbench-parity.yaml. Subset: the 20 cases in parity/parity_cases.txt. Order: 5-10-case sanity check on both sides, one full run on both sides, then runs 2 and 3. Scores are collected with parity/collect_parity.py; errored trials are reported separately and not scored as 0.",
+    "original_parity_repo": "https://github.com/column-tax/tax-calc-bench/tree/fdfe0db992ae9033f5b8b942633181a3596da64c",
+    "adapter_pr": [
+      "https://github.com/harbor-index/adapters/pull/27"
+    ],
+    "dataset_pr": [],
+    "parity_pr": [],
+    "metrics": [
+      {
+        "benchmark_name": "TaxCalcBench",
+        "metric": "Strictly correct returns (%)",
+        "original": "TBD (runs pending)",
+        "harbor": "TBD (runs pending)",
+        "original_runs": [],
+        "harbor_runs": []
+      },
+      {
+        "benchmark_name": "TaxCalcBench",
+        "metric": "Correct by line (%)",
+        "original": "TBD (runs pending)",
+        "harbor": "TBD (runs pending)",
+        "original_runs": [],
+        "harbor_runs": []
+      }
+    ]
+  }
+]

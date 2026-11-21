@@ -1,0 +1,25 @@
+[project]
+name = "harbor-taxcalcbench-adapter"
+version = "0.1.0"
+description = "Harbor adapter for TaxCalcBench (column-tax/tax-calc-bench)"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = ["lxml>=6.0", "numpy>=1.24"]  # numpy: imported by upstream tax_return_evaluator
+
+[project.optional-dependencies]
+# Parity agent (taxcalcbench.parity_agent) and the original-side scripts.
+# Same pins as upstream tax-calc-bench@fdfe0db (uv.lock there).
+parity = ["harbor==0.26.0", "litellm==1.100.5", "openai==2.43.0", "google-genai>=2.17.0,<3.0.0", "httpx>=0.28.1", "python-dotenv>=1.2.2"]
+
+[project.scripts]
+taxcalcbench = "taxcalcbench.main:main"
+
+[build-system]
+requires = ["hatchling>=1,<2"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/taxcalcbench"]
+
+[dependency-groups]
+dev = ["pytest>=8"]
