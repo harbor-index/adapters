@@ -1,0 +1,25 @@
+{
+  "adapter_commit": "8243e330b954bf464a5988ae539c4c862b03ac13",
+  "harness_commit": "10287322040bc72574f144cb40eccfd6ccb66936",
+  "tasks_commit": "82f51ab34860c0ab3fe63a0ce9ae394ad38234a6",
+  "harbor_version": "0.23.0",
+  "vm": {
+    "runtime": "Colima 0.10.3",
+    "kernel": "6.8.0-117-generic",
+    "cpus": 6,
+    "memory_gib": 8
+  },
+  "oracle_concurrency": 4,
+  "images": {
+    "amd64": {
+      "id": "sha256:fa8d4c9ccda1248e3a5b8ad2a6ae02e52ffc604fa8d6c6264a6453adeea824c8",
+      "architecture": "amd64",
+      "os": "linux"
+    },
+    "arm64": {
+      "id": "sha256:367500632e64de2fae3cf6678b82172dcc184e9590d470d77e708168e84b9a7b",
+      "architecture": "arm64",
+      "os": "linux"
+    }
+  }
+}

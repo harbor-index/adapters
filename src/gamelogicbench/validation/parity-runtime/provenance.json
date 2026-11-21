@@ -1,0 +1,6 @@
+{
+  "npm_version": "0.144.1-linux-arm64",
+  "tarball": "https://registry.npmjs.org/@openai/codex/-/codex-0.144.1-linux-arm64.tgz",
+  "integrity": "sha512-451o15+XtaXCCb35t/KCyyPqXHnTPxPxtdqEYOnE3e4sH5AfnI/uVJwfdjOksMG6vRLy6R+fLvSDOMguRFLmQw==",
+  "codex_sha256": "9513fa3f5f4ad444ac1e40d972aef0e2664834ec54da987d54aba0dc2f13ea07"
+}

@@ -1,0 +1,13 @@
+{
+  "job": "oracle-full",
+  "status": "pass",
+  "tasks": 72,
+  "completed": 72,
+  "full_reward": 72,
+  "exceptions": 0,
+  "retries": 0,
+  "scenarios": 410,
+  "cells": 1474,
+  "started_at": "2026-11-18T02:16:47.802048",
+  "finished_at": "2026-11-18T03:16:56.979038"
+}

@@ -1,0 +1,84 @@
+[
+  {
+    "adapter_name": "gamelogicbench",
+    "agent": "codex@0.144.1",
+    "model": "gpt-5-mini",
+    "date": "2026-11-20",
+    "adapted_benchmark_size": 72,
+    "number_of_runs": 3,
+    "notes": "Provisional historical cohort: 24 tasks (8 per kind), 472 cells per side per round, three runs. Scores are percentages with sample SEM. Harbor mixes 47 argv and 25 stdin driver attempts, so range overlap is not final parity confirmation. Four unusable attempts are archived and replaced; model timeouts are retained; the archived-zero sensitivity result is unchanged. Cross-grading all seven disagreement pairs matches 294/294 cells. Both evaluators fail a private verdict-authenticity negative test. Uniform-configuration validation, redistribution permission, dataset/HF publication and registry verification remain unresolved. See validation/acceptance.md and validation/parity-reproduction.md.",
+    "original_parity_repo": "https://github.com/NJU-LINK/GameLogicBench",
+    "adapter_pr": [
+      "https://github.com/harbor-index/adapters/pull/19"
+    ],
+    "dataset_pr": null,
+    "parity_pr": null,
+    "metrics": [
+      {
+        "benchmark_name": "GameLogicBench",
+        "metric": "task_pass_rate_percent",
+        "original": "13.8889 \u00b1 2.7778",
+        "harbor": "18.0556 \u00b1 3.6747",
+        "original_runs": [
+          16.666666666666664,
+          8.333333333333332,
+          16.666666666666664
+        ],
+        "harbor_runs": [
+          25.0,
+          16.666666666666664,
+          12.5
+        ]
+      },
+      {
+        "benchmark_name": "GameLogicBench/atom",
+        "metric": "task_pass_rate_percent",
+        "original": "33.3333 \u00b1 4.1667",
+        "harbor": "45.8333 \u00b1 4.1667",
+        "original_runs": [
+          37.5,
+          25.0,
+          37.5
+        ],
+        "harbor_runs": [
+          50.0,
+          50.0,
+          37.5
+        ]
+      },
+      {
+        "benchmark_name": "GameLogicBench/combo",
+        "metric": "task_pass_rate_percent",
+        "original": "8.3333 \u00b1 4.1667",
+        "harbor": "4.1667 \u00b1 4.1667",
+        "original_runs": [
+          12.5,
+          0.0,
+          12.5
+        ],
+        "harbor_runs": [
+          12.5,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "benchmark_name": "GameLogicBench/repo",
+        "metric": "task_pass_rate_percent",
+        "original": "0.0000 \u00b1 0.0000",
+        "harbor": "4.1667 \u00b1 4.1667",
+        "original_runs": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "harbor_runs": [
+          12.5,
+          0.0,
+          0.0
+        ]
+      }
+    ],
+    "parity_benchmark_size": 24
+  }
+]

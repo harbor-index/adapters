@@ -1,0 +1,7 @@
+{
+  "harbor_version": "0.23.0",
+  "baseline_sha256": "ee0ca8ec43617f3909d2195afe8f9e7cbd7313a8b3b558b01fde388f65b7c39c",
+  "patched_sha256": "b9df0d27fb268a65dcaf636b857d176a714f65aa90cb875e7335111159b93436",
+  "reason": "Codex prompt argv is matched by model pkill -f cleanup; align with upstream file/stdin prompt delivery",
+  "applies_to": "Harbor repaired atom_target_selection in round 1 and subsequent round 3 model runs; earlier valid attempts retained"
+}

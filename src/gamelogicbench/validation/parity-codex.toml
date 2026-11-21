@@ -1,0 +1,14 @@
+model_provider = "gateway"
+model_context_window = 400000
+
+[features]
+plugins = false
+
+[model_providers.gateway]
+name = "gateway"
+base_url = "https://app.ppapi.ai/v1"
+env_key = "OPENAI_API_KEY"
+wire_api = "responses"
+request_max_retries = 4
+stream_max_retries = 8
+stream_idle_timeout_ms = 120000

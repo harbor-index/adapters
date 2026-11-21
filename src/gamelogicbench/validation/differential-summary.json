@@ -1,0 +1,45 @@
+{
+  "status": "pass",
+  "kind": "Original harness versus real Harbor runtime, proper and naive references",
+  "pairs": 114,
+  "matches": 114,
+  "mismatches": 0,
+  "results": {
+    "atom_light_occlusion/proper": {
+      "pairs": 17,
+      "matches": 17,
+      "passed": 17,
+      "failed": 0
+    },
+    "combo_reverse_dock/proper": {
+      "pairs": 17,
+      "matches": 17,
+      "passed": 17,
+      "failed": 0
+    },
+    "repo_amsg_movement_engine/proper": {
+      "pairs": 23,
+      "matches": 23,
+      "passed": 23,
+      "failed": 0
+    },
+    "combo_reverse_dock/naive": {
+      "pairs": 17,
+      "matches": 17,
+      "passed": 5,
+      "failed": 12
+    },
+    "repo_amsg_movement_engine/naive": {
+      "pairs": 23,
+      "matches": 23,
+      "passed": 8,
+      "failed": 15
+    },
+    "atom_light_occlusion/naive": {
+      "pairs": 17,
+      "matches": 17,
+      "passed": 5,
+      "failed": 12
+    }
+  }
+}

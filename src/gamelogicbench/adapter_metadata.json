@@ -1,0 +1,38 @@
+[
+  {
+    "adapter_name": "gamelogicbench",
+    "adapter_builders": [
+      "ShawVentus (937585404@qq.com)"
+    ],
+    "original_benchmark": [
+      {
+        "split": "full",
+        "size": 72,
+        "harness": "agent",
+        "supported_agents": [
+          "claude-code",
+          "codex",
+          "opencode"
+        ],
+        "adaptable": true,
+        "notes": "Pinned public source snapshot contains 72 tasks, 410 scenarios and 1474 cells."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "full",
+        "adapted_benchmark_size": 72,
+        "parity_benchmark_size": 24,
+        "parity_sampling_rate": 0.3333333333333333,
+        "registry_benchmark_size": 0,
+        "added_agents": [
+          "None"
+        ],
+        "parity_matching_agents": [],
+        "parity_unmatching_agents": [],
+        "parity_costs": "$7.174998300",
+        "notes": "Provisional historical cohort: 24 tasks (8 per kind), 472 cells per side per round, three runs. Scores are percentages with sample SEM. Harbor mixes 47 argv and 25 stdin driver attempts, so range overlap is not final parity confirmation. Four unusable attempts are archived and replaced; model timeouts are retained; the archived-zero sensitivity result is unchanged. Cross-grading all seven disagreement pairs matches 294/294 cells. Both evaluators fail a private verdict-authenticity negative test. Uniform-configuration validation, redistribution permission, dataset/HF publication and registry verification remain unresolved. See validation/acceptance.md and validation/parity-reproduction.md. Cost is a bundled-rate usage estimate, not the 2077 invoice; unreported requests and assistant-session costs are excluded."
+      }
+    ]
+  }
+]
