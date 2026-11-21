@@ -1,0 +1,26 @@
+version = "1.0"
+artifacts = [{service = "browser", source = "/evidence", destination = "stressweb"}]
+
+[task]
+name = "stressweb/@TASK@"
+authors = [{name = "Haoyue Bai"}, {name = "Dong Wang"}, {name = "Long Chen"}, {name = "Bingguang Hao"}, {name = "Pengyang Shao"}, {name = "Yonghui Yang"}, {name = "Yicheng He"}, {name = "Chenyi Zhuang"}]
+keywords = ["web", "browser", "robustness"]
+
+[metadata]
+category = "web-interaction"
+
+[agent]
+timeout_sec = 2400
+
+[verifier]
+timeout_sec = 120
+environment_mode = "separate"
+
+[verifier.environment]
+build_timeout_sec = 600
+
+[environment]
+build_timeout_sec = 1800
+cpus = 2
+memory_mb = 4096
+storage_mb = 9216

@@ -1,0 +1,15 @@
+services:
+  main:
+    depends_on:
+      browser:
+        condition: service_healthy
+  browser:
+    build:
+      context: ./browser
+    init: true
+    shm_size: 1gb
+    healthcheck:
+      test: ["CMD", "python", "-c", "from urllib.request import urlopen; urlopen('http://127.0.0.1:8765/ready', timeout=3)"]
+      interval: 5s
+      timeout: 4s
+      retries: 30

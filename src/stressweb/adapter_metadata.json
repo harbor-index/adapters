@@ -1,0 +1,36 @@
+[
+  {
+    "adapter_name": "stressweb",
+    "adapter_builders": [
+      "Haoyue Bai (baihaoyue621@gmail.com)"
+    ],
+    "original_benchmark": [
+      {
+        "split": "full",
+        "size": 1043,
+        "harness": "agent",
+        "supported_agents": [
+          "NoteWebsiteAgent@be52dbf"
+        ],
+        "adaptable": true,
+        "notes": "The full benchmark covers 10 websites, 149 queries and seven modes."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "note",
+        "adapted_benchmark_size": 12,
+        "parity_benchmark_size": 0,
+        "parity_sampling_rate": 0,
+        "registry_benchmark_size": 0,
+        "added_agents": [
+          "stressweb-note@be52dbf"
+        ],
+        "parity_matching_agents": [],
+        "parity_unmatching_agents": [],
+        "parity_costs": null,
+        "notes": "Note queries 1 and 4, paired over six released website variants. A 12-task parity comparison is proposed; formal runs and registry publication are pending."
+      }
+    ]
+  }
+]
