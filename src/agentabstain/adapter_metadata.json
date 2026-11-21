@@ -1,0 +1,32 @@
+[
+  {
+    "adapter_name": "agentabstain",
+    "adapter_builders": [
+      "James Zhu (zhuyangjunfeng@gmail.com)"
+    ],
+    "original_benchmark": [
+      {
+        "split": "test",
+        "size": 526,
+        "harness": "agent",
+        "supported_agents": ["None"],
+        "adaptable": true,
+        "notes": "The released task corpus is harness-agnostic and does not pin agent versions."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "test",
+        "adapted_benchmark_size": 526,
+        "parity_benchmark_size": 94,
+        "parity_sampling_rate": 0.1787,
+        "registry_benchmark_size": 526,
+        "added_agents": ["None"],
+        "parity_matching_agents": ["None"],
+        "parity_unmatching_agents": ["None"],
+        "parity_costs": null,
+        "notes": "Public AgentAbstain corpus: 526 variants in 263 act/abstain pairs, eight categories, and 42 environments. The intended registry count is 526, pending registry publication. The 47-pair (94-variant) slice is a development coverage slice for all environments. The final parity subset is pending maintainer approval."
+      }
+    ]
+  }
+]

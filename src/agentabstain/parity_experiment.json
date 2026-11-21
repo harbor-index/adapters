@@ -1,0 +1,26 @@
+[
+  {
+    "adapter_name": "agentabstain",
+    "agent": "pending",
+    "model": "pending",
+    "date": "2026-11-20",
+    "adapted_benchmark_size": 526,
+    "parity_benchmark_size": 94,
+    "number_of_runs": 0,
+    "notes": "Formal original-to-Harbor parity has not been run. The deterministic 47-pair sample covering all 42 environments is a development coverage slice. The proposed pilot uses four complete pairs, then expands to a maintainer-approved pair-complete 5–10% parity subset. The same pair IDs will run on both sides with a maintainer-approved lower-cost agent/model, at least two independent runs per side, and no offline stub. Paired accuracy and CAR will be aggregated by pair_id, with means, sample SEM, and MSE between original and Harbor score vectors. The maintainer-approved MSE threshold determines review readiness. Raw submissions, logs, and grading results will be retained with the dataset and parity links. Exact agent/model settings, judge endpoint, and parity key remain pending maintainer confirmation. Current evidence covers full generation, separate-verifier Docker builds, Oracle smoke, and the latest Harbor verifier checks. The offline judge stub is excluded from parity claims.",
+    "original_parity_repo": "https://github.com/AntiQuality/agentabstain",
+    "adapter_pr": ["https://github.com/harbor-index/adapters/pull/24"],
+    "dataset_pr": null,
+    "parity_pr": null,
+    "metrics": [
+      {
+        "benchmark_name": "AgentAbstain",
+        "metric": "paired accuracy / CAR",
+        "original": "pending",
+        "harbor": "pending",
+        "original_runs": [],
+        "harbor_runs": []
+      }
+    ]
+  }
+]

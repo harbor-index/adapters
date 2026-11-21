@@ -1,0 +1,3 @@
+These runtime files are copied from AgentAbstain at source commit
+cfc3faf7ab1cfd4892cde1158d6e43b2f312ddc3.
+AgentAbstain code is MIT licensed. See the upstream repository and LICENSE.

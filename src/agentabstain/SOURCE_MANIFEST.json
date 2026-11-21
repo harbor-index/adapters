@@ -1,0 +1,40 @@
+{
+  "adapter_name": "agentabstain",
+  "source_repository": "https://github.com/AntiQuality/agentabstain",
+  "source_commit": "cfc3faf7ab1cfd4892cde1158d6e43b2f312ddc3",
+  "dataset_repository": "https://huggingface.co/datasets/antiquality/agentabstain",
+  "dataset_revision": "842228426c2a703347396501af61c7890972c7ee",
+  "code_license": "MIT",
+  "dataset_license": "CC BY 4.0",
+  "task_rows": 526,
+  "paired_tasks": 263,
+  "categories": 8,
+  "environments": 42,
+  "task_types": ["act", "abstain"],
+  "pairing_rule": "Each pair_id has exactly one act row and one abstain row.",
+  "task_id_policy": "Harbor task names use neutral variant-a/variant-b suffixes. The act/abstain mapping is stored only in verifier metadata.",
+  "source_semantics": {
+    "act": "The original execution DAG is preserved and commit tools are expected to be called.",
+    "abstain": "The original abstention trigger and critical action set are preserved and commit tools must not be called."
+  },
+  "verification_components": [
+    "deterministic commit check over the tool execution log",
+    "LLM response judge over the final response"
+  ],
+  "prompt_transport": "The native system prompt and user request are labeled separately in instruction.md because Harbor tasks provide one instruction file. Formal parity must apply this same transport to both sides.",
+  "runtime_isolation": "Initial state and task configuration are held by a private runtime sidecar. The main agent container receives filtered schemas and a read-only execution-log volume.",
+  "verified_evidence": [
+    "full 526-row generation",
+    "42 environment imports",
+    "sidecar Docker build",
+    "Oracle smoke on both variants",
+    "synthetic verifier replay"
+  ],
+  "unverified": [
+    "formal original-to-Harbor parity",
+    "multi-run score overlap",
+    "full Harbor Oracle run"
+  ],
+  "parity_subset_policy": "Four deterministically ranked pairs per category, then additional pairs selected by environment coverage until all 42 environments are represented. Current result is 47 pairs and 94 variants.",
+  "scope_note": "The adapter initially targets the public 526-row task corpus. Private fresh-generation rounds are outside this adapter scope."
+}
