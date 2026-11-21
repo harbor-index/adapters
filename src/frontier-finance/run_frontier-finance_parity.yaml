@@ -1,0 +1,30 @@
+# Harbor side of FrontierFinance parity: claude-code (Scenario 2).
+# The original side runs the same claude-code version and model outside Harbor,
+# from the fork of samaya-ai/frontier-finance (harbor_parity/run_claude_code.py).
+#
+#   harbor run -y -c src/frontier-finance/run_frontier-finance_parity.yaml --env-file <keys.env>
+#
+# <keys.env> holds the judge keys (ANTHROPIC_API_KEY, OPENAI_API_KEY, GEMINI_API_KEY)
+# and the parity gateway's ANTHROPIC_BASE_URL, OPENAI_BASE_URL and GOOGLE_GEMINI_BASE_URL.
+# claude-code uses ANTHROPIC_API_KEY and ANTHROPIC_BASE_URL.
+# Harbor's retry stays off (the default): infrastructure failures are rerun by the
+# rule in run_claude_code.py collect, the same on both sides (see README).
+jobs_dir: jobs
+n_attempts: 1
+timeout_multiplier: 1.0
+# Keep equal to run_claude_code.py -n on the original side.
+n_concurrent_trials: 8
+quiet: false
+environment:
+  type: daytona
+  force_build: false
+  delete: true
+agents:
+  - name: claude-code
+    # The original side uses the same model and version.
+    model_name: anthropic/claude-haiku-5-5
+    kwargs:
+      version: "2.1.330"
+datasets:
+  # uv run frontier-finance --split parity --output-dir ../../datasets/frontier-finance-parity
+  - path: datasets/frontier-finance-parity

@@ -1,0 +1,38 @@
+[
+  {
+    "adapter_name": "frontier-finance",
+    "agent": "claude-code@2.1.330",
+    "model": "claude-haiku-5-5",
+    "date": "2026-11-21",
+    "adapted_benchmark_size": 220,
+    "parity_benchmark_size": 11,
+    "number_of_runs": 3,
+    "notes": "Parity on the 11-task subset (5%, stratified by use case, --split parity), as proposed in the parity plan on the adapter PR. Both sides: Harbor 0.27.0 (latest release), claude-code 2.1.330 installed by Harbor's claude-code install step, model claude-haiku-5-5 (the model's canonical ID; it has no dated variant, and every request in the claude-code logs reports it), Harbor's claude-code flags and environment with host overrides unset, instruction.md unchanged on stdin, 3600 s agent limit and resources from task.toml, up to 8 concurrent trials, Daytona sandboxes, gateway https://app.ppapi.ai. Both sides are graded by the unmodified upstream grader at 8b71342 with upstream's judge panel and settings (claude-sonnet-4-6, gemini-3.1-pro-preview, gpt-5.4; eval.example.yaml). Scores are still not comparable with the upstream leaderboard: agent, model and subset differ. Order: the Harbor runs and the first original-side set followed sanity (5 queries, counted toward run 1), the rest of run 1, then runs 2 and 3; after the install fix only the original side was rerun, as three full batches. All 66 agent runs ended with claude-code status success and a report; no run was rerun, every query was graded by all three judges, and no report hit the oracle shortcut. Metric: upstream macro_avg_qualification_rate_on_all_queries on the original side, Harbor mean reward on the Harbor side (the same quantity), as fractions. Paired per-task difference (Harbor minus original, mean over runs): +0.031, 95% CI [-0.021, +0.083], 7 tasks higher on Harbor and 4 lower. Task 8d7ee1f4 is higher on Harbor in all 3 runs, which about 1 of 11 tasks is expected to show by chance (p = 0.1 per task). History: the same reports were first graded with a cheap panel (claude-haiku-5-5, gemini-3.8-flash, gpt-6-luna) through a grader fork with a judge-compatibility change: original 0.3189 ± 0.0207 against Harbor 0.3448 ± 0.0326, also overlapping. Grading was then moved to the upstream panel and unmodified grader and all 66 reports regraded once; the switch was decided after the cheap-panel comparisons were known and before this regrade ran, and every grading made is reported. The original-side runs are the second set, run after the original side's install step was changed to Harbor's exact command (fork commit ada6995); a first set with --no-install-recommends (cheap panel: 0.3540 ± 0.0405) also overlapped and is not used here.",
+    "original_parity_repo": "https://github.com/Chaoqi31/frontier-finance/tree/harbor-parity",
+    "adapter_pr": [
+      "https://github.com/harbor-index/adapters/pull/16"
+    ],
+    "dataset_pr": [],
+    "parity_pr": [
+      "https://huggingface.co/datasets/harborframework/parity-experiments/discussions/291"
+    ],
+    "metrics": [
+      {
+        "benchmark_name": "FrontierFinance",
+        "metric": "macro_avg_qualification_rate_on_all_queries",
+        "original": "0.3334 ± 0.0026",
+        "harbor": "0.3648 ± 0.0272",
+        "original_runs": [
+          0.3355,
+          0.3365,
+          0.3281
+        ],
+        "harbor_runs": [
+          0.4144,
+          0.3208,
+          0.3591
+        ]
+      }
+    ]
+  }
+]
