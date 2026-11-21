@@ -1,0 +1,142 @@
+[
+  {
+    "adapter_name": "physcibench",
+    "adapter_builders": [
+      "Jiaxing Zhang (zjxing9972@gmail.com)"
+    ],
+    "original_benchmark": [
+      {
+        "split": "multimodal-qa",
+        "size": 39,
+        "harness": "llm",
+        "supported_agents": [
+          "None"
+        ],
+        "adaptable": true,
+        "notes": "Information extraction. Given experimental figures or scientific charts, answer by reading values, identifying trends, or explaining observed phenomena."
+      },
+      {
+        "split": "long-context-qa",
+        "size": 30,
+        "harness": "llm",
+        "supported_agents": [
+          "None"
+        ],
+        "adaptable": true,
+        "notes": "Scientific understanding. Given research papers or supplementary materials, synthesize evidence from multiple sections or documents to answer the question."
+      },
+      {
+        "split": "structured-information-extraction",
+        "size": 40,
+        "harness": "llm",
+        "supported_agents": [
+          "None"
+        ],
+        "adaptable": true,
+        "notes": "Information extraction. Given text, tables, or documents, extract the requested fields and return them as JSON or CSV in the specified format."
+      },
+      {
+        "split": "scientific-reasoning",
+        "size": 36,
+        "harness": "llm",
+        "supported_agents": [
+          "None"
+        ],
+        "adaptable": true,
+        "notes": "Scientific understanding. Given a scientific problem and its conditions, apply relevant principles to produce a multi-step derivation or explanation."
+      },
+      {
+        "split": "experimental-design",
+        "size": 35,
+        "harness": "llm",
+        "supported_agents": [
+          "None"
+        ],
+        "adaptable": true,
+        "notes": "Application and creation. Given a research goal and constraints, propose an experimental plan that can be assessed against the scoring rubric."
+      },
+      {
+        "split": "code-generation",
+        "size": 20,
+        "harness": "llm",
+        "supported_agents": [
+          "None"
+        ],
+        "adaptable": false,
+        "notes": "Application and creation. Given a scientific computing problem, submit executable code whose results are checked by the scorer. Excluded from this Harbor adapter."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "multimodal-qa",
+        "adapted_benchmark_size": 38,
+        "parity_benchmark_size": 0,
+        "parity_sampling_rate": 0.0,
+        "registry_benchmark_size": 0,
+        "added_agents": [
+          "None"
+        ],
+        "parity_matching_agents": [],
+        "parity_unmatching_agents": [],
+        "parity_costs": null,
+        "notes": "The input is a question with experimental figures or scientific charts. The output is extracted values, identified trends, or scientific explanations, saved to /workspace/response.txt. Exact matching or LLM grading against the reference answer and available rubric produces a score from 0 to 1 and a correctness flag. The 162-task selection in config/run_physcibench_162.yaml excludes physci-010: their ground-truth answers did not fully cover the rubric requirements under LLM judging, so oracle responses did not consistently receive full credit."
+      },
+      {
+        "split": "long-context-qa",
+        "adapted_benchmark_size": 29,
+        "parity_benchmark_size": 0,
+        "parity_sampling_rate": 0.0,
+        "registry_benchmark_size": 0,
+        "added_agents": [
+          "None"
+        ],
+        "parity_matching_agents": [],
+        "parity_unmatching_agents": [],
+        "parity_costs": null,
+        "notes": "The input is a question with research papers or supplementary materials. The output is an answer synthesizing evidence across the supplied documents, saved to /workspace/response.txt. Exact matching or LLM grading against the reference answer and available rubric produces a score from 0 to 1 and a correctness flag. The 162-task selection in config/run_physcibench_162.yaml excludes physci-141: their ground-truth answers did not fully cover the rubric requirements under LLM judging, so oracle responses did not consistently receive full credit."
+      },
+      {
+        "split": "structured-information-extraction",
+        "adapted_benchmark_size": 40,
+        "parity_benchmark_size": 0,
+        "parity_sampling_rate": 0.0,
+        "registry_benchmark_size": 0,
+        "added_agents": [
+          "None"
+        ],
+        "parity_matching_agents": [],
+        "parity_unmatching_agents": [],
+        "parity_costs": null,
+        "notes": "The input is text, tables, or documents with requested fields. The output is JSON or CSV matching the requested schema, saved to /workspace/response.txt. Rule-based format, field, and value checks produce a score from 0 to 1 and a correctness flag."
+      },
+      {
+        "split": "scientific-reasoning",
+        "adapted_benchmark_size": 27,
+        "parity_benchmark_size": 0,
+        "parity_sampling_rate": 0.0,
+        "registry_benchmark_size": 0,
+        "added_agents": [
+          "None"
+        ],
+        "parity_matching_agents": [],
+        "parity_unmatching_agents": [],
+        "parity_costs": null,
+        "notes": "The input is a scientific problem with specified conditions. The output is a multi-step derivation or scientific explanation, saved to /workspace/response.txt. Exact matching or LLM grading against the reference answer and available rubric produces a score from 0 to 1 and a correctness flag. The 162-task selection in config/run_physcibench_162.yaml excludes physci-121, physci-147, physci-148, physci-149, physci-150, physci-152, physci-153, physci-154, physci-155: their ground-truth answers did not fully cover the rubric requirements under LLM judging, so oracle responses did not consistently receive full credit."
+      },
+      {
+        "split": "experimental-design",
+        "adapted_benchmark_size": 28,
+        "parity_benchmark_size": 0,
+        "parity_sampling_rate": 0.0,
+        "registry_benchmark_size": 0,
+        "added_agents": [
+          "None"
+        ],
+        "parity_matching_agents": [],
+        "parity_unmatching_agents": [],
+        "parity_costs": null,
+        "notes": "The input is a research goal and constraints. The output is an experimental plan addressing the requested requirements, saved to /workspace/response.txt. Exact matching or LLM grading against the reference answer and available rubric produces a score from 0 to 1 and a correctness flag. The 162-task selection in config/run_physcibench_162.yaml excludes physci-092, physci-094, physci-095, physci-096, physci-099, physci-100, physci-181: their ground-truth answers did not fully cover the rubric requirements under LLM judging, so oracle responses did not consistently receive full credit."
+      }
+    ]
+  }
+]

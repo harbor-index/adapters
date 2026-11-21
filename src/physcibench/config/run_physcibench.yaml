@@ -1,0 +1,14 @@
+# Exclude the 16 tasks below that scored below full marks in oracle run
+# 2026-11-19__12-37-12. Retain 164 of the original 180 tasks.
+jobs_dir: jobs
+n_attempts: 1
+orchestrator:
+  type: local
+  n_concurrent_trials: 4
+environment:
+  type: docker
+  delete: true
+agents:
+  - name: oracle
+datasets:
+  - path: datasets/physcibench

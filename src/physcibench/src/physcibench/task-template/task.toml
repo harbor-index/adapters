@@ -1,0 +1,29 @@
+version = "1.0"
+
+[task]
+name = "physcibench/{task_id}"
+authors = [
+    { name = "Yigeng Jiang", email = "yigengjiang@gmail.com" },
+    { name = "Tengchao Yang" },
+]
+
+[metadata]
+category = "{task_type}"
+
+[agent]
+timeout_sec = 1800.0
+
+[verifier]
+timeout_sec = 300.0
+
+[verifier.env]
+JUDGE_LLM_API_KEY = "${OPENAI_API_KEY}"
+JUDGE_LLM_BASE_URL = "${OPENAI_BASE_URL}"
+JUDGE_LLM_MODEL = "${JUDGE_LLM_MODEL}"
+JUDGE_LLM_TYPE = "chat.completions"
+
+[environment]
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240

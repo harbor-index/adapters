@@ -1,0 +1,33 @@
+# Exclude the original 16 tasks plus physci-010 and physci-181, which scored
+# below full marks in oracle run 2026-11-21__19-01-13. Retain 162 of 180 tasks.
+jobs_dir: jobs
+n_attempts: 1
+orchestrator:
+  type: local
+  n_concurrent_trials: 4
+environment:
+  type: docker
+  delete: true
+agents:
+  - name: oracle
+datasets:
+  - path: datasets/physcibench
+    exclude_task_names:
+      - physci-010
+      - physci-092
+      - physci-094
+      - physci-095
+      - physci-096
+      - physci-099
+      - physci-100
+      - physci-121
+      - physci-141
+      - physci-147
+      - physci-148
+      - physci-149
+      - physci-150
+      - physci-152
+      - physci-153
+      - physci-154
+      - physci-155
+      - physci-181
