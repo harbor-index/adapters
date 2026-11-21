@@ -1,0 +1,184 @@
+{
+  "benchmark": "StableToolBench",
+  "split": "G1_instruction",
+  "upstream_revision": "aa4ed9f4737ad98bd706663f01d63623c3427812",
+  "tool_revision": "0c25df5e6937aae854c2cc1bb203297600afce8b",
+  "baseline_revision": "ea70398f955e7b58f8807187936818e794ce5140",
+  "simulator": {
+    "model": "MirrorAPI-Cache",
+    "revision": "df8f586d0f8d17bcbbaee11f1e8f9dd178a28c68",
+    "dtype": "bfloat16",
+    "temperature": 0.1,
+    "seed": 42,
+    "max_tokens": 2048
+  },
+  "harbor_version": "0.26.0",
+  "environment": "Daytona",
+  "judge_model": "gpt-4.1-2025-04-14",
+  "metric": "Solvable Pass Rate (SoPR)",
+  "votes_per_oracle": 3,
+  "fresh_queries": [
+    23982,
+    66018,
+    79620
+  ],
+  "reused_queries": [
+    608,
+    1073
+  ],
+  "reuse": "Queries 608 and 1073 retain byte-identical frozen tasks, oracle and no-action trials. Their broker traces were graded by independent Harbor verifiers. The three additional queries were executed and graded in the expanded release.",
+  "tasks": [
+    {
+      "task": "stabletoolbench/g1-instruction-608",
+      "query_id": 608,
+      "task_checksum": "96ad8b1967415a3e14530a4a79aa464b1f158580fdde77269c06f4b673e3e06f",
+      "task_digest": "sha256:0c6cb0e914aea51f7ca58cc28f8dc453eef2e7b38a9e6e0432aa98b93997de90",
+      "origin": "reused",
+      "broker_answer_sha256": "26575abf6b84c9467f936ab06606829f190a4f2b28ad5410c37909d269bdf75b",
+      "tool_calls": [
+        "get_channel_clips",
+        "get_channel_details"
+      ],
+      "oracle": {
+        "judge_called": true,
+        "labels": [
+          "AnswerStatus.Solved",
+          "AnswerStatus.Solved",
+          "AnswerStatus.Solved"
+        ],
+        "SoPR": 1.0
+      },
+      "nop": {
+        "judge_called": false,
+        "labels": [
+          "AnswerStatus.Unsolved",
+          "AnswerStatus.Unsolved",
+          "AnswerStatus.Unsolved"
+        ],
+        "SoPR": 0.0
+      }
+    },
+    {
+      "task": "stabletoolbench/g1-instruction-1073",
+      "query_id": 1073,
+      "task_checksum": "5e0407637698bd4abf0ae22360e818f1aa64d131ceca51487074ba834ce750bb",
+      "task_digest": "sha256:013d686e780d842e976b8990efbf3bab895cc43ed05431ec3075cc8764a68afb",
+      "origin": "reused",
+      "broker_answer_sha256": "a43d6400ada5f5fea4bb4e08dacd6367d432c6559dee7c2cd30ffc5fa8e97444",
+      "tool_calls": [
+        "popularsitesforquery",
+        "querykeywords"
+      ],
+      "oracle": {
+        "judge_called": true,
+        "labels": [
+          "AnswerStatus.Solved",
+          "AnswerStatus.Solved",
+          "AnswerStatus.Solved"
+        ],
+        "SoPR": 1.0
+      },
+      "nop": {
+        "judge_called": false,
+        "labels": [
+          "AnswerStatus.Unsolved",
+          "AnswerStatus.Unsolved",
+          "AnswerStatus.Unsolved"
+        ],
+        "SoPR": 0.0
+      }
+    },
+    {
+      "task": "stabletoolbench/g1-instruction-23982",
+      "query_id": 23982,
+      "task_checksum": "92d29c1c68f44217469f4132c1f5761d7273d83782a3e47152900f44f08cbe14",
+      "task_digest": "sha256:f83b53cadda223941fd52488b2c345afa949f8903c6e258ab42dbbdab68ac9a5",
+      "origin": "fresh",
+      "broker_answer_sha256": "da0c4ae530a111ce8bd91693d673a6559dd09a2bc46a00017fd18d3eaf3994d8",
+      "tool_calls": [
+        "search_jokes_by_anime_name",
+        "search_jokes",
+        "get_all_jokes"
+      ],
+      "oracle": {
+        "judge_called": true,
+        "labels": [
+          "AnswerStatus.Solved",
+          "AnswerStatus.Solved",
+          "AnswerStatus.Solved"
+        ],
+        "SoPR": 1.0
+      },
+      "nop": {
+        "judge_called": false,
+        "labels": [
+          "AnswerStatus.Unsolved",
+          "AnswerStatus.Unsolved",
+          "AnswerStatus.Unsolved"
+        ],
+        "SoPR": 0.0
+      }
+    },
+    {
+      "task": "stabletoolbench/g1-instruction-66018",
+      "query_id": 66018,
+      "task_checksum": "ac2198d539e1237a611dc4eba0785a9dbbe9fb5674b8b2a1ab2c158d5d5641da",
+      "task_digest": "sha256:4edcc444b6590fd1f204105da77c629ad5c4b285f1ee474f59dfbc4cf682890d",
+      "origin": "fresh",
+      "broker_answer_sha256": "656d843dd46e6e97e217086159955e1811b1d263b679d9876366e19f36270a2c",
+      "tool_calls": [
+        "api_all",
+        "api_all",
+        "api_information"
+      ],
+      "oracle": {
+        "judge_called": true,
+        "labels": [
+          "AnswerStatus.Solved",
+          "AnswerStatus.Solved",
+          "AnswerStatus.Solved"
+        ],
+        "SoPR": 1.0
+      },
+      "nop": {
+        "judge_called": false,
+        "labels": [
+          "AnswerStatus.Unsolved",
+          "AnswerStatus.Unsolved",
+          "AnswerStatus.Unsolved"
+        ],
+        "SoPR": 0.0
+      }
+    },
+    {
+      "task": "stabletoolbench/g1-instruction-79620",
+      "query_id": 79620,
+      "task_checksum": "eea0fd73a55fb836c7d0ea1ac6f2352ced0eb87f58d224d5012bb548527030d5",
+      "task_digest": "sha256:f35549ce413ace5067facfb763012778ad0dd4a634a46fd3b3b697ebf1245435",
+      "origin": "fresh",
+      "broker_answer_sha256": "fd8b8616bfc583ac752e42d2f3f54e072fe12660384827562ec4ed37285ce210",
+      "tool_calls": [
+        "get_airports_by_city",
+        "get_airport_details_by_code"
+      ],
+      "oracle": {
+        "judge_called": true,
+        "labels": [
+          "AnswerStatus.Solved",
+          "AnswerStatus.Solved",
+          "AnswerStatus.Solved"
+        ],
+        "SoPR": 1.0
+      },
+      "nop": {
+        "judge_called": false,
+        "labels": [
+          "AnswerStatus.Unsolved",
+          "AnswerStatus.Unsolved",
+          "AnswerStatus.Unsolved"
+        ],
+        "SoPR": 0.0
+      }
+    }
+  ]
+}

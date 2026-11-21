@@ -1,0 +1,17 @@
+services:
+  main:
+    depends_on:
+      broker:
+        condition: service_healthy
+  broker:
+    build:
+      context: ${CONTEXT_DIR}/broker
+    environment:
+      SERVICE_URL: ${STB_MIRROR_URL:?Set STB_MIRROR_URL to the reachable MirrorAPI /virtual endpoint}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD", "python", "-c", "from urllib.request import urlopen; urlopen('http://localhost:8090/tools', timeout=3)"]
+      interval: 3s
+      timeout: 5s
+      retries: 25

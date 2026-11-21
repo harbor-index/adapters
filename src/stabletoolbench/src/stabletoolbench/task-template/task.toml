@@ -1,0 +1,39 @@
+version = "1.0"
+artifacts = [{source="/stb-trace/answer.json", service="broker"}]
+
+[task]
+name = "stabletoolbench/{task_id}"
+authors = [{name="Zhicheng Guo"}, {name="Sijie Cheng"}, {name="Hao Wang"}, {name="Shihao Liang"}, {name="Yujia Qin"}, {name="Peng Li"}, {name="Zhiyuan Liu"}, {name="Maosong Sun"}, {name="Yang Liu"}]
+
+[metadata]
+category = "tool-use"
+difficulty = "medium"
+
+[agent]
+timeout_sec = 900
+
+[environment]
+cpus = 1
+memory_mb = 2048
+storage_mb = 4096
+
+[environment.env]
+STB_MIRROR_URL = "${STB_MIRROR_URL:-http://127.0.0.1:18180/virtual}"
+
+[verifier]
+environment_mode = "separate"
+timeout_sec = 600
+
+[[verifier.collect]]
+service = "broker"
+command = "python /broker/collect.py"
+
+[verifier.environment]
+cpus = 1
+memory_mb = 2048
+storage_mb = 4096
+
+[verifier.env]
+STABLETOOLBENCH_JUDGE_API_KEY = "${STABLETOOLBENCH_JUDGE_API_KEY:-}"
+STABLETOOLBENCH_JUDGE_BASE_URL = "${STABLETOOLBENCH_JUDGE_BASE_URL:-}"
+STABLETOOLBENCH_JUDGE_MODEL = "${STABLETOOLBENCH_JUDGE_MODEL:-}"
