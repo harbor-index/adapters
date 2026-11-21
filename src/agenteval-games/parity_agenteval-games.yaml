@@ -1,0 +1,21 @@
+# Prospective native parity configuration. Fill in the team-approved model and
+# identical generation settings on both sides before any billable run.
+# The numeric values below are examples, not approved experimental settings.
+datasets:
+  - path: /tmp/agenteval-games
+agents:
+  - import_path: agenteval_games.harbor_agent:AgentEvalNativeAgent
+    model_name: TEAM_APPROVED_EXACT_MODEL_ID
+    kwargs:
+      temperature: 0.0
+      max_tokens: 2048
+      top_p: 1.0
+      request_timeout_sec: 120
+      environment_timeout_sec: 30
+      episode_timeout_sec: 1500
+environment:
+  type: docker
+  delete: true
+orchestrator:
+  type: local
+  n_concurrent_trials: 4

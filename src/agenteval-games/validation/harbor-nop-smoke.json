@@ -1,0 +1,95 @@
+{
+  "schema_version": 2,
+  "purpose": "Negative control: an agent taking no actions must receive zero reward.",
+  "harbor_version": "0.26.0",
+  "harbor_source": "PyPI harbor==0.26.0",
+  "job_name": "agenteval-nop-smoke-01",
+  "paid_model_calls": 0,
+  "job_result": {
+    "schema_version": 1,
+    "id": "67df0967-3a97-481f-a506-0a010226f4f9",
+    "started_at": "2026-11-20T20:00:18.826683",
+    "updated_at": "2026-11-20T20:01:05.988186",
+    "finished_at": "2026-11-20T20:01:05.988186",
+    "n_total_trials": 2,
+    "stats": {
+      "n_completed_trials": 2,
+      "n_errored_trials": 0,
+      "n_running_trials": 0,
+      "n_pending_trials": 0,
+      "n_cancelled_trials": 0,
+      "n_retries": 0,
+      "evals": {
+        "nop__agenteval-generated": {
+          "n_trials": 2,
+          "n_errors": 0,
+          "metrics": [
+            {
+              "mean": 0.0
+            }
+          ],
+          "pass_at_k": {},
+          "reward_stats": {
+            "reward": {
+              "0.0": [
+                "agenteval-maze-00__jaLjEaM",
+                "agenteval-wordle-00__igoFZmk"
+              ]
+            }
+          },
+          "exception_stats": {}
+        }
+      },
+      "n_input_tokens": null,
+      "n_cache_tokens": null,
+      "n_output_tokens": null,
+      "cost_usd": null
+    }
+  },
+  "trials": [
+    {
+      "id": "68f51dfb-1281-4e88-b091-98fe2fcc4c4f",
+      "task_name": "agentgym/agenteval-maze-00",
+      "trial_name": "agenteval-maze-00__jaLjEaM",
+      "task_checksum": "9001a1884e3f2f583f7cbd6952093be88e9cffed0dfd0fea7bdfab733d0f95a5",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 0.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T04:00:18.914599Z",
+      "finished_at": "2026-11-21T04:00:57.003082Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 0,
+        "final_reward": 0
+      }
+    },
+    {
+      "id": "32d4b55b-3ade-4093-95b4-61c0b6aac230",
+      "task_name": "agentgym/agenteval-wordle-00",
+      "trial_name": "agenteval-wordle-00__igoFZmk",
+      "task_checksum": "c5709ffff01f5472609f980c240c1b38fc792e08762c8f3d1e10e6c1f54a68df",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 0.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T04:00:18.981712Z",
+      "finished_at": "2026-11-21T04:01:05.980525Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 0,
+        "final_reward": 0
+      }
+    }
+  ]
+}

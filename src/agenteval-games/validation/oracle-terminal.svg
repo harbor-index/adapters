@@ -1,0 +1,113 @@
+<svg class="rich-terminal" viewBox="0 0 1238 440.4" xmlns="http://www.w3.org/2000/svg">
+    <!-- Generated with Rich https://www.textualize.io -->
+    <style>
+
+    @font-face {
+        font-family: "Fira Code";
+        src: local("FiraCode-Regular"),
+                url("https://cdnjs.cloudflare.com/ajax/libs/firacode/6.2.0/woff2/FiraCode-Regular.woff2") format("woff2"),
+                url("https://cdnjs.cloudflare.com/ajax/libs/firacode/6.2.0/woff/FiraCode-Regular.woff") format("woff");
+        font-style: normal;
+        font-weight: 400;
+    }
+    @font-face {
+        font-family: "Fira Code";
+        src: local("FiraCode-Bold"),
+                url("https://cdnjs.cloudflare.com/ajax/libs/firacode/6.2.0/woff2/FiraCode-Bold.woff2") format("woff2"),
+                url("https://cdnjs.cloudflare.com/ajax/libs/firacode/6.2.0/woff/FiraCode-Bold.woff") format("woff");
+        font-style: bold;
+        font-weight: 700;
+    }
+
+    .terminal-1233861067-matrix {
+        font-family: Fira Code, monospace;
+        font-size: 20px;
+        line-height: 24.4px;
+        font-variant-east-asian: full-width;
+    }
+
+    .terminal-1233861067-title {
+        font-size: 18px;
+        font-weight: bold;
+        font-family: arial;
+    }
+
+    .terminal-1233861067-r1 { fill: #c5c8c6 }
+    </style>
+
+    <defs>
+    <clipPath id="terminal-1233861067-clip-terminal">
+      <rect x="0" y="0" width="1219.0" height="389.4" />
+    </clipPath>
+    <clipPath id="terminal-1233861067-line-0">
+    <rect x="0" y="1.5" width="1220" height="24.65"/>
+            </clipPath>
+<clipPath id="terminal-1233861067-line-1">
+    <rect x="0" y="25.9" width="1220" height="24.65"/>
+            </clipPath>
+<clipPath id="terminal-1233861067-line-2">
+    <rect x="0" y="50.3" width="1220" height="24.65"/>
+            </clipPath>
+<clipPath id="terminal-1233861067-line-3">
+    <rect x="0" y="74.7" width="1220" height="24.65"/>
+            </clipPath>
+<clipPath id="terminal-1233861067-line-4">
+    <rect x="0" y="99.1" width="1220" height="24.65"/>
+            </clipPath>
+<clipPath id="terminal-1233861067-line-5">
+    <rect x="0" y="123.5" width="1220" height="24.65"/>
+            </clipPath>
+<clipPath id="terminal-1233861067-line-6">
+    <rect x="0" y="147.9" width="1220" height="24.65"/>
+            </clipPath>
+<clipPath id="terminal-1233861067-line-7">
+    <rect x="0" y="172.3" width="1220" height="24.65"/>
+            </clipPath>
+<clipPath id="terminal-1233861067-line-8">
+    <rect x="0" y="196.7" width="1220" height="24.65"/>
+            </clipPath>
+<clipPath id="terminal-1233861067-line-9">
+    <rect x="0" y="221.1" width="1220" height="24.65"/>
+            </clipPath>
+<clipPath id="terminal-1233861067-line-10">
+    <rect x="0" y="245.5" width="1220" height="24.65"/>
+            </clipPath>
+<clipPath id="terminal-1233861067-line-11">
+    <rect x="0" y="269.9" width="1220" height="24.65"/>
+            </clipPath>
+<clipPath id="terminal-1233861067-line-12">
+    <rect x="0" y="294.3" width="1220" height="24.65"/>
+            </clipPath>
+<clipPath id="terminal-1233861067-line-13">
+    <rect x="0" y="318.7" width="1220" height="24.65"/>
+            </clipPath>
+<clipPath id="terminal-1233861067-line-14">
+    <rect x="0" y="343.1" width="1220" height="24.65"/>
+            </clipPath>
+    </defs>
+
+    <rect fill="#292929" stroke="rgba(255,255,255,0.35)" stroke-width="1" x="1" y="1" width="1236" height="438.4" rx="8"/>
+        
+    <g transform="translate(9, 41)" clip-path="url(#terminal-1233861067-clip-terminal)">
+    
+    <g class="terminal-1233861067-matrix">
+    <text class="terminal-1233861067-r1" x="0" y="20" textLength="927.2" clip-path="url(#terminal-1233861067-line-0)">&#160;&#160;50/50&#160;Mean:&#160;1.000&#160;━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━&#160;0:09:43&#160;0:00:00</text><text class="terminal-1233861067-r1" x="1220" y="20" textLength="12.2" clip-path="url(#terminal-1233861067-line-0)">
+</text><text class="terminal-1233861067-r1" x="0" y="44.4" textLength="341.6" clip-path="url(#terminal-1233861067-line-1)">agenteval-generated&#160;•&#160;oracle</text><text class="terminal-1233861067-r1" x="1220" y="44.4" textLength="12.2" clip-path="url(#terminal-1233861067-line-1)">
+</text><text class="terminal-1233861067-r1" x="0" y="68.8" textLength="378.2" clip-path="url(#terminal-1233861067-line-2)">┏━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━┓</text><text class="terminal-1233861067-r1" x="1220" y="68.8" textLength="12.2" clip-path="url(#terminal-1233861067-line-2)">
+</text><text class="terminal-1233861067-r1" x="0" y="93.2" textLength="378.2" clip-path="url(#terminal-1233861067-line-3)">┃&#160;Trials&#160;┃&#160;Exceptions&#160;┃&#160;&#160;Mean&#160;┃</text><text class="terminal-1233861067-r1" x="1220" y="93.2" textLength="12.2" clip-path="url(#terminal-1233861067-line-3)">
+</text><text class="terminal-1233861067-r1" x="0" y="117.6" textLength="378.2" clip-path="url(#terminal-1233861067-line-4)">┡━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━┩</text><text class="terminal-1233861067-r1" x="1220" y="117.6" textLength="12.2" clip-path="url(#terminal-1233861067-line-4)">
+</text><text class="terminal-1233861067-r1" x="0" y="142" textLength="378.2" clip-path="url(#terminal-1233861067-line-5)">│&#160;&#160;&#160;&#160;&#160;50&#160;│&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;0&#160;│&#160;1.000&#160;│</text><text class="terminal-1233861067-r1" x="1220" y="142" textLength="12.2" clip-path="url(#terminal-1233861067-line-5)">
+</text><text class="terminal-1233861067-r1" x="0" y="166.4" textLength="378.2" clip-path="url(#terminal-1233861067-line-6)">└────────┴────────────┴───────┘</text><text class="terminal-1233861067-r1" x="1220" y="166.4" textLength="12.2" clip-path="url(#terminal-1233861067-line-6)">
+</text><text class="terminal-1233861067-r1" x="1220" y="190.8" textLength="12.2" clip-path="url(#terminal-1233861067-line-7)">
+</text><text class="terminal-1233861067-r1" x="0" y="215.2" textLength="219.6" clip-path="url(#terminal-1233861067-line-8)">┏━━━━━━━━┳━━━━━━━┓</text><text class="terminal-1233861067-r1" x="1220" y="215.2" textLength="12.2" clip-path="url(#terminal-1233861067-line-8)">
+</text><text class="terminal-1233861067-r1" x="0" y="239.6" textLength="219.6" clip-path="url(#terminal-1233861067-line-9)">┃&#160;Reward&#160;┃&#160;Count&#160;┃</text><text class="terminal-1233861067-r1" x="1220" y="239.6" textLength="12.2" clip-path="url(#terminal-1233861067-line-9)">
+</text><text class="terminal-1233861067-r1" x="0" y="264" textLength="219.6" clip-path="url(#terminal-1233861067-line-10)">┡━━━━━━━━╇━━━━━━━┩</text><text class="terminal-1233861067-r1" x="1220" y="264" textLength="12.2" clip-path="url(#terminal-1233861067-line-10)">
+</text><text class="terminal-1233861067-r1" x="0" y="288.4" textLength="219.6" clip-path="url(#terminal-1233861067-line-11)">│&#160;1.0&#160;&#160;&#160;&#160;│&#160;&#160;&#160;&#160;50&#160;│</text><text class="terminal-1233861067-r1" x="1220" y="288.4" textLength="12.2" clip-path="url(#terminal-1233861067-line-11)">
+</text><text class="terminal-1233861067-r1" x="0" y="312.8" textLength="219.6" clip-path="url(#terminal-1233861067-line-12)">└────────┴───────┘</text><text class="terminal-1233861067-r1" x="1220" y="312.8" textLength="12.2" clip-path="url(#terminal-1233861067-line-12)">
+</text><text class="terminal-1233861067-r1" x="1220" y="337.2" textLength="12.2" clip-path="url(#terminal-1233861067-line-13)">
+</text><text class="terminal-1233861067-r1" x="0" y="361.6" textLength="97.6" clip-path="url(#terminal-1233861067-line-14)">Job&#160;Info</text><text class="terminal-1233861067-r1" x="1220" y="361.6" textLength="12.2" clip-path="url(#terminal-1233861067-line-14)">
+</text><text class="terminal-1233861067-r1" x="0" y="386" textLength="256.2" clip-path="url(#terminal-1233861067-line-15)">Total&#160;runtime:&#160;9m&#160;44s</text><text class="terminal-1233861067-r1" x="1220" y="386" textLength="12.2" clip-path="url(#terminal-1233861067-line-15)">
+</text>
+    </g>
+    </g>
+</svg>

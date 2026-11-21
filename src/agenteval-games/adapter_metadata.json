@@ -1,0 +1,68 @@
+[
+  {
+    "adapter_name": "agenteval-games",
+    "adapter_builders": [
+      "Zonglin DI (ElegantLin)"
+    ],
+    "original_benchmark": [
+      {
+        "split": "maze_test",
+        "size": 25,
+        "harness": "agent",
+        "supported_agents": [
+          "AgentGym@3ef9235"
+        ],
+        "adaptable": true,
+        "notes": "Complete published AgentEval maze test split, IDs 0\u201324."
+      },
+      {
+        "split": "wordle_test",
+        "size": 25,
+        "harness": "agent",
+        "supported_agents": [
+          "AgentGym@3ef9235"
+        ],
+        "adaptable": true,
+        "notes": "Complete published AgentEval wordle test split, IDs 0\u201324."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "maze_test",
+        "adapted_benchmark_size": 25,
+        "parity_benchmark_size": 0,
+        "parity_sampling_rate": 0,
+        "registry_benchmark_size": 0,
+        "added_agents": [
+          "AgentEvalNativeAgent@0.1.0"
+        ],
+        "parity_matching_agents": [
+          "None"
+        ],
+        "parity_unmatching_agents": [
+          "None"
+        ],
+        "parity_costs": null,
+        "notes": "WIP: model parity has not run, costs and configuration await Harbor team coordination. No registry publication. Empty parity results do not imply a match."
+      },
+      {
+        "split": "wordle_test",
+        "adapted_benchmark_size": 25,
+        "parity_benchmark_size": 0,
+        "parity_sampling_rate": 0,
+        "registry_benchmark_size": 0,
+        "added_agents": [
+          "AgentEvalNativeAgent@0.1.0"
+        ],
+        "parity_matching_agents": [
+          "None"
+        ],
+        "parity_unmatching_agents": [
+          "None"
+        ],
+        "parity_costs": null,
+        "notes": "WIP: model parity has not run, costs and configuration await Harbor team coordination. No registry publication. Empty parity results do not imply a match."
+      }
+    ]
+  }
+]

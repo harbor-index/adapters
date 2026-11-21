@@ -1,0 +1,1199 @@
+{
+  "schema_version": 2,
+  "purpose": "Full deterministic reference-solution validation with the separate verifier; not model parity.",
+  "harbor_version": "0.26.0",
+  "harbor_source": "PyPI harbor==0.26.0",
+  "job_name": "agenteval-oracle-50",
+  "paid_model_calls": 0,
+  "job_result": {
+    "schema_version": 1,
+    "id": "4b36ce28-51bd-432e-964e-bbdff14af601",
+    "started_at": "2026-11-20T19:50:19.542665",
+    "updated_at": "2026-11-20T20:00:03.698259",
+    "finished_at": "2026-11-20T20:00:03.698259",
+    "n_total_trials": 50,
+    "stats": {
+      "n_completed_trials": 50,
+      "n_errored_trials": 0,
+      "n_running_trials": 0,
+      "n_pending_trials": 0,
+      "n_cancelled_trials": 0,
+      "n_retries": 0,
+      "evals": {
+        "oracle__agenteval-generated": {
+          "n_trials": 50,
+          "n_errors": 0,
+          "metrics": [
+            {
+              "mean": 1.0
+            }
+          ],
+          "pass_at_k": {},
+          "reward_stats": {
+            "reward": {
+              "1.0": [
+                "agenteval-maze-00__4wqtodp",
+                "agenteval-maze-01__zmsYKVx",
+                "agenteval-maze-02__x3rWvDk",
+                "agenteval-maze-03__fVeZA5E",
+                "agenteval-maze-04__QKJZPmp",
+                "agenteval-maze-05__e5zGAA4",
+                "agenteval-maze-06__Z8BrtBr",
+                "agenteval-maze-07__b7SszbD",
+                "agenteval-maze-08__FDYGCBj",
+                "agenteval-maze-09__MBmcGK5",
+                "agenteval-maze-10__nRkqKDi",
+                "agenteval-maze-11__A3J2NnN",
+                "agenteval-maze-12__Nn6eTTW",
+                "agenteval-maze-13__LfH83PA",
+                "agenteval-maze-14__SRDhq5v",
+                "agenteval-maze-15__rb8vihc",
+                "agenteval-maze-16__dhPUUjW",
+                "agenteval-maze-17__ENbT8MJ",
+                "agenteval-maze-18__QfBbHwZ",
+                "agenteval-maze-19__JLJcjq7",
+                "agenteval-maze-20__kpDtJgm",
+                "agenteval-maze-21__M6sYcg8",
+                "agenteval-maze-22__AZg9nEJ",
+                "agenteval-maze-23__TZ7PpkU",
+                "agenteval-maze-24__YbCZ6Ej",
+                "agenteval-wordle-00__EdmL3Ti",
+                "agenteval-wordle-01__nMEhmSg",
+                "agenteval-wordle-02__D3MccSi",
+                "agenteval-wordle-03__YXiNmdA",
+                "agenteval-wordle-04__KQznYso",
+                "agenteval-wordle-05__wFJRnog",
+                "agenteval-wordle-06__h6ehqAw",
+                "agenteval-wordle-07__PD8Uk4M",
+                "agenteval-wordle-08__9iCqJCz",
+                "agenteval-wordle-09__Rhym2be",
+                "agenteval-wordle-10__8Xamfo2",
+                "agenteval-wordle-11__y3e89tf",
+                "agenteval-wordle-12__be7cGVE",
+                "agenteval-wordle-13__jiPzY7A",
+                "agenteval-wordle-14__S567DLt",
+                "agenteval-wordle-15__doT5HVx",
+                "agenteval-wordle-16__QXcmoBm",
+                "agenteval-wordle-17__y8f54mG",
+                "agenteval-wordle-18__oPVYtZn",
+                "agenteval-wordle-19__pyn5A8a",
+                "agenteval-wordle-20__whju5pS",
+                "agenteval-wordle-21__mQWTEco",
+                "agenteval-wordle-22__92g7AWu",
+                "agenteval-wordle-23__cud5R7g",
+                "agenteval-wordle-24__qgzkR2H"
+              ]
+            }
+          },
+          "exception_stats": {}
+        }
+      },
+      "n_input_tokens": null,
+      "n_cache_tokens": null,
+      "n_output_tokens": null,
+      "cost_usd": null
+    }
+  },
+  "trials": [
+    {
+      "id": "fda2228f-f892-4fc5-b839-204686655f34",
+      "task_name": "agentgym/agenteval-maze-00",
+      "trial_name": "agenteval-maze-00__4wqtodp",
+      "task_checksum": "9001a1884e3f2f583f7cbd6952093be88e9cffed0dfd0fea7bdfab733d0f95a5",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:50:20.312732Z",
+      "finished_at": "2026-11-21T03:50:59.029433Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 12,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "a9ef9459-c35b-493e-9b3e-f6bff22ca901",
+      "task_name": "agentgym/agenteval-maze-01",
+      "trial_name": "agenteval-maze-01__zmsYKVx",
+      "task_checksum": "437304f212983cb18342de21e86a152b4197dc05adb7b8b84714fa7466293204",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:50:20.393208Z",
+      "finished_at": "2026-11-21T03:51:08.621189Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 11,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "06023f8a-92f2-41b8-a0e2-e81f8a744f47",
+      "task_name": "agentgym/agenteval-maze-02",
+      "trial_name": "agenteval-maze-02__x3rWvDk",
+      "task_checksum": "695057f1e57ebca41d8d41680e557c9e82082f18ed27ff6a98b228e847fe25e4",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:50:20.439993Z",
+      "finished_at": "2026-11-21T03:51:02.747419Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 10,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "e418a0ab-6be0-4cf6-a465-ca74fda892bc",
+      "task_name": "agentgym/agenteval-maze-03",
+      "trial_name": "agenteval-maze-03__fVeZA5E",
+      "task_checksum": "2ef91af2b52f05393b523cf26a224cebbe3e7609cd73ab199aa18f828267663e",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:50:20.485104Z",
+      "finished_at": "2026-11-21T03:51:02.568907Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 11,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "7cdf0751-a097-40e8-904a-1dc0dd9cb1f8",
+      "task_name": "agentgym/agenteval-maze-04",
+      "trial_name": "agenteval-maze-04__QKJZPmp",
+      "task_checksum": "d40ca2d7621370f6874bce899eb663af4dfed9358d09d297a7a1d3ab4cda9f38",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:50:59.098250Z",
+      "finished_at": "2026-11-21T03:51:46.426955Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 12,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "af5c1f9a-d204-42b9-90e4-c56f8f1edd38",
+      "task_name": "agentgym/agenteval-maze-05",
+      "trial_name": "agenteval-maze-05__e5zGAA4",
+      "task_checksum": "26c1b4e4bf3f5be1dda36d0efdc3459710461eb4b1a3e69a1e5263a140dd1123",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:51:02.616185Z",
+      "finished_at": "2026-11-21T03:51:49.572902Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 12,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "a6930a11-e279-487a-bd10-f58d20e5826a",
+      "task_name": "agentgym/agenteval-maze-06",
+      "trial_name": "agenteval-maze-06__Z8BrtBr",
+      "task_checksum": "4e99d9d274bcaec84dd1303b7bc41c96032c29e11a9122ea9d9ef6bff606909e",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:51:02.794700Z",
+      "finished_at": "2026-11-21T03:51:46.620213Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 11,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "8c50a521-1bf4-4d5d-9a22-5dc6c455f043",
+      "task_name": "agentgym/agenteval-maze-07",
+      "trial_name": "agenteval-maze-07__b7SszbD",
+      "task_checksum": "842504a8379f82ee457ef2ef21f435e820124943d3e62d2989a4172f48d17f2b",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:51:08.708245Z",
+      "finished_at": "2026-11-21T03:51:55.979740Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 10,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "75cd296d-ad91-4908-b67a-9d8619e42a11",
+      "task_name": "agentgym/agenteval-maze-08",
+      "trial_name": "agenteval-maze-08__FDYGCBj",
+      "task_checksum": "7eb289293e01c8f13ccfa88ae71cffda6e4f7ec7a2e7bb2bf75246820f258028",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:51:46.490869Z",
+      "finished_at": "2026-11-21T03:52:33.958785Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 11,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "a839fb76-d2da-4cb1-a4e6-17c325e9df78",
+      "task_name": "agentgym/agenteval-maze-09",
+      "trial_name": "agenteval-maze-09__MBmcGK5",
+      "task_checksum": "5056f6170701f1b6065f676351ca7317a852e2ed2e5ffe56c289906cd79798fd",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:51:46.666862Z",
+      "finished_at": "2026-11-21T03:52:27.867650Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 12,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "8fc53779-084f-45db-b680-ee12639a3f06",
+      "task_name": "agentgym/agenteval-maze-10",
+      "trial_name": "agenteval-maze-10__nRkqKDi",
+      "task_checksum": "b5c090ae4767cf08fb788cf893b377f0bfeebefd1d7efb9b9651d665bbfc894a",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:51:49.634043Z",
+      "finished_at": "2026-11-21T03:52:37.034906Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 9,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "884c09c5-c11e-41c3-b765-dcc86a8d8224",
+      "task_name": "agentgym/agenteval-maze-11",
+      "trial_name": "agenteval-maze-11__A3J2NnN",
+      "task_checksum": "ada06220a8f8f07ada7e33ca70dec97e779c25c78514db754abf7edf763fd7c6",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:51:56.051296Z",
+      "finished_at": "2026-11-21T03:52:37.203603Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 8,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "966e60ac-98ac-44b8-92e4-9419fb6270e2",
+      "task_name": "agentgym/agenteval-maze-12",
+      "trial_name": "agenteval-maze-12__Nn6eTTW",
+      "task_checksum": "7e1b03da535504b231350e896bf5b7b566388b26feb911015a49fc9af09f3e82",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:52:27.937673Z",
+      "finished_at": "2026-11-21T03:53:15.231269Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 7,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "4687e31f-c21d-408a-9ef4-629a05240e2c",
+      "task_name": "agentgym/agenteval-maze-13",
+      "trial_name": "agenteval-maze-13__LfH83PA",
+      "task_checksum": "d8cdd057035e1ca2c0ad9c8344876ee88ae1f5f8018bf92f1c2ff39a8b45117b",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:52:34.033762Z",
+      "finished_at": "2026-11-21T03:53:24.558715Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 6,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "bb076060-f15f-48c6-b2a3-cf45248f4671",
+      "task_name": "agentgym/agenteval-maze-14",
+      "trial_name": "agenteval-maze-14__SRDhq5v",
+      "task_checksum": "201d62227f8fa69d4cee5643cc945932405f9a3f2ee44377c789a89ac649a52f",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:52:37.111101Z",
+      "finished_at": "2026-11-21T03:53:15.406411Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 5,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "6b8ab10f-42c6-4a39-94b1-213c0f5067bb",
+      "task_name": "agentgym/agenteval-maze-15",
+      "trial_name": "agenteval-maze-15__rb8vihc",
+      "task_checksum": "20a3f051ce14bd8bb8c31b9d9bdffbb6952d413cbe4c4b31a04920a0a0c6d0d9",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:52:37.250076Z",
+      "finished_at": "2026-11-21T03:53:18.603792Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 4,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "26e47e3c-0b86-48b7-9aa5-aefa493acd88",
+      "task_name": "agentgym/agenteval-maze-16",
+      "trial_name": "agenteval-maze-16__dhPUUjW",
+      "task_checksum": "00859d4f6c1fe5d27643da3ee733848af1ac6e58dbf2c50a2a638777d553c593",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:53:15.292000Z",
+      "finished_at": "2026-11-21T03:54:06.046624Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 3,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "bf3f4e54-3351-40fa-ae27-a03a3de16ec8",
+      "task_name": "agentgym/agenteval-maze-17",
+      "trial_name": "agenteval-maze-17__ENbT8MJ",
+      "task_checksum": "e8c33d149b211b84ed6f73b21dada19490323e70e9f3eccbb690dc18b1a1d945",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:53:15.451571Z",
+      "finished_at": "2026-11-21T03:54:05.904660Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 2,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "58be6db2-ef65-4cf9-a676-e63a6c031236",
+      "task_name": "agentgym/agenteval-maze-18",
+      "trial_name": "agenteval-maze-18__QfBbHwZ",
+      "task_checksum": "32ce828a376e0b36c422671a6ffa13b213ddf4e77f30df6a3281e7e766bdd6f2",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:53:18.655319Z",
+      "finished_at": "2026-11-21T03:54:02.886959Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 1,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "05060365-f101-4388-ab85-8f9dc96dbc17",
+      "task_name": "agentgym/agenteval-maze-19",
+      "trial_name": "agenteval-maze-19__JLJcjq7",
+      "task_checksum": "0ebf2caac445906cca9d8387da063ad76bc18bfeb15647067028de45212195eb",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:53:24.624651Z",
+      "finished_at": "2026-11-21T03:54:08.905473Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 4,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "943d68f3-4da3-48fb-bb3d-b634fa11b8fe",
+      "task_name": "agentgym/agenteval-maze-20",
+      "trial_name": "agenteval-maze-20__kpDtJgm",
+      "task_checksum": "b20381988f2d20f817886809d81b2b1fc80cc2fd80820b53e0d8488a8dc5e1d7",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:54:02.955461Z",
+      "finished_at": "2026-11-21T03:54:44.027223Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 5,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "706213e4-62ee-486d-adf2-c10596149783",
+      "task_name": "agentgym/agenteval-maze-21",
+      "trial_name": "agenteval-maze-21__M6sYcg8",
+      "task_checksum": "703bbc1241d5b75cd81859d67cba6966cb94f098253495e5665e72df62b788b3",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:54:05.962064Z",
+      "finished_at": "2026-11-21T03:54:56.694868Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 6,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "a8c54af3-4dad-491e-95a5-8ee7ea0221c0",
+      "task_name": "agentgym/agenteval-maze-22",
+      "trial_name": "agenteval-maze-22__AZg9nEJ",
+      "task_checksum": "a5a7dad8f05706c9b5ab1ee12f9c381f3784b05887a056a4600bc27fe458d57d",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:54:06.101686Z",
+      "finished_at": "2026-11-21T03:54:53.812079Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 7,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "dcac9263-f2e0-4f69-b4d8-a535e51ee46f",
+      "task_name": "agentgym/agenteval-maze-23",
+      "trial_name": "agenteval-maze-23__TZ7PpkU",
+      "task_checksum": "371e8bef695d6d0b8d28477bc93bad884e9b7d6bc5c95f51224dc9389169fb29",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:54:08.959427Z",
+      "finished_at": "2026-11-21T03:54:50.621231Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 8,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "ad8def19-3b8a-42a5-97b6-db64c1295580",
+      "task_name": "agentgym/agenteval-maze-24",
+      "trial_name": "agenteval-maze-24__YbCZ6Ej",
+      "task_checksum": "5ffd4996d11b089d0a56690c491a3f3bef08e8362c34fcd0f11ee327acd6da0e",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:54:44.075671Z",
+      "finished_at": "2026-11-21T03:55:31.707606Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 9,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "b723e062-51e7-4e17-81b7-4535d537a38a",
+      "task_name": "agentgym/agenteval-wordle-00",
+      "trial_name": "agenteval-wordle-00__EdmL3Ti",
+      "task_checksum": "c5709ffff01f5472609f980c240c1b38fc792e08762c8f3d1e10e6c1f54a68df",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:54:50.672619Z",
+      "finished_at": "2026-11-21T03:55:31.856711Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 3,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "24f00484-9590-431d-a691-d47bc86f69bb",
+      "task_name": "agentgym/agenteval-wordle-01",
+      "trial_name": "agenteval-wordle-01__nMEhmSg",
+      "task_checksum": "15416552bf14d79729b25789f3f4038bf9d8c491ef2d46f92be7dc376e7a2246",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:54:53.886310Z",
+      "finished_at": "2026-11-21T03:55:34.966461Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 2,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "4cdfddcf-55ed-469a-b05c-13d5c77c8036",
+      "task_name": "agentgym/agenteval-wordle-02",
+      "trial_name": "agenteval-wordle-02__D3MccSi",
+      "task_checksum": "a1ecaa8ea34ca244347f52006c18ac3fc7fa3658d289672500998d7b6c427f6f",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:54:56.744206Z",
+      "finished_at": "2026-11-21T03:55:50.335752Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 2,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "decd9452-4f55-4c8b-a4b3-a00313d2033e",
+      "task_name": "agentgym/agenteval-wordle-03",
+      "trial_name": "agenteval-wordle-03__YXiNmdA",
+      "task_checksum": "3c070df6dc43ebe371532b9997f2379cd4c6b04526b55ab5ca4b8a2b50fd80fe",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:55:31.771683Z",
+      "finished_at": "2026-11-21T03:56:16.102745Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 3,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "4d35b1ad-ccae-44cb-a850-eee3893d8b34",
+      "task_name": "agentgym/agenteval-wordle-04",
+      "trial_name": "agenteval-wordle-04__KQznYso",
+      "task_checksum": "ab1e21b39e9956c2b4a1f5b27c22a500ef0ff8c107853f4985127df225edc789",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:55:31.902234Z",
+      "finished_at": "2026-11-21T03:56:19.345091Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 3,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "c24134b3-137c-4734-b032-890b08f7ad26",
+      "task_name": "agentgym/agenteval-wordle-05",
+      "trial_name": "agenteval-wordle-05__wFJRnog",
+      "task_checksum": "75c1bf6671273b223e69370a1f987ed3f34b83c2f20018c71085c5b2fca878e0",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:55:35.015317Z",
+      "finished_at": "2026-11-21T03:56:19.350564Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 3,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "8719bd85-3964-4fdc-bf3a-a051858cab7a",
+      "task_name": "agentgym/agenteval-wordle-06",
+      "trial_name": "agenteval-wordle-06__h6ehqAw",
+      "task_checksum": "9eadf5b1384c837fcef06df342e61d6275d1371b6ca5330595cb8ec235ebca1b",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:55:50.410672Z",
+      "finished_at": "2026-11-21T03:56:31.408026Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 2,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "aa3b3c9b-4c34-4e41-8487-29e8c3f3278c",
+      "task_name": "agentgym/agenteval-wordle-07",
+      "trial_name": "agenteval-wordle-07__PD8Uk4M",
+      "task_checksum": "baf8bf1f2a35987745df0b492b621945ae95355af232c8f0719c552056d73852",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:56:16.176032Z",
+      "finished_at": "2026-11-21T03:57:00.546772Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 2,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "5ee29ca2-2aee-4919-9c8b-41f7fc6fdbf6",
+      "task_name": "agentgym/agenteval-wordle-08",
+      "trial_name": "agenteval-wordle-08__9iCqJCz",
+      "task_checksum": "3da7fdef91b2f3063e767041076e9a1b9e8b01333e7d25f109c02ded43d40404",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:56:19.411627Z",
+      "finished_at": "2026-11-21T03:57:06.419890Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 3,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "b744e37b-671b-452c-a62c-bccd8b9a4821",
+      "task_name": "agentgym/agenteval-wordle-09",
+      "trial_name": "agenteval-wordle-09__Rhym2be",
+      "task_checksum": "4d60e944b1053bd546bd4fc9e84801faf452e148b13585edcda7f3d31e8434cb",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:56:19.467801Z",
+      "finished_at": "2026-11-21T03:57:03.478245Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 2,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "f2e32c79-af38-4f5f-8eff-4bab664db0cd",
+      "task_name": "agentgym/agenteval-wordle-10",
+      "trial_name": "agenteval-wordle-10__8Xamfo2",
+      "task_checksum": "303435130bd61390881eefc26688b7c59cbf43f5ef9c4e5829f2afa87c97a91b",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:56:31.481763Z",
+      "finished_at": "2026-11-21T03:57:12.789578Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 2,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "0b7879e7-9a62-44eb-8521-ca23738848b5",
+      "task_name": "agentgym/agenteval-wordle-11",
+      "trial_name": "agenteval-wordle-11__y3e89tf",
+      "task_checksum": "f757a6c20b3669d58697f4c7fcd9741021e2523b2d18373dec2224d6e095eef1",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:57:00.611596Z",
+      "finished_at": "2026-11-21T03:57:47.967568Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 3,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "7971cef8-e324-4b7e-86ea-dd22945b8e3c",
+      "task_name": "agentgym/agenteval-wordle-12",
+      "trial_name": "agenteval-wordle-12__be7cGVE",
+      "task_checksum": "ca29475f2369a90dba67f73b6beea0ac18f6724d8d6b540df8ea07ad61b77425",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:57:03.556534Z",
+      "finished_at": "2026-11-21T03:57:51.018926Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 2,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "cff29fa6-9fc6-43ca-a8d5-439b6328db04",
+      "task_name": "agentgym/agenteval-wordle-13",
+      "trial_name": "agenteval-wordle-13__jiPzY7A",
+      "task_checksum": "26a4f58fab8af17969cd87cf255fbdbde515908d54030f82346af4d579afa5c0",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:57:06.482010Z",
+      "finished_at": "2026-11-21T03:57:53.759431Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 3,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "55a873c5-91a3-4705-8031-40275fde815a",
+      "task_name": "agentgym/agenteval-wordle-14",
+      "trial_name": "agenteval-wordle-14__S567DLt",
+      "task_checksum": "8ddb298dcdc6abea88cb3250b4fad899167643b1ebe71c0c7eb106332f759b83",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:57:12.853166Z",
+      "finished_at": "2026-11-21T03:57:59.954282Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 2,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "dcb020cf-95e1-4572-8981-378aa946bc19",
+      "task_name": "agentgym/agenteval-wordle-15",
+      "trial_name": "agenteval-wordle-15__doT5HVx",
+      "task_checksum": "29fccb50715e666edfe8df0f00cbbc06f7bc6626e1bcfa290303eff4d6416966",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:57:48.037824Z",
+      "finished_at": "2026-11-21T03:58:29.135169Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 2,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "34a7d444-b3de-4003-9c8b-41b8219e499e",
+      "task_name": "agentgym/agenteval-wordle-16",
+      "trial_name": "agenteval-wordle-16__QXcmoBm",
+      "task_checksum": "7654588b11aeb89cd92f0b0f6a3bc87de9421314c7f78069cd91d74c62ad8cbf",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:57:51.080555Z",
+      "finished_at": "2026-11-21T03:58:38.048424Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 3,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "057b8e52-5eac-44a2-a3f5-894f94075134",
+      "task_name": "agentgym/agenteval-wordle-17",
+      "trial_name": "agenteval-wordle-17__y8f54mG",
+      "task_checksum": "4d72e635c4c36180b73e8951a55d9b7a7889d73aedb7fb0e4f874956b46edd4b",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:57:53.835140Z",
+      "finished_at": "2026-11-21T03:58:41.195813Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 3,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "2c229605-8fab-4e5f-a2b2-34051a976d5d",
+      "task_name": "agentgym/agenteval-wordle-18",
+      "trial_name": "agenteval-wordle-18__oPVYtZn",
+      "task_checksum": "7eb5ebf21a4bb9a0fe77de24a36f2a37c06c4d0a1d833ecbaafb498ac7d8a4bd",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:58:00.022176Z",
+      "finished_at": "2026-11-21T03:58:47.286968Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 2,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "65c36415-460f-4230-9989-e56a590194c3",
+      "task_name": "agentgym/agenteval-wordle-19",
+      "trial_name": "agenteval-wordle-19__pyn5A8a",
+      "task_checksum": "5642604f810f64a3a4d267a05b1094c47974bf0c571af65cd5aef6771639faaf",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:58:29.212398Z",
+      "finished_at": "2026-11-21T03:59:07.589353Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 3,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "00d6a1e8-4bba-498b-b5a6-3dd699ea1b73",
+      "task_name": "agentgym/agenteval-wordle-20",
+      "trial_name": "agenteval-wordle-20__whju5pS",
+      "task_checksum": "c1ca7cfe6fe5fe06adf11abeee9feaa1a24ca4c92fe825eb71e50e9747c21707",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:58:38.121104Z",
+      "finished_at": "2026-11-21T03:59:22.376782Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 3,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "6413cfd1-f081-4e8b-bf2f-a699325ebfab",
+      "task_name": "agentgym/agenteval-wordle-21",
+      "trial_name": "agenteval-wordle-21__mQWTEco",
+      "task_checksum": "87cecaf34f429e363b10f7b946c6464fa2512c05fe9fc40fb2e6674b760efa34",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:58:41.254491Z",
+      "finished_at": "2026-11-21T03:59:25.724028Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 3,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "cda76cf5-f943-4c37-acc2-c37a590485a3",
+      "task_name": "agentgym/agenteval-wordle-22",
+      "trial_name": "agenteval-wordle-22__92g7AWu",
+      "task_checksum": "59726644396ba0fb2c7b197b43d1191f5718df15453a9ad31a10c074f4d2c139",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:58:47.351137Z",
+      "finished_at": "2026-11-21T03:59:28.763410Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 2,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "f795e84c-169d-4745-a07c-de5e30f66922",
+      "task_name": "agentgym/agenteval-wordle-23",
+      "trial_name": "agenteval-wordle-23__cud5R7g",
+      "task_checksum": "034a9555eba03f1258e2c1da0f874b7c30018743c0acbba0445caa7f54895389",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:59:07.666847Z",
+      "finished_at": "2026-11-21T03:59:59.642367Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 2,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "09e389ef-a2e8-46f9-9c87-9eaa67c372db",
+      "task_name": "agentgym/agenteval-wordle-24",
+      "trial_name": "agenteval-wordle-24__qgzkR2H",
+      "task_checksum": "36469d2d47bfdc5661371d26d47352ac607a07fda56999547674b3ec619062a5",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-21T03:59:22.455312Z",
+      "finished_at": "2026-11-21T04:00:03.690844Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 3,
+        "final_reward": 1
+      }
+    }
+  ]
+}
