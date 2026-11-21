@@ -1,0 +1,12 @@
+[
+  {
+    "adapter_name": "stabletoolbench",
+    "adapter_builders": ["Haoyue Bai (baihaoyue621@gmail.com)"],
+    "original_benchmark": [
+      {"split":"G1_instruction","size":163,"harness":"agent","supported_agents":["ChatGPTFunction+CoT@1"],"adaptable":true,"notes":"One of six solvable splits. The other five splits are outside this development adapter."}
+    ],
+    "harbor_adapter": [
+      {"split":"G1_instruction","adapted_benchmark_size":5,"parity_benchmark_size":0,"parity_sampling_rate":0,"registry_benchmark_size":0,"added_agents":["None"],"parity_matching_agents":[],"parity_unmatching_agents":[],"parity_costs":null,"notes":"Five fixed queries: 608, 1073, 23982, 66018 and 79620. Formal parity and registry publication are pending."}
+    ]
+  }
+]

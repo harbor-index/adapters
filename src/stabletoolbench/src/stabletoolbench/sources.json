@@ -1,0 +1,45 @@
+{
+  "608": {
+    "trace_source": "upstream",
+    "trace_path": "data_example/answer/virtual_chatgpt_cot/G1_instruction/608_CoT@1.json",
+    "trace_sha256": "fdf6f3541e302a60b61eaae44d4c4ba7d4c57f5568e8a5a8226652f5223b7316",
+    "tools": {
+      "Data/kick_com_api_kick_api.json": "a15543d314fbd44d38884e0980e28dbc72913b95c55f3c12fd615001a2318d99"
+    }
+  },
+  "1073": {
+    "trace_source": "upstream",
+    "trace_path": "data_example/answer/virtual_chatgpt_cot/G1_instruction/1073_CoT@1.json",
+    "trace_sha256": "118679388221048baa891181cecb99e89c04a4aa7272a45e1f7480222694ce4b",
+    "tools": {
+      "Data/keyword_analysis.json": "d6161d05ee5fa4238f6d7458c070042049a142dc4b1e38fac7de0bee81740a28"
+    }
+  },
+  "23982": {
+    "trace_source": "baseline",
+    "trace_path": "data_baselines/chatgpt_cot/G1_instruction/23982_CoT@1.json",
+    "trace_sha256": "d857340961c125754061746b0f7e03be03a6d13e0e2dd3bd8667fc4052771a57",
+    "tools": {
+      "Entertainment/anime_jokes.json": "3d4d9ea2c397d7f2d9dad26cfed34474b4be7b8435f4674d889d9872474e948c"
+    },
+    "oracle": "extended_oracle.py"
+  },
+  "66018": {
+    "trace_source": "baseline",
+    "trace_path": "data_baselines/chatgpt_cot/G1_instruction/66018_CoT@1.json",
+    "trace_sha256": "1e056756fa0cfabd9f30b5a85756eb9fb524fdece6c25b3f74efb0ba5c070a0b",
+    "tools": {
+      "Entertainment/movie_showtimes.json": "7ce9c2f4432d0a3d90c8fad2051625832673412a3c74522aacec44e4f3720e0b"
+    },
+    "oracle": "extended_oracle.py"
+  },
+  "79620": {
+    "trace_source": "baseline",
+    "trace_path": "data_baselines/chatgpt_cot/G1_instruction/79620_CoT@1.json",
+    "trace_sha256": "d5112f096b6bafb73780d42e4a5d02b9c5ced93c6403aae6a60785b04ed51a5a",
+    "tools": {
+      "Travel/airports_finder.json": "f0bf0bdbdcd383ae773693ed21f1637a54652b5fd898a4e2c24ecd214d9cc3e0"
+    },
+    "oracle": "extended_oracle.py"
+  }
+}
