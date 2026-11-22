@@ -231,9 +231,12 @@ Deviations from the upstream harness and why:
   fail upstream's masking step and are skipped by upstream as `invalid_task`. For 4
   (`iclr2024-18447-11`, `neurips2024-97791-5`, `iclr2024-18439-2`, `iclr2024-18439-0`;
   295k–446k tokens) the setup-judge prompt is over o3-mini's context even with an empty
-  patch; upstream's judge raises a context-length error on them and stops judging the
-  rest of that paper. `scripts/audit_judge_context.py` recomputes the list for a given
-  judge model and context. One more task, `neurips2024-94391-12`, leaves only about 7k
+  patch: their reference files are Jupyter notebooks saved with outputs. The released
+  judge raises a context-length error on them and stops judging the rest of that paper.
+  The authors' earlier runs could grade them because the reference files were only added
+  to the setup-judge prompt later (May 2025, before the code release); this adapter and
+  the original side of parity use the released judge. `scripts/audit_judge_context.py`
+  recomputes the list for a given judge model and context. One more task, `neurips2024-94391-12`, leaves only about 7k
   tokens for the agent's patch; a larger patch makes the judge call fail, as it would
   upstream, and the trial ends without a reward.
 - **Environment.** Upstream runs agents in the OpenHands sandbox with the repository
