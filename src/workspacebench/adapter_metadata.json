@@ -1,0 +1,44 @@
+[
+  {
+    "adapter_name": "workspacebench",
+    "adapter_builders": [
+      "Pranav Vashistha (220042524+Pranavv-dev@users.noreply.github.com)"
+    ],
+    "original_benchmark": [
+      {
+        "split": "test",
+        "size": 776,
+        "harness": "agent",
+        "supported_agents": [
+          "claude-agent-sdk@0.2.107",
+          "codex@0.130.0",
+          "openclaw@2026.11.6",
+          "deepseek-harness-sdk@0.1.0rc7",
+          "deepagents"
+        ],
+        "adaptable": true,
+        "notes": "388 English and 388 Chinese tasks (HF Workspace-Bench @ 3491f9e). Agent versions as pinned in upstream's evaluation/docker/Dockerfile and package files; deepagents runs from the repo's own deepagents/ copy."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "test",
+        "adapted_benchmark_size": 723,
+        "parity_benchmark_size": 50,
+        "parity_sampling_rate": 0.0692,
+        "registry_benchmark_size": 723,
+        "added_agents": [
+          "None"
+        ],
+        "parity_matching_agents": [
+          "claude-code@2.1.311+claude-haiku-4-5"
+        ],
+        "parity_unmatching_agents": [
+          "None"
+        ],
+        "parity_costs": "$135",
+        "notes": "53 of the 776 upstream tasks are excluded because no answer built from the task's inputs can pass them (excluded_tasks.json lists each with its reason). Parity cost is the total on the parity key for the agent runs, including sanity checks, superseded runs and diagnostics; the 8 counted runs cost about $66. The judge ran on a Claude subscription token."
+      }
+    ]
+  }
+]

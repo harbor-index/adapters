@@ -1,0 +1,53 @@
+schema_version = "1.0"
+# /app/model_output: the outputs, kept with the trial results.
+# /logs/wsb_collected: what the collect hook gathered (graded outputs, manifest,
+# agent log); the separate verifier container receives only these artifacts.
+artifacts = ["/app/model_output", "/logs/wsb_collected"]
+
+[task]
+name = "workspacebench/{task_name}"
+authors = [
+    { name = "Workspace-Bench authors (OpenDataBox)" },
+]
+keywords = ["workspacebench", "{language}", "{persona}", "workspace", "office-files", "llm-judge"]
+
+[metadata]
+difficulty = "{difficulty}"
+category = "workspace-tasks"
+
+[verifier]
+# Upstream's judge: one Claude Code session per task, 600 s per attempt, up to
+# JUDGE_MAX_RETRIES attempts (default 3).
+timeout_sec = 3900.0
+# The judge runs in a fresh container from the same image, which receives only
+# the artifacts above, so the agent cannot change the judge, its code or the reward.
+environment_mode = "separate"
+
+# Runs in the agent container after the agent phase: upstream's output
+# collector (environment/collect_outputs.py). The expected output names are
+# passed here, not stored in the image, so the agent never sees them.
+[[verifier.collect]]
+command = "python3 /opt/wsb/collect_outputs.py --meta-b64 {collect_meta_b64}"
+timeout_sec = 900.0
+
+[verifier.env]
+# Judge auth: ANTHROPIC_API_KEY (default), or CLAUDE_CODE_OAUTH_TOKEN (a Claude
+# subscription token) when no API key is set.
+ANTHROPIC_API_KEY = "${ANTHROPIC_API_KEY:-}"
+CLAUDE_CODE_OAUTH_TOKEN = "${CLAUDE_CODE_OAUTH_TOKEN:-}"
+ANTHROPIC_BASE_URL = "${ANTHROPIC_BASE_URL:-https://api.anthropic.com}"
+JUDGE_MODEL = "${JUDGE_MODEL:-claude-sonnet-5-5}"
+JUDGE_MAX_RETRIES = "${JUDGE_MAX_RETRIES:-3}"
+# No telemetry, error reports or update checks from the judge's Claude Code, as
+# Harbor's claude-code agent already does. Grading calls are unaffected.
+CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC = "1"
+
+[agent]
+# Upstream's per-task agent timeout.
+timeout_sec = 2000.0
+
+[environment]
+build_timeout_sec = 7200.0
+cpus = 2
+memory_mb = 8192
+storage_mb = {storage_mb}

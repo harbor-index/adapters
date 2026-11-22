@@ -1,0 +1,27 @@
+[project]
+name = "harbor-workspacebench-adapter"
+version = "0.1.0"
+description = "Harbor adapter for Workspace-Bench: tasks inside large, realistic worker workspaces, graded per rubric by upstream's agent-as-a-judge"
+readme = "README.md"
+authors = [
+    { name = "Pranav Vashistha", email = "220042524+Pranavv-dev@users.noreply.github.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "huggingface-hub>=0.34",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+]
+
+[project.scripts]
+workspacebench = "workspacebench.main:main"
+
+[build-system]
+requires = ["uv_build>=0.12.5,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "workspacebench"

@@ -1,0 +1,32 @@
+[
+  {
+    "adapter_name": "workspacebench",
+    "agent": "claude-code@2.1.311",
+    "model": "claude-haiku-4-5",
+    "date": "2026-11-21",
+    "adapted_benchmark_size": 723,
+    "parity_benchmark_size": 50,
+    "number_of_runs": 4,
+    "notes": "Scenario 1: upstream already runs Claude Code. The original side is upstream's own pipeline (isolated task container, task view, prompt building, output collection, agent_as_a_judge.py) in the fork's harbor-parity branch, with Claude Code launched exactly as Harbor 0.26.0's claude-code agent launches it (evaluation/scripts/harbor_parity/test_identical_launch.py; recorded API requests identical on both sides apart from session ids). Both sides: claude-code@2.1.311 with claude-haiku-4-5 through the 2077AI API, which serves only this undated alias; judge claude-sonnet-5-5 with upstream's rubric judge, one verdict per task. Agent timeout 4000 s on both sides because the API proxy queues requests (the adapter's default stays 2000 s). Subset: 50 English tasks (README explains the selection). Failure rule, same on both sides: agent timeouts and crashes are scored; API or infrastructure failures are rerun (1 case: original run 1, en-078, 'Connection lost mid-response'); judge failures are rerun, never scored 0 (1 case: original run 4, en-013, the judge could not read the output). 400/400 trials scored. Pins: upstream code OpenDataBox/Workspace-Bench 3fbd0f1 (the fork's base); task data HF Workspace-Bench/Workspace-Bench @ 3491f9e; workspaces HF Workspace-Bench/Workspace-Bench-Workspaces @ e245d63; Harbor 0.26.0; judge through the Claude Agent SDK 0.2.107. Every run and both recoveries are listed in ATTEMPTS.md in the parity upload. Harbor runs: 2026-11-20/21. Original runs: 2026-11-21, fork commit 68d3a8a, with the agent working in /app and logging to /logs/agent as on Harbor. An earlier set of 4 original runs, made before an audit found that the original side's prompt still differed from Harbor's (a long per-case work-folder path and a git-status block), is superseded; it is listed with every diagnostic run in the parity upload. The shared parity-experiments repo is over the Hub's file limit, so the parity files are in https://huggingface.co/datasets/PranavVashistha/workspacebench-parity-experiments at revision 393da848d5e9785774f5f5a2921a7061d043d8fe (same layout), linked from parity_pr. Harbor 0.26.0 (commit 3cb627394b95d3ae605f31e0d694edf508cf4b7b). Harbor side used prebuilt images: built from the tasks' own environment/ folders (one per language and persona) and set as docker_image in each parity task's task.toml, with force_build false; the tasks are otherwise unchanged. Grading ran in a separate verifier container on both sides.",
+    "original_parity_repo": "https://github.com/Pranavv-dev/Workspace-Bench/tree/harbor-parity",
+    "adapter_pr": [
+      "https://github.com/harbor-index/adapters/pull/26"
+    ],
+    "dataset_pr": [
+      "https://huggingface.co/datasets/harborframework/harbor-datasets/discussions/69"
+    ],
+    "parity_pr": [
+      "https://huggingface.co/datasets/harborframework/parity-experiments/discussions/292"
+    ],
+    "metrics": [
+      {
+        "benchmark_name": "Workspace-Bench",
+        "metric": "mean rubric pass rate (%)",
+        "original": "44.05 ± 0.7205",
+        "harbor": "44.70 ± 0.4013",
+        "original_runs": [42.75, 42.90, 45.60, 44.95],
+        "harbor_runs": [43.90, 45.54, 45.23, 44.14]
+      }
+    ]
+  }
+]

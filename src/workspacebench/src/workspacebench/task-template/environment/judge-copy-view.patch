@@ -1,0 +1,17 @@
+--- a/evaluation/src/agent_as_a_judge.py
++++ b/evaluation/src/agent_as_a_judge.py
+@@ -228,11 +228,9 @@
+ def _symlink_or_copy(src: str, dst: str) -> None:
+     _safe_remove_path(dst)
+     os.makedirs(os.path.dirname(os.path.abspath(dst)), exist_ok=True)
+-    try:
+-        os.symlink(src, dst)
+-        return
+-    except Exception:
+-        pass
++    # Harbor adapter: always copy. Claude Code's Glob does not follow symlinked
++    # directories, so a judge that lists files with Glob saw no inputs/outputs
++    # and failed every rubric with no error.
+     if os.path.isdir(src):
+         shutil.copytree(src, dst)
+     else:

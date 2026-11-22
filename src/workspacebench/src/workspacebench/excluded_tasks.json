@@ -1,0 +1,503 @@
+{
+ "en-002": {
+  "honest_score": "22/24",
+  "rubrics": [
+   10,
+   11
+  ],
+  "reason": "rubrics 10/11 ask whether security_policy_15/25 still preserve 'Reporting Vulnerabilities' / 'Dependency Scanning', but neither phrase is in any input (as in cn-002)"
+ },
+ "en-007": {
+  "honest_score": "7/10",
+  "rubrics": [
+   2,
+   3,
+   4
+  ],
+  "reason": "rubrics 2-4 require copy sizes 4000/4586/5613 B, but the en input files are 4760/5582/6511 B and rubrics 7-9 require byte-identical copies"
+ },
+ "en-018": {
+  "honest_score": "not passable (rubric conflict)",
+  "rubrics": [
+   1,
+   14
+  ],
+  "reason": "rubric 2 excludes only Diagram 5 of the source's 8 roadmaps and the next rubrics require each other one, so 7 remain, but rubrics 1 and 14 require exactly 6 slides, one roadmap each (same rubrics as cn-018)"
+ },
+ "en-020": {
+  "honest_score": "13/20",
+  "rubrics": [
+   3,
+   5,
+   7,
+   12,
+   14,
+   15,
+   18
+  ],
+  "reason": "rubrics 3/5/7/14/15/18 need figures no file has (food 120.75, a 42/28/18/12 split, 242,000 waste, 12-month and 8-quarter series, 78-90%); rubric 12's savings range is judge-dependent"
+ },
+ "en-021": {
+  "honest_score": "18/19 (19/19 in 1 of 4 Harbor gradings)",
+  "rubrics": [
+   15
+  ],
+  "reason": "rubric 15 needs a matching gameplay video link for all 5 games; no Monster-specific video exists, so the honest answer uses a compilation link and the judge accepts it only sometimes"
+ },
+ "en-039": {
+  "honest_score": "not passable (inputs contradict the rubric)",
+  "rubrics": [
+   1,
+   2,
+   5,
+   8,
+   12
+  ],
+  "reason": "rubrics 1/2/5, 8, 12 expect 208 days from 2022-03-01 and April/May new works of 89/92; the source has 209 days and 54/60, and the 67.53% retention can't be derived"
+ },
+ "en-050": {
+  "honest_score": "not passable (inputs contradict the rubric)",
+  "rubrics": [
+   7,
+   12
+  ],
+  "reason": "rubric 7 (and 12) require risk-return ratios of 1.26 and 0.50 and a composite score of 90 that no formula over the input figures produces"
+ },
+ "en-052": {
+  "honest_score": "16/20",
+  "rubrics": [
+   9,
+   10,
+   15
+  ],
+  "reason": "rubric 9 needs 20+ enrolled names (sources list 10 then '...'), rubric 10 a 6-step exam workflow and rubric 15 four work items no file has; rubric 17 depends on them and is judge-dependent"
+ },
+ "en-119": {
+  "honest_score": "13/19",
+  "rubrics": [
+   3,
+   8,
+   10,
+   12,
+   14,
+   16
+  ],
+  "reason": "rubrics 3/8/10/12/14/16 require 26 xlsx and 36 files in total, but the inputs hold 24 xlsx + 10 md = 34 files"
+ },
+ "en-131": {
+  "honest_score": "17/22",
+  "rubrics": [
+   11,
+   12,
+   13,
+   14,
+   15
+  ],
+  "reason": "rubrics 11-15 require backup sizes 1136/4367/8232/11578/20187 B (cn copies minus the final newline), but faithful copies of the workspace files are 1137/4368/8234/11579/20188 B"
+ },
+ "en-135": {
+  "honest_score": "19/20",
+  "rubrics": [
+   17
+  ],
+  "reason": "rubric 17 calls 5,800,000 (2024-02-18) the lowest point, but 2024-02-11 (2,260,000) is lower and rubrics 4/5 need it; judge-dependent (cn-135 passes it leniently)"
+ },
+ "en-137": {
+  "honest_score": "21/24",
+  "rubrics": [
+   17,
+   18,
+   20
+  ],
+  "reason": "rubric 17 wants 40 distinct integer commission rates in 20-40% (only 21 exist; 14 partners are below 20%, rubric 10 itself needs 12%); rubrics 18/20 ranges exclude stated input values"
+ },
+ "en-152": {
+  "honest_score": "16/20",
+  "rubrics": [
+   1,
+   7,
+   8,
+   15
+  ],
+  "reason": "rubrics 1/15 describe two people but the person icon shows one; rubrics 7/8 give bubble ~503 KB and person ~920 KB, swapped against the inputs (919,902 B bubble, 503,399 B person)"
+ },
+ "en-158": {
+  "honest_score": "20/22",
+  "rubrics": [
+   4,
+   6
+  ],
+  "reason": "rubrics 4/6 organise work by Customer Success, Product and Growth Operations departments, but the team's only roster lists 8 roles and none of those"
+ },
+ "en-162": {
+  "honest_score": "18/20",
+  "rubrics": [
+   10,
+   14
+  ],
+  "reason": "rubric 14 wants a 3/4/3 type split (10 records), but rubric 6 and the inputs have 9 records (3/3/3); rubric 10 wants tag 'Referral' where the source tags #ViralLoop"
+ },
+ "en-164": {
+  "honest_score": "18/20",
+  "rubrics": [
+   2,
+   14
+  ],
+  "reason": "rubric 14 says POST_64 gained the most followers, but POST_42 has more (3,244,400 vs 3,206,300); rubric 2's score 76.86 fits no defined scaling (stated weights give 82.32)"
+ },
+ "en-174": {
+  "honest_score": "11/19",
+  "rubrics": [
+   3,
+   4,
+   5,
+   7,
+   8,
+   10,
+   11,
+   18
+  ],
+  "reason": "rubrics 3/4/5/8/10/11/18 need amounts, statuses, counts, a 2,238,192 total and acceptance bills the 20 statements contradict (sum 2,306,562); rubric 7 (invalid source dates) is judge-dependent"
+ },
+ "en-179": {
+  "honest_score": "14/15",
+  "rubrics": [
+   7
+  ],
+  "reason": "rubric 7 requires the file name '__ PH_1 __', an unfilled placeholder the instruction never states (metadata lists Product_Showcase_PPT.pptx)"
+ },
+ "en-180": {
+  "honest_score": "18/19",
+  "rubrics": [
+   4
+  ],
+  "reason": "rubric 4 lists 7 Australian categories (electric, pickup, MPV/van, luxury...) absent from the input, which has only cars, SUV, light/heavy commercial and totals; one lenient judge run passed it"
+ },
+ "en-182": {
+  "honest_score": "19/23",
+  "rubrics": [
+   4,
+   10,
+   11,
+   20
+  ],
+  "reason": "rubric 20's expected file name is the unfilled placeholder __ PH_16 __; rubrics 4/10/11 need an 8% return rate and after-sales costs no file has (sourced margin 64.54%, not 59-60%)"
+ },
+ "en-187": {
+  "honest_score": "17/20",
+  "rubrics": [
+   15
+  ],
+  "reason": "rubric 15's expected file name is the unfilled placeholder __ PH_24 __ (outputs.txt fixes Common_Employment_Contract_Templates.docx); rubrics 5/7 also fail but are judge-dependent"
+ },
+ "en-207": {
+  "honest_score": "19/20",
+  "rubrics": [
+   4,
+   11
+  ],
+  "reason": "rubric 4 requires Zhang Haoran's score to be 82 and the Excellence Award, while rubric 11 requires all four candidates to be rated excellent at 85 or above"
+ },
+ "en-210": {
+  "honest_score": "14/17",
+  "rubrics": [
+   1,
+   2,
+   13
+  ],
+  "reason": "rubrics 1/2 ask for guobacai and an Old City custom no PPT has (en mistranslations), and rubric 13 (PPT content only) conflicts with rubrics 4/8, which need climate labels the PPTs lack"
+ },
+ "en-226": {
+  "honest_score": "at most 6/22",
+  "rubrics": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   16,
+   20
+  ],
+  "reason": "the English code inputs are clean (the translation fixed them); rubrics 1-14, 16 and 20 grade 13 specific bugs that exist only in the Chinese originals"
+ },
+ "en-233": {
+  "honest_score": "19/21",
+  "rubrics": [
+   2,
+   17
+  ],
+  "reason": "rubric 17 expects 39.80%, but 346,690,218.69 / 871,229,686.48 gives 39.79% (as the report prints); rubric 2 expects 68 income-statement rows, but all four reports have 67"
+ },
+ "en-234": {
+  "honest_score": "not passable (inputs contradict the rubric)",
+  "rubrics": [
+   3,
+   5
+  ],
+  "reason": "rubric 5 (and 3) require 2020 growth of 0.3% and 2015-16 as the only decline; the inputs give +5.1% for 2020 and further declines in 2019, 2022 and 2023"
+ },
+ "en-239": {
+  "honest_score": "not passable (inputs contradict the rubric)",
+  "rubrics": [
+   13,
+   14,
+   16
+  ],
+  "reason": "rubrics 13/14 require a five-year retention rule, an index path and working-day limits that appear in no template, while rubric 16 forbids anything beyond the templates"
+ },
+ "en-259": {
+  "honest_score": "18/20",
+  "rubrics": [
+   4,
+   9
+  ],
+  "reason": "rubric 4's -91.01% January deviation needs a 521,852 forecast base no cell gives (the workbook yields +6.47%); rubric 9's 18 abnormal items needs a formula contradicting rubric 4 (gives 9)"
+ },
+ "en-277": {
+  "honest_score": "17/18",
+  "rubrics": [
+   9
+  ],
+  "reason": "rubric 9 wants Zhou Jing ranked first with over 200,000 yuan, but the sales sheet puts Zhou Jing 7th at 103,200 and the top total is 192,500"
+ },
+ "en-291": {
+  "honest_score": "12/19",
+  "rubrics": [
+   2,
+   3,
+   4,
+   10,
+   12,
+   13,
+   16
+  ],
+  "reason": "rubrics 2/3/4/12/13/16 rest on a 145,000 annual target (35k/40k splits, 43,500 ads, 65,250 COGS) no file has (the plan says 2,241,000); rubric 10 wants 89-199 prices, inputs give 268-358"
+ },
+ "en-312": {
+  "honest_score": "not passable (inputs contradict the rubric)",
+  "rubrics": [
+   4,
+   15
+  ],
+  "reason": "rubrics 4 and 15 require a 40-point sales cap and 30 points for temporary work cooperation; the source says 80 and 20"
+ },
+ "en-336": {
+  "honest_score": "5/14",
+  "rubrics": [
+   2,
+   3,
+   4,
+   5,
+   6,
+   8,
+   9,
+   10,
+   11
+  ],
+  "reason": "rubrics 2-6 and 8-11 need figures no workspace file has (30% traffic uplift, AOV 168/price 158, category ranks, 80,000 Zhitongche, 40,000 UV, 8/12/10% uplifts, 12,000 cart adds)"
+ },
+ "en-345": {
+  "honest_score": "11/17",
+  "rubrics": [
+   4,
+   6,
+   11,
+   12,
+   13,
+   15
+  ],
+  "reason": "rubrics 4/6/11/12/13/15 need a 1360 budget (inputs have no prices), 2026-06-15/2026-06-12 dates, 33℃ and 清凉饮料 check wording, and named owners (inputs show ***)"
+ },
+ "en-358": {
+  "honest_score": "13/15",
+  "rubrics": [
+   0,
+   1
+  ],
+  "reason": "rubrics 0/1 give per-file counts 12 (6/3/3) and 15 (6/6/3), but summary-report has 15 unfinished (6/7/2) and personnel-list 12 (6/3/3); 6/6/3 fits neither file"
+ },
+ "en-385": {
+  "honest_score": "22/25",
+  "rubrics": [
+   7,
+   8,
+   16
+  ],
+  "reason": "rubrics 7/8/16 need a 5-per-day free AI quota, 25/month and 68/quarter prices and competitor A/B features that no input or workspace file has; ungrounded rather than contradictory"
+ },
+ "cn-002": {
+  "honest_score": "22/24",
+  "rubrics": [
+   10,
+   11
+  ],
+  "reason": "rubrics 10/11 require SECURITY_15/25 to keep 'Reporting Vulnerabilities' and 'Dependency Scanning' text the inputs lack, and rubric 16 forbids adding it; en-002 passes only by judge leniency"
+ },
+ "cn-018": {
+  "honest_score": "not passable (rubric conflict)",
+  "rubrics": [
+   1,
+   14
+  ],
+  "reason": "rubric 2 excludes only Diagram 5 of the source's 8 roadmaps and the next rubrics require each other one, so 7 remain, but rubrics 1 and 14 require exactly 6 slides, one roadmap each"
+ },
+ "cn-020": {
+  "honest_score": "14/20",
+  "rubrics": [
+   3,
+   5,
+   7,
+   14,
+   15,
+   18
+  ],
+  "reason": "rubrics 3/5/7/14/15/18 need figures no file has (food 120.75万, a 42/28/18/12 split, 24.2万 waste, 12-month and 8-quarter series, 7 measures at 78-90%)"
+ },
+ "cn-052": {
+  "honest_score": "19/20",
+  "rubrics": [
+   9
+  ],
+  "reason": "rubric 9 needs at least 20 registered names in the checkup plan, but every source lists only 10 names followed by '...'"
+ },
+ "cn-102": {
+  "honest_score": "7/8",
+  "rubrics": [
+   4,
+   5
+  ],
+  "reason": "judge-dependent, not proven impossible: rubrics 4/5 want reward rules and a 公车私用 penalty the four inputs lack, rubric 7 forbids adding them, and each fails intermittently"
+ },
+ "cn-119": {
+  "honest_score": "13/19",
+  "rubrics": [
+   3,
+   8,
+   12,
+   14,
+   16
+  ],
+  "reason": "rubrics 3/8/12/14/16 need 26 xlsx (10+26=36), but the inputs hold 24 xlsx + 10 md = 34; rubric 10 (36 files) could pass only by counting the two output.md files"
+ },
+ "cn-137": {
+  "honest_score": "21/24",
+  "rubrics": [
+   17,
+   18,
+   20
+  ],
+  "reason": "rubric 17 wants 40 distinct integer commission rates in 20-40% (only 21 exist; 14 partners are below 20%, rubric 10 itself needs 12%); rubrics 18/20 ranges exclude stated input values"
+ },
+ "cn-162": {
+  "honest_score": "19/20",
+  "rubrics": [
+   14
+  ],
+  "reason": "rubric 14 wants a 3/4/3 type split (10 records), but rubric 6 and the inputs have 9 records, split 3/3/3"
+ },
+ "cn-164": {
+  "honest_score": "17/20",
+  "rubrics": [
+   2,
+   14,
+   15
+  ],
+  "reason": "rubric 14 says POST_64 gained the most followers (POST_42 has more), rubric 15 says POST_99 ranks high on every metric (it is 73rd on reach), and rubric 2's 76.86 fits no principled scaling"
+ },
+ "cn-174": {
+  "honest_score": "11/19",
+  "rubrics": [
+   3,
+   4,
+   5,
+   7,
+   8,
+   10,
+   11,
+   18
+  ],
+  "reason": "rubrics 3/4/5/8/10/11/18 need amounts, statuses, counts, a 2,238,192 total and 承兑汇票 the 20 statements contradict (sum 2,306,562); rubric 7 (invalid source dates) is judge-dependent"
+ },
+ "cn-180": {
+  "honest_score": "18/19",
+  "rubrics": [
+   4
+  ],
+  "reason": "rubric 4 lists 7 Australian categories (EV, pickup, MPV/van, luxury...) absent from the input, which has only 轿车, SUV, light/heavy commercial and totals"
+ },
+ "cn-182": {
+  "honest_score": "20/23",
+  "rubrics": [
+   4,
+   10,
+   11
+  ],
+  "reason": "rubrics 4/10/11 need an 8% return rate and ~33.6k packaging/after-sales cost no file has (sourced total 376,889, margin 65.67%); a policy line, as the task allows starred assumptions"
+ },
+ "cn-210": {
+  "honest_score": "16/17 (17/17 in one grading)",
+  "rubrics": [
+   13
+  ],
+  "reason": "rubric 13 requires the report to come 100% from the PPTs, while rubrics 1-4, 6 and 8 need facts and climate labels the PPTs lack (as in en-210); judge-dependent"
+ },
+ "cn-233": {
+  "honest_score": "18/21",
+  "rubrics": [
+   1,
+   2,
+   17
+  ],
+  "reason": "rubric 17 expects 39.80% (data and report give 39.79%), rubric 2 expects 68 income-statement rows (reports have 67), and rubric 1's 21/9/13 counts fit no reading (reports: 23/12/13)"
+ },
+ "cn-259": {
+  "honest_score": "18/20",
+  "rubrics": [
+   4,
+   9
+  ],
+  "reason": "rubric 4's -91.01% January deviation needs a 521,852 forecast base no cell gives (the workbook yields +6.47%); rubric 9's 18 abnormal items needs a formula contradicting rubric 4 (gives 9)"
+ },
+ "cn-291": {
+  "honest_score": "12/19",
+  "rubrics": [
+   2,
+   3,
+   4,
+   10,
+   12,
+   13,
+   16
+  ],
+  "reason": "rubrics 2/3/4/12/13/16 rest on a 145,000 annual target (35k/40k splits, 43,500 ads, 65,250 COGS) no file has (the plan says 224.1万); rubric 10 wants 89-199 prices, inputs give 268-358"
+ },
+ "cn-345": {
+  "honest_score": "11/17",
+  "rubrics": [
+   4,
+   6,
+   11,
+   12,
+   13,
+   15
+  ],
+  "reason": "rubrics 4/6/11/12/13/15 need a 1360元 budget (inputs have no prices), 2026-06-15/2026-06-12 dates, 33℃ and 清凉饮料 check wording, and named owners (inputs show ***)"
+ },
+ "cn-358": {
+  "honest_score": "13/15",
+  "rubrics": [
+   0,
+   1
+  ],
+  "reason": "rubrics 0/1 give per-file counts 12 (6/3/3) and 15 (6/6/3), but 总结报告 has 15 unfinished (6/7/2) and 人员清单 12 (6/3/3); one lenient judge run passed both anyway"
+ }
+}

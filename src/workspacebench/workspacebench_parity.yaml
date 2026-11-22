@@ -1,0 +1,31 @@
+# Harbor side of the parity experiment (parity_experiment.json), as the parity jobs ran it.
+# Generate the 50 parity tasks first:
+#   uv run workspacebench --split parity --output-dir datasets/workspacebench-parity
+# Then, with the agent's API key and base URL and the judge's credential exported:
+#   harbor run -c src/workspacebench/workspacebench_parity.yaml
+# Agent timeout is 4000 s on both sides of the parity experiment because the API proxy used for it queues
+# requests; the tasks' own default (task.toml) stays 2000 s.
+jobs_dir: jobs
+n_attempts: 1
+timeout_multiplier: 1.0
+n_concurrent_trials: 2
+environment:
+  type: docker
+  force_build: false
+  delete: true
+agents:
+  - name: claude-code
+    model_name: claude-haiku-4-5
+    override_timeout_sec: 4000
+    kwargs:
+      version: 2.1.311
+    env:
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      ANTHROPIC_BASE_URL: ${ANTHROPIC_BASE_URL}
+verifier:
+  env:
+    JUDGE_MODEL: claude-sonnet-5-5
+    # The judge reads ANTHROPIC_API_KEY / ANTHROPIC_BASE_URL (task.toml [verifier.env]); with a Claude
+    # subscription instead, export CLAUDE_CODE_OAUTH_TOKEN and leave ANTHROPIC_API_KEY unset for the judge.
+datasets:
+  - path: datasets/workspacebench-parity
