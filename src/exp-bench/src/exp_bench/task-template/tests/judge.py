@@ -62,6 +62,20 @@ CONTEXT_LENGTHS = {
     "gemini-2.5-pro-preview-03-25": 200000,
 }
 
+# Optional, not upstream: Claude judges (1M-token input) through Anthropic's
+# OpenAI-compatible endpoint (OPENAI_BASE_URL=https://api.anthropic.com/v1/, OPENAI_API_KEY
+# = an Anthropic key). Budgets here are counted with tiktoken, which undercounts Claude
+# tokens by roughly 1.4x on these prompts, so the budget leaves that margin.
+CLAUDE_JUDGE = JUDGE_MODEL.startswith("claude-")
+CLAUDE_CONTEXT_TIKTOKEN = 650000
+# That endpoint rejects an empty user turn, `temperature` (Claude 5 models) and
+# `json_object`; a minimal user turn and a strict JSON schema of the keys each judge
+# prompt asks for replace them. The judge prompts themselves are unchanged.
+CLAUDE_USER_TURN = "Respond with the JSON object."
+INTEGER_KEYS = {"design_score", "setup_score"}
+BOOLEAN_KEYS = {"paper_access", "git_operations", "faked_or_nonexperimental_data"}
+ENUM_KEYS = {"conclusion_score": ["correct", "incorrect"]}
+
 
 def log(msg: str) -> None:
     print(f"[exp-bench judge] {msg}", flush=True)
@@ -71,7 +85,24 @@ def log(msg: str) -> None:
 
 
 def context_length() -> int:
+    if CLAUDE_JUDGE:
+        return CLAUDE_CONTEXT_TIKTOKEN
     return CONTEXT_LENGTHS.get(JUDGE_MODEL, 30000)
+
+
+def json_schema_for(keys) -> dict:
+    """Strict JSON schema for a judge prompt's output keys (Claude judges only)."""
+    properties = {}
+    for key in keys:
+        if key in INTEGER_KEYS:
+            properties[key] = {"type": "integer"}
+        elif key in BOOLEAN_KEYS:
+            properties[key] = {"type": "boolean"}
+        elif key in ENUM_KEYS:
+            properties[key] = {"type": "string", "enum": ENUM_KEYS[key]}
+        else:
+            properties[key] = {"type": "string"}
+    return {"type": "object", "properties": properties, "required": list(keys), "additionalProperties": False}
 
 
 def count_tokens(text: str) -> int:
@@ -120,7 +151,7 @@ def llm_query_plain(system_prompt: str, default_json_output: dict) -> dict:
         CLIENT = make_client()
     messages = [
         {"role": "system", "content": system_prompt},
-        {"role": "user", "content": ""},
+        {"role": "user", "content": CLAUDE_USER_TURN if CLAUDE_JUDGE else ""},
     ]
     kwargs = {
         "model": JUDGE_MODEL,
@@ -128,7 +159,12 @@ def llm_query_plain(system_prompt: str, default_json_output: dict) -> dict:
         "stop": None,
         "response_format": {"type": "json_object"},
     }
-    if not ("o3" in JUDGE_MODEL or "o1" in JUDGE_MODEL):
+    if CLAUDE_JUDGE:
+        kwargs["response_format"] = {
+            "type": "json_schema",
+            "json_schema": {"name": "judge_output", "strict": True, "schema": json_schema_for(default_json_output)},
+        }
+    elif not ("o3" in JUDGE_MODEL or "o1" in JUDGE_MODEL):
         kwargs["temperature"] = 0.7
     # Transport-level retries only; they do not change what is judged.
     for attempt in range(6):

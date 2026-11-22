@@ -257,6 +257,13 @@ Deviations from the upstream harness and why:
   judged diff.
 - **Judge endpoint.** OpenAI-compatible client instead of Azure; transient API errors are
   retried. The judge model must be the same on both sides of any comparison.
+- **Optional Claude judge (not upstream).** `EXP_BENCH_JUDGE_MODEL=claude-*` with
+  `OPENAI_BASE_URL=https://api.anthropic.com/v1/` and an Anthropic key in
+  `OPENAI_API_KEY` uses a 1M-token Claude model as judge, which can grade the 4 tasks
+  excluded for o3-mini. Anthropic's OpenAI-compatible endpoint needs three request
+  changes: a one-line user turn instead of an empty one, no `temperature`, and a strict
+  JSON schema of the prompt's output keys instead of `json_object`. The judge prompts are
+  unchanged. Scores from a different judge are not comparable to o3-mini scores.
 - **Primary reward** is C (conclusion correctness). The paper does not state the cut-offs
   for the conjunctive metrics; `all_correct` here requires D = I = 100 and C correct,
   pending confirmation.
