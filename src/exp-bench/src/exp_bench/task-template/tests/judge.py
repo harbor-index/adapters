@@ -43,6 +43,10 @@ EXEC_TIMEOUT_SEC = int(os.environ.get("EXP_BENCH_EXEC_TIMEOUT_SEC", "3600"))
 # Oracle validation only: skip the log monitor and execution check, which judge an
 # agent's trajectory and cannot be satisfied by copying reference answers.
 ORACLE_VALIDATION = os.environ.get("EXP_BENCH_ORACLE_VALIDATION", "0") == "1"
+# Capture the judge inputs in the container and run the LLM judge later
+# (scripts/judge_deferred.py), e.g. when no judge API key is available during the run.
+DEFER_JUDGE = os.environ.get("EXP_BENCH_DEFER_JUDGE", "0") == "1"
+DEFERRED_INPUTS_FILE = "judge_inputs.json"
 
 ERR = "Error parsing response"
 
@@ -352,11 +356,46 @@ def to_fraction(score) -> float:
 def main() -> None:
     VERIFIER_DIR.mkdir(parents=True, exist_ok=True)
     spec = json.loads((TESTS_DIR / "task_data.json").read_text())
-    task_data = spec["task_data"]
 
     output_json = collect_agent_output(spec["output_filename"])
     patch = generate_patch(VERIFIER_DIR / "eval_gen.patch")
 
+    if DEFER_JUDGE:
+        # Everything that needs the container (agent output, patch, logs, execution
+        # check) is captured now; the LLM calls run later via scripts/judge_deferred.py.
+        # The execution check runs unconditionally here; grade() ignores it when the
+        # monitor flags the run, as upstream skips it in that case.
+        inputs = {
+            "judge_model": JUDGE_MODEL,
+            "oracle_validation": ORACLE_VALIDATION,
+            "exec_check": EXEC_CHECK,
+            "spec": spec,
+            "output_json": output_json,
+            "patch": patch,
+            "agent_logs": None if ORACLE_VALIDATION else read_agent_logs(),
+            "execution": execute_setup() if (EXEC_CHECK and not ORACLE_VALIDATION) else None,
+        }
+        (VERIFIER_DIR / DEFERRED_INPUTS_FILE).write_text(json.dumps(inputs))
+        (VERIFIER_DIR / "reward.json").write_text(json.dumps({"judge_pending": 1.0}))
+        log("EXP_BENCH_DEFER_JUDGE=1: judge inputs saved; grade later with scripts/judge_deferred.py")
+        return
+
+    grade(spec, output_json, patch)
+
+
+def grade(
+    spec: dict,
+    output_json: dict,
+    patch: str,
+    agent_logs: str | None = None,
+    execution: dict | None = None,
+) -> dict:
+    """Upstream judge.py:query_normal: monitor, design/conclusion, setup, execution.
+
+    ``agent_logs`` and ``execution`` are passed when grading inputs saved by
+    ``EXP_BENCH_DEFER_JUDGE=1``; otherwise they are read / run here.
+    """
+    task_data = spec["task_data"]
     if "no_answer" in output_json:
         design_output = output_json["no_answer"]
         conclusion_output = output_json["no_answer"]
@@ -396,7 +435,8 @@ def main() -> None:
         log("EXP_BENCH_ORACLE_VALIDATION=1: skipping the log monitor and execution check")
         monitor_response = {"monitor_skipped": True}
     else:
-        monitor_prompt = load_prompt("eval_judge_setup_monitor_prompt.txt").format(logs=read_agent_logs())
+        logs = agent_logs if agent_logs is not None else read_agent_logs()
+        monitor_prompt = load_prompt("eval_judge_setup_monitor_prompt.txt").format(logs=logs)
         monitor_response = query_plain(monitor_prompt, default_monitor_json_output)
         monitor_flagged = any(v == True for v in monitor_response.values()) or any(  # noqa: E712
             v == ERR for v in monitor_response.values()
@@ -464,7 +504,7 @@ def main() -> None:
 
         # 3. Execution check.
         if EXEC_CHECK and not ORACLE_VALIDATION:
-            judged = {**judged, **execute_setup()}
+            judged = {**judged, **(execution if execution is not None else execute_setup())}
 
     (VERIFIER_DIR / "eval_judge.json").write_text(json.dumps(judged, indent=2))
 
@@ -487,6 +527,7 @@ def main() -> None:
     (VERIFIER_DIR / "reward.json").write_text(json.dumps(rewards, indent=2))
     (VERIFIER_DIR / "reward.txt").write_text(f"{rewards['reward']}\n")
     log(f"rewards: {rewards}")
+    return rewards
 
 
 if __name__ == "__main__":

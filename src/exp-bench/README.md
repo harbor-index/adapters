@@ -133,6 +133,23 @@ harbor run -d just-curieous/exp-bench@parity -a openhands -m "<model>"
 The verifier needs `OPENAI_API_KEY` (and `OPENAI_BASE_URL` for a non-OpenAI endpoint)
 for the judge. `EXP_BENCH_JUDGE_MODEL` defaults to `o3-mini`, the upstream judge.
 
+**Deferred judging.** With `EXP_BENCH_DEFER_JUDGE=1` the verifier does everything that
+needs the task container (collects the agent's answer, builds the patch, reads the
+agent logs, runs the execution check) and saves it to `verifier/judge_inputs.json`
+without calling the judge; `reward.json` then holds only `judge_pending`. Grade the job
+later with the same judge code:
+
+```bash
+EXP_BENCH_DEFER_JUDGE=1 OPENAI_API_KEY=unused harbor run -p datasets/exp-bench -a <agent> -m "<model>"
+
+cd src/exp-bench
+OPENAI_API_KEY=... uv run --with openai==1.66.3 --with tiktoken==0.9.0 \
+    --with langchain-text-splitters==0.3.6 python scripts/judge_deferred.py <job-dir>
+```
+
+The execution check always runs in deferred mode; grading ignores it when the monitor
+flags the run, as upstream skips it then, so the scores are the same as direct grading.
+
 ### Using Job Configurations
 
 ```bash

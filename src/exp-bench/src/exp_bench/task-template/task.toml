@@ -38,6 +38,9 @@ EXP_BENCH_EXEC_CHECK = "${EXP_BENCH_EXEC_CHECK:-1}"
 EXP_BENCH_EXEC_TIMEOUT_SEC = "${EXP_BENCH_EXEC_TIMEOUT_SEC:-3600}"
 # Set to 1 only for oracle runs: skips the trajectory monitor and execution check.
 EXP_BENCH_ORACLE_VALIDATION = "${EXP_BENCH_ORACLE_VALIDATION:-0}"
+# Set to 1 to save the judge inputs (patch, logs, execution check) and grade later with
+# scripts/judge_deferred.py; reward.json then only holds judge_pending until graded.
+EXP_BENCH_DEFER_JUDGE = "${EXP_BENCH_DEFER_JUDGE:-0}"
 
 [agent]
 network_mode = "public"
