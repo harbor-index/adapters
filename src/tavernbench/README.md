@@ -137,7 +137,7 @@ harbor run -p datasets/tavernbench -a claude-code -m "<model>" \
 
 Checks so far:
 
-- **Oracle with Harbor:** pending. The result and the Harbor version will be recorded here.
+- **Oracle with Harbor:** with Harbor 0.27.0 and Docker on a GitHub-hosted Ubuntu runner, `harbor run -a oracle` gives reward 1 on all 368 `eval` tasks and on all 960 `full` tasks (mean 1.000, no exceptions).
 - **Verifier flow outside Docker:** for all 368 `eval` tasks and all 960 `full` tasks, running `solution/solve.sh` and then `tests/test.sh` gives reward 1. A missing answer file, a file without a JSON object and a deliberately wrong answer each give reward 0, and the reference answer inside a Markdown code fence gives reward 1.
 - **Oracle on the original side:** the unchanged upstream scorer (`python -m tavernbench.score`) gives accuracy 1.000 on the oracle answers of all 368 `eval` tasks and all 960 `full` tasks.
 - **Task format:** the task models of Harbor 0.26.0 and 0.27.0 load all generated tasks of both splits; their names are unique.
