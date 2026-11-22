@@ -1,0 +1,36 @@
+# Reference config for the TavernBench adapter.
+# Generate the tasks first (from src/tavernbench):
+#   uv run tavernbench --output-dir ../../datasets/tavernbench
+# then, from the repository root:
+#   harbor run -c src/tavernbench/run_tavernbench.yaml
+jobs_dir: jobs
+n_attempts: 1
+timeout_multiplier: 1.0
+orchestrator:
+  type: local
+  n_concurrent_trials: 4
+  quiet: false
+environment:
+  type: docker
+  # type: daytona
+  force_build: true
+  delete: true
+  # env:
+  #   ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+  #   ANTHROPIC_BASE_URL: ${ANTHROPIC_BASE_URL}
+  #   DAYTONA_API_KEY: ${DAYTONA_API_KEY}
+
+# Default: oracle agent, which writes the reference answer of every task.
+agents:
+  - name: oracle
+
+# Parity runs (agent version and model are fixed with the Harbor team first):
+# agents:
+#   - name: claude-code
+#     model_name: anthropic/<model id>
+#     kwargs:
+#       version: "<pinned claude-code version>"
+#       disable_web_search: true
+
+datasets:
+  - path: datasets/tavernbench

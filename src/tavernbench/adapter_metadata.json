@@ -1,0 +1,40 @@
+[
+  {
+    "adapter_name": "tavernbench",
+    "adapter_builders": [
+      "Ming Yin (ming.yin@duke.edu)"
+    ],
+    "original_benchmark": [
+      {
+        "split": "eval",
+        "size": 368,
+        "harness": "llm",
+        "supported_agents": ["None"],
+        "adaptable": true,
+        "notes": "The fixed evaluation set every system answers in the paper: 8 tasks from each of 37 scenarios plus all tasks of D4 (16), N1 (29) and N2 (27). The original runners make one model call per task. run_claude uses the Claude Code CLI, but as a single call without tools, so it is a model call and not an agent harness."
+      },
+      {
+        "split": "full",
+        "size": 960,
+        "harness": "llm",
+        "supported_agents": ["None"],
+        "adaptable": true,
+        "notes": "All 960 tasks in 40 scenarios; eval is a subset. Generated with --split full."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "eval",
+        "adapted_benchmark_size": 368,
+        "parity_benchmark_size": 368,
+        "parity_sampling_rate": 1.0,
+        "registry_benchmark_size": 368,
+        "added_agents": ["None"],
+        "parity_matching_agents": [],
+        "parity_unmatching_agents": [],
+        "parity_costs": null,
+        "notes": "Parity experiments have not been run yet. Planned: the full eval split on both sides, pending confirmation of agent, model and number of runs with the Harbor team."
+      }
+    ]
+  }
+]

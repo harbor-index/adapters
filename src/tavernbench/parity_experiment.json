@@ -1,0 +1,26 @@
+[
+  {
+    "adapter_name": "tavernbench",
+    "agent": "pending",
+    "model": "pending",
+    "date": "pending",
+    "adapted_benchmark_size": 368,
+    "parity_benchmark_size": 368,
+    "number_of_runs": 0,
+    "notes": "Parity experiments have not been run yet; no scores are recorded. The plan (agent, model, number of runs) is to be confirmed with the Harbor team first. This entry will be replaced with the measured runs.",
+    "original_parity_repo": null,
+    "adapter_pr": [],
+    "dataset_pr": [],
+    "parity_pr": [],
+    "metrics": [
+      {
+        "benchmark_name": "TavernBench",
+        "metric": "accuracy (%)",
+        "original": "pending",
+        "harbor": "pending",
+        "original_runs": [],
+        "harbor_runs": []
+      }
+    ]
+  }
+]
