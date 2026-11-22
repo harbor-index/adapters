@@ -252,9 +252,20 @@ def generate_patch(patch_file: Path) -> str:
 
 
 def read_agent_logs() -> str:
-    """Concatenate the agent's logs (upstream passes the OpenHands log file)."""
+    """Return the agent log the monitor judges.
+
+    Upstream passes the OpenHands console log (stdout and stderr of the OpenHands CLI,
+    ``tee``'d to ``*_eval_gen_openhands_logs.txt``). Harbor's OpenHands agent writes the
+    same stream to ``/logs/agent/openhands.txt``, so only that file is used when it
+    exists; Harbor's derived files (``trajectory.json``, ``sessions/``) repeat its
+    content in another format. Other agents have no upstream equivalent, so all their
+    text logs are concatenated.
+    """
+    console_log = AGENT_LOG_DIR / "openhands.txt"
     parts = []
-    if AGENT_LOG_DIR.exists():
+    if console_log.is_file():
+        parts.append(console_log.read_text(errors="replace"))
+    elif AGENT_LOG_DIR.exists():
         for path in sorted(p for p in AGENT_LOG_DIR.rglob("*") if p.is_file()):
             try:
                 text = path.read_text(errors="replace")

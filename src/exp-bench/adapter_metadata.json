@@ -9,21 +9,21 @@
         "harness": "agent",
         "supported_agents": ["openhands", "inspectai-iterative-agent"],
         "adaptable": true,
-        "notes": "461 tasks from 51 ICLR/NeurIPS 2024 papers. 36 tasks fail upstream's own masking step (listed source file absent from the repository, or README.md listed as a source) and are skipped by the upstream harness as invalid_task."
+        "notes": "461 tasks from 51 ICLR/NeurIPS 2024 papers. 36 tasks fail upstream's own masking step (listed source file absent from the repository, or README.md listed as a source) and are skipped by the upstream harness as invalid_task. For 4 more, the setup-judge prompt exceeds the o3-mini judge's 200k-token context even without an agent patch, so upstream's judge cannot grade them."
       }
     ],
     "harbor_adapter": [
       {
         "split": "full",
-        "adapted_benchmark_size": 425,
-        "parity_benchmark_size": 33,
-        "parity_sampling_rate": 0.0776,
-        "registry_benchmark_size": 425,
+        "adapted_benchmark_size": 421,
+        "parity_benchmark_size": 30,
+        "parity_sampling_rate": 0.0713,
+        "registry_benchmark_size": 421,
         "added_agents": ["None"],
         "parity_matching_agents": [],
         "parity_unmatching_agents": ["None"],
         "parity_costs": null,
-        "notes": "Parity pending. Provisional subset: 33 valid tasks marked MATCH/PARTIAL_MATCH in the dataset's published verification records (verification/status.csv); final stratified selection to be agreed with the Harbor team."
+        "notes": "Parity pending. Provisional subset: 30 valid tasks marked MATCH/PARTIAL_MATCH in the dataset's published verification records (verification/status.csv); final stratified selection to be agreed with the Harbor team."
       }
     ]
   }

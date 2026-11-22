@@ -1,23 +1,49 @@
 [
   {
     "adapter_name": "exp-bench",
-    "agent": "<agent>@<version>",
-    "model": "<model>",
-    "date": "YYYY-MM-DD",
-    "adapted_benchmark_size": null,
+    "agent": "openhands@02bc7de3 (pending confirmation)",
+    "model": "pending",
+    "date": "pending",
+    "adapted_benchmark_size": 421,
     "parity_benchmark_size": null,
-    "number_of_runs": null,
-    "notes": null,
-    "original_parity_repo": null,
-    "adapter_pr": [],
+    "number_of_runs": 3,
+    "notes": "Parity not run yet; plan in README. Both sides: same task bundle, pinned repository commits, OpenHands version, max_iterations=30, agent time limit and judge model/endpoint. Original side: upstream generate -> judge pipeline with opt-in pinning changes.",
+    "original_parity_repo": "https://github.com/Just-Curieous/Curie/tree/harbor-parity",
+    "adapter_pr": [
+      "https://github.com/harbor-index/adapters/pull/28"
+    ],
     "dataset_pr": [],
     "parity_pr": [],
     "metrics": [
       {
         "benchmark_name": "EXP-Bench",
-        "metric": "<metric_name>",
-        "original": "<mean +/- sample_SEM, e.g. 45.2% +/- 1.3%>",
-        "harbor": "<mean +/- sample_SEM, e.g. 44.8% +/- 1.1%>",
+        "metric": "conclusion (C)",
+        "original": "pending",
+        "harbor": "pending",
+        "original_runs": [],
+        "harbor_runs": []
+      },
+      {
+        "benchmark_name": "EXP-Bench",
+        "metric": "design (D)",
+        "original": "pending",
+        "harbor": "pending",
+        "original_runs": [],
+        "harbor_runs": []
+      },
+      {
+        "benchmark_name": "EXP-Bench",
+        "metric": "implementation (I)",
+        "original": "pending",
+        "harbor": "pending",
+        "original_runs": [],
+        "harbor_runs": []
+      },
+      {
+        "benchmark_name": "EXP-Bench",
+        "metric": "execution (E)",
+        "original": "pending",
+        "harbor": "pending",
         "original_runs": [],
         "harbor_runs": []
       }

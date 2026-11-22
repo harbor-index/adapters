@@ -24,6 +24,18 @@ DEFAULT_DATA_FILE = PACKAGE_DIR / "data" / "exp_bench_tasks.json.gz"
 PARITY_SPLIT_FILE = PACKAGE_DIR / "data" / "parity_task_ids.txt"
 DEFAULT_CACHE_DIR = Path.home() / ".cache" / "harbor-exp-bench-adapter"
 
+# Tasks whose setup-judge prompt (template + method + reference source files, no agent
+# patch) already exceeds o3-mini's 200k-token context, counted with tiktoken's o3-mini
+# encoding by scripts/audit_judge_context.py. The setup judge embeds the reference files
+# in every prompt (and every chunk), so no agent output can be graded; upstream's judge
+# raises a context-length error and stops judging the paper.
+JUDGE_CONTEXT_OVERFLOW = {
+    "iclr2024-18447-11": 445900,  # demo.ipynb with embedded outputs
+    "neurips2024-97791-5": 365244,
+    "iclr2024-18439-2": 304187,
+    "iclr2024-18439-0": 295041,
+}
+
 # Upstream eval.py values for OpenHands / Inspect agents.
 OUTPUT_SCRIPT_NAME = "/workspace/reproduce_exp_bench.sh"
 ADDITIONAL_INFO = (
@@ -131,16 +143,25 @@ class EXPBenchAdapter:
 
     @staticmethod
     def invalid_reason(task: dict) -> str | None:
-        """Tasks the upstream harness marks ``invalid_task`` (eval.py:mask_repo fails).
+        """Tasks the upstream pipeline cannot grade.
 
-        Upstream masks the README first and then each listed source file; if a listed
-        file does not exist in the repository, masking fails and the task is skipped.
+        * Upstream masks the README first and then each listed source file; if a listed
+          file does not exist in the repository, masking fails and the task is skipped as
+          ``invalid_task`` (eval.py:mask_repo).
+        * For a few tasks the setup-judge prompt exceeds the default judge's context even
+          with an empty agent patch, because the reference source files it embeds are too
+          large; upstream's judge raises on them (see ``JUDGE_CONTEXT_OVERFLOW``).
         """
         missing = [path for path, sha in task["setup_script_sha256"].items() if sha is None]
         if missing:
             return f"masked source file(s) not in the repository at the pinned commit: {missing}"
         if "README.md" in task["masked_files"]:
             return "masks README.md, which upstream already removed before masking sources"
+        if task["task_id"] in JUDGE_CONTEXT_OVERFLOW:
+            return (
+                "setup-judge prompt without any agent patch is "
+                f"{JUDGE_CONTEXT_OVERFLOW[task['task_id']]} tokens, over o3-mini's 200k context"
+            )
         return None
 
     def load_tasks(self) -> list[dict]:

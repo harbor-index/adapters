@@ -14,10 +14,13 @@ and run it, and state a conclusion grounded in its own results.
 - **Task types:** type 1 (210 tasks) masks source files the agent must re-implement;
   type 2 (123) masks the scripts that run an experiment; type 3 (128) masks nothing but
   the README and asks for the experiment from scratch.
-- **This adapter: 425 tasks.** The 36 excluded tasks are ones the upstream harness
-  itself marks `invalid_task`: 33 list a source file that does not exist in the
-  paper's repository (it never existed in the repository's history), and 3 list
-  `README.md`, which upstream removes before masking. See Notes & Caveats.
+- **This adapter: 421 tasks.** 40 tasks cannot be graded by the upstream pipeline and
+  are excluded. 36 are ones the upstream harness itself marks `invalid_task`: 33 list a
+  source file that does not exist in the paper's repository (it never existed in the
+  repository's history), and 3 list `README.md`, which upstream removes before masking.
+  For the other 4, the reference source files that the setup judge embeds in every
+  prompt already exceed o3-mini's 200k-token context, so upstream's judge fails on any
+  agent output. See Notes & Caveats.
 - **Main adaptations:** repositories are pinned to the commit that was current when the
   tasks were constructed (upstream clones `HEAD` at run time), and the judge talks to any
   OpenAI-compatible endpoint (upstream uses Azure OpenAI). Prompts, masking, judge prompts
@@ -155,7 +158,7 @@ harbor trial start -p datasets/exp-bench/neurips2024-98316-5 -a openhands -m "<m
 ```bash
 cd src/exp-bench
 uv sync
-uv run exp-bench --output-dir ../../datasets/exp-bench                     # all 425 tasks
+uv run exp-bench --output-dir ../../datasets/exp-bench                     # all 421 tasks
 uv run exp-bench --split parity --output-dir ../../datasets/exp-bench-parity
 uv run exp-bench --task-ids neurips2024-97649-0 iclr2024-18447-11 --overwrite
 uv run exp-bench --gpus 1 --agent-timeout-hours 1 --output-dir ../../datasets/exp-bench-gpu
@@ -173,12 +176,12 @@ Parity has not been run yet. Values are reported as mean ± sample SEM.
 
 | Agent | Model | Metric | Number of Runs | Dataset Size | Original Benchmark Performance | Harbor Adapter Performance |
 |-------|-------|--------|------------------|--------------|------------------------------|----------------------------|
-| openhands@TBD | TBD | conclusion (C) | 3 | 33 (7.8%) | TBD | TBD |
+| openhands@TBD | TBD | conclusion (C) | 3 | 30 (7.1%) | TBD | TBD |
 
 Planned setup (to be confirmed with the Harbor team before any paid run):
 
 - **Subset (provisional):** about 30–40 tasks stratified across papers. The current
-  candidate list in `src/exp_bench/data/parity_task_ids.txt` holds the 33 valid tasks
+  candidate list in `src/exp_bench/data/parity_task_ids.txt` holds the 30 valid tasks
   marked `MATCH` / `PARTIAL_MATCH` in the dataset's published verification records
   (`verification/status.csv`), i.e. tasks with a reproduced, runnable environment. That
   list leans towards easier tasks, so the final selection rule will be agreed with the
@@ -207,8 +210,15 @@ Deviations from the upstream harness and why:
   `task.toml` metadata) and fetches it with `--depth 1`.
 - **Reference scripts for the setup judge** are read from the pinned commit at generation
   time; upstream downloads them from the `main`/`master` branch when judging.
-- **36 excluded tasks** (see Overview) would fail upstream's masking step and are skipped
-  by upstream as `invalid_task`; the list is computed by `EXPBenchAdapter.invalid_reason`.
+- **40 excluded tasks** (see Overview), listed by `EXPBenchAdapter.invalid_reason`. 36
+  fail upstream's masking step and are skipped by upstream as `invalid_task`. For 4
+  (`iclr2024-18447-11`, `neurips2024-97791-5`, `iclr2024-18439-2`, `iclr2024-18439-0`;
+  295k–446k tokens) the setup-judge prompt is over o3-mini's context even with an empty
+  patch; upstream's judge raises a context-length error on them and stops judging the
+  rest of that paper. `scripts/audit_judge_context.py` recomputes the list for a given
+  judge model and context. One more task, `neurips2024-94391-12`, leaves only about 7k
+  tokens for the agent's patch; a larger patch makes the judge call fail, as it would
+  upstream, and the trial ends without a reward.
 - **Environment.** Upstream runs agents in the OpenHands sandbox with the repository
   mounted at `/workspace`; here the repository is baked into a miniconda image (the base
   of upstream's `ExpDockerfile_default`) at `/workspace`.
@@ -216,9 +226,10 @@ Deviations from the upstream harness and why:
   agent finishes; upstream starts a fresh container with the workspace mounted, so
   system packages the agent installed outside `/workspace` do not carry over there.
   E can therefore be higher here when the script relies on such packages.
-- **Monitor input.** Upstream passes the OpenHands log; here the monitor reads all files
-  in `/logs/agent`, truncated (head and tail) to fit the judge context, where upstream
-  would fail on an over-long log.
+- **Monitor input.** Upstream passes the OpenHands console log. With Harbor's OpenHands
+  agent the monitor reads the same stream, `/logs/agent/openhands.txt`; with other agents
+  it reads all text files in `/logs/agent`. Over-long logs are truncated (head and tail)
+  to fit the judge context, where upstream would fail.
 - **Credentials folder.** Upstream copies its Azure credential files into
   `setup_apis_exp/`; here `setup_apis_exp/env.sh` exports `OPENAI_API_KEY` /
   `OPENAI_BASE_URL` from `EXP_BENCH_TASK_OPENAI_API_KEY` /

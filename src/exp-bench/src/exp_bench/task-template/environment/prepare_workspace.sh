@@ -9,18 +9,35 @@ MASKED_FILES=(
 {masked_files}
 )
 
+# Network retries only (large fetches can fail transiently); HTTP/1.1 avoids the GnuTLS
+# "Error decoding the received TLS packet" failures seen with some proxies.
+retry() {
+    local attempt
+    for attempt in 1 2 3 4 5; do
+        "$@" && return 0
+        echo "attempt $attempt failed: $*" >&2
+        sleep $((attempt * 10))
+    done
+    return 1
+}
+export GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=http.version GIT_CONFIG_VALUE_0=HTTP/1.1
+
 cd /workspace
 git init -q .
 git remote add origin "$REPO_URL"
-git fetch -q --depth 1 origin "$COMMIT"
+retry git fetch -q --depth 1 origin "$COMMIT"
 git checkout -q FETCH_HEAD
 
 # Upstream convert_ssh_submodules_to_https + update_submodules.
 if [ -f .gitmodules ]; then
     sed -i -E 's#url = git@github\.com:(.+)\.git#url = https://github.com/\1.git#' .gitmodules
     git submodule sync -q
-    git submodule update -q --init --recursive --depth 1 || git submodule update -q --init --recursive
+    submodules() {
+        git submodule update -q --init --recursive --depth 1 || git submodule update -q --init --recursive
+    }
+    retry submodules
 fi
+unset GIT_CONFIG_COUNT GIT_CONFIG_KEY_0 GIT_CONFIG_VALUE_0
 
 # Mask the README first, then the task-specific source files.
 if [ -f README.md ]; then

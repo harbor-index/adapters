@@ -2,16 +2,14 @@
 # Candidates: tasks whose expected outcome was reproduced in the dataset's published
 # verification records (verification_status MATCH or PARTIAL_MATCH in the HF dataset's
 # verification/status.csv at revision 436670ce46307eaa0cc827740a08c6078d9c693f).
-# Excludes 8 verified tasks the upstream harness marks invalid (unmaskable sources).
-# 33 of 425 adapted tasks (7.8%).
+# Excludes 8 verified tasks the upstream harness marks invalid (unmaskable sources) and
+# 3 whose setup-judge prompt exceeds o3-mini's context (adapter.JUDGE_CONTEXT_OVERFLOW).
+# 30 of 421 adapted tasks (7.1%), 18 papers.
 iclr2024-17776-7
 iclr2024-17776-8
 iclr2024-18244-2
 iclr2024-18244-7
 iclr2024-18244-9
-iclr2024-18439-0
-iclr2024-18439-2
-iclr2024-18447-11
 iclr2024-18447-12
 iclr2024-18447-13
 iclr2024-18447-14
