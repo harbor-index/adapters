@@ -1,0 +1,25 @@
+# Original side: the unmodified AgentGym `lmrlgym` Maze/Wordle server.
+#
+# Build context: <AgentGym checkout>/agentenv-lmrlgym at the pinned commit, with
+# the lmrlgym submodule initialised. No upstream file is changed.
+#
+# Upstream's documented setup (`pip install -r lmrlgym/requirements.txt`) no
+# longer resolves: it pins jaxlib==0.4.7, which PyPI stopped serving, and its
+# unpinned transitive dependencies now select releases without Python 3.9
+# support. That file also covers unrelated environments (JAX, torch, TextWorld,
+# chess). This image installs only the packages the Maze and Wordle servers
+# import, at upstream's pins where it has one, and runs on arm64 and amd64.
+FROM python:3.9.12-slim-bullseye@sha256:364ada4cb4f943b603d330cbb3d26f689c8b54de51cb12bad1202de7dba31814
+RUN pip install --no-cache-dir pip==22.1.2
+# Pinned by upstream (lmrlgym/requirements.txt).
+RUN pip install --no-cache-dir \
+    transformers==4.26.1 tqdm==4.64.0 termcolor==1.1.0 scikit-image==0.19.3
+# Left unpinned by upstream; fixed here so the image is reproducible.
+RUN pip install --no-cache-dir \
+    numpy==1.24.4 ipython==8.18.1 fastapi==0.115.6 uvicorn==0.34.0 pydantic==2.10.4
+WORKDIR /upstream/agentenv-lmrlgym
+COPY . .
+RUN pip install --no-cache-dir --no-deps -e ./lmrlgym \
+ && pip install --no-cache-dir --no-deps -e .
+EXPOSE 36001
+CMD ["lmrlgym", "--host", "0.0.0.0", "--port", "36001"]

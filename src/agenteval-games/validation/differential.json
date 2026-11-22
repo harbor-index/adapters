@@ -1,0 +1,3166 @@
+{
+  "validation": "deterministic upstream differential replay (not model parity)",
+  "python": "3.9.12 (main, May 11 2022, 10:44:44) \n[GCC 10.2.1 20210110]",
+  "upstream_agentgym_commit": "3ef9235d23e68e7c2920c5422ad957dc8ced5c6c",
+  "upstream_lmrl_commit": "83abeedb3a461c3d7d20572b73318a259d85f2ac",
+  "pinned_source_files_verified": 15,
+  "packaged_asset_hashes_verified": true,
+  "adapter_only_game_field_verified_separately": true,
+  "tasks": 50,
+  "scenarios": 350,
+  "state_comparisons": 3280,
+  "oracle_successes": 50,
+  "original_maze_51st_step_failure_verified": true,
+  "scenarios_detail": [
+    {
+      "game": "maze",
+      "index": 0,
+      "scenario": "oracle",
+      "steps": 12,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 0,
+      "scenario": "success-on-budget-boundary",
+      "steps": 15,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 0,
+      "scenario": "goal-after-budget-disallowed",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 0,
+      "scenario": "invalid-and-parser",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 0,
+      "scenario": "random-walk",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 0,
+      "scenario": "random-words-0",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 0,
+      "scenario": "random-words-1",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 0,
+      "scenario": "invalid-six",
+      "steps": 6,
+      "reward": 0.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 0,
+      "scenario": "repeated-letters",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 0,
+      "scenario": "parser-and-invalid-rng",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 0,
+      "scenario": "oracle",
+      "steps": 3,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 0,
+      "scenario": "success-on-sixth-attempt",
+      "steps": 6,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 0,
+      "scenario": "goal-after-sixth-attempt-disallowed",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 0,
+      "scenario": "repeat-valid-outside-candidates",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 1,
+      "scenario": "oracle",
+      "steps": 11,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 1,
+      "scenario": "success-on-budget-boundary",
+      "steps": 15,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 1,
+      "scenario": "goal-after-budget-disallowed",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 1,
+      "scenario": "invalid-and-parser",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 1,
+      "scenario": "random-walk",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 1,
+      "scenario": "random-words-0",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 1,
+      "scenario": "random-words-1",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 1,
+      "scenario": "invalid-six",
+      "steps": 6,
+      "reward": 0.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 1,
+      "scenario": "repeated-letters",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 1,
+      "scenario": "parser-and-invalid-rng",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 1,
+      "scenario": "oracle",
+      "steps": 2,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 1,
+      "scenario": "success-on-sixth-attempt",
+      "steps": 6,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 1,
+      "scenario": "goal-after-sixth-attempt-disallowed",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 1,
+      "scenario": "repeat-valid-outside-candidates",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 2,
+      "scenario": "oracle",
+      "steps": 10,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 2,
+      "scenario": "success-on-budget-boundary",
+      "steps": 15,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 2,
+      "scenario": "goal-after-budget-disallowed",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 2,
+      "scenario": "invalid-and-parser",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 2,
+      "scenario": "random-walk",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 2,
+      "scenario": "random-words-0",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 2,
+      "scenario": "random-words-1",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 2,
+      "scenario": "invalid-six",
+      "steps": 6,
+      "reward": 0.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 2,
+      "scenario": "repeated-letters",
+      "steps": 4,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 2,
+      "scenario": "parser-and-invalid-rng",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 2,
+      "scenario": "oracle",
+      "steps": 2,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 2,
+      "scenario": "success-on-sixth-attempt",
+      "steps": 6,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 2,
+      "scenario": "goal-after-sixth-attempt-disallowed",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 2,
+      "scenario": "repeat-valid-outside-candidates",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 3,
+      "scenario": "oracle",
+      "steps": 11,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 3,
+      "scenario": "success-on-budget-boundary",
+      "steps": 15,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 3,
+      "scenario": "goal-after-budget-disallowed",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 3,
+      "scenario": "invalid-and-parser",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 3,
+      "scenario": "random-walk",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 3,
+      "scenario": "random-words-0",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 3,
+      "scenario": "random-words-1",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 3,
+      "scenario": "invalid-six",
+      "steps": 6,
+      "reward": 0.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 3,
+      "scenario": "repeated-letters",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 3,
+      "scenario": "parser-and-invalid-rng",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 3,
+      "scenario": "oracle",
+      "steps": 3,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 3,
+      "scenario": "success-on-sixth-attempt",
+      "steps": 6,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 3,
+      "scenario": "goal-after-sixth-attempt-disallowed",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 3,
+      "scenario": "repeat-valid-outside-candidates",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 4,
+      "scenario": "oracle",
+      "steps": 12,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 4,
+      "scenario": "success-on-budget-boundary",
+      "steps": 15,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 4,
+      "scenario": "goal-after-budget-disallowed",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 4,
+      "scenario": "invalid-and-parser",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 4,
+      "scenario": "random-walk",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 4,
+      "scenario": "random-words-0",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 4,
+      "scenario": "random-words-1",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 4,
+      "scenario": "invalid-six",
+      "steps": 6,
+      "reward": 0.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 4,
+      "scenario": "repeated-letters",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 4,
+      "scenario": "parser-and-invalid-rng",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 4,
+      "scenario": "oracle",
+      "steps": 3,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 4,
+      "scenario": "success-on-sixth-attempt",
+      "steps": 6,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 4,
+      "scenario": "goal-after-sixth-attempt-disallowed",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 4,
+      "scenario": "repeat-valid-outside-candidates",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 5,
+      "scenario": "oracle",
+      "steps": 12,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 5,
+      "scenario": "success-on-budget-boundary",
+      "steps": 15,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 5,
+      "scenario": "goal-after-budget-disallowed",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 5,
+      "scenario": "invalid-and-parser",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 5,
+      "scenario": "random-walk",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 5,
+      "scenario": "random-words-0",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 5,
+      "scenario": "random-words-1",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 5,
+      "scenario": "invalid-six",
+      "steps": 6,
+      "reward": 0.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 5,
+      "scenario": "repeated-letters",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 5,
+      "scenario": "parser-and-invalid-rng",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 5,
+      "scenario": "oracle",
+      "steps": 3,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 5,
+      "scenario": "success-on-sixth-attempt",
+      "steps": 6,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 5,
+      "scenario": "goal-after-sixth-attempt-disallowed",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 5,
+      "scenario": "repeat-valid-outside-candidates",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 6,
+      "scenario": "oracle",
+      "steps": 11,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 6,
+      "scenario": "success-on-budget-boundary",
+      "steps": 15,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 6,
+      "scenario": "goal-after-budget-disallowed",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 6,
+      "scenario": "invalid-and-parser",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 6,
+      "scenario": "random-walk",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 6,
+      "scenario": "random-words-0",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 6,
+      "scenario": "random-words-1",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 6,
+      "scenario": "invalid-six",
+      "steps": 6,
+      "reward": 0.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 6,
+      "scenario": "repeated-letters",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 6,
+      "scenario": "parser-and-invalid-rng",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 6,
+      "scenario": "oracle",
+      "steps": 2,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 6,
+      "scenario": "success-on-sixth-attempt",
+      "steps": 6,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 6,
+      "scenario": "goal-after-sixth-attempt-disallowed",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 6,
+      "scenario": "repeat-valid-outside-candidates",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 7,
+      "scenario": "oracle",
+      "steps": 10,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 7,
+      "scenario": "success-on-budget-boundary",
+      "steps": 15,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 7,
+      "scenario": "goal-after-budget-disallowed",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 7,
+      "scenario": "invalid-and-parser",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 7,
+      "scenario": "random-walk",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 7,
+      "scenario": "random-words-0",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 7,
+      "scenario": "random-words-1",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 7,
+      "scenario": "invalid-six",
+      "steps": 6,
+      "reward": 0.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 7,
+      "scenario": "repeated-letters",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 7,
+      "scenario": "parser-and-invalid-rng",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 7,
+      "scenario": "oracle",
+      "steps": 2,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 7,
+      "scenario": "success-on-sixth-attempt",
+      "steps": 6,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 7,
+      "scenario": "goal-after-sixth-attempt-disallowed",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 7,
+      "scenario": "repeat-valid-outside-candidates",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 8,
+      "scenario": "oracle",
+      "steps": 11,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 8,
+      "scenario": "success-on-budget-boundary",
+      "steps": 15,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 8,
+      "scenario": "goal-after-budget-disallowed",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 8,
+      "scenario": "invalid-and-parser",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 8,
+      "scenario": "random-walk",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 8,
+      "scenario": "random-words-0",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 8,
+      "scenario": "random-words-1",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 8,
+      "scenario": "invalid-six",
+      "steps": 6,
+      "reward": 0.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 8,
+      "scenario": "repeated-letters",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 8,
+      "scenario": "parser-and-invalid-rng",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 8,
+      "scenario": "oracle",
+      "steps": 3,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 8,
+      "scenario": "success-on-sixth-attempt",
+      "steps": 6,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 8,
+      "scenario": "goal-after-sixth-attempt-disallowed",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 8,
+      "scenario": "repeat-valid-outside-candidates",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 9,
+      "scenario": "oracle",
+      "steps": 12,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 9,
+      "scenario": "success-on-budget-boundary",
+      "steps": 15,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 9,
+      "scenario": "goal-after-budget-disallowed",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 9,
+      "scenario": "invalid-and-parser",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 9,
+      "scenario": "random-walk",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 9,
+      "scenario": "random-words-0",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 9,
+      "scenario": "random-words-1",
+      "steps": 3,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 9,
+      "scenario": "invalid-six",
+      "steps": 6,
+      "reward": 0.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 9,
+      "scenario": "repeated-letters",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 9,
+      "scenario": "parser-and-invalid-rng",
+      "steps": 5,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 9,
+      "scenario": "oracle",
+      "steps": 2,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 9,
+      "scenario": "success-on-sixth-attempt",
+      "steps": 6,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 9,
+      "scenario": "goal-after-sixth-attempt-disallowed",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 9,
+      "scenario": "repeat-valid-outside-candidates",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 10,
+      "scenario": "oracle",
+      "steps": 9,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 10,
+      "scenario": "success-on-budget-boundary",
+      "steps": 15,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 10,
+      "scenario": "goal-after-budget-disallowed",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 10,
+      "scenario": "invalid-and-parser",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 10,
+      "scenario": "random-walk",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 10,
+      "scenario": "random-words-0",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 10,
+      "scenario": "random-words-1",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 10,
+      "scenario": "invalid-six",
+      "steps": 6,
+      "reward": 0.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 10,
+      "scenario": "repeated-letters",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 10,
+      "scenario": "parser-and-invalid-rng",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 10,
+      "scenario": "oracle",
+      "steps": 2,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 10,
+      "scenario": "success-on-sixth-attempt",
+      "steps": 6,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 10,
+      "scenario": "goal-after-sixth-attempt-disallowed",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 10,
+      "scenario": "repeat-valid-outside-candidates",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 11,
+      "scenario": "oracle",
+      "steps": 8,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 11,
+      "scenario": "success-on-budget-boundary",
+      "steps": 15,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 11,
+      "scenario": "goal-after-budget-disallowed",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 11,
+      "scenario": "invalid-and-parser",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 11,
+      "scenario": "random-walk",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 11,
+      "scenario": "random-words-0",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 11,
+      "scenario": "random-words-1",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 11,
+      "scenario": "invalid-six",
+      "steps": 6,
+      "reward": 0.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 11,
+      "scenario": "repeated-letters",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 11,
+      "scenario": "parser-and-invalid-rng",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 11,
+      "scenario": "oracle",
+      "steps": 3,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 11,
+      "scenario": "success-on-sixth-attempt",
+      "steps": 6,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 11,
+      "scenario": "goal-after-sixth-attempt-disallowed",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 11,
+      "scenario": "repeat-valid-outside-candidates",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 12,
+      "scenario": "oracle",
+      "steps": 7,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 12,
+      "scenario": "success-on-budget-boundary",
+      "steps": 15,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 12,
+      "scenario": "goal-after-budget-disallowed",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 12,
+      "scenario": "invalid-and-parser",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 12,
+      "scenario": "random-walk",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 12,
+      "scenario": "random-words-0",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 12,
+      "scenario": "random-words-1",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 12,
+      "scenario": "invalid-six",
+      "steps": 6,
+      "reward": 0.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 12,
+      "scenario": "repeated-letters",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 12,
+      "scenario": "parser-and-invalid-rng",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 12,
+      "scenario": "oracle",
+      "steps": 2,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 12,
+      "scenario": "success-on-sixth-attempt",
+      "steps": 6,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 12,
+      "scenario": "goal-after-sixth-attempt-disallowed",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 12,
+      "scenario": "repeat-valid-outside-candidates",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 13,
+      "scenario": "oracle",
+      "steps": 6,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 13,
+      "scenario": "success-on-budget-boundary",
+      "steps": 15,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 13,
+      "scenario": "goal-after-budget-disallowed",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 13,
+      "scenario": "invalid-and-parser",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 13,
+      "scenario": "random-walk",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 13,
+      "scenario": "random-words-0",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 13,
+      "scenario": "random-words-1",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 13,
+      "scenario": "invalid-six",
+      "steps": 6,
+      "reward": 0.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 13,
+      "scenario": "repeated-letters",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 13,
+      "scenario": "parser-and-invalid-rng",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 13,
+      "scenario": "oracle",
+      "steps": 3,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 13,
+      "scenario": "success-on-sixth-attempt",
+      "steps": 6,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 13,
+      "scenario": "goal-after-sixth-attempt-disallowed",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 13,
+      "scenario": "repeat-valid-outside-candidates",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 14,
+      "scenario": "oracle",
+      "steps": 5,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 14,
+      "scenario": "success-on-budget-boundary",
+      "steps": 15,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 14,
+      "scenario": "goal-after-budget-disallowed",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 14,
+      "scenario": "invalid-and-parser",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 14,
+      "scenario": "random-walk",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 14,
+      "scenario": "random-words-0",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 14,
+      "scenario": "random-words-1",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 14,
+      "scenario": "invalid-six",
+      "steps": 6,
+      "reward": 0.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 14,
+      "scenario": "repeated-letters",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 14,
+      "scenario": "parser-and-invalid-rng",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 14,
+      "scenario": "oracle",
+      "steps": 2,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 14,
+      "scenario": "success-on-sixth-attempt",
+      "steps": 6,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 14,
+      "scenario": "goal-after-sixth-attempt-disallowed",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 14,
+      "scenario": "repeat-valid-outside-candidates",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 15,
+      "scenario": "oracle",
+      "steps": 4,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 15,
+      "scenario": "success-on-budget-boundary",
+      "steps": 15,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 15,
+      "scenario": "goal-after-budget-disallowed",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 15,
+      "scenario": "invalid-and-parser",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 15,
+      "scenario": "random-walk",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 15,
+      "scenario": "random-words-0",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 15,
+      "scenario": "random-words-1",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 15,
+      "scenario": "invalid-six",
+      "steps": 6,
+      "reward": 0.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 15,
+      "scenario": "repeated-letters",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 15,
+      "scenario": "parser-and-invalid-rng",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 15,
+      "scenario": "oracle",
+      "steps": 2,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 15,
+      "scenario": "success-on-sixth-attempt",
+      "steps": 6,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 15,
+      "scenario": "goal-after-sixth-attempt-disallowed",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 15,
+      "scenario": "repeat-valid-outside-candidates",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 16,
+      "scenario": "oracle",
+      "steps": 3,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 16,
+      "scenario": "success-on-budget-boundary",
+      "steps": 15,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 16,
+      "scenario": "goal-after-budget-disallowed",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 16,
+      "scenario": "invalid-and-parser",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 16,
+      "scenario": "random-walk",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 16,
+      "scenario": "random-words-0",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 16,
+      "scenario": "random-words-1",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 16,
+      "scenario": "invalid-six",
+      "steps": 6,
+      "reward": 0.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 16,
+      "scenario": "repeated-letters",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 16,
+      "scenario": "parser-and-invalid-rng",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 16,
+      "scenario": "oracle",
+      "steps": 3,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 16,
+      "scenario": "success-on-sixth-attempt",
+      "steps": 6,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 16,
+      "scenario": "goal-after-sixth-attempt-disallowed",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 16,
+      "scenario": "repeat-valid-outside-candidates",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 17,
+      "scenario": "oracle",
+      "steps": 2,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 17,
+      "scenario": "success-on-budget-boundary",
+      "steps": 15,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 17,
+      "scenario": "goal-after-budget-disallowed",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 17,
+      "scenario": "invalid-and-parser",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 17,
+      "scenario": "random-walk",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 17,
+      "scenario": "random-words-0",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 17,
+      "scenario": "random-words-1",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 17,
+      "scenario": "invalid-six",
+      "steps": 6,
+      "reward": 0.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 17,
+      "scenario": "repeated-letters",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 17,
+      "scenario": "parser-and-invalid-rng",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 17,
+      "scenario": "oracle",
+      "steps": 3,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 17,
+      "scenario": "success-on-sixth-attempt",
+      "steps": 6,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 17,
+      "scenario": "goal-after-sixth-attempt-disallowed",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 17,
+      "scenario": "repeat-valid-outside-candidates",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 18,
+      "scenario": "oracle",
+      "steps": 1,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 18,
+      "scenario": "success-on-budget-boundary",
+      "steps": 15,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 18,
+      "scenario": "goal-after-budget-disallowed",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 18,
+      "scenario": "invalid-and-parser",
+      "steps": 7,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 18,
+      "scenario": "random-walk",
+      "steps": 6,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 18,
+      "scenario": "random-words-0",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 18,
+      "scenario": "random-words-1",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 18,
+      "scenario": "invalid-six",
+      "steps": 6,
+      "reward": 0.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 18,
+      "scenario": "repeated-letters",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 18,
+      "scenario": "parser-and-invalid-rng",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 18,
+      "scenario": "oracle",
+      "steps": 2,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 18,
+      "scenario": "success-on-sixth-attempt",
+      "steps": 6,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 18,
+      "scenario": "goal-after-sixth-attempt-disallowed",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 18,
+      "scenario": "repeat-valid-outside-candidates",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 19,
+      "scenario": "oracle",
+      "steps": 4,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 19,
+      "scenario": "success-on-budget-boundary",
+      "steps": 15,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 19,
+      "scenario": "goal-after-budget-disallowed",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 19,
+      "scenario": "invalid-and-parser",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 19,
+      "scenario": "random-walk",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 19,
+      "scenario": "random-words-0",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 19,
+      "scenario": "random-words-1",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 19,
+      "scenario": "invalid-six",
+      "steps": 6,
+      "reward": 0.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 19,
+      "scenario": "repeated-letters",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 19,
+      "scenario": "parser-and-invalid-rng",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 19,
+      "scenario": "oracle",
+      "steps": 3,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 19,
+      "scenario": "success-on-sixth-attempt",
+      "steps": 6,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 19,
+      "scenario": "goal-after-sixth-attempt-disallowed",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 19,
+      "scenario": "repeat-valid-outside-candidates",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 20,
+      "scenario": "oracle",
+      "steps": 5,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 20,
+      "scenario": "success-on-budget-boundary",
+      "steps": 15,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 20,
+      "scenario": "goal-after-budget-disallowed",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 20,
+      "scenario": "invalid-and-parser",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 20,
+      "scenario": "random-walk",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 20,
+      "scenario": "random-words-0",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 20,
+      "scenario": "random-words-1",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 20,
+      "scenario": "invalid-six",
+      "steps": 6,
+      "reward": 0.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 20,
+      "scenario": "repeated-letters",
+      "steps": 1,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 20,
+      "scenario": "parser-and-invalid-rng",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 20,
+      "scenario": "oracle",
+      "steps": 3,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 20,
+      "scenario": "success-on-sixth-attempt",
+      "steps": 6,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 20,
+      "scenario": "goal-after-sixth-attempt-disallowed",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 20,
+      "scenario": "repeat-valid-outside-candidates",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 21,
+      "scenario": "oracle",
+      "steps": 6,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 21,
+      "scenario": "success-on-budget-boundary",
+      "steps": 15,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 21,
+      "scenario": "goal-after-budget-disallowed",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 21,
+      "scenario": "invalid-and-parser",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 21,
+      "scenario": "random-walk",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 21,
+      "scenario": "random-words-0",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 21,
+      "scenario": "random-words-1",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 21,
+      "scenario": "invalid-six",
+      "steps": 6,
+      "reward": 0.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 21,
+      "scenario": "repeated-letters",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 21,
+      "scenario": "parser-and-invalid-rng",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 21,
+      "scenario": "oracle",
+      "steps": 3,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 21,
+      "scenario": "success-on-sixth-attempt",
+      "steps": 6,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 21,
+      "scenario": "goal-after-sixth-attempt-disallowed",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 21,
+      "scenario": "repeat-valid-outside-candidates",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 22,
+      "scenario": "oracle",
+      "steps": 7,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 22,
+      "scenario": "success-on-budget-boundary",
+      "steps": 15,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 22,
+      "scenario": "goal-after-budget-disallowed",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 22,
+      "scenario": "invalid-and-parser",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 22,
+      "scenario": "random-walk",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 22,
+      "scenario": "random-words-0",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 22,
+      "scenario": "random-words-1",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 22,
+      "scenario": "invalid-six",
+      "steps": 6,
+      "reward": 0.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 22,
+      "scenario": "repeated-letters",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 22,
+      "scenario": "parser-and-invalid-rng",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 22,
+      "scenario": "oracle",
+      "steps": 2,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 22,
+      "scenario": "success-on-sixth-attempt",
+      "steps": 6,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 22,
+      "scenario": "goal-after-sixth-attempt-disallowed",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 22,
+      "scenario": "repeat-valid-outside-candidates",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 23,
+      "scenario": "oracle",
+      "steps": 8,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 23,
+      "scenario": "success-on-budget-boundary",
+      "steps": 15,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 23,
+      "scenario": "goal-after-budget-disallowed",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 23,
+      "scenario": "invalid-and-parser",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 23,
+      "scenario": "random-walk",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 23,
+      "scenario": "random-words-0",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 23,
+      "scenario": "random-words-1",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 23,
+      "scenario": "invalid-six",
+      "steps": 6,
+      "reward": 0.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 23,
+      "scenario": "repeated-letters",
+      "steps": 5,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 23,
+      "scenario": "parser-and-invalid-rng",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 23,
+      "scenario": "oracle",
+      "steps": 2,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 23,
+      "scenario": "success-on-sixth-attempt",
+      "steps": 6,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 23,
+      "scenario": "goal-after-sixth-attempt-disallowed",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 23,
+      "scenario": "repeat-valid-outside-candidates",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 24,
+      "scenario": "oracle",
+      "steps": 9,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 24,
+      "scenario": "success-on-budget-boundary",
+      "steps": 15,
+      "reward": 1.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 24,
+      "scenario": "goal-after-budget-disallowed",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 24,
+      "scenario": "invalid-and-parser",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "maze",
+      "index": 24,
+      "scenario": "random-walk",
+      "steps": 15,
+      "reward": 0,
+      "engine_done": false,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 24,
+      "scenario": "random-words-0",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 24,
+      "scenario": "random-words-1",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 24,
+      "scenario": "invalid-six",
+      "steps": 6,
+      "reward": 0.0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 24,
+      "scenario": "repeated-letters",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 24,
+      "scenario": "parser-and-invalid-rng",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 24,
+      "scenario": "oracle",
+      "steps": 3,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 24,
+      "scenario": "success-on-sixth-attempt",
+      "steps": 6,
+      "reward": 1,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 24,
+      "scenario": "goal-after-sixth-attempt-disallowed",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    },
+    {
+      "game": "wordle",
+      "index": 24,
+      "scenario": "repeat-valid-outside-candidates",
+      "steps": 6,
+      "reward": 0,
+      "engine_done": true,
+      "episode_finished": true
+    }
+  ]
+}

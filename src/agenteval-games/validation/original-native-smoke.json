@@ -1,0 +1,221 @@
+{
+  "schema_version": 2,
+  "purpose": "Original-side native runner against the unmodified upstream lmrlgym server, with a local mock Chat Completions endpoint returning reference actions. No real model was called; not model parity.",
+  "paid_model_calls": 0,
+  "run_name": "original-native-smoke-01",
+  "upstream": {
+    "agentgym_commit": "3ef9235d23e68e7c2920c5422ad957dc8ced5c6c",
+    "lmrl_gym_commit": "83abeedb3a461c3d7d20572b73318a259d85f2ac",
+    "checkout_verified": true,
+    "server_checkout_operator_asserted": true
+  },
+  "server_image": {
+    "dockerfile": "scripts/Dockerfile.original",
+    "platform": "linux/arm64",
+    "python": "3.9.12",
+    "packages": {
+      "transformers": "4.26.1",
+      "tqdm": "4.64.0",
+      "termcolor": "1.1.0",
+      "scikit-image": "0.19.3",
+      "numpy": "1.24.4",
+      "ipython": "8.18.1",
+      "fastapi": "0.115.6",
+      "uvicorn": "0.34.0",
+      "pydantic": "2.10.4"
+    }
+  },
+  "run": {
+    "side": "original",
+    "status": "completed",
+    "score": 1.0,
+    "selected_task_ids": [
+      "agenteval-maze-00",
+      "agenteval-wordle-00"
+    ],
+    "started_at": "2026-11-22T00:08:18.975500+00:00",
+    "ended_at": "2026-11-22T00:08:19.089279+00:00"
+  },
+  "episodes": [
+    {
+      "task_id": "agenteval-maze-00",
+      "upstream_id": "lmrlgym_maze_0",
+      "status": "completed",
+      "reward": 1.0,
+      "outcome": "success",
+      "turns": 12
+    },
+    {
+      "task_id": "agenteval-wordle-00",
+      "upstream_id": "lmrlgym_wordle_0",
+      "status": "completed",
+      "reward": 1,
+      "outcome": "success",
+      "turns": 3
+    }
+  ],
+  "smoke_check": {
+    "kind": "local_reference_action_replay_not_model_parity",
+    "side": "original",
+    "passed": true,
+    "runner_return_code": 0,
+    "task_ids": [
+      "agenteval-maze-00",
+      "agenteval-wordle-00"
+    ],
+    "model_requests": 15,
+    "external_model_calls": 0
+  },
+  "mock_requests": [
+    {
+      "game": "maze",
+      "turn": 1,
+      "action": "move right",
+      "initial_roles": [
+        "user",
+        "assistant",
+        "user"
+      ]
+    },
+    {
+      "game": "maze",
+      "turn": 2,
+      "action": "move right",
+      "initial_roles": [
+        "user",
+        "assistant",
+        "user"
+      ]
+    },
+    {
+      "game": "maze",
+      "turn": 3,
+      "action": "move down",
+      "initial_roles": [
+        "user",
+        "assistant",
+        "user"
+      ]
+    },
+    {
+      "game": "maze",
+      "turn": 4,
+      "action": "move down",
+      "initial_roles": [
+        "user",
+        "assistant",
+        "user"
+      ]
+    },
+    {
+      "game": "maze",
+      "turn": 5,
+      "action": "move down",
+      "initial_roles": [
+        "user",
+        "assistant",
+        "user"
+      ]
+    },
+    {
+      "game": "maze",
+      "turn": 6,
+      "action": "move down",
+      "initial_roles": [
+        "user",
+        "assistant",
+        "user"
+      ]
+    },
+    {
+      "game": "maze",
+      "turn": 7,
+      "action": "move right",
+      "initial_roles": [
+        "user",
+        "assistant",
+        "user"
+      ]
+    },
+    {
+      "game": "maze",
+      "turn": 8,
+      "action": "move right",
+      "initial_roles": [
+        "user",
+        "assistant",
+        "user"
+      ]
+    },
+    {
+      "game": "maze",
+      "turn": 9,
+      "action": "move right",
+      "initial_roles": [
+        "user",
+        "assistant",
+        "user"
+      ]
+    },
+    {
+      "game": "maze",
+      "turn": 10,
+      "action": "move down",
+      "initial_roles": [
+        "user",
+        "assistant",
+        "user"
+      ]
+    },
+    {
+      "game": "maze",
+      "turn": 11,
+      "action": "move down",
+      "initial_roles": [
+        "user",
+        "assistant",
+        "user"
+      ]
+    },
+    {
+      "game": "maze",
+      "turn": 12,
+      "action": "move down",
+      "initial_roles": [
+        "user",
+        "assistant",
+        "user"
+      ]
+    },
+    {
+      "game": "wordle",
+      "turn": 1,
+      "action": "p a n i c",
+      "initial_roles": [
+        "user",
+        "assistant",
+        "user"
+      ]
+    },
+    {
+      "game": "wordle",
+      "turn": 2,
+      "action": "s o l a r",
+      "initial_roles": [
+        "user",
+        "assistant",
+        "user"
+      ]
+    },
+    {
+      "game": "wordle",
+      "turn": 3,
+      "action": "a r o m a",
+      "initial_roles": [
+        "user",
+        "assistant",
+        "user"
+      ]
+    }
+  ]
+}

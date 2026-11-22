@@ -1,0 +1,61 @@
+{
+  "tasks": 50,
+  "runs_per_side": {
+    "original": 3,
+    "harbor": 3
+  },
+  "metrics": [
+    {
+      "subset": "all",
+      "tasks": 50,
+      "original_runs": [
+        100.0,
+        100.0,
+        100.0
+      ],
+      "original": "100.00 \u00b1 0.00",
+      "harbor_runs": [
+        100.0,
+        100.0,
+        100.0
+      ],
+      "harbor": "100.00 \u00b1 0.00",
+      "ranges_overlap": true
+    },
+    {
+      "subset": "maze",
+      "tasks": 25,
+      "original_runs": [
+        100.0,
+        100.0,
+        100.0
+      ],
+      "original": "100.00 \u00b1 0.00",
+      "harbor_runs": [
+        100.0,
+        100.0,
+        100.0
+      ],
+      "harbor": "100.00 \u00b1 0.00",
+      "ranges_overlap": true
+    },
+    {
+      "subset": "wordle",
+      "tasks": 25,
+      "original_runs": [
+        100.0,
+        100.0,
+        100.0
+      ],
+      "original": "100.00 \u00b1 0.00",
+      "harbor_runs": [
+        100.0,
+        100.0,
+        100.0
+      ],
+      "harbor": "100.00 \u00b1 0.00",
+      "ranges_overlap": true
+    }
+  ],
+  "tasks_with_differing_rewards": {}
+}

@@ -1,0 +1,247 @@
+{
+  "schema_version": 2,
+  "purpose": "Native Harbor agent with a local mock Chat Completions endpoint returning reference actions. No real model was called; not model parity.",
+  "harbor_version": "0.27.0",
+  "harbor_source": "PyPI harbor==0.27.0",
+  "job_name": "agenteval-native-smoke-01",
+  "paid_model_calls": 0,
+  "job_result": {
+    "schema_version": 1,
+    "id": "e9467acc-acf4-4b9b-aaf9-00293e570d82",
+    "started_at": "2026-11-21T20:29:46.201973",
+    "updated_at": "2026-11-21T20:30:38.567138",
+    "finished_at": "2026-11-21T20:30:38.567138",
+    "n_total_trials": 2,
+    "stats": {
+      "n_completed_trials": 2,
+      "n_errored_trials": 0,
+      "n_running_trials": 0,
+      "n_pending_trials": 0,
+      "n_cancelled_trials": 0,
+      "n_retries": 0,
+      "evals": {
+        "agenteval-native__local/mock-agent__agenteval-generated": {
+          "n_trials": 2,
+          "n_errors": 0,
+          "metrics": [
+            {
+              "mean": 1.0
+            }
+          ],
+          "pass_at_k": {},
+          "reward_stats": {
+            "reward": {
+              "1.0": [
+                "agenteval-maze-00__smXdN2N",
+                "agenteval-wordle-00__gXx4ZBH"
+              ]
+            }
+          },
+          "exception_stats": {}
+        }
+      },
+      "n_input_tokens": 15,
+      "n_cache_tokens": 0,
+      "n_output_tokens": 15,
+      "cost_usd": null
+    }
+  },
+  "trials": [
+    {
+      "id": "918799e8-91b2-4f89-9ac2-34a80cf82328",
+      "task_name": "agentgym/agenteval-maze-00",
+      "trial_name": "agenteval-maze-00__smXdN2N",
+      "task_checksum": "9623afba450fa30cb407c192d3a331674f15180c91fc6e63a7715e6b6d385b11",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-22T04:29:46.268430Z",
+      "finished_at": "2026-11-22T04:30:38.565133Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 12,
+        "final_reward": 1
+      }
+    },
+    {
+      "id": "bfcac21f-810a-4efb-8a08-7050b934d07b",
+      "task_name": "agentgym/agenteval-wordle-00",
+      "trial_name": "agenteval-wordle-00__gXx4ZBH",
+      "task_checksum": "7bdf469ef6bcf37d575c72de5d537455c6bd243bd9c1f0955c7edaa9003d0554",
+      "verifier_environment_mode": "separate",
+      "verifier_result": {
+        "rewards": {
+          "reward": 1.0
+        }
+      },
+      "exception_info": null,
+      "started_at": "2026-11-22T04:29:46.332763Z",
+      "finished_at": "2026-11-22T04:30:31.629193Z",
+      "transcript_artifact": {
+        "source": "/game-evidence/transcript.json",
+        "service": "game",
+        "status": "ok",
+        "turns": 3,
+        "final_reward": 1
+      }
+    }
+  ],
+  "mock_requests": [
+    {
+      "game": "wordle",
+      "turn": 1,
+      "action": "p a n i c",
+      "initial_roles": [
+        "user",
+        "assistant",
+        "user"
+      ]
+    },
+    {
+      "game": "wordle",
+      "turn": 2,
+      "action": "s o l a r",
+      "initial_roles": [
+        "user",
+        "assistant",
+        "user"
+      ]
+    },
+    {
+      "game": "wordle",
+      "turn": 3,
+      "action": "a r o m a",
+      "initial_roles": [
+        "user",
+        "assistant",
+        "user"
+      ]
+    },
+    {
+      "game": "maze",
+      "turn": 1,
+      "action": "move right",
+      "initial_roles": [
+        "user",
+        "assistant",
+        "user"
+      ]
+    },
+    {
+      "game": "maze",
+      "turn": 2,
+      "action": "move right",
+      "initial_roles": [
+        "user",
+        "assistant",
+        "user"
+      ]
+    },
+    {
+      "game": "maze",
+      "turn": 3,
+      "action": "move down",
+      "initial_roles": [
+        "user",
+        "assistant",
+        "user"
+      ]
+    },
+    {
+      "game": "maze",
+      "turn": 4,
+      "action": "move down",
+      "initial_roles": [
+        "user",
+        "assistant",
+        "user"
+      ]
+    },
+    {
+      "game": "maze",
+      "turn": 5,
+      "action": "move down",
+      "initial_roles": [
+        "user",
+        "assistant",
+        "user"
+      ]
+    },
+    {
+      "game": "maze",
+      "turn": 6,
+      "action": "move down",
+      "initial_roles": [
+        "user",
+        "assistant",
+        "user"
+      ]
+    },
+    {
+      "game": "maze",
+      "turn": 7,
+      "action": "move right",
+      "initial_roles": [
+        "user",
+        "assistant",
+        "user"
+      ]
+    },
+    {
+      "game": "maze",
+      "turn": 8,
+      "action": "move right",
+      "initial_roles": [
+        "user",
+        "assistant",
+        "user"
+      ]
+    },
+    {
+      "game": "maze",
+      "turn": 9,
+      "action": "move right",
+      "initial_roles": [
+        "user",
+        "assistant",
+        "user"
+      ]
+    },
+    {
+      "game": "maze",
+      "turn": 10,
+      "action": "move down",
+      "initial_roles": [
+        "user",
+        "assistant",
+        "user"
+      ]
+    },
+    {
+      "game": "maze",
+      "turn": 11,
+      "action": "move down",
+      "initial_roles": [
+        "user",
+        "assistant",
+        "user"
+      ]
+    },
+    {
+      "game": "maze",
+      "turn": 12,
+      "action": "move down",
+      "initial_roles": [
+        "user",
+        "assistant",
+        "user"
+      ]
+    }
+  ]
+}

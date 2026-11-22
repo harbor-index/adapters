@@ -1,0 +1,48 @@
+{
+  "comparisons": [
+    {
+      "recorded_on": "original",
+      "run": "original-run1.json",
+      "replayed_through": "adapter engine",
+      "episodes": 50,
+      "steps": 258
+    },
+    {
+      "recorded_on": "original",
+      "run": "original-run2.json",
+      "replayed_through": "adapter engine",
+      "episodes": 50,
+      "steps": 256
+    },
+    {
+      "recorded_on": "original",
+      "run": "original-run3.json",
+      "replayed_through": "adapter engine",
+      "episodes": 50,
+      "steps": 255
+    },
+    {
+      "recorded_on": "harbor",
+      "run": "harbor-run1",
+      "replayed_through": "upstream server",
+      "episodes": 50,
+      "steps": 256
+    },
+    {
+      "recorded_on": "harbor",
+      "run": "harbor-run2",
+      "replayed_through": "upstream server",
+      "episodes": 50,
+      "steps": 255
+    },
+    {
+      "recorded_on": "harbor",
+      "run": "harbor-run3",
+      "replayed_through": "upstream server",
+      "episodes": 50,
+      "steps": 257
+    }
+  ],
+  "mismatches": [],
+  "passed": true
+}

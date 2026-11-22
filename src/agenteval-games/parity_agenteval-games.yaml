@@ -1,0 +1,31 @@
+# Native parity configuration used for the recorded runs (Harbor side).
+# Both sides send their chat requests to scripts/codex_chat_bridge.py, which was
+# listening on port 18080. The Codex CLI route cannot set sampling parameters,
+# so temperature, max_tokens and top_p are null and are left out of the request.
+# For a plain OpenAI-compatible endpoint, set api_base (or OPENAI_BASE_URL) and
+# the key variable, and give the sampling fields explicit values.
+#   a model that accepts temperature or top_p but not both:  top_p: null
+#   a model that takes max_completion_tokens and fixed sampling:
+#     temperature: null, max_tokens: null, top_p: null,
+#     extra_body: {max_completion_tokens: 4096}
+datasets:
+  - path: /tmp/agenteval-games
+agents:
+  - import_path: agenteval_games.harbor_agent:AgentEvalNativeAgent
+    model_name: gpt-6.1-astra
+    kwargs:
+      temperature: null
+      max_tokens: null
+      top_p: null
+      extra_body: {}
+      request_timeout_sec: 120
+      environment_timeout_sec: 30
+      episode_timeout_sec: 1500
+      api_base: http://127.0.0.1:18080/v1
+      api_key_env: AGENTEVAL_BRIDGE_KEY
+environment:
+  type: docker
+  delete: true
+orchestrator:
+  type: local
+  n_concurrent_trials: 4

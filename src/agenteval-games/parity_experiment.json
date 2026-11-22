@@ -1,0 +1,72 @@
+[
+  {
+    "adapter_name": "agenteval-games",
+    "agent": "agenteval-native@0.1.0",
+    "model": "gpt-6.1-astra",
+    "date": "2026-11-21",
+    "adapted_benchmark_size": 50,
+    "parity_benchmark_size": 50,
+    "number_of_runs": 3,
+    "notes": "All 50 tasks (25 Maze + 25 Wordle), 3 full runs per side, in the required order: a sanity check on 5 Maze + 5 Wordle tasks per side (10/10 on both), one full run per side, then two more per side. Custom-agent parity: the shared conversation policy agenteval_games.native_policy 0.1.0 runs as AgentEvalNativeAgent on Harbor 0.27.0 and as agenteval_games.original_runner against the unmodified upstream lmrlgym server (AgentGym 3ef9235, LMRL-Gym 83abeed, built with scripts/Dockerfile.original). Model access: gpt-6.1-astra was reachable only through the Codex CLI (codex-cli 0.171.0) on a private gateway, so both sides sent chat requests to scripts/codex_chat_bridge.py, which answers each request with one `codex exec` call at reasoning effort medium. On both sides Codex's own system prompt and a short instruction to reply as the assistant precede the conversation, and temperature, max_tokens and top_p cannot be set, so they were omitted. The model ID is not a dated identifier; the gateway serves the model under an internal alias, which the uploaded logs show as <gateway-model-alias>. Codex had no built-in metadata for that name and ran with its fallback model settings. 1,537 model calls, 0 failures, 0 commands executed by Codex; 32.5M input and 0.07M output tokens. Both sides are at the score ceiling, which satisfies the range-overlap criterion but cannot by itself reveal a small divergence. As a model-free supplement, every reply recorded on either side (300 episodes, 1,537 steps) was replayed through the other side's environment with identical observations, rewards and termination flags at every step (scripts/cross_replay.py, validation/parity-cross-replay.json). Scores are percentages, mean ± sample SEM over runs. Standard agent (Harbor side only, not a parity comparison): Harbor's built-in codex@0.171.0 played all 50 tasks once with the same model through the terminal `game` client and scored 50/50. These scores are not comparable to published AgentGym results, which used a plain chat API. Parity artifacts: harborframework/parity-experiments is over the Hub's file-count limit and rejects new files, so they are mirrored at https://huggingface.co/datasets/zodi1121/agenteval-games-parity-experiments until PR 296 can accept them.",
+    "original_parity_repo": "https://github.com/WooooDyy/AgentGym/tree/3ef9235d23e68e7c2920c5422ad957dc8ced5c6c",
+    "adapter_pr": [
+      "https://github.com/harbor-index/adapters/pull/20"
+    ],
+    "dataset_pr": [
+      "https://github.com/harbor-framework/harbor-datasets/pull/290"
+    ],
+    "parity_pr": [
+      "https://huggingface.co/datasets/harborframework/parity-experiments/discussions/296"
+    ],
+    "metrics": [
+      {
+        "benchmark_name": "AgentEval Games (Maze + Wordle)",
+        "metric": "final-step reward (%)",
+        "original": "100.00 ± 0.00",
+        "harbor": "100.00 ± 0.00",
+        "original_runs": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "harbor_runs": [
+          100.0,
+          100.0,
+          100.0
+        ]
+      },
+      {
+        "benchmark_name": "AgentEval Maze",
+        "metric": "final-step reward (%)",
+        "original": "100.00 ± 0.00",
+        "harbor": "100.00 ± 0.00",
+        "original_runs": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "harbor_runs": [
+          100.0,
+          100.0,
+          100.0
+        ]
+      },
+      {
+        "benchmark_name": "AgentEval Wordle",
+        "metric": "final-step reward (%)",
+        "original": "100.00 ± 0.00",
+        "harbor": "100.00 ± 0.00",
+        "original_runs": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "harbor_runs": [
+          100.0,
+          100.0,
+          100.0
+        ]
+      }
+    ]
+  }
+]
