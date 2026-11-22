@@ -1,0 +1,20 @@
+[project]
+name = "harbor-tavernbench-adapter"
+version = "0.1.0"
+description = "Harbor adapter for TavernBench, a benchmark of Hearthstone Battlegrounds decisions and rule execution"
+readme = "README.md"
+authors = [
+    { name = "Ming Yin", email = "ming.yin@duke.edu" }
+]
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+tavernbench = "tavernbench.main:main"
+
+[build-system]
+requires = ["uv_build>=0.11.32,<0.12.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "tavernbench"
