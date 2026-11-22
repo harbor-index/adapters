@@ -9,7 +9,9 @@
     "number_of_runs": null,
     "notes": "Parity experiments have not been run yet; this entry is a placeholder until the parity plan is agreed with the Harbor team.",
     "original_parity_repo": "https://github.com/LeiLiLab/susvibes",
-    "adapter_pr": [],
+    "adapter_pr": [
+      "https://github.com/harbor-index/adapters/pull/33"
+    ],
     "dataset_pr": [],
     "parity_pr": [],
     "metrics": [
