@@ -174,6 +174,8 @@ The oracle was run over the whole default dataset with Harbor 0.25.0 on Docker (
 |-------|----------------------|------------|-------------|
 | 1,962 | 1,962 | 0 | 1.000 |
 
+The run was repeated with Harbor 0.27.0 on the same task files, with the same result: 1,962 of 1,962 with reward 1, no exceptions, in 1 h 57 min.
+
 - The run was interrupted once by a restart of the session that had started it, after 645 finished trials, and was completed with `harbor job resume`. The six trials that were in flight at that moment were run again; no trial was repeated because of a failure. The two parts took 38 minutes and 1 h 19 min on a machine with 16 CPUs.
 - `humanevalpack-score` on that job reports 100.00% pass@1 for every language in both task families (981 problems each).
 - The dataset on disk is the one this run used: a fresh generation with the same code is identical to it file for file.
