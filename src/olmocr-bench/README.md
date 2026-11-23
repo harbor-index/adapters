@@ -221,6 +221,8 @@ The oracle was run on the full benchmark with Harbor 0.25.0 on Docker (`run_olmo
 - `olmocr-bench-score` on that job reports "Average Score: 100.0% ± 0.0% (average of per-JSONL scores) over 8413 tests", with all eight sources at 100%.
 - Independently of Harbor, the same oracle outputs pass every test, 8,413 of 8,413, under the original harness (`python -m olmocr.bench.benchmark` at the pinned commit: "Average Score: 100.0% ± 0.0%").
 
+- The run was repeated with Harbor 0.27.0 on the same task files: 1,403 of 1,403 with reward 1.0, no exceptions, in 1 h 26 min.
+
 No task is excluded and no oracle fails.
 
 ### Evaluator replay against the original harness
