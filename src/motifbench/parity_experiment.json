@@ -1,0 +1,22 @@
+[
+  {
+    "adapter_name": "motifbench",
+    "agent": "TBD",
+    "model": "TBD",
+    "date": "2026-11-23",
+    "adapted_benchmark_size": 12,
+    "parity_benchmark_size": 12,
+    "notes": "Scenario-2 model parity is pending Harbor-team approval before [Ready for review]. original and harbor stay null so unpublished scores are not invented. The deterministic oracle path is a verifier check, not a parity score.",
+    "adapter_pr": null,
+    "dataset_pr": null,
+    "parity_pr": null,
+    "metrics": [
+      {
+        "benchmark_name": "MotifBench Macbeth scene-group",
+        "metric": "Hit@5 (micro)",
+        "original": null,
+        "harbor": null
+      }
+    ]
+  }
+]

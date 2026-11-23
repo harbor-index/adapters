@@ -1,0 +1,35 @@
+[
+  {
+    "adapter_name": "motifbench",
+    "adapter_builders": [
+      {
+        "name": "Xinyu Sun",
+        "email": "sunxy23@m.fudan.edu.cn"
+      }
+    ],
+    "original_benchmark": [
+      {
+        "split": "test",
+        "size": 12,
+        "harness": "llm",
+        "supported_agents": null,
+        "adaptable": true,
+        "notes": "MotifBench (Critic's Eye, EMNLP 2026 Findings) Macbeth benchmark from Acture/MotifBench. After anti-leakage sanitization (removing 19 explicit Act/Scene/Line citation motifs, 40 passage-pointer motifs, and 60 local ±15-line verbatim 3-gram pairs), 218 clean candidate motifs and 270 query lines (449 pairs, 96.4% zero content-word overlap) are grouped into 12 contiguous Act-respecting scene-group tasks (13-36 queries/task; single-query 270-task mode also supported via --granularity query). Full play provided in both TXT and PDF formats under /app/."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "test",
+        "adapted_benchmark_size": 12,
+        "parity_benchmark_size": 12,
+        "parity_sampling_rate": 1.0,
+        "registry_benchmark_size": 12,
+        "added_agents": null,
+        "parity_matching_agents": [],
+        "parity_unmatching_agents": null,
+        "parity_costs": null,
+        "notes": "Pending Scenario-2 parity runs with Harbor team approval."
+      }
+    ]
+  }
+]
