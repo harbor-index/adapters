@@ -1,13 +1,13 @@
 [
   {
     "adapter_name": "exp-bench",
-    "agent": "openhands@02bc7de3 (pending confirmation)",
+    "agent": "claude-code@2.1.330",
     "model": "pending",
     "date": "pending",
     "adapted_benchmark_size": 421,
-    "parity_benchmark_size": null,
+    "parity_benchmark_size": 27,
     "number_of_runs": 3,
-    "notes": "Parity not run yet; plan in README. Both sides: same task bundle, pinned repository commits, OpenHands version, max_iterations=30, agent time limit and judge model/endpoint. Original side: upstream generate -> judge pipeline with opt-in pinning changes.",
+    "notes": "Parity not run yet; plan in README. Subset: 27 CPU-feasible tasks (20 papers), no GPUs on either side. Both sides: same task bundle and pinned repository commits, Claude Code 2.1.330 with the same install command and flags, 30-minute agent limit, same judge model and endpoint. Original side: the EXP-Bench harness with Claude Code added (Scenario 2).",
     "original_parity_repo": "https://github.com/Just-Curieous/Curie/tree/harbor-parity",
     "adapter_pr": [
       "https://github.com/harbor-index/adapters/pull/28"

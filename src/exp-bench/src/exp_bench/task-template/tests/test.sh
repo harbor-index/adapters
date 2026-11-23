@@ -1,10 +1,6 @@
 #!/bin/bash
-# EXP-Bench verifier: git diff + LLM judge (upstream prompts) + execution check.
-# judge.py writes /logs/verifier/reward.json (all metrics) and /logs/verifier/reward.txt
-# (the primary reward: conclusion correctness).
-# Judge dependencies are pinned to the upstream EXP-Bench environment.yml and installed
-# into a fresh venv at an unpredictable path, ignoring pip configuration, so neither the
-# agent's packages nor anything it left behind can affect the judge.
+# EXP-Bench verifier. Judge dependencies (pinned as in upstream's environment.yml) go into
+# a fresh venv, ignoring pip configuration, so nothing the agent installed affects the judge.
 set -uo pipefail
 
 mkdir -p /logs/verifier
@@ -15,7 +11,7 @@ JUDGE_VENV="$(mktemp -d /tmp/exp-bench-judge-XXXXXXXX)"
 
 installed=0
 for attempt in 1 2 3 4; do
-    # tiktoken downloads its encodings on first use; fetch them here so the retry covers it.
+    # tiktoken downloads its encodings on first use; fetch them inside the retry.
     if PIP_CONFIG_FILE=/dev/null "$JUDGE_VENV/bin/pip" install --isolated -q \
         --disable-pip-version-check --timeout 60 --retries 10 \
         "openai==1.66.3" "tiktoken==0.9.0" "langchain-text-splitters==0.3.6" \

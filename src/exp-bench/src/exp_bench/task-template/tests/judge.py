@@ -24,11 +24,10 @@ import re
 import shutil
 import signal
 import subprocess
-import time
 from pathlib import Path
 
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from openai import APIConnectionError, APIStatusError, APITimeoutError, OpenAI, RateLimitError
+from openai import OpenAI
 import tiktoken
 
 TESTS_DIR = Path(__file__).resolve().parent
@@ -62,15 +61,11 @@ CONTEXT_LENGTHS = {
     "gemini-2.5-pro-preview-03-25": 200000,
 }
 
-# Optional, not upstream: Claude judges (1M-token input) through Anthropic's
-# OpenAI-compatible endpoint (OPENAI_BASE_URL=https://api.anthropic.com/v1/, OPENAI_API_KEY
-# = an Anthropic key). Budgets here are counted with tiktoken, which undercounts Claude
-# tokens by roughly 1.4x on these prompts, so the budget leaves that margin.
+# Optional Claude judges (not upstream) via Anthropic's OpenAI-compatible endpoint. Token
+# budgets use tiktoken, which undercounts Claude tokens by ~1.4x, hence 650k of 1M. The
+# endpoint rejects an empty user turn, `temperature` and `json_object` (see llm_query_plain).
 CLAUDE_JUDGE = JUDGE_MODEL.startswith("claude-")
 CLAUDE_CONTEXT_TIKTOKEN = 650000
-# That endpoint rejects an empty user turn, `temperature` (Claude 5 models) and
-# `json_object`; a minimal user turn and a strict JSON schema of the keys each judge
-# prompt asks for replace them. The judge prompts themselves are unchanged.
 CLAUDE_USER_TURN = "Respond with the JSON object."
 INTEGER_KEYS = {"design_score", "setup_score"}
 BOOLEAN_KEYS = {"paper_access", "git_operations", "faked_or_nonexperimental_data"}
@@ -135,10 +130,8 @@ def breakdown_message(msg: str) -> list[str]:
 
 
 def make_client() -> OpenAI:
-    kwargs = {"api_key": os.environ["OPENAI_API_KEY"]}
-    if os.environ.get("OPENAI_BASE_URL"):
-        kwargs["base_url"] = os.environ["OPENAI_BASE_URL"]
-    return OpenAI(**kwargs)
+    # Transport-level retries (connection errors, 429, 5xx) do not change what is judged.
+    return OpenAI(api_key=os.environ["OPENAI_API_KEY"], base_url=os.environ.get("OPENAI_BASE_URL") or None, max_retries=6)
 
 
 CLIENT = None
@@ -166,24 +159,7 @@ def llm_query_plain(system_prompt: str, default_json_output: dict) -> dict:
         }
     elif not ("o3" in JUDGE_MODEL or "o1" in JUDGE_MODEL):
         kwargs["temperature"] = 0.7
-    # Transport-level retries only; they do not change what is judged.
-    for attempt in range(6):
-        try:
-            response = CLIENT.chat.completions.create(**kwargs)
-            break
-        except (APIConnectionError, APITimeoutError, RateLimitError) as e:
-            wait = min(60, 5 * 2**attempt)
-            log(f"judge API transient error ({type(e).__name__}); retrying in {wait}s")
-            time.sleep(wait)
-        except APIStatusError as e:
-            if e.status_code >= 500 and attempt < 5:
-                wait = min(60, 5 * 2**attempt)
-                log(f"judge API {e.status_code}; retrying in {wait}s")
-                time.sleep(wait)
-                continue
-            raise
-    else:
-        raise RuntimeError("Judge API unavailable after retries")
+    response = CLIENT.chat.completions.create(**kwargs)
     content = response.choices[0].message.content or ""
     try:
         return json.loads(content)
@@ -292,19 +268,15 @@ def generate_patch(patch_file: Path) -> str:
 
 
 def read_agent_logs() -> str:
-    """Return the agent log the monitor judges.
+    """The agent's console log, as upstream passes the OpenHands console log to the monitor.
 
-    Upstream passes the OpenHands console log (stdout and stderr of the OpenHands CLI,
-    ``tee``'d to ``*_eval_gen_openhands_logs.txt``). Harbor's OpenHands agent writes the
-    same stream to ``/logs/agent/openhands.txt``, so only that file is used when it
-    exists; Harbor's derived files (``trajectory.json``, ``sessions/``) repeat its
-    content in another format. Other agents have no upstream equivalent, so all their
-    text logs are concatenated.
+    Harbor's derived files (trajectory.json, sessions/) repeat it, so only the console log
+    is used for agents that write one; for other agents all text logs are concatenated.
     """
-    console_log = AGENT_LOG_DIR / "openhands.txt"
+    console_logs = [AGENT_LOG_DIR / name for name in ("openhands.txt", "claude-code.txt")]
     parts = []
-    if console_log.is_file():
-        parts.append(console_log.read_text(errors="replace"))
+    if any(path.is_file() for path in console_logs):
+        parts.append(next(path for path in console_logs if path.is_file()).read_text(errors="replace"))
     elif AGENT_LOG_DIR.exists():
         for path in sorted(p for p in AGENT_LOG_DIR.rglob("*") if p.is_file()):
             try:

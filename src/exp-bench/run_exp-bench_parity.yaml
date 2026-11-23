@@ -1,23 +1,20 @@
-# Parity subset config (generate with: uv run exp-bench --split parity
-#   --output-dir ../../datasets/exp-bench-parity).
-# Agent version, model and judge model must match the original-side run exactly.
-# Host env: OPENAI_API_KEY / OPENAI_BASE_URL (judge), EXP_BENCH_JUDGE_MODEL,
-# plus the agent's model credentials.
+# Parity subset (uv run exp-bench --split parity --output-dir ../../datasets/exp-bench-parity).
+# Agent version, model and judge model must match the original-side run.
+# Host env: ANTHROPIC_API_KEY (agent), OPENAI_API_KEY / OPENAI_BASE_URL / EXP_BENCH_JUDGE_MODEL (judge).
 jobs_dir: jobs
 n_attempts: 1
 timeout_multiplier: 1.0
 orchestrator:
   type: local
   n_concurrent_trials: 8
-  quiet: false
 environment:
   type: daytona
   force_build: true
   delete: true
 agents:
-  - name: openhands
-    model_name: TBD  # pinned low-cost model agreed with the Harbor team
-    # kwargs:
-    #   version: TBD  # same OpenHands version as the original-side fork
+  - name: claude-code
+    model_name: anthropic/claude-haiku-5-5  # to be agreed with the Harbor team
+    kwargs:
+      version: 2.1.330
 datasets:
   - path: datasets/exp-bench-parity

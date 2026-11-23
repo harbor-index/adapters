@@ -16,14 +16,14 @@
       {
         "split": "full",
         "adapted_benchmark_size": 421,
-        "parity_benchmark_size": 30,
-        "parity_sampling_rate": 0.0713,
+        "parity_benchmark_size": 27,
+        "parity_sampling_rate": 0.0641,
         "registry_benchmark_size": 421,
         "added_agents": ["None"],
         "parity_matching_agents": [],
         "parity_unmatching_agents": ["None"],
         "parity_costs": null,
-        "notes": "Parity pending. Provisional subset: 30 valid tasks marked MATCH/PARTIAL_MATCH in the dataset's published verification records (verification/status.csv); final stratified selection to be agreed with the Harbor team."
+        "notes": "Parity pending. Subset: 27 tasks from 20 papers whose experiment can be finished on CPU within the 30-minute limit (selection rule in src/exp_bench/data/parity_task_ids.txt); both sides run Claude Code without GPUs. Claude Code is added to the original harness because its OpenHands build cannot call current models."
       }
     ]
   }

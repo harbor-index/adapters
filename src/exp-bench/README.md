@@ -2,164 +2,102 @@
 
 ## Overview
 
-EXP-Bench evaluates whether AI agents can carry out a complete AI research experiment:
-given a research question from a real ICLR 2024 or NeurIPS 2024 paper and the paper's
-code repository with key files masked, the agent must design the experiment, implement
-and run it, and state a conclusion grounded in its own results.
+EXP-Bench evaluates whether AI agents can carry out an AI research experiment: given a
+research question from an ICLR 2024 or NeurIPS 2024 paper and the paper's repository with
+key files masked, the agent designs the experiment, implements and runs it, and states a
+conclusion.
 
-- **Source:** 461 tasks from 51 papers (24 ICLR 2024, 27 NeurIPS 2024),
-  [arXiv:2505.24785](https://arxiv.org/abs/2505.24785). Dataset on
-  [Hugging Face](https://huggingface.co/datasets/Just-Curieous/EXP-Bench) (CC-BY-4.0);
-  evaluation harness in [Just-Curieous/Curie](https://github.com/Just-Curieous/Curie/tree/main/benchmark/exp_bench) (Apache-2.0).
-- **Task types:** type 1 (210 tasks) masks source files the agent must re-implement;
-  type 2 (123) masks the scripts that run an experiment; type 3 (128) masks nothing but
-  the README and asks for the experiment from scratch.
-- **This adapter: 421 tasks.** 40 tasks cannot be graded by the upstream pipeline and
-  are excluded. 36 are ones the upstream harness itself marks `invalid_task`: 33 list a
-  source file that does not exist in the paper's repository (it never existed in the
-  repository's history), and 3 list `README.md`, which upstream removes before masking.
-  For the other 4, the reference source files that the setup judge embeds in every
-  prompt already exceed o3-mini's 200k-token context, so upstream's judge fails on any
-  agent output. See Notes & Caveats.
-- **Main adaptations:** repositories are pinned to the commit that was current when the
-  tasks were constructed (upstream clones `HEAD` at run time), and the judge talks to any
-  OpenAI-compatible endpoint (upstream uses Azure OpenAI). Prompts, masking, judge prompts
-  and score definitions are unchanged.
+- **Source:** 461 tasks from 51 papers, [arXiv:2505.24785](https://arxiv.org/abs/2505.24785).
+  Dataset on [Hugging Face](https://huggingface.co/datasets/Just-Curieous/EXP-Bench)
+  (CC-BY-4.0); harness in [Just-Curieous/Curie](https://github.com/Just-Curieous/Curie/tree/main/benchmark/exp_bench) (Apache-2.0).
+- **Task types:** type 1 (210) masks source files to re-implement, type 2 (123) masks the
+  scripts that run an experiment, type 3 (128) masks only the README.
+- **This adapter: 421 tasks.** 40 tasks cannot be graded by the upstream pipeline and are
+  excluded (see Notes & Caveats).
+- **Main adaptations:** repositories are pinned to the commit current when the tasks were
+  built (upstream clones `HEAD`), and the judge uses any OpenAI-compatible endpoint
+  (upstream uses Azure). Prompts, masking, judge prompts and scores are unchanged.
 
 ## What is EXP-Bench?
 
-[EXP-Bench](https://arxiv.org/abs/2505.24785) ("EXP-Bench: Can AI Conduct AI Research
-Experiments?") curates research tasks from influential AI papers. Each task gives an
-agent a research question, a description of the method, and optional step-by-step
-instructions, plus the paper's repository with the implementation masked. Agents must
-formulate a design, implement and execute it, and conclude. An LLM judge (o3-mini)
-grades the run against the paper-derived ground truth:
+Each task gives a research question, a method description and optional step-by-step
+instructions, plus the masked repository. An LLM judge (o3-mini) grades the run:
 
-- **D (design):** percentage of ground-truth design variables matched.
-- **I (implementation):** percentage of ground-truth setup requirements fulfilled by the
-  agent's git diff, with the original source files as reference.
-- **C (conclusion):** whether the conclusion semantically matches the expected outcome.
-- **E (execution):** whether the agent's `reproduce_exp_bench.sh` runs successfully.
-- A log monitor first checks that the agent did not read the paper, use git to recover
-  masked files, or fabricate results; if it did, every score is 0.
+- **D (design):** share of ground-truth design variables matched.
+- **I (implementation):** share of setup requirements met by the agent's git diff.
+- **C (conclusion):** whether the conclusion matches the expected outcome.
+- **E (execution):** whether the agent's `reproduce_exp_bench.sh` runs.
+- A log monitor first checks that the agent did not read the paper, recover masked files
+  with git, or fake results; otherwise every score is 0.
 
-In the paper, the best configuration (OpenHands + o3-mini) reached D 18.4, I 20.3,
-C 21.0 and 0.5% fully correct and executable experiments.
+The paper's best configuration (OpenHands + o3-mini) reached D 18.4, I 20.3, C 21.0 and
+0.5% fully correct and executable experiments.
 
 ## Adapter Features
 
-- Task generation from the full upstream task records (question, method, agent
-  instructions, design ground truth, setup requirements, expected outcome, masked
-  sources), with stable task ids `<conference>-<paper_id>-<task_index>` and task names
-  `just-curieous/exp-bench__<task id>`.
-- Environment: the paper repository at a pinned commit in `/workspace`, submodules
-  converted to HTTPS and initialised, README and task source files removed from disk and
-  from the git index exactly as upstream `mask_repo` does.
-- Agent prompt: upstream `eval_gen_prompt.txt`, filled the way upstream fills it for
-  OpenHands / Inspect agents, including the output JSON path and
-  `/workspace/reproduce_exp_bench.sh`.
-- Verifier (`tests/judge.py`): a port of upstream `judge.py`: same git diff commands and
-  70 MB truncation, same four judge prompts filled with the same Python objects, same
-  retry and "Error parsing response" rules, the same chunking of large diffs (upstream
-  token counting and text splitter, stopping at chunk 15), the setup monitor, and the
-  1 hour execution check. Judge dependencies are pinned to upstream's environment.
+- Tasks from the full upstream task records, with stable ids
+  `<conference>-<paper_id>-<task_index>` and names `just-curieous/exp-bench__<task id>`.
+- Environment: the repository at its pinned commit in `/workspace`, masked as upstream
+  `mask_repo` does.
+- Instruction: upstream `eval_gen_prompt.txt`, filled as upstream fills it for its agents.
+- Verifier (`tests/judge.py`): a port of upstream `judge.py` (diff generation, the four
+  judge prompts, retries, chunking of large diffs, log monitor, 1-hour execution check),
+  with judge dependencies pinned to upstream's.
 - Rewards (`/logs/verifier/reward.json`): `design`, `implementation`, `conclusion`,
-  `execution`, `implementation_and_execution`, `all_correct`,
-  `all_correct_and_execution`, `monitor_pass`, and `reward` (= `conclusion`, also in
-  `reward.txt`). Judge outputs, the patch and the agent answer are saved under
-  `/logs/verifier/`.
-- `--split parity` generates the parity subset; `--gpus`, `--cpus`, `--memory-mb`,
-  `--storage-mb` and `--agent-timeout-hours` set resources and the time limit.
-- No custom agent: any Harbor agent can run the tasks; parity uses OpenHands, which the
-  upstream harness supports.
+  `execution`, conjunctive metrics, `monitor_pass`, and `reward` (= `conclusion`).
+- Any Harbor agent can run the tasks; no custom agent.
 
 ## Generated Task Structure
 
 ```
 exp-bench/
 ├── {task_id}/                       # e.g. neurips2024-97649-0
-│   ├── task.toml                    # name, authors, metadata, judge env, resources
-│   ├── instruction.md               # upstream eval_gen_prompt filled for this task
+│   ├── task.toml                    # metadata, judge env, resources
+│   ├── instruction.md               # upstream agent prompt for this task
 │   ├── environment/
-│   │   ├── Dockerfile               # miniconda base + tools
-│   │   └── prepare_workspace.sh     # clone at pinned commit, mask README and sources
-│   ├── solution/
-│   │   ├── solve.sh                 # oracle: restore sources, write reference answer
-│   │   ├── oracle_answer.json       # ground-truth design and expected outcome
-│   │   └── oracle_files/            # original masked source files
+│   │   ├── Dockerfile
+│   │   └── prepare_workspace.sh     # clone at pinned commit, mask
+│   ├── solution/                    # oracle: restore sources, write reference answer
 │   └── tests/
-│       ├── test.sh                  # installs pinned judge deps, runs judge.py
-│       ├── judge.py                 # upstream judging pipeline
-│       ├── prompts/                 # upstream judge prompts (verbatim)
-│       └── task_data.json           # task record and ground-truth source files
+│       ├── test.sh                  # installs judge deps, runs judge.py
+│       ├── judge.py
+│       ├── prompts/                 # upstream judge prompts
+│       └── task_data.json           # task record and reference sources
 ```
 
-Adapter code:
-
-```
-src/exp-bench/
-├── README.md
-├── adapter_metadata.json
-├── parity_experiment.json
-├── pyproject.toml
-├── run_exp-bench.yaml
-├── scripts/build_task_bundle.py     # how the task bundle is built from upstream outputs
-└── src/exp_bench/
-    ├── adapter.py
-    ├── main.py
-    ├── prompts/eval_gen_prompt.txt  # upstream agent prompt (verbatim)
-    ├── data/exp_bench_tasks.json.gz # full task records, pinned commits, source hashes
-    ├── data/parity_task_ids.txt     # parity subset
-    └── task-template/
-```
+Adapter code: `src/exp_bench/adapter.py`, `main.py`, `prompts/eval_gen_prompt.txt`,
+`data/exp_bench_tasks.json.gz` (task records, pinned commits, source hashes),
+`data/parity_task_ids.txt`, and `task-template/`. `scripts/build_task_bundle.py` shows how
+the bundle is built from upstream outputs.
 
 ## Run Evaluation / Harness
 
 ### Running with Datasets Registry
 
-After the dataset is published:
-
 ```bash
-# Oracle (see the note on EXP_BENCH_ORACLE_VALIDATION below)
-EXP_BENCH_ORACLE_VALIDATION=1 harbor run -d just-curieous/exp-bench
-
-# An agent and model
-harbor run -d just-curieous/exp-bench -a openhands -m "<model>"
-
-# Parity subset
-harbor run -d just-curieous/exp-bench@parity -a openhands -m "<model>"
+EXP_BENCH_ORACLE_VALIDATION=1 harbor run -d just-curieous/exp-bench   # oracle
+harbor run -d just-curieous/exp-bench -a claude-code -m "<model>"
+harbor run -d just-curieous/exp-bench@parity -a claude-code -m "<model>"
 ```
 
-The verifier needs `OPENAI_API_KEY` (and `OPENAI_BASE_URL` for a non-OpenAI endpoint)
-for the judge. `EXP_BENCH_JUDGE_MODEL` defaults to `o3-mini`, the upstream judge.
+The verifier needs `OPENAI_API_KEY` (and `OPENAI_BASE_URL` for a non-OpenAI endpoint).
+`EXP_BENCH_JUDGE_MODEL` defaults to `o3-mini`.
 
-**Deferred judging.** With `EXP_BENCH_DEFER_JUDGE=1` the verifier does everything that
-needs the task container (collects the agent's answer, builds the patch, reads the
-agent logs, runs the execution check) and saves it to `verifier/judge_inputs.json`
-without calling the judge; `reward.json` then holds only `judge_pending`. Grade the job
-later with the same judge code:
+**Deferred judging.** With `EXP_BENCH_DEFER_JUDGE=1` the verifier saves the agent's answer,
+patch, logs and execution check to `verifier/judge_inputs.json` instead of calling the
+judge; grade the job later with the same judge code:
 
 ```bash
-EXP_BENCH_DEFER_JUDGE=1 OPENAI_API_KEY=unused harbor run -p datasets/exp-bench -a <agent> -m "<model>"
-
 cd src/exp-bench
 OPENAI_API_KEY=... uv run --with openai==1.66.3 --with tiktoken==0.9.0 \
     --with langchain-text-splitters==0.3.6 python scripts/judge_deferred.py <job-dir>
 ```
 
-The execution check always runs in deferred mode; grading ignores it when the monitor
-flags the run, as upstream skips it then, so the scores are the same as direct grading.
-
 ### Using Job Configurations
 
 ```bash
-# From the repository root
 harbor run -c src/exp-bench/run_exp-bench.yaml
-
-# Locally prepared dataset
-harbor run -p datasets/exp-bench -a openhands -m "<model>"
-
-# Resume a job
+harbor run -p datasets/exp-bench -a claude-code -m "<model>"
 harbor job resume -p /path/to/jobs/directory
 ```
 
@@ -167,7 +105,7 @@ harbor job resume -p /path/to/jobs/directory
 
 ```bash
 EXP_BENCH_ORACLE_VALIDATION=1 harbor trial start -p datasets/exp-bench/neurips2024-98316-5
-harbor trial start -p datasets/exp-bench/neurips2024-98316-5 -a openhands -m "<model>"
+harbor trial start -p datasets/exp-bench/neurips2024-98316-5 -a claude-code -m "<model>"
 ```
 
 ## Usage: Create Task Directories
@@ -177,15 +115,12 @@ cd src/exp-bench
 uv sync
 uv run exp-bench --output-dir ../../datasets/exp-bench                     # all 421 tasks
 uv run exp-bench --split parity --output-dir ../../datasets/exp-bench-parity
-uv run exp-bench --task-ids neurips2024-97649-0 iclr2024-18447-11 --overwrite
+uv run exp-bench --task-ids neurips2024-97649-0 --overwrite
 uv run exp-bench --gpus 1 --agent-timeout-hours 1 --output-dir ../../datasets/exp-bench-gpu
 ```
 
-The task records ship with the adapter (`src/exp_bench/data/exp_bench_tasks.json.gz`;
-override with `--data-file`). Generation downloads each task's original source files from
-GitHub at the pinned commit, checks them against the recorded sha256, and caches them in
-`~/.cache/harbor-exp-bench-adapter` (override with `--cache-dir`), so it needs network
-access on first run.
+Generation downloads each task's reference source files at the pinned commit, checks
+their sha256, and caches them in `~/.cache/harbor-exp-bench-adapter`.
 
 ## Comparison with Original Benchmark (Parity)
 
@@ -193,120 +128,83 @@ Parity has not been run yet. Values are reported as mean ± sample SEM.
 
 | Agent | Model | Metric | Number of Runs | Dataset Size | Original Benchmark Performance | Harbor Adapter Performance |
 |-------|-------|--------|------------------|--------------|------------------------------|----------------------------|
-| openhands@TBD | TBD | conclusion (C) | 3 | 30 (7.1%) | TBD | TBD |
+| claude-code@2.1.330 | TBD | conclusion (C) | 3 | 27 (6.4%) | TBD | TBD |
 
-Planned setup (to be confirmed with the Harbor team before any paid run):
+Plan (to be confirmed with the Harbor team):
 
-- **Subset (provisional):** about 30–40 tasks stratified across papers. The current
-  candidate list in `src/exp_bench/data/parity_task_ids.txt` holds the 30 valid tasks
-  marked `MATCH` / `PARTIAL_MATCH` in the dataset's published verification records
-  (`verification/status.csv`), i.e. tasks with a reproduced, runnable environment. That
-  list leans towards easier tasks, so the final selection rule will be agreed with the
-  Harbor team and documented here.
-- **Agent / model:** OpenHands at one pinned version on both sides, with one low-cost
-  model; the same judge model on both sides.
-- **Runs:** sanity check on 5–10 tasks on both sides, then one full run on both sides,
-  then three runs per side. Metrics compared: D, I, C, E (run ranges must overlap; MSE
-  of per-task scores also reported).
-- **Original side:** the upstream harness (`evaluation/parallel_eval.py`, generate then
-  judge) from a fork that pins the same repository commits and OpenHands version.
-  Reproduction commands will be listed here with the fork link.
+- **Subset:** the 27 tasks (20 papers) in `src/exp_bench/data/parity_task_ids.txt`, whose
+  experiments can finish on CPU within the time limit; no GPUs on either side.
+- **Agent:** Claude Code at a pinned version, one low-cost model, 30-minute limit. Upstream
+  only ships an OpenHands build from Feb 2025 that cannot call current models, so Claude
+  Code is added to the original harness with Harbor's install command and flags.
+- **Judge:** the same model and endpoint on both sides.
+- **Runs:** 5-task sanity check, then 1 full run, then 3 runs per side. C, D, I and E are
+  compared by overlap of run ranges and per-task MSE.
+- **Original side:** branch [`harbor-parity`](https://github.com/Just-Curieous/Curie/tree/harbor-parity)
+  of the official EXP-Bench repository; commands in `benchmark/exp_bench/harbor_parity/README.md`.
 - **Harbor side:**
   ```bash
   uv run exp-bench --split parity --output-dir ../../datasets/exp-bench-parity
-  harbor run -p datasets/exp-bench-parity -a openhands -m "<model>"
+  harbor run -c src/exp-bench/run_exp-bench_parity.yaml
   ```
 
 ## Notes & Caveats
 
-Deviations from the upstream harness and why:
-
-- **Pinned repositories.** Upstream clones each repository's current `HEAD` at run time,
-  so results drift as repositories change. The adapter pins every repository to the last
-  default-branch commit before that paper's tasks were constructed (recorded in
-  `task.toml` metadata) and fetches it with `--depth 1`.
-- **Reference scripts for the setup judge** are read from the pinned commit at generation
-  time; upstream downloads them from the `main`/`master` branch when judging.
-- **40 excluded tasks** (see Overview), listed by `EXPBenchAdapter.invalid_reason`. 36
-  fail upstream's masking step and are skipped by upstream as `invalid_task`. For 4
-  (`iclr2024-18447-11`, `neurips2024-97791-5`, `iclr2024-18439-2`, `iclr2024-18439-0`;
-  295k–446k tokens) the setup-judge prompt is over o3-mini's context even with an empty
-  patch: their reference files are Jupyter notebooks saved with outputs. The released
-  judge raises a context-length error on them and stops judging the rest of that paper.
-  The authors' earlier runs could grade them because the reference files were only added
-  to the setup-judge prompt later (May 2025, before the code release); this adapter and
-  the original side of parity use the released judge. `scripts/audit_judge_context.py`
-  recomputes the list for a given judge model and context. One more task, `neurips2024-94391-12`, leaves only about 7k
-  tokens for the agent's patch; a larger patch makes the judge call fail, as it would
-  upstream, and the trial ends without a reward.
+- **Pinned repositories.** Each repository is fetched at the last commit before its
+  paper's tasks were built (recorded in `task.toml`); reference sources for the setup
+  judge come from that commit, where upstream downloads them from `main`/`master`.
+- **40 excluded tasks** (`EXPBenchAdapter.invalid_reason`). 36 fail upstream's masking
+  step (33 list a file that never existed in the repository, 3 list `README.md`) and
+  upstream skips them as `invalid_task`. For 4 (`iclr2024-18447-11`,
+  `neurips2024-97791-5`, `iclr2024-18439-0`, `iclr2024-18439-2`) the reference files alone
+  exceed o3-mini's 200k-token context, so the released judge cannot grade them; the
+  authors' earlier runs could, because reference files were added to the prompt only in
+  May 2025. `scripts/audit_judge_context.py` recomputes the list for another judge.
+  `neurips2024-94391-12` leaves about 7k tokens for the agent's patch.
 - **Environment.** Upstream runs agents in the OpenHands sandbox with the repository
   mounted at `/workspace`; here the repository is baked into a miniconda image (the base
-  of upstream's `ExpDockerfile_default`) at `/workspace`.
-- **Execution check** runs `reproduce_exp_bench.sh` in the agent's container after the
-  agent finishes; upstream starts a fresh container with the workspace mounted, so
-  system packages the agent installed outside `/workspace` do not carry over there.
-  E can therefore be higher here when the script relies on such packages.
-- **Monitor input.** Upstream passes the OpenHands console log. With Harbor's OpenHands
-  agent the monitor reads the same stream, `/logs/agent/openhands.txt`; with other agents
-  it reads all text files in `/logs/agent`. Over-long logs are truncated (head and tail)
-  to fit the judge context, where upstream would fail.
-- **Credentials folder.** Upstream copies its Azure credential files into
-  `setup_apis_exp/`; here `setup_apis_exp/env.sh` exports `OPENAI_API_KEY` /
-  `OPENAI_BASE_URL` from `EXP_BENCH_TASK_OPENAI_API_KEY` /
-  `EXP_BENCH_TASK_OPENAI_BASE_URL` (empty unless set). The folder is excluded from the
-  judged diff.
-- **Judge endpoint.** OpenAI-compatible client instead of Azure; transient API errors are
-  retried. The judge model must be the same on both sides of any comparison.
-- **Optional Claude judge (not upstream).** `EXP_BENCH_JUDGE_MODEL=claude-*` with
-  `OPENAI_BASE_URL=https://api.anthropic.com/v1/` and an Anthropic key in
-  `OPENAI_API_KEY` uses a 1M-token Claude model as judge, which can grade the 4 tasks
-  excluded for o3-mini. Anthropic's OpenAI-compatible endpoint needs three request
-  changes: a one-line user turn instead of an empty one, no `temperature`, and a strict
-  JSON schema of the prompt's output keys instead of `json_object`. The judge prompts are
-  unchanged. Scores from a different judge are not comparable to o3-mini scores.
-- **Primary reward** is C (conclusion correctness). The paper does not state the cut-offs
-  for the conjunctive metrics; `all_correct` here requires D = I = 100 and C correct,
-  pending confirmation.
-- **Time limit.** Default 0.5 hours per task (upstream `run_parallel_gen_evals.py`
-  default); the paper used a 40 minute soft limit. The output file name encodes the
-  limit, as upstream does.
-- **GPUs.** Upstream agents had 4× A40; tasks default to `gpus = 0` here. Many tasks need
-  a GPU to finish their experiment; use `--gpus` for GPU runs.
-- **Oracle.** EXP-Bench has no runnable reference trajectory. The oracle restores the
-  masked files and writes the ground-truth design and expected outcome. Run it with
-  `EXP_BENCH_ORACLE_VALIDATION=1`, which skips the log monitor and execution check (they
-  judge a real trajectory). Type 3 tasks have no reference code, so their oracle
-  `implementation` score is low by construction; oracle validation uses `reward`.
-- **Task data.** The public Hugging Face CSV is a flattened view that omits fields the
-  judge needs (method, design ground truth, code URL, masked-source lists). The adapter
-  ships the full upstream task records (`*_complete_final.json`, one per paper; task index
-  = position in that file, as upstream enumerates it) under the dataset's CC-BY-4.0
-  license. `scripts/build_task_bundle.py`
-  documents how the bundle is assembled from the upstream construction outputs.
+  of upstream's image).
+- **Execution check** runs in the agent's container after the agent finishes; upstream
+  starts a fresh container, so packages installed outside `/workspace` do not carry over
+  there and E can be higher here.
+- **Monitor input** is the agent's console log (`/logs/agent/openhands.txt` or
+  `claude-code.txt`; all text logs for other agents), truncated head and tail to fit the
+  judge context where upstream would fail.
+- **Credentials folder.** `setup_apis_exp/env.sh` exports `OPENAI_API_KEY` /
+  `OPENAI_BASE_URL` from `EXP_BENCH_TASK_OPENAI_API_KEY` / `EXP_BENCH_TASK_OPENAI_BASE_URL`
+  (empty unless set), and is excluded from the judged diff.
+- **Claude judge (optional).** `EXP_BENCH_JUDGE_MODEL=claude-*` with
+  `OPENAI_BASE_URL=https://api.anthropic.com/v1/` sends a one-line user turn instead of an
+  empty one, a strict JSON schema instead of `json_object`, and no `temperature`; prompts
+  are unchanged. Scores are not comparable to o3-mini scores.
+- **Conjunctive metrics.** The paper does not state their cut-offs; `all_correct` here
+  requires D = I = 100 and C correct.
+- **Time limit** is 0.5 hours (upstream default; the paper mentions a 40-minute soft limit).
+- **GPUs.** Upstream agents had 4× A40; tasks default to `gpus = 0` here.
+- **Oracle.** EXP-Bench has no reference trajectory: the oracle restores the masked files
+  and writes the ground-truth answer. Run it with `EXP_BENCH_ORACLE_VALIDATION=1`, which
+  skips the monitor and execution check. Type 3 tasks have no reference code, so their
+  oracle `implementation` is low by design.
+- **Task data.** The public CSV omits fields the judge needs, so the full upstream task
+  records ship with the adapter under the dataset's CC-BY-4.0 license.
 
 ## Installation / Prerequisites
 
 - Docker (or a Harbor cloud environment such as Daytona)
 - Harbor: `uv tool install harbor`
-- Adapter dependencies:
-  ```bash
-  cd src/exp-bench
-  uv sync
-  ```
-- Judge credentials in the host environment: `OPENAI_API_KEY`, optional
-  `OPENAI_BASE_URL`, optional `EXP_BENCH_JUDGE_MODEL`.
-- Optional credentials for experiments that call an LLM:
-  `EXP_BENCH_TASK_OPENAI_API_KEY`, `EXP_BENCH_TASK_OPENAI_BASE_URL`.
-- Image builds clone each paper's repository; some repositories are large.
+- `cd src/exp-bench && uv sync`
+- Judge credentials: `OPENAI_API_KEY`, optional `OPENAI_BASE_URL`, `EXP_BENCH_JUDGE_MODEL`.
+- Optional credentials for experiments that call an LLM: `EXP_BENCH_TASK_OPENAI_API_KEY`,
+  `EXP_BENCH_TASK_OPENAI_BASE_URL`.
 
 ## Troubleshooting
 
-- **Build fails with "EXP-Bench masking failed"**: a listed source file is missing at the
-  pinned commit; report the task id.
-- **Verifier fails installing judge dependencies**: the verifier needs network access to
-  PyPI and the judge endpoint (`network_mode = "public"`).
-- **Long verifier runs**: the execution check can take up to 1 hour; set
-  `EXP_BENCH_EXEC_CHECK=0` to skip it (E is then 0).
+- **"EXP-Bench masking failed" at build:** a listed source file is missing at the pinned
+  commit; report the task id.
+- **Judge dependency install fails:** the verifier needs network access to PyPI and the
+  judge endpoint.
+- **Long verifier runs:** the execution check can take an hour; `EXP_BENCH_EXEC_CHECK=0`
+  skips it (E is then 0).
 
 ## Citation
 
@@ -322,11 +220,9 @@ Deviations from the upstream harness and why:
 
 ## Authors & Contributions
 
-This adapter is developed and maintained by Jingjia Peng (EXP-Bench co-author). Yuwei Han
-started the initial scaffold in
-[harbor-framework/harbor#742](https://github.com/harbor-framework/harbor/pull/742).
+Developed and maintained by Jingjia Peng (EXP-Bench co-author). Yuwei Han started the
+initial scaffold in [harbor-framework/harbor#742](https://github.com/harbor-framework/harbor/pull/742).
 
-**Issues and Contributions:**
 - Submit issues and pull requests to the adapters repository.
 - Report dataset errors on the [EXP-Bench dataset page](https://huggingface.co/datasets/Just-Curieous/EXP-Bench).
 

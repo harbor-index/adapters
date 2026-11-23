@@ -24,11 +24,8 @@ DEFAULT_DATA_FILE = PACKAGE_DIR / "data" / "exp_bench_tasks.json.gz"
 PARITY_SPLIT_FILE = PACKAGE_DIR / "data" / "parity_task_ids.txt"
 DEFAULT_CACHE_DIR = Path.home() / ".cache" / "harbor-exp-bench-adapter"
 
-# Tasks whose setup-judge prompt (template + method + reference source files, no agent
-# patch) already exceeds o3-mini's 200k-token context, counted with tiktoken's o3-mini
-# encoding by scripts/audit_judge_context.py. The setup judge embeds the reference files
-# in every prompt (and every chunk), so no agent output can be graded; upstream's judge
-# raises a context-length error and stops judging the paper.
+# Tasks whose setup-judge prompt exceeds o3-mini's 200k-token context even without an agent
+# patch (tiktoken counts from scripts/audit_judge_context.py), so upstream cannot grade them.
 JUDGE_CONTEXT_OVERFLOW = {
     "iclr2024-18447-11": 445900,  # demo.ipynb with embedded outputs
     "neurips2024-97791-5": 365244,

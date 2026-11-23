@@ -9,8 +9,7 @@ MASKED_FILES=(
 {masked_files}
 )
 
-# Network retries only (large fetches can fail transiently); HTTP/1.1 avoids the GnuTLS
-# "Error decoding the received TLS packet" failures seen with some proxies.
+# Network retries; HTTP/1.1 avoids GnuTLS errors on large fetches through some proxies.
 retry() {
     local attempt
     for attempt in 1 2 3 4 5; do
