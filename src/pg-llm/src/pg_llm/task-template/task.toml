@@ -1,0 +1,44 @@
+version = "1.0"
+artifacts = ["/app/answer.json"]
+
+[task]
+name = "markslab/pg-llm__{task_id}"
+authors = [
+    { name = "Rohit Krishan Arora" },
+    { name = "Leo Tianlai Chen" },
+    { name = "Melissa Du" },
+    { name = "Debora Marks" },
+    { name = "George Church" },
+]
+keywords = ["science", "biology", "protein", "variant-ranking", "proteingym", "pg-llm"]
+
+[metadata]
+difficulty = "hard"
+category = "science"
+tags = ["protein-engineering", "deep-mutational-scanning", "fitness-ranking"]
+dms_id = "{dms_id}"
+uniprot_id = "{uniprot_id}"
+selection_type = "{selection_type}"
+taxon = "{taxon}"
+msa_category = "{msa_category}"
+seq_len = {seq_len}
+n_variants = {n_variants}
+seed = {seed}
+multi_mutant = {multi_mutant}
+
+[verifier]
+timeout_sec = 120.0
+environment_mode = "separate"
+network_mode = "{network_mode}"
+
+[agent]
+timeout_sec = 900.0
+network_mode = "{network_mode}"
+user = "agent"
+
+[environment]
+build_timeout_sec = 600.0
+network_mode = "{network_mode}"
+cpus = 1
+memory_mb = 2048
+storage_mb = 2048

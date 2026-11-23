@@ -1,0 +1,26 @@
+[
+  {
+    "adapter_name": "pg-llm",
+    "agent": "TBD (pending parity plan)",
+    "model": "TBD",
+    "date": "2026-11-22",
+    "adapted_benchmark_size": 217,
+    "parity_benchmark_size": null,
+    "number_of_runs": 0,
+    "notes": "WIP placeholder prior to parity runs. Parity plan (agent, pinned version, model ID, and 50-task stratified vs 217-task scope) pending maintainer confirmation.",
+    "original_parity_repo": null,
+    "adapter_pr": null,
+    "dataset_pr": null,
+    "parity_pr": null,
+    "metrics": [
+      {
+        "benchmark_name": "PG-LLM",
+        "metric": "Spearman rho",
+        "original": "TBD (pending parity)",
+        "harbor": "TBD (pending parity)",
+        "original_runs": [],
+        "harbor_runs": []
+      }
+    ]
+  }
+]
