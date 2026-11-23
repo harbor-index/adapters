@@ -1,0 +1,7 @@
+# Grading needs no network: the verifier container gets none.
+services:
+  main:
+    network_mode: none
+    build:
+      args:
+        PIP_INDEX_URL: ${PIP_INDEX_URL:-}
