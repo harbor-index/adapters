@@ -1,0 +1,23 @@
+[project]
+name = "harbor-olmocr-bench-adapter"
+version = "0.1.0"
+description = "Harbor adapter for olmOCR-Bench (PDF-to-Markdown conversion graded by unit tests)"
+readme = "README.md"
+authors = [
+    { name = "Himanshu Gupta", email = "him141195@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "huggingface-hub>=0.30",
+]
+
+[project.scripts]
+olmocr-bench = "olmocr_bench.main:main"
+olmocr-bench-score = "olmocr_bench.score:main"
+
+[build-system]
+requires = ["uv_build>=0.11.8,<0.12.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "olmocr_bench"

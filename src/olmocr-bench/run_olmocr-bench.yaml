@@ -1,0 +1,35 @@
+# Reference config for running the olmOCR-Bench adapter. From the repository root:
+#
+#   harbor run -c src/olmocr-bench/run_olmocr-bench.yaml
+#
+# Every task builds the same image layers and differs only in the final COPY of
+# its PDF, so builds after the first one are cache hits.
+jobs_dir: jobs
+n_attempts: 1
+timeout_multiplier: 1.0
+orchestrator:
+  type: local
+  n_concurrent_trials: 4
+  quiet: false
+environment:
+  type: docker
+  force_build: true
+  delete: true
+
+# Default: oracle agent (writes the output synthesized from each page's unit tests)
+agents:
+  - name: oracle
+
+# To run another agent, comment out the block above and uncomment one of these:
+# agents:
+#   - name: claude-code
+#     model_name: anthropic/claude-haiku-4-5-20251001
+#
+# agents:
+#   - name: codex
+#     model_name: openai/gpt-5-mini-2025-08-07
+
+datasets:
+  - path: datasets/olmocr-bench
+  # Parity subset (generate it with: uv run olmocr-bench --split parity ...):
+  # - path: datasets/olmocr-bench-parity
