@@ -1,0 +1,42 @@
+{
+  "adapter_name": "agentabstain",
+  "source_repository": "https://github.com/AntiQuality/agentabstain",
+  "source_commit": "cfc3faf7ab1cfd4892cde1158d6e43b2f312ddc3",
+  "dataset_repository": "https://huggingface.co/datasets/antiquality/agentabstain",
+  "dataset_revision": "842228426c2a703347396501af61c7890972c7ee",
+  "code_license": "MIT",
+  "dataset_license": "CC BY 4.0",
+  "task_rows": 526,
+  "paired_tasks": 263,
+  "categories": 8,
+  "environments": 42,
+  "task_types": [
+    "act",
+    "abstain"
+  ],
+  "pairing_rule": "Each pair_id has exactly one act row and one abstain row.",
+  "task_id_policy": "Harbor task names use neutral variant-a/variant-b suffixes. The act/abstain mapping is stored only in verifier metadata.",
+  "source_semantics": {
+    "act": "The original execution DAG is preserved and commit tools are expected to be called.",
+    "abstain": "The original abstention trigger and critical action set are preserved and commit tools must not be called."
+  },
+  "verification_components": [
+    "deterministic commit check over the tool execution log",
+    "LLM response judge over the final response"
+  ],
+  "prompt_transport": "The Harbor instruction labels the native system prompt and user request. The matched SDK agent restores those two messages and supplies the native tool schemas. The first actor requests matched on all 32 measured variants in an offline capture.",
+  "runtime_isolation": "Initial state and task configuration are held by a private runtime sidecar. The main agent container receives filtered schemas and a read-only execution-log volume.",
+  "verified_evidence": [
+    "526 generated variants and 526 Harbor v0.27.0 package digests",
+    "526 offline reference solutions scored 1 with their own runtime and verifier using the expected-behavior stub",
+    "Harbor v0.27.0 separate-verifier representative task with positive and known-wrong controls",
+    "Three paired repetitions on the measured subset, 96 valid real judgments per implementation",
+    "32 matching initial SDK requests under capture and 335 archived Harbor tool responses checked"
+  ],
+  "unverified": [
+    "dated provider snapshots behind the actor and judge aliases",
+    "full 526-task Harbor v0.27.0 orchestration"
+  ],
+  "parity_subset_policy": "16 held-out pairs, one per scenario and informational/operational stratum. The pair IDs in parity_pairs.txt reproduce the measured 32 variants. The 47-pair environment-coverage slice is available with --split development.",
+  "scope_note": "The adapter initially targets the public 526-row task corpus. Private fresh-generation rounds are outside this adapter scope."
+}

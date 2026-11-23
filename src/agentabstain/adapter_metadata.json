@@ -1,0 +1,43 @@
+[
+  {
+    "adapter_name": "agentabstain",
+    "adapter_builders": [
+      "James Zhu (zhuyangjunfeng@gmail.com)"
+    ],
+    "original_benchmark": [
+      {
+        "split": "test",
+        "size": 526,
+        "harness": "agent",
+        "supported_agents": [
+          "openai-agents@0.25.0",
+          "claude-code-sdk@0.0.25",
+          "google-adk@2.14.1",
+          "openclaw@2026.4.29"
+        ],
+        "adaptable": true,
+        "notes": "The upstream release provides four agent integrations. These versions identify the packages installed for reproduction and the OpenClaw CLI pinned by the source authors. The matched experiment used OpenAI Agents SDK."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "test",
+        "adapted_benchmark_size": 526,
+        "parity_benchmark_size": 32,
+        "parity_sampling_rate": 0.060836501901140684,
+        "registry_benchmark_size": 526,
+        "added_agents": [
+          "openai-agents@0.25.0"
+        ],
+        "parity_matching_agents": [
+          "openai-agents@0.25.0+gpt-5-mini"
+        ],
+        "parity_unmatching_agents": [
+          "None"
+        ],
+        "parity_costs": null,
+        "notes": "The registry submission contains 526 variants in 263 pairs across eight scenarios and 42 environments. The proposed parity tag contains the 32 measured variants in 13 environments. The separate development split contains 94 variants and covers all 42 environments. The sponsored provider did not supply a billed USD total."
+      }
+    ]
+  }
+]

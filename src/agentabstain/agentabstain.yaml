@@ -1,0 +1,16 @@
+job_name: agentabstain-oracle
+jobs_dir: jobs/agentabstain
+n_concurrent_trials: 4
+
+datasets:
+  - path: /tmp/agentabstain-full
+
+agents:
+  - name: oracle
+
+verifier:
+  env:
+    AGENTABSTAIN_JUDGE_STUB: expected
+
+environment:
+  type: docker

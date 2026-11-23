@@ -1,0 +1,56 @@
+[
+  {
+    "adapter_name": "agentabstain",
+    "agent": "openai-agents@0.25.0",
+    "model": "gpt-5-mini",
+    "date": "2026-11-23",
+    "adapted_benchmark_size": 526,
+    "parity_benchmark_size": 32,
+    "number_of_runs": 3,
+    "notes": "Three repetitions per side on 16 held-out pairs (32 variants). Each of the 16 scenario and action-type strata contributes one pair. Harbor v0.26.0 and upstream ran the same OpenAI Agents SDK, first request and 30-turn limit. The actor was gpt-5-mini and the Responses judge was gpt-5.4. The provider returned the judge alias and did not expose a dated revision. Its response to the release's dated judge ID was HTTP 503 model_not_found. Both reported metrics use proportions and sample SEM. The three-run score ranges overlap from 0.25 to 0.3125. Task-repeat agreement was 86/96. The MSE of 32 variant means was 0.055556. All 192 submissions received a real grade. The separate offline Oracle controls are excluded. The official HF contribution links the full evidence in the contributor-hosted dataset because the shared repository exceeds the Hub file limit.",
+    "original_parity_repo": "https://github.com/PinkPig97/agentabstain/tree/527bf2269c302d2a7effd70bfb8d307e83be9e53",
+    "adapter_pr": [
+      "https://github.com/harbor-index/adapters/pull/24"
+    ],
+    "dataset_pr": [
+      "https://github.com/harbor-framework/harbor-datasets/pull/298"
+    ],
+    "parity_pr": [
+      "https://huggingface.co/datasets/harborframework/parity-experiments/discussions/299"
+    ],
+    "metrics": [
+      {
+        "benchmark_name": "AgentAbstain",
+        "metric": "Paired accuracy",
+        "original": "0.270833 ± 0.020833",
+        "original_runs": [
+          0.25,
+          0.3125,
+          0.25
+        ],
+        "harbor": "0.354167 ± 0.055120",
+        "harbor_runs": [
+          0.25,
+          0.4375,
+          0.375
+        ]
+      },
+      {
+        "benchmark_name": "AgentAbstain",
+        "metric": "CAR (macro average by scenario)",
+        "original": "0.270833 ± 0.020833",
+        "original_runs": [
+          0.25,
+          0.3125,
+          0.25
+        ],
+        "harbor": "0.354167 ± 0.055120",
+        "harbor_runs": [
+          0.25,
+          0.4375,
+          0.375
+        ]
+      }
+    ]
+  }
+]
