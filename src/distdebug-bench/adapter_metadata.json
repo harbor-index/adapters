@@ -1,0 +1,54 @@
+[
+  {
+    "adapter_name": "distdebug-bench",
+    "adapter_builders": [
+      "Xiang Ding (nhckdvrl@gmail.com)"
+    ],
+    "original_benchmark": [
+      {
+        "split": "lite",
+        "size": 34,
+        "harness": "agent",
+        "supported_agents": [
+          "mini-swe-agent@2.2.8",
+          "codex@0.117.0",
+          "opencode@1.4.6"
+        ],
+        "adaptable": true,
+        "notes": "DistDebug-Bench Lite (benchmark/lite.txt, v1.1 labels, upstream commit c3e929b). Scored by deterministic comparison with human-labeled root-cause blocks; block_coverage is the main metric."
+      },
+      {
+        "split": "full",
+        "size": 120,
+        "harness": "agent",
+        "supported_agents": [
+          "mini-swe-agent@2.2.8",
+          "codex@0.117.0",
+          "opencode@1.4.6"
+        ],
+        "adaptable": true,
+        "notes": "Generation is implemented (--split full, all 120 snapshots pinned); oracle 120/120 at reward 1.0 on local Docker. The registry dataset targets Lite."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "lite",
+        "adapted_benchmark_size": 34,
+        "parity_benchmark_size": 12,
+        "parity_sampling_rate": 0.353,
+        "registry_benchmark_size": 34,
+        "added_agents": [
+          "None"
+        ],
+        "parity_matching_agents": [
+          "mini-swe-agent@2.2.8+step-5-preview"
+        ],
+        "parity_unmatching_agents": [
+          "None"
+        ],
+        "parity_costs": "$0",
+        "notes": "Parity matched (range overlap on all upstream metrics) with mini-swe-agent@2.2.8 + StepFun step-5-preview via the Step Plan subscription (no per-token charge, hence $0); 12-bug parity split = 10% of the 120-bug benchmark, 3 runs per side. Reward = block_coverage; all upstream metrics are also reported in reward.json."
+      }
+    ]
+  }
+]

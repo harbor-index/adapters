@@ -1,0 +1,606 @@
+{
+  "_comment": "Pre-fix snapshot of every DistDebug-Bench bug, resolved from report.json `branch` to a full commit SHA with the same precedence as upstream `git rev-parse <branch>^{commit}` (full SHA, tag, abbreviated SHA). Regenerate with scripts/resolve_snapshots.py.",
+  "benchmark_commit": "c3e929b9ee0082345337358e352ae37fc472df4c",
+  "bugs": {
+    "elasticsearch-105065": {
+      "repo_url": "https://github.com/elastic/elasticsearch",
+      "upstream_ref": "bb1eddada3678257838b0590090ff9eb68acaa1b",
+      "commit": "bb1eddada3678257838b0590090ff9eb68acaa1b"
+    },
+    "elasticsearch-110360": {
+      "repo_url": "https://github.com/elastic/elasticsearch",
+      "upstream_ref": "89cd966b247148372aed73c3586b0754d6e176ca",
+      "commit": "89cd966b247148372aed73c3586b0754d6e176ca"
+    },
+    "elasticsearch-113615": {
+      "repo_url": "https://github.com/elastic/elasticsearch",
+      "upstream_ref": "b2a69b54e1f28711d423926d9261a8346fd22c76",
+      "commit": "b2a69b54e1f28711d423926d9261a8346fd22c76"
+    },
+    "elasticsearch-116341": {
+      "repo_url": "https://github.com/elastic/elasticsearch",
+      "upstream_ref": "a4482d4c4c2d24418553510afa6a11a5f316983a",
+      "commit": "a4482d4c4c2d24418553510afa6a11a5f316983a"
+    },
+    "elasticsearch-128583": {
+      "repo_url": "https://github.com/elastic/elasticsearch",
+      "upstream_ref": "041c42a77961b2a227e2631d2d4034d2716779c4",
+      "commit": "041c42a77961b2a227e2631d2d4034d2716779c4"
+    },
+    "elasticsearch-128852": {
+      "repo_url": "https://github.com/elastic/elasticsearch",
+      "upstream_ref": "c17bfcbfc219f1a0746baaf3b9501b2e479488a4",
+      "commit": "c17bfcbfc219f1a0746baaf3b9501b2e479488a4"
+    },
+    "elasticsearch-134925": {
+      "repo_url": "https://github.com/elastic/elasticsearch",
+      "upstream_ref": "1904abbb730ec6bfc47a58425a3949664013ed55",
+      "commit": "1904abbb730ec6bfc47a58425a3949664013ed55"
+    },
+    "elasticsearch-135472": {
+      "repo_url": "https://github.com/elastic/elasticsearch",
+      "upstream_ref": "8a38cbbafee64879a0fd20ce16e8546f30057cee",
+      "commit": "8a38cbbafee64879a0fd20ce16e8546f30057cee"
+    },
+    "elasticsearch-139252": {
+      "repo_url": "https://github.com/elastic/elasticsearch",
+      "upstream_ref": "8a3da5e87351f09306f75b74d29ce4ea1d80d28e",
+      "commit": "8a3da5e87351f09306f75b74d29ce4ea1d80d28e"
+    },
+    "elasticsearch-140492": {
+      "repo_url": "https://github.com/elastic/elasticsearch",
+      "upstream_ref": "21fc8565454e1cea03fa7276dcb550f6a2bf6ec8",
+      "commit": "21fc8565454e1cea03fa7276dcb550f6a2bf6ec8"
+    },
+    "elasticsearch-141740": {
+      "repo_url": "https://github.com/elastic/elasticsearch",
+      "upstream_ref": "96be973fb5687c9837f51352fd7c8c5d2a5894aa",
+      "commit": "96be973fb5687c9837f51352fd7c8c5d2a5894aa"
+    },
+    "elasticsearch-147171": {
+      "repo_url": "https://github.com/elastic/elasticsearch",
+      "upstream_ref": "2a88d3a56c5afdb7a1f30e860a38c0b28ddb3f58",
+      "commit": "2a88d3a56c5afdb7a1f30e860a38c0b28ddb3f58"
+    },
+    "elasticsearch-59649": {
+      "repo_url": "https://github.com/elastic/elasticsearch",
+      "upstream_ref": "24143b07a47339e9455b5b2d0b20b5f6a352134e",
+      "commit": "24143b07a47339e9455b5b2d0b20b5f6a352134e"
+    },
+    "elasticsearch-85839": {
+      "repo_url": "https://github.com/elastic/elasticsearch",
+      "upstream_ref": "44fa734bbd60a571dfa49d8e80440df9fc85e105",
+      "commit": "44fa734bbd60a571dfa49d8e80440df9fc85e105"
+    },
+    "elasticsearch-87237": {
+      "repo_url": "https://github.com/elastic/elasticsearch",
+      "upstream_ref": "35b48729b183bc180914146a361609f01b08b921",
+      "commit": "35b48729b183bc180914146a361609f01b08b921"
+    },
+    "elasticsearch-90442": {
+      "repo_url": "https://github.com/elastic/elasticsearch",
+      "upstream_ref": "9e6a784aa57877fcfe0352862356d4866aabb3ab",
+      "commit": "9e6a784aa57877fcfe0352862356d4866aabb3ab"
+    },
+    "elasticsearch-93542": {
+      "repo_url": "https://github.com/elastic/elasticsearch",
+      "upstream_ref": "052a4f15b92713e422560ddee70050744f94555a",
+      "commit": "052a4f15b92713e422560ddee70050744f94555a"
+    },
+    "elasticsearch-96544": {
+      "repo_url": "https://github.com/elastic/elasticsearch",
+      "upstream_ref": "6caf9c1f60ba0b993dbb3d6cf97768275e9975fc",
+      "commit": "6caf9c1f60ba0b993dbb3d6cf97768275e9975fc"
+    },
+    "elasticsearch-98926": {
+      "repo_url": "https://github.com/elastic/elasticsearch",
+      "upstream_ref": "cca26276b3965e24da9367c0ccfde411ec5124cd",
+      "commit": "cca26276b3965e24da9367c0ccfde411ec5124cd"
+    },
+    "etcd-14110": {
+      "repo_url": "https://github.com/etcd-io/etcd",
+      "upstream_ref": "v3.5.3",
+      "commit": "0452feec719fa8ad88ae343e66e9bb222965d75d"
+    },
+    "etcd-14325": {
+      "repo_url": "https://github.com/etcd-io/etcd",
+      "upstream_ref": "v3.5.3",
+      "commit": "0452feec719fa8ad88ae343e66e9bb222965d75d"
+    },
+    "etcd-14382": {
+      "repo_url": "https://github.com/etcd-io/etcd",
+      "upstream_ref": "v3.5.4",
+      "commit": "08407ff7600eb16c4445d5f21c4fafaf19412e24"
+    },
+    "etcd-14571": {
+      "repo_url": "https://github.com/etcd-io/etcd",
+      "upstream_ref": "v3.5.5",
+      "commit": "19002cfc689fba2b8f56605e5797bf79f8b61fdd"
+    },
+    "etcd-14764": {
+      "repo_url": "https://github.com/etcd-io/etcd",
+      "upstream_ref": "v3.5.5",
+      "commit": "19002cfc689fba2b8f56605e5797bf79f8b61fdd"
+    },
+    "etcd-15247": {
+      "repo_url": "https://github.com/etcd-io/etcd",
+      "upstream_ref": "v3.4.3",
+      "commit": "3cf2f69b5738fb702ba1a935590f36b52b18979b"
+    },
+    "etcd-17507": {
+      "repo_url": "https://github.com/etcd-io/etcd",
+      "upstream_ref": "v3.5.10",
+      "commit": "0223ca52b8d6d4953f708e5e4245c37cb4274115"
+    },
+    "etcd-5664": {
+      "repo_url": "https://github.com/etcd-io/etcd",
+      "upstream_ref": "b07fbbf27cfb2d5d9e209e198eb056c9ff12613f",
+      "commit": "b07fbbf27cfb2d5d9e209e198eb056c9ff12613f"
+    },
+    "hbase-28376": {
+      "repo_url": "https://github.com/apache/hbase",
+      "upstream_ref": "2306820df8b41d9af5227465ee2cf9e18b8f0b5c",
+      "commit": "2306820df8b41d9af5227465ee2cf9e18b8f0b5c"
+    },
+    "hbase-28830": {
+      "repo_url": "https://github.com/apache/hbase",
+      "upstream_ref": "rel/3.0.0-beta-1",
+      "commit": "119d11c808aefa82d22fef6cd265981506b9dc09"
+    },
+    "hbase-28962": {
+      "repo_url": "https://github.com/apache/hbase",
+      "upstream_ref": "db3ba44a4c692d26e70b6030fc519e92fd79f638",
+      "commit": "db3ba44a4c692d26e70b6030fc519e92fd79f638"
+    },
+    "hbase-29021": {
+      "repo_url": "https://github.com/apache/hbase",
+      "upstream_ref": "rel/2.6.1",
+      "commit": "7ed50b4dd742269a78875fb32112215f831284ff"
+    },
+    "hbase-29108": {
+      "repo_url": "https://github.com/apache/hbase",
+      "upstream_ref": "rel/2.5.10",
+      "commit": "a3af60980c61fb4be31e0dcd89880f304d01098a"
+    },
+    "hdfs-10512": {
+      "repo_url": "https://github.com/apache/hadoop",
+      "upstream_ref": "932aed64d77edcc8483a95c1ce31a4c9ae679446",
+      "commit": "932aed64d77edcc8483a95c1ce31a4c9ae679446"
+    },
+    "hdfs-10733": {
+      "repo_url": "https://github.com/apache/hadoop",
+      "upstream_ref": "9130af3f74a7923fff3f80360ba043ab2c6558a9",
+      "commit": "9130af3f74a7923fff3f80360ba043ab2c6558a9"
+    },
+    "hdfs-11583": {
+      "repo_url": "https://github.com/apache/hadoop",
+      "upstream_ref": "release-2.7.1",
+      "commit": "ac0538aac347bfd97cc0dee1db49db503c15f1d9"
+    },
+    "hdfs-11701": {
+      "repo_url": "https://github.com/apache/hadoop",
+      "upstream_ref": "456705a07c8b80658950acc99f23086244c6b20f",
+      "commit": "456705a07c8b80658950acc99f23086244c6b20f"
+    },
+    "hdfs-13051": {
+      "repo_url": "https://github.com/apache/hadoop",
+      "upstream_ref": "96892c469b16c5aaff1b7c42f66f820344256bc2",
+      "commit": "96892c469b16c5aaff1b7c42f66f820344256bc2"
+    },
+    "hdfs-13101": {
+      "repo_url": "https://github.com/apache/hadoop",
+      "upstream_ref": "167acd87daf61be9a27dfb5af6e7cbacb96e44de",
+      "commit": "167acd87daf61be9a27dfb5af6e7cbacb96e44de"
+    },
+    "hdfs-13179": {
+      "repo_url": "https://github.com/apache/hadoop",
+      "upstream_ref": "5abd0148eb9484381c7ff92b4bfab9ac8a81c681",
+      "commit": "5abd0148eb9484381c7ff92b4bfab9ac8a81c681"
+    },
+    "hdfs-13292": {
+      "repo_url": "https://github.com/apache/hadoop",
+      "upstream_ref": "00ebec89f101347a5da44657e388b30c57ed9deb",
+      "commit": "00ebec89f101347a5da44657e388b30c57ed9deb"
+    },
+    "hdfs-13893": {
+      "repo_url": "https://github.com/apache/hadoop",
+      "upstream_ref": "98d20656433cdec76c2108d24ff3b935657c1e80",
+      "commit": "98d20656433cdec76c2108d24ff3b935657c1e80"
+    },
+    "hdfs-15175": {
+      "repo_url": "https://github.com/apache/hadoop",
+      "upstream_ref": "3c8a48e681babe4038e49205624e7be183b3466e",
+      "commit": "3c8a48e681babe4038e49205624e7be183b3466e"
+    },
+    "ignite-4205": {
+      "repo_url": "https://github.com/apache/ignite",
+      "upstream_ref": "90717b4b7230ca5f5e0fd9318d0aa0a6f5e48064",
+      "commit": "90717b4b7230ca5f5e0fd9318d0aa0a6f5e48064"
+    },
+    "ignite-6860": {
+      "repo_url": "https://github.com/apache/ignite",
+      "upstream_ref": "7366809ed0ea7a943e1c80079fdbeb556ee86245",
+      "commit": "7366809ed0ea7a943e1c80079fdbeb556ee86245"
+    },
+    "ignite-9133": {
+      "repo_url": "https://github.com/apache/ignite",
+      "upstream_ref": "824939ba1f238621bd89a5ff445c6932c79e5db9",
+      "commit": "824939ba1f238621bd89a5ff445c6932c79e5db9"
+    },
+    "ignite3-15596": {
+      "repo_url": "https://github.com/apache/ignite-3",
+      "upstream_ref": "ed519fb2fa2a89e11a8ab7fad3069f7e1f7d74b3",
+      "commit": "ed519fb2fa2a89e11a8ab7fad3069f7e1f7d74b3"
+    },
+    "ignite3-15724": {
+      "repo_url": "https://github.com/apache/ignite-3",
+      "upstream_ref": "2abd5b9f5525ac2ea9314e45cea9deb6be871418",
+      "commit": "2abd5b9f5525ac2ea9314e45cea9deb6be871418"
+    },
+    "ignite3-17428": {
+      "repo_url": "https://github.com/apache/ignite-3",
+      "upstream_ref": "2c4d07597235ef54b23c9726a755e5876b98e1a1",
+      "commit": "2c4d07597235ef54b23c9726a755e5876b98e1a1"
+    },
+    "ignite3-20498": {
+      "repo_url": "https://github.com/apache/ignite-3",
+      "upstream_ref": "7a1540365d89d188da1f0d22c27c96ddc21485ac",
+      "commit": "7a1540365d89d188da1f0d22c27c96ddc21485ac"
+    },
+    "ignite3-21776": {
+      "repo_url": "https://github.com/apache/ignite-3",
+      "upstream_ref": "b08fbb60872f5c88209152992bce392f92109f87",
+      "commit": "b08fbb60872f5c88209152992bce392f92109f87"
+    },
+    "ignite3-21827": {
+      "repo_url": "https://github.com/apache/ignite-3",
+      "upstream_ref": "166ade294eb8311cb0dc46bcdcedb3620bea7eb9",
+      "commit": "166ade294eb8311cb0dc46bcdcedb3620bea7eb9"
+    },
+    "ignite3-22597": {
+      "repo_url": "https://github.com/apache/ignite-3",
+      "upstream_ref": "787e868ede5a489b49c4cd9d58d3c467b10e46ed",
+      "commit": "787e868ede5a489b49c4cd9d58d3c467b10e46ed"
+    },
+    "kafka-13407": {
+      "repo_url": "https://github.com/apache/kafka",
+      "upstream_ref": "2.8.1",
+      "commit": "839b886f9b732b151e1faeace7303c80641c08c4"
+    },
+    "kafka-13668": {
+      "repo_url": "https://github.com/apache/kafka",
+      "upstream_ref": "3.5.1",
+      "commit": "2c6fb6c54472e90ae17439e62540ef3cb0426fe3"
+    },
+    "kafka-17062": {
+      "repo_url": "https://github.com/apache/kafka",
+      "upstream_ref": "3.8.0",
+      "commit": "771b9576b00ecf5b64ab6e8bedf04156fbdb5cd6"
+    },
+    "kafka-18073": {
+      "repo_url": "https://github.com/apache/kafka",
+      "upstream_ref": "3.1.0",
+      "commit": "37edeed0777bacb3dc34e97bc6959bf9d043de2d"
+    },
+    "kafka-6446": {
+      "repo_url": "https://github.com/apache/kafka",
+      "upstream_ref": "1.0.0",
+      "commit": "aaa7af6d4a11b29d3da9c5d6084530b8fa69be64"
+    },
+    "kafka-7044": {
+      "repo_url": "https://github.com/apache/kafka",
+      "upstream_ref": "1.1.0",
+      "commit": "fdcf75ea326b8e07d8d7c4f5cc14f1e70451bcd4"
+    },
+    "kafka-8289": {
+      "repo_url": "https://github.com/apache/kafka",
+      "upstream_ref": "2.2.0",
+      "commit": "05fcfde8f69b0349216553f711fdfc3f0259c601"
+    },
+    "kafka-8950": {
+      "repo_url": "https://github.com/apache/kafka",
+      "upstream_ref": "2.3.0",
+      "commit": "fc1aaa116b661c8a1a2eefc0ed7e92b7f2e27d35"
+    },
+    "kubernetes-135981": {
+      "repo_url": "https://github.com/kubernetes/kubernetes",
+      "upstream_ref": "0ba578f91f5",
+      "commit": "0ba578f91f5de11776152b55bac37491d9848ef3"
+    },
+    "kubernetes-135983": {
+      "repo_url": "https://github.com/kubernetes/kubernetes",
+      "upstream_ref": "4e69edd0eea",
+      "commit": "4e69edd0eeaf8964b26c6b837cdb4a8f51edce16"
+    },
+    "kubernetes-136014": {
+      "repo_url": "https://github.com/kubernetes/kubernetes",
+      "upstream_ref": "1c9180cd453",
+      "commit": "1c9180cd453b88ef19cd3735509e1baf29ece390"
+    },
+    "kubernetes-136026": {
+      "repo_url": "https://github.com/kubernetes/kubernetes",
+      "upstream_ref": "6817bea700f",
+      "commit": "6817bea700feddae1fb77c5ef60b557c3d1349b8"
+    },
+    "kubernetes-136028": {
+      "repo_url": "https://github.com/kubernetes/kubernetes",
+      "upstream_ref": "97df11dfd18",
+      "commit": "97df11dfd1817828d3a156d9267ecc91850e0bbe"
+    },
+    "kubernetes-136037": {
+      "repo_url": "https://github.com/kubernetes/kubernetes",
+      "upstream_ref": "0f89b13c794",
+      "commit": "0f89b13c79482b914d9cc3ebe4837c1e7cbdc9d4"
+    },
+    "kubernetes-136206": {
+      "repo_url": "https://github.com/kubernetes/kubernetes",
+      "upstream_ref": "664efa86275",
+      "commit": "664efa86275a404081d20825c0e339db2720b515"
+    },
+    "kubernetes-136450": {
+      "repo_url": "https://github.com/kubernetes/kubernetes",
+      "upstream_ref": "bcdc613966e613aa3d7f5106c013c8650a0edecf",
+      "commit": "bcdc613966e613aa3d7f5106c013c8650a0edecf"
+    },
+    "kubernetes-136509": {
+      "repo_url": "https://github.com/kubernetes/kubernetes",
+      "upstream_ref": "8f4c197169b",
+      "commit": "8f4c197169bd4454bef3f7fc47ce02a324d51c76"
+    },
+    "kubernetes-136534": {
+      "repo_url": "https://github.com/kubernetes/kubernetes",
+      "upstream_ref": "4ffc49fb3e4",
+      "commit": "4ffc49fb3e4932b97b25450d8f4161cb1896f9f2"
+    },
+    "ray-14264": {
+      "repo_url": "https://github.com/ray-project/ray",
+      "upstream_ref": "d921dca075456203727bff09329923e6b210cc3d",
+      "commit": "d921dca075456203727bff09329923e6b210cc3d"
+    },
+    "ray-14883": {
+      "repo_url": "https://github.com/ray-project/ray",
+      "upstream_ref": "d4c20c970b15f32d6bef7dadd2ad9e1db9b34132",
+      "commit": "d4c20c970b15f32d6bef7dadd2ad9e1db9b34132"
+    },
+    "ray-15990": {
+      "repo_url": "https://github.com/ray-project/ray",
+      "upstream_ref": "55bb1e93b487cdc2e31d99db0174bf11c3a70ae8",
+      "commit": "55bb1e93b487cdc2e31d99db0174bf11c3a70ae8"
+    },
+    "ray-16614": {
+      "repo_url": "https://github.com/ray-project/ray",
+      "upstream_ref": "e1cd8580a0b4aee1fc47671b0fdfe9ea1b1a3c02",
+      "commit": "e1cd8580a0b4aee1fc47671b0fdfe9ea1b1a3c02"
+    },
+    "ray-22122": {
+      "repo_url": "https://github.com/ray-project/ray",
+      "upstream_ref": "11bbf00338b23c9c318f2d9e7b44ee49b1339043",
+      "commit": "11bbf00338b23c9c318f2d9e7b44ee49b1339043"
+    },
+    "ray-25699": {
+      "repo_url": "https://github.com/ray-project/ray",
+      "upstream_ref": "37086a5a1d0b85d7f6779d362395d5fbc59d5ad9",
+      "commit": "37086a5a1d0b85d7f6779d362395d5fbc59d5ad9"
+    },
+    "ray-30229": {
+      "repo_url": "https://github.com/ray-project/ray",
+      "upstream_ref": "d59f189540b14269f49d976ba60e97b804f011ba",
+      "commit": "d59f189540b14269f49d976ba60e97b804f011ba"
+    },
+    "ray-38591": {
+      "repo_url": "https://github.com/ray-project/ray",
+      "upstream_ref": "449afc9461a54ddd15a2f479b163ec4daf9d12a4",
+      "commit": "449afc9461a54ddd15a2f479b163ec4daf9d12a4"
+    },
+    "ray-41076": {
+      "repo_url": "https://github.com/ray-project/ray",
+      "upstream_ref": "76907c10290851a6c388d588cccb1381d714f573",
+      "commit": "76907c10290851a6c388d588cccb1381d714f573"
+    },
+    "ray-46315": {
+      "repo_url": "https://github.com/ray-project/ray",
+      "upstream_ref": "a1d4cb19ffcf3e430f88d2e00504b930fadad338",
+      "commit": "a1d4cb19ffcf3e430f88d2e00504b930fadad338"
+    },
+    "ray-47668": {
+      "repo_url": "https://github.com/ray-project/ray",
+      "upstream_ref": "c1e7c45f58c659132c56815b179e9493663fe73c",
+      "commit": "c1e7c45f58c659132c56815b179e9493663fe73c"
+    },
+    "ray-54830": {
+      "repo_url": "https://github.com/ray-project/ray",
+      "upstream_ref": "4c6993ee347e3a4d1ff9a26fb3daddd9bf50783c",
+      "commit": "4c6993ee347e3a4d1ff9a26fb3daddd9bf50783c"
+    },
+    "ray-54841": {
+      "repo_url": "https://github.com/ray-project/ray",
+      "upstream_ref": "cf3f3ed51c3ae1e2c191a4ddcde09a5d726b8517",
+      "commit": "cf3f3ed51c3ae1e2c191a4ddcde09a5d726b8517"
+    },
+    "ray-60453": {
+      "repo_url": "https://github.com/ray-project/ray",
+      "upstream_ref": "f996fa05bbbf6cbef6a80121c8c04fdf4d8f28d8",
+      "commit": "f996fa05bbbf6cbef6a80121c8c04fdf4d8f28d8"
+    },
+    "ray-60991": {
+      "repo_url": "https://github.com/ray-project/ray",
+      "upstream_ref": "bbeb7adbbc8ebaa050dda238a2418e4dd002e80d",
+      "commit": "bbeb7adbbc8ebaa050dda238a2418e4dd002e80d"
+    },
+    "ray-61604": {
+      "repo_url": "https://github.com/ray-project/ray",
+      "upstream_ref": "d334cd6536846bb44d27d6af7b1ddc6106a1e056",
+      "commit": "d334cd6536846bb44d27d6af7b1ddc6106a1e056"
+    },
+    "ray-61922": {
+      "repo_url": "https://github.com/ray-project/ray",
+      "upstream_ref": "027d17fbdffc23fb41aaecd24f0c27de93a1293c",
+      "commit": "027d17fbdffc23fb41aaecd24f0c27de93a1293c"
+    },
+    "ray-62328": {
+      "repo_url": "https://github.com/ray-project/ray",
+      "upstream_ref": "a5ee5309e49895d37b2c2bd964de141df9864fd1",
+      "commit": "a5ee5309e49895d37b2c2bd964de141df9864fd1"
+    },
+    "ray-62430": {
+      "repo_url": "https://github.com/ray-project/ray",
+      "upstream_ref": "e4d0c470b5f97d461a19f6321dcaba97ec69aeab",
+      "commit": "e4d0c470b5f97d461a19f6321dcaba97ec69aeab"
+    },
+    "ray-8749": {
+      "repo_url": "https://github.com/ray-project/ray",
+      "upstream_ref": "890cb8cb70f095c146e747db2c3368f6af1931fa",
+      "commit": "890cb8cb70f095c146e747db2c3368f6af1931fa"
+    },
+    "ray-8889": {
+      "repo_url": "https://github.com/ray-project/ray",
+      "upstream_ref": "a90cd0fcbb81c2be472b16c61bebc75125d16133",
+      "commit": "a90cd0fcbb81c2be472b16c61bebc75125d16133"
+    },
+    "tikv-16818": {
+      "repo_url": "https://github.com/tikv/tikv",
+      "upstream_ref": "2f3f32d9a0de2ebdb987c00b2419761cfbda4556",
+      "commit": "2f3f32d9a0de2ebdb987c00b2419761cfbda4556"
+    },
+    "tikv-17830": {
+      "repo_url": "https://github.com/tikv/tikv",
+      "upstream_ref": "b00db656cefcd693651fdc337c23ae8c680d6be0",
+      "commit": "b00db656cefcd693651fdc337c23ae8c680d6be0"
+    },
+    "tikv-18317": {
+      "repo_url": "https://github.com/tikv/tikv",
+      "upstream_ref": "71aecc2",
+      "commit": "71aecc238297e803d6692b87a61fb0ae4bbdef2c"
+    },
+    "tikv-18458": {
+      "repo_url": "https://github.com/tikv/tikv",
+      "upstream_ref": "a150e45",
+      "commit": "a150e4569fda1c64763fda297f4e09775759de4a"
+    },
+    "tikv-18498": {
+      "repo_url": "https://github.com/tikv/tikv",
+      "upstream_ref": "v8.5.1",
+      "commit": "25897b73e1f0e93f616c764dbe65ed7db02edd07"
+    },
+    "tikv-18756": {
+      "repo_url": "https://github.com/tikv/tikv",
+      "upstream_ref": "ed504baa35c36fa2f05ee1e5bb8f5e3f60da46d6",
+      "commit": "ed504baa35c36fa2f05ee1e5bb8f5e3f60da46d6"
+    },
+    "tikv-18912": {
+      "repo_url": "https://github.com/tikv/tikv",
+      "upstream_ref": "2d51d3e",
+      "commit": "2d51d3e9202f713a3564d8e3d46fd82fe87dd0d3"
+    },
+    "tikv-18983": {
+      "repo_url": "https://github.com/tikv/tikv",
+      "upstream_ref": "2198165",
+      "commit": "219816571aa8f7796b0a88130821bc8a9f76639c"
+    },
+    "tikv-19004": {
+      "repo_url": "https://github.com/tikv/tikv",
+      "upstream_ref": "fb85c9563caeeac44777a52cb872cb6d84fbc093",
+      "commit": "fb85c9563caeeac44777a52cb872cb6d84fbc093"
+    },
+    "tikv-19220": {
+      "repo_url": "https://github.com/tikv/tikv",
+      "upstream_ref": "6bb8ff37ef2984587a12e4b9595944745fb13896",
+      "commit": "6bb8ff37ef2984587a12e4b9595944745fb13896"
+    },
+    "tikv-19238": {
+      "repo_url": "https://github.com/tikv/tikv",
+      "upstream_ref": "v8.5.3",
+      "commit": "13b9af5c34ad0dd62b5ae5ee02e05806e6d31e0b"
+    },
+    "zookeeper-2581": {
+      "repo_url": "https://github.com/apache/zookeeper",
+      "upstream_ref": "release-3.5.1",
+      "commit": "59adfa23fb6c1b9034283d6fc09cd7a4a8e6e0b1"
+    },
+    "zookeeper-2623": {
+      "repo_url": "https://github.com/apache/zookeeper",
+      "upstream_ref": "release-3.9.0",
+      "commit": "1674a5e97f43bc38e9bf56b04f83a7ae34d68249"
+    },
+    "zookeeper-2775": {
+      "repo_url": "https://github.com/apache/zookeeper",
+      "upstream_ref": "release-3.5.3",
+      "commit": "8ce24f9e675cbefffb8f21a47e06b42864475a60"
+    },
+    "zookeeper-2836": {
+      "repo_url": "https://github.com/apache/zookeeper",
+      "upstream_ref": "release-3.5.3",
+      "commit": "8ce24f9e675cbefffb8f21a47e06b42864475a60"
+    },
+    "zookeeper-2845": {
+      "repo_url": "https://github.com/apache/zookeeper",
+      "upstream_ref": "release-3.5.3",
+      "commit": "8ce24f9e675cbefffb8f21a47e06b42864475a60"
+    },
+    "zookeeper-2959": {
+      "repo_url": "https://github.com/apache/zookeeper",
+      "upstream_ref": "release-3.5.3",
+      "commit": "8ce24f9e675cbefffb8f21a47e06b42864475a60"
+    },
+    "zookeeper-2960": {
+      "repo_url": "https://github.com/apache/zookeeper",
+      "upstream_ref": "release-3.4.11",
+      "commit": "37e277162d567b55a07d1755f0b31c32e93c01a0"
+    },
+    "zookeeper-2982": {
+      "repo_url": "https://github.com/apache/zookeeper",
+      "upstream_ref": "release-3.5.3",
+      "commit": "8ce24f9e675cbefffb8f21a47e06b42864475a60"
+    },
+    "zookeeper-3218": {
+      "repo_url": "https://github.com/apache/zookeeper",
+      "upstream_ref": "release-3.5.5",
+      "commit": "390fe37ea45dee01bf87dc1c042b5e3dcce88653"
+    },
+    "zookeeper-3642": {
+      "repo_url": "https://github.com/apache/zookeeper",
+      "upstream_ref": "release-3.5.6",
+      "commit": "c11b7e26bc554b8523dc929761dd28808913f091"
+    },
+    "zookeeper-3644": {
+      "repo_url": "https://github.com/apache/zookeeper",
+      "upstream_ref": "release-3.5.6",
+      "commit": "c11b7e26bc554b8523dc929761dd28808913f091"
+    },
+    "zookeeper-3656": {
+      "repo_url": "https://github.com/apache/zookeeper",
+      "upstream_ref": "release-3.6.3",
+      "commit": "6401e4ad2087061bc6b9f80dec2d69f2e3c8660a"
+    },
+    "zookeeper-3769": {
+      "repo_url": "https://github.com/apache/zookeeper",
+      "upstream_ref": "release-3.5.7",
+      "commit": "f0fdd52973d373ffd9c86b81d99842dc2c7f660e"
+    },
+    "zookeeper-3829": {
+      "repo_url": "https://github.com/apache/zookeeper",
+      "upstream_ref": "release-3.6.1",
+      "commit": "104dcb3e3fb464b30c5186d229e00af9f332524b"
+    },
+    "zookeeper-3988": {
+      "repo_url": "https://github.com/apache/zookeeper",
+      "upstream_ref": "release-3.7.0",
+      "commit": "e3704b390a6697bfdf4b0bef79e3da7a4f6bac4b"
+    },
+    "zookeeper-4699": {
+      "repo_url": "https://github.com/apache/zookeeper",
+      "upstream_ref": "release-3.8.1",
+      "commit": "74db005175a4ec545697012f9069cb9dcc8cdda7"
+    },
+    "zookeeper-4761": {
+      "repo_url": "https://github.com/apache/zookeeper",
+      "upstream_ref": "release-3.7.0",
+      "commit": "e3704b390a6697bfdf4b0bef79e3da7a4f6bac4b"
+    },
+    "zookeeper-4921": {
+      "repo_url": "https://github.com/apache/zookeeper",
+      "upstream_ref": "release-3.9.3",
+      "commit": "c26634f34490bb0ea7a09cc51e05ede3b4e320ee"
+    }
+  }
+}

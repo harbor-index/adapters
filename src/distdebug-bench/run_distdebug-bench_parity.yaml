@@ -1,0 +1,36 @@
+# Parity runs (Harbor side): Mini-SWE-Agent 2.2.8 + StepFun step-5-preview with the
+# upstream DistDebug-Bench prompt (configs/harbor_mini_swe_agent.yaml).
+# One job = one parity run; run it once per run index (3x), from the adapters repo root:
+#   cd src/distdebug-bench && uv run distdebug-bench --split parity --output-dir ../../datasets/distdebug-bench-parity
+#   export STEPFUN_API_KEY=...   # Step Plan key
+#   harbor run -c src/distdebug-bench/run_distdebug-bench_parity.yaml --job-name distdebug-parity-run1
+# Use datasets/distdebug-bench instead to run parity on the full Lite split.
+jobs_dir: jobs
+n_attempts: 1
+timeout_multiplier: 1.0
+orchestrator:
+  type: local
+  n_concurrent_trials: 4
+  quiet: false
+environment:
+  type: docker
+  delete: true
+datasets:
+  - path: datasets/distdebug-bench-parity
+agents:
+  - name: mini-swe-agent
+    model_name: openai/step-5-preview
+    base_url: https://api.stepfun.com/step_plan/v1
+    model_api_key_name: STEPFUN_API_KEY
+    # Needed so Harbor accepts base_url together with config_file.
+    model_api_format: openai_chat_completions
+    # Upstream Mini-SWE-Agent runs have no wall-clock limit; keep Harbor's generous.
+    override_timeout_sec: 7200
+    kwargs:
+      version: 2.2.8
+      cost_limit: "3.0"   # upstream default; inactive when LiteLLM has no price
+      # No session-ID header: Harbor would otherwise put the trial name (which contains
+      # the bug id) on the mini-swe-agent command line, echoed into /logs/agent/mini-swe-agent.txt,
+      # which the agent can read. Upstream's sandbox exposes no bug id to the agent.
+      session_id_headers: []
+      config_file: src/distdebug-bench/configs/harbor_mini_swe_agent.yaml

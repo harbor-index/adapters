@@ -1,0 +1,53 @@
+version = "1.0"
+
+# The agent's diagnosis is handed to a separate verifier container, so the
+# ground-truth labels, the scorer and the fix links never enter the agent's
+# environment (upstream scores offline, after the attempt).
+artifacts = ["/workspace/diagnosis.json"]
+
+[task]
+name = "orderlab/distdebug-bench__{task_id}"
+description = "DistDebug-Bench {bug_id}: localize the root-cause code blocks of a real {system_title} failure."
+authors = [
+    { name = "Yuxuan Jiang", email = "jyuxuan@umich.edu" },
+    { name = "Chenglin Liu" },
+    { name = "John Rose" },
+    { name = "Mason Miller" },
+    { name = "Ruthesh Thavamani" },
+    { name = "Juntao Wu" },
+    { name = "Yinwei Huang" },
+    { name = "Jiahao Xu" },
+    { name = "Peng Huang" },
+]
+keywords = ["distdebug-bench", "debugging", "root-cause-localization", "distributed-systems", "{system}", "{language}"]
+
+[metadata]
+source = "DistDebug-Bench"
+benchmark_version = "{benchmark_version}"
+bug_id = "{bug_id}"
+system = "{system}"
+language = "{language}"
+upstream_ref = "{upstream_ref}"
+commit = "{commit}"
+difficulty = "{difficulty}"
+category = "debugging"
+root_cause_type = "{root_cause_type}"
+num_ground_truth_blocks = {num_blocks}
+primary_metric = "block_coverage"
+
+[agent]
+timeout_sec = {agent_timeout_sec}
+{agent_network}
+
+[verifier]
+timeout_sec = 300.0
+environment_mode = "separate"
+# Scoring is pure Python stdlib over files baked into the verifier image.
+network_mode = "no-network"
+
+[environment]
+build_timeout_sec = {build_timeout_sec}
+cpus = 2
+memory_mb = 4096
+storage_mb = {storage_mb}
+workdir = "/workspace"

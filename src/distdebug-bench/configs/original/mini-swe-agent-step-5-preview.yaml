@@ -1,0 +1,14 @@
+# Original-side parity config: drop into configs/mini-swe-agent/ of OrderLab/distdebug-bench
+# (commit c3e929b) and run with `python -m distdebug_bench.run --config ...`.
+# Mini-SWE-Agent 2.2.8 with StepFun step-5-preview through the Step Plan
+# OpenAI-compatible endpoint (chat completions), following the paper's MiMo config.
+# Export OPENAI_API_KEY=<Step Plan key>.
+name: mini-swe-agent-step-5-preview
+model_name: openai/step-5-preview
+model_class: litellm
+model_kwargs:
+  drop_params: true
+  api_base: https://api.stepfun.com/step_plan/v1
+cost_limit: 3.0
+env:
+  MSWEA_COST_TRACKING: ignore_errors

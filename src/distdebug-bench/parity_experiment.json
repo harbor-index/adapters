@@ -1,0 +1,56 @@
+[
+  {
+    "adapter_name": "distdebug-bench",
+    "agent": "mini-swe-agent@2.2.8",
+    "model": "step-5-preview (StepFun Step Plan, OpenAI-compatible chat completions)",
+    "date": "2026-11-22",
+    "adapted_benchmark_size": 34,
+    "parity_benchmark_size": 12,
+    "number_of_runs": 3,
+    "notes": "Parity on the 12-bug parity split (first Lite bug of each of the 11 systems plus kafka-13668; 10% of the 120-bug benchmark). 3 runs per side. Protocol on both sides: one attempt per bug per run; a missing or schema-invalid diagnosis would score 0 (none occurred). Both sides rescored offline with the same upstream distdebug_bench.score.score_run (scripts/parity_compare.py); Harbor's in-container reward.json matched the upstream rescoring on 36/36 trials. Upstream leakage check: 0 of 36 traces flagged on each side. One earlier Harbor trial (run 2, elasticsearch-128583) was flagged because Harbor's mini-swe-agent wrote the trial name (bug id) into an agent-readable log; it was excluded and rerun with session_id_headers: [] (now set in the parity config; see README). All seven upstream metrics overlap (function_coverage, line_coverage, strict_block_coverage, block_precision, mention_coverage are in the README). Prompts verified byte-identical on real trajectories except mini-swe-agent's <system_information> uname line (original: x86_64 Linux host with bubblewrap; Harbor: aarch64 Linux VM via Colima). Values are percentages (mean over 12 bugs), mean ± sample SEM over runs. Parity artifacts: harborframework/parity-experiments is over the Hub's 1M-file limit, so the files are mirrored at https://huggingface.co/datasets/Nhckdvrl/distdebug-bench-parity-experiments until PR 294 can accept them.",
+    "original_parity_repo": "https://github.com/OrderLab/distdebug-bench/tree/c3e929b9ee0082345337358e352ae37fc472df4c (plus configs/original/mini-swe-agent-step-5-preview.yaml from this adapter)",
+    "adapter_pr": [
+      "https://github.com/harbor-index/adapters/pull/32"
+    ],
+    "dataset_pr": [
+      "https://github.com/harbor-framework/harbor-datasets/pull/288"
+    ],
+    "parity_pr": [
+      "https://huggingface.co/datasets/harborframework/parity-experiments/discussions/294"
+    ],
+    "metrics": [
+      {
+        "benchmark_name": "DistDebug-Bench Lite (12-task parity split)",
+        "metric": "block_coverage",
+        "original": "60.19 ± 5.44",
+        "harbor": "58.52 ± 2.48",
+        "original_runs": [
+          49.31,
+          65.97,
+          65.28
+        ],
+        "harbor_runs": [
+          53.75,
+          62.08,
+          59.72
+        ]
+      },
+      {
+        "benchmark_name": "DistDebug-Bench Lite (12-task parity split)",
+        "metric": "file_coverage",
+        "original": "80.56 ± 7.22",
+        "harbor": "75.46 ± 4.04",
+        "original_runs": [
+          68.06,
+          80.56,
+          93.06
+        ],
+        "harbor_runs": [
+          76.39,
+          81.94,
+          68.06
+        ]
+      }
+    ]
+  }
+]

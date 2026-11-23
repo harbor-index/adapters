@@ -1,0 +1,27 @@
+# Harbor-side Mini-SWE-Agent config for DistDebug-Bench parity.
+#
+# Reproduces distdebug_bench/mini_swe_agent_prompt.yaml (upstream commit c3e929b)
+# exactly. Harbor passes instruction.md (upstream's CLI-harness prompt =
+# system_template + instance body with the CLI finishing step) as {{task}}; the
+# instance_template below strips the system prefix and restores the Mini-SWE-Agent
+# finishing step, so the first two messages are byte-identical to an upstream
+# `python -m distdebug_bench.run` attempt (checked by scripts/check_mini_prompt.py).
+# Use with: --ak config_file=<this file>
+agent:
+  system_template: |
+    You are a helpful assistant that can interact with a computer through bash tool calls.
+
+    Your job is diagnosis only. Do not modify the codebase and do not attempt to produce a fix.
+  instance_template: |
+    {{ task | replace("You are a helpful assistant that can interact with a computer through bash tool calls.\n\nYour job is diagnosis only. Do not modify the codebase and do not attempt to produce a fix.\n\n", "", 1) | replace("6. Only after validation succeeds, stop and reply with a one-sentence summary.", "6. Only after validation succeeds, finish by issuing:\n   `echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT`") | trim }}
+
+    <system_information>
+    {{system}} {{release}} {{version}} {{machine}}
+    </system_information>
+  step_limit: 0
+  cost_limit: 3.0
+environment:
+  timeout: 60
+model:
+  model_kwargs:
+    drop_params: true
