@@ -1,0 +1,32 @@
+# Reference job config for the HumanEvalPack adapter.
+#
+# From the adapters repository root:
+#   uv run --project src/humanevalpack humanevalpack          # writes datasets/humanevalpack
+#   harbor run -c src/humanevalpack/run_humanevalpack.yaml    # oracle run over every task
+#
+# The six language images are built once each (every task of a language has the
+# same build context), so only the first trial of a language waits for a build.
+jobs_dir: jobs
+n_attempts: 1
+timeout_multiplier: 1.0
+orchestrator:
+  type: local
+  n_concurrent_trials: 4
+  quiet: false
+environment:
+  type: docker
+  force_build: true
+  delete: true
+# Default: the oracle agent, which installs the benchmark's reference solution.
+agents:
+  - name: oracle
+# To evaluate an agent, replace the block above with one of these (or pass
+# `-a <agent> -m <model>` on the command line):
+# agents:
+#   - name: codex
+#     model_name: openai/gpt-5-mini
+# agents:
+#   - name: claude-code
+#     model_name: anthropic/claude-haiku-4-5
+datasets:
+  - path: datasets/humanevalpack

@@ -1,0 +1,61 @@
+
+# --- Rust: 1.71.1 + the cargo package the tests are built in, with pre-built dependencies ---
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends gcc libc6-dev \
+    && rm -rf /var/lib/apt/lists/*
+ENV RUSTUP_HOME=/opt/toolchain/rustup \
+    CARGO_HOME=/opt/toolchain/cargo \
+    PATH=/opt/toolchain/cargo/bin:$PATH
+RUN set -eux; \
+    arch="$(dpkg --print-architecture)"; \
+    case "$arch" in \
+      amd64) triple=x86_64-unknown-linux-gnu; sha256=6aeece6993e902708983b209d04c0d1dbb14ebb405ddb87def578d41f920f56d ;; \
+      arm64) triple=aarch64-unknown-linux-gnu; sha256=1cffbf51e63e634c746f741de50649bbbcbd9dbe1de363c9ecef64e278dba2b2 ;; \
+      *) echo "unsupported architecture: $arch" >&2; exit 1 ;; \
+    esac; \
+    curl -fsSL -o /tmp/rustup-init \
+      "https://static.rust-lang.org/rustup/archive/1.27.1/${triple}/rustup-init"; \
+    echo "${sha256}  /tmp/rustup-init" | sha256sum -c -; \
+    chmod +x /tmp/rustup-init; \
+    /tmp/rustup-init -y --no-modify-path --profile minimal --default-toolchain 1.71.1; \
+    rm /tmp/rustup-init; \
+    rustc --version; cargo --version
+
+# Cargo.toml is the manifest of the reference setup (rand 0.4, regex 1, md5 0.7.0).
+# Cargo.lock pins the versions that resolved when rustc 1.71.1 was current, and
+# the dependencies are compiled here for both `cargo check` and `cargo test`, so
+# building a solution needs no network access and only compiles the solution.
+# The package and the crate cache belong to the sandbox account, which builds
+# the submitted code there.
+COPY Cargo.toml Cargo.lock /opt/toolchain/rust/
+RUN set -eux; \
+    cd /opt/toolchain/rust; \
+    mkdir -p src/bin; \
+    printf '%s\n' \
+      'fn main(){}' \
+      '' \
+      'use rand::Rng;' \
+      'use regex::Regex;' \
+      'use md5;' \
+      '' \
+      'fn warmup() -> bool {' \
+      '    let _roll: u32 = rand::thread_rng().gen_range(0, 10);' \
+      '    let digest = format!("{:x}", md5::compute("warmup"));' \
+      '    Regex::new(r"^[0-9a-f]{32}$").unwrap().is_match(&digest)' \
+      '}' \
+      '' \
+      '#[cfg(test)]' \
+      'mod tests {' \
+      '    use super::*;' \
+      '' \
+      '    #[test]' \
+      '    fn test_warmup() {' \
+      '        assert_eq!(warmup(), true);' \
+      '    }' \
+      '}' > src/bin/test.rs; \
+    cargo fetch --locked; \
+    cargo check --bin test --message-format json > /dev/null; \
+    cargo test --bin test --message-format json > /dev/null; \
+    chown sandbox:sandbox "$CARGO_HOME"; \
+    chown -R sandbox:sandbox "$CARGO_HOME/registry" /opt/toolchain/rust; \
+    find "$CARGO_HOME" -maxdepth 1 -type f -exec chown sandbox:sandbox {} +

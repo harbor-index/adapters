@@ -1,0 +1,28 @@
+[project]
+name = "harbor-humanevalpack-adapter"
+version = "0.1.0"
+description = "Harbor adapter for HumanEvalPack (HumanEvalFix and HumanEvalSynthesize in six languages)"
+readme = "README.md"
+authors = [
+    { name = "Himanshu Gupta", email = "him141195@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "huggingface-hub>=0.23",
+    "polars>=1.0",
+]
+
+[project.scripts]
+humanevalpack = "humanevalpack.main:main"
+humanevalpack-score = "humanevalpack.score:main"
+
+[build-system]
+requires = ["uv_build>=0.11.8,<0.12.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "humanevalpack"
+
+[tool.ruff]
+# The original executor is vendored byte for byte and is not linted or formatted.
+extend-exclude = ["src/humanevalpack/task-template/tests/execute.py"]
