@@ -1,0 +1,73 @@
+version = "1.0"
+artifacts = [
+  { source = "/opt/embodiedlab/capture", destination = "capture" },
+  { source = "/home/agent/workspace", destination = "workspace", exclude = ["embodiedlab_api"] },
+]
+
+[task]
+name = "embodiedlab/@@TASK_NAME@@"
+description = "EmbodiedLab #@@NUMBER@@ @@EXP_ID@@: @@TITLE@@ (dev instance @@SEED@@, interface level T0)."
+authors = [@@AUTHORS@@]
+keywords = ["embodiedlab", "embodied-ai", "robotics", "scientific-experiment", "physics-simulation", "isaac-sim", "@@DISCIPLINE_KW@@"]
+
+[metadata]
+benchmark = "EmbodiedLab"
+benchmark_version = "@@BENCHMARK_VERSION@@"
+experiment = "@@EXP_ID@@"
+number = @@NUMBER@@
+discipline = "@@DISCIPLINE@@"
+dimension = "@@DIMENSION@@"
+tier = "@@TIER@@"
+tolerance = "@@TOLERANCE@@"
+exposure = "T0"
+split = "dev"
+seed = @@SEED@@
+instance_id = "@@INSTANCE_ID@@"
+sim_budget_s = @@SIM_S@@
+reward = "1 when the EmbodiedLab evaluator marks the task completed, else 0"
+
+# The agent timeout is the experiment's wall-clock limit. The agent runs as the unprivileged user "agent", which can
+# reach only the three public tool routes on 127.0.0.1:18731.
+# While the agent works it may reach its model API only: no web search, package index or GitHub (the dev instance's
+# hidden values follow from the public EmbodiedLab code). Harbor adds the inference host of an installed agent by
+# itself; give any other endpoint with --allow-agent-host. Setup before the agent phase keeps the network.
+[agent]
+timeout_sec = @@WALL_S@@
+user = "agent"
+network_mode = "allowlist"
+allowed_hosts = []
+
+# Scoring runs in its own container (tests/Dockerfile) with the instance record and the offline evaluator, so the
+# hidden values never enter the agent's container. Before it starts, the collect step asks the simulator to seal the
+# episode's evidence, which the capture artifact then carries over.
+[verifier]
+environment_mode = "separate"
+timeout_sec = 600.0
+
+[[verifier.collect]]
+command = "/usr/bin/python3 /opt/el-harbor/gateway.py capture"
+timeout_sec = 900
+
+[environment]
+docker_image = "@@IMAGE@@"
+build_timeout_sec = 3600.0
+workdir = "/home/agent/workspace"
+cpus = 8
+memory_mb = 32768
+storage_mb = 102400
+gpus = 1
+# Isaac Sim renders with RT cores: an RTX-class GPU, not a data-center GPU without them.
+gpu_types = ["rtx-4090", "rtx-5090", "rtx-pro-6000"]
+
+[environment.env]
+EL_TASK = "@@TASK_NAME@@"
+
+# Starts the simulator and the tool gateway (cloud sandboxes do not run image entrypoints) and passes once the agent's
+# workspace is rendered. Isaac Sim's first start compiles shaders, hence the long start period.
+[environment.healthcheck]
+command = "/opt/el-harbor/up.sh"
+interval_sec = 10.0
+timeout_sec = 30.0
+start_period_sec = 1800.0
+start_interval_sec = 10.0
+retries = 3

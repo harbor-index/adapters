@@ -1,0 +1,51 @@
+[
+  {
+    "adapter_name": "embodiedlab",
+    "adapter_builders": [
+      "Zelin Zheng (zhengzelin200303@163.com)",
+      "Hongcheng Gao (gaohongcheng2000@gmail.com)"
+    ],
+    "original_benchmark": [
+      {
+        "split": "T0",
+        "size": 35,
+        "harness": "agent",
+        "supported_agents": [
+          "None"
+        ],
+        "adaptable": true,
+        "notes": "EmbodiedLab 0.2.1, dev split, interface level T0 (raw control). 30 determination and 5 optimization experiments. The original trial runner hands the rendered workspace to any coding agent; it ships no agent of its own."
+      },
+      {
+        "split": "T1",
+        "size": 35,
+        "harness": "agent",
+        "supported_agents": [
+          "None"
+        ],
+        "adaptable": false,
+        "notes": "Not adapted: T1 adds SAM3 segmentation and cuRobo motion planning, which run as separate GPU services outside the task container."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "T0",
+        "adapted_benchmark_size": 32,
+        "parity_benchmark_size": 10,
+        "parity_sampling_rate": 0.303,
+        "registry_benchmark_size": 32,
+        "added_agents": [
+          "None"
+        ],
+        "parity_matching_agents": [
+          "None"
+        ],
+        "parity_unmatching_agents": [
+          "None"
+        ],
+        "parity_costs": null,
+        "notes": "One dev instance per experiment, the instance whose recorded successful run is the oracle. truss_bridge, lens_focal and optical_relay are not yet included, until their oracle replays are validated (README, Notes & Caveats). Parity has not run yet; None parity-agent entries mean no experiments."
+      }
+    ]
+  }
+]

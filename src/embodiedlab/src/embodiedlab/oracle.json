@@ -1,0 +1,201 @@
+{
+  "benchmark_version": "0.2.1",
+  "bundle": {
+    "name": "embodiedlab-oracle-0.2.1.tar",
+    "sha256": "9439e34dded13225bca679270880e9743fe33fee678a2de22641630186a0cb40"
+  },
+  "experiments": {
+    "active_filter": {
+      "seed": 0,
+      "instance_id": "inst-2f67f95a7e6363d7adae054e",
+      "calls": 4514,
+      "sha256": "58366f766239afb1e61a0b63901f981a9dd2ae1c205c52f9ab23ae2f2d404a4e"
+    },
+    "airtrack_collision": {
+      "seed": 2,
+      "instance_id": "inst-31230e5691c16f56f5ec1931",
+      "calls": 188,
+      "sha256": "440a82337a7d85a86368b623090526ce5931d58d92246a4370c84550a315c556"
+    },
+    "battery_emf": {
+      "seed": 2,
+      "instance_id": "inst-4d75f023be1ad2e3136c5e3a",
+      "calls": 424,
+      "sha256": "d9b035f9355a1b4c690762feeee466850bd94111e4e0aa811e6e7014812caa50"
+    },
+    "beam_compliance": {
+      "seed": 0,
+      "instance_id": "inst-7f833ba899b642fe2c13820c",
+      "calls": 662,
+      "sha256": "4821e3d64083daabbad1e1c49509bdb20592e12e2577163af02c63f9ad17247d"
+    },
+    "calorimetry_specific_heat": {
+      "seed": 0,
+      "instance_id": "inst-00dc5127d7afc83a61e8d79f",
+      "calls": 852,
+      "sha256": "b4c706d92f924c9dc6e0e15cb72c7938d263cfc4577568763d3587f56a7ae1bd"
+    },
+    "circuit_blackbox3": {
+      "seed": 0,
+      "instance_id": "inst-b7dfa548c070b4546a20104c",
+      "calls": 828,
+      "sha256": "716759f75eadc71c419025428b58ae5c7a22f83cb023dd52a2df8cbe9f98dc57"
+    },
+    "coupled_modes": {
+      "seed": 2,
+      "instance_id": "inst-0fb592ee31a3d4b22cf4c9e5",
+      "calls": 180,
+      "sha256": "d2540c00a1fb1d8ba19d6b05fa525f3267458e52ed8801cedbe45e7f8a599d9c"
+    },
+    "dye_absorptivity": {
+      "seed": 0,
+      "instance_id": "inst-41d6665b139a94fda4d1ba72",
+      "calls": 785,
+      "sha256": "dff57a182c305b5d70187443b511d7978ec7370ee908630cbbfaa53cda1647dd"
+    },
+    "fiber_coupling": {
+      "seed": 2,
+      "instance_id": "inst-7eca8d32caa315758d2e16e2",
+      "calls": 13210,
+      "sha256": "71516c02f0729d3f0b2e54d9067d3a4bb636b66dd868bb04a3ab95231c97258b"
+    },
+    "grating_wavelength": {
+      "seed": 0,
+      "instance_id": "inst-8b8ee7d2064a4b46a6d306bc",
+      "calls": 117,
+      "sha256": "20b31921d6ad7c23bff73b02069fc76d61a33fc2ace1d85df04bcbc471f7bd7c"
+    },
+    "hooke_dynamic_k": {
+      "seed": 3,
+      "instance_id": "inst-2b4ff70f7349e1732f16552c",
+      "calls": 429,
+      "sha256": "0387bc17142626e5dee79b15abee95729ef41360adf705a5f000e975c7081deb"
+    },
+    "hooke_k": {
+      "seed": 0,
+      "instance_id": "inst-445768530a2b68aaca7dc762",
+      "calls": 182,
+      "sha256": "fb3f45e68416ea0ece9ddef6450473c5d5f5ca2e363524858ba92d3653f4e114"
+    },
+    "incline_friction": {
+      "seed": 4,
+      "instance_id": "inst-b36c128d5e5e3c5a3db18931",
+      "calls": 694,
+      "sha256": "085299084742787ff274d4c0e7da0784f1de0f985458765c2cf6378632b9673a"
+    },
+    "kinetics_crystal_violet": {
+      "seed": 0,
+      "instance_id": "inst-fcb5adf8215c4d0cc7811caf",
+      "calls": 683,
+      "sha256": "45f424c7606aec3efbfd984eff081bb483960c98c2e19a05dbb0e4df1813954c"
+    },
+    "led_planck": {
+      "seed": 2,
+      "instance_id": "inst-334b508d84015e43482e660b",
+      "calls": 1180,
+      "sha256": "db1729ff7380a5bd055e2ce567f914915c46bd28903f206cb17e490441642cca"
+    },
+    "pendulum_g": {
+      "seed": 2,
+      "instance_id": "inst-94e006376d90c609907f7dfb",
+      "calls": 206,
+      "sha256": "d8d1da34368c7626401bc838103b68c6a3225eca508634e7a2e76ec5b1e9b6a5"
+    },
+    "plate_index": {
+      "seed": 2,
+      "instance_id": "inst-4a7438c454d2838e11033bd2",
+      "calls": 517,
+      "sha256": "b88a769ff20d666504a4ea461e8d6dc63116da93389739d192625d32b2a741fa"
+    },
+    "projectile_landing": {
+      "seed": 2,
+      "instance_id": "inst-d1753c41bfab334e15896d8f",
+      "calls": 494,
+      "sha256": "10348799e9426f5703dcde15ea32387dc11413833eb2f2c1ecf8ff6a762db39a"
+    },
+    "rc_capacitance": {
+      "seed": 2,
+      "instance_id": "inst-6ccb566a24fbbafba0df4944",
+      "calls": 1148,
+      "sha256": "58ad5932d1a79f1691284a69c3d082dcd234c60591fef2913acd095604497f5e"
+    },
+    "reaction_yield": {
+      "seed": 1,
+      "instance_id": "inst-d20f164aaf228df1cc8db4cd",
+      "calls": 2594,
+      "sha256": "b6839bba4b70abca24d898440cb2f8629cac441ef7fb43d678a8618b047049f9"
+    },
+    "rectifier_supply": {
+      "seed": 2,
+      "instance_id": "inst-107272f0ce361847c95aec60",
+      "calls": 1045,
+      "sha256": "71b2e69a2622a8a347fe00d650a05b351cf17845198fbe11982c188083173231"
+    },
+    "resistor_blackbox": {
+      "seed": 1,
+      "instance_id": "inst-ba4dfcd54a4dbe42eaa72fee",
+      "calls": 853,
+      "sha256": "f31eaf6fdc7b0a011b440f046ecc8206a29979e9f755eada33b5fd5ca00b9d37"
+    },
+    "rod_expansion": {
+      "seed": 0,
+      "instance_id": "inst-8bb91a5deaa16180662edb5c",
+      "calls": 233,
+      "sha256": "ac5add3f7629914bdfaceee2cd64e5c4b8ae5930dffdcaf7c2e13d87c13afefd"
+    },
+    "slit_width": {
+      "seed": 0,
+      "instance_id": "inst-85a2f1af22b2883e5380ebd0",
+      "calls": 188,
+      "sha256": "0f7902ce736091fbd17c145dcd433539db6477f86b3d69b9a97160419244f91e"
+    },
+    "spectro_basic": {
+      "seed": 0,
+      "instance_id": "inst-58fe716529f8b8d421b20cb7",
+      "calls": 1516,
+      "sha256": "976df99340454484464fde30cd665ff7904b47bbead8181adaeb08c114c0db68"
+    },
+    "spectro_mixture": {
+      "seed": 0,
+      "instance_id": "inst-f78b861eb01b53e10c6db36f",
+      "calls": 458,
+      "sha256": "6fe914fdfd894e2e1148d6f4e61f91be002b1a2a42f2005e256d2f140416ddfb"
+    },
+    "thermistor_beta": {
+      "seed": 0,
+      "instance_id": "inst-1fe7749bb888a958a57b73d6",
+      "calls": 388,
+      "sha256": "4b332d3ffff20b16ee061f4113dfd93b9ccd279e676846df3351d9a319005ce5"
+    },
+    "titration_basic": {
+      "seed": 2,
+      "instance_id": "inst-a283701e052865ed7ae231bf",
+      "calls": 458,
+      "sha256": "e29299159131c2d91a3fcb143b51d1032f5c08938b1b1fc73a374a777bba43a9"
+    },
+    "titration_weak_acid": {
+      "seed": 0,
+      "instance_id": "inst-8081ac2a986a2413a2fefad8",
+      "calls": 2399,
+      "sha256": "df9f6d183d6ef2bae6a4dfddd7a717ca29415877c48c2a39a677052943e698e4"
+    },
+    "torsion_centroid": {
+      "seed": 0,
+      "instance_id": "inst-3863754d6fda27dfe9e49728",
+      "calls": 804,
+      "sha256": "2badf0aecfa5d5003df1e879e4c4b4705ede71611c1ae7d2d6302a4880459df6"
+    },
+    "torsion_inertia": {
+      "seed": 0,
+      "instance_id": "inst-c71382166ac4880dcf7a9875",
+      "calls": 436,
+      "sha256": "ad8bdbde99d76a619ee2ee51d9ec8500e36391860bfd1c1938f895f80da7ca29"
+    },
+    "vibration_absorber": {
+      "seed": 2,
+      "instance_id": "inst-5c1c8d7a9bbfdf4aee85e2c4",
+      "calls": 4143,
+      "sha256": "75be247547297cf95e76d67382601c275a31331a9e902b222ed618d8cdf64c95"
+    }
+  }
+}

@@ -1,0 +1,28 @@
+# Run from the adapters repository root after generating datasets/embodiedlab and building the task image
+# (scripts/build_image.sh). Each trial needs one RTX-class GPU (Isaac Sim).
+jobs_dir: jobs
+n_attempts: 1
+datasets:
+  - path: datasets/embodiedlab
+
+# Default: the oracle agent (replays a recorded successful run of each instance).
+agents:
+  - name: oracle
+
+# Uncomment to run with other agents:
+# agents:
+#   - name: codex
+#     model_name: openai/<model>
+#
+# agents:
+#   - name: claude-code
+#     model_name: anthropic/<model>
+
+environment:
+  type: docker
+  delete: true
+
+# One trial per GPU. With Daytona (-e daytona) the tasks request their GPU through task.toml.
+orchestrator:
+  type: local
+  n_concurrent_trials: 1
