@@ -9,16 +9,16 @@
         "harness": "agent",
         "supported_agents": ["openhands", "inspectai-iterative-agent"],
         "adaptable": true,
-        "notes": "461 tasks from 51 ICLR/NeurIPS 2024 papers. 36 tasks fail upstream's own masking step (listed source file absent from the repository, or README.md listed as a source) and are skipped by the upstream harness as invalid_task. For 4 more, the setup-judge prompt exceeds the o3-mini judge's 200k-token context even without an agent patch, so upstream's judge cannot grade them."
+        "notes": "461 tasks from 51 ICLR/NeurIPS 2024 papers. 36 tasks fail upstream's own masking step (33 list scripts the construction agent wrote that are not in the paper repository, 3 list README.md) and are skipped by the upstream harness as invalid_task. Upstream judges with o3-mini; 4 tasks exceed its 200k-token context and need a long-context judge."
       }
     ],
     "harbor_adapter": [
       {
         "split": "full",
-        "adapted_benchmark_size": 421,
+        "adapted_benchmark_size": 425,
         "parity_benchmark_size": 57,
-        "parity_sampling_rate": 0.1354,
-        "registry_benchmark_size": 421,
+        "parity_sampling_rate": 0.1341,
+        "registry_benchmark_size": 425,
         "added_agents": ["None"],
         "parity_matching_agents": [],
         "parity_unmatching_agents": ["None"],

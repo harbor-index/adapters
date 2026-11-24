@@ -25,7 +25,8 @@ PARITY_SPLIT_FILE = PACKAGE_DIR / "data" / "parity_task_ids.txt"
 DEFAULT_CACHE_DIR = Path.home() / ".cache" / "harbor-exp-bench-adapter"
 
 # Tasks whose setup-judge prompt exceeds o3-mini's 200k-token context even without an agent
-# patch (tiktoken counts from scripts/audit_judge_context.py), so upstream cannot grade them.
+# patch (tiktoken counts from scripts/audit_judge_context.py): only long-context judges such
+# as the default Claude judge can grade them.
 JUDGE_CONTEXT_OVERFLOW = {
     "iclr2024-18447-11": 445900,  # demo.ipynb with embedded outputs
     "neurips2024-97791-5": 365244,
@@ -145,20 +146,12 @@ class EXPBenchAdapter:
         * Upstream masks the README first and then each listed source file; if a listed
           file does not exist in the repository, masking fails and the task is skipped as
           ``invalid_task`` (eval.py:mask_repo).
-        * For a few tasks the setup-judge prompt exceeds the default judge's context even
-          with an empty agent patch, because the reference source files it embeds are too
-          large; upstream's judge raises on them (see ``JUDGE_CONTEXT_OVERFLOW``).
         """
         missing = [path for path, sha in task["setup_script_sha256"].items() if sha is None]
         if missing:
             return f"masked source file(s) not in the repository at the pinned commit: {missing}"
         if "README.md" in task["masked_files"]:
             return "masks README.md, which upstream already removed before masking sources"
-        if task["task_id"] in JUDGE_CONTEXT_OVERFLOW:
-            return (
-                "setup-judge prompt without any agent patch is "
-                f"{JUDGE_CONTEXT_OVERFLOW[task['task_id']]} tokens, over o3-mini's 200k context"
-            )
         return None
 
     def load_tasks(self) -> list[dict]:

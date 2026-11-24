@@ -4,7 +4,7 @@
     "agent": "claude-code@2.1.330",
     "model": "claude-haiku-5-5 (proposed)",
     "date": "pending",
-    "adapted_benchmark_size": 421,
+    "adapted_benchmark_size": 425,
     "parity_benchmark_size": 57,
     "number_of_runs": 3,
     "notes": "Parity not run yet; plan in README. Subset: 57 tasks (40 papers): 27 CPU-feasible tasks plus a stratified random sample of 30 GPU tasks; 1 GPU per task on both sides. Both sides: same task bundle and pinned repository commits, Claude Code 2.1.330 with the same install command and flags, 30-minute agent limit, claude-haiku-5-5 judge. Original side: the EXP-Bench harness with Claude Code added (Scenario 2).",

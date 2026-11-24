@@ -15,7 +15,7 @@ are re-read from the trial's ``agent/`` directory so they are truncated to the n
 judge's context rather than the old one's.
 
 Usage (from src/exp-bench; judge settings come from the environment as in task.toml):
-    OPENAI_API_KEY=... [OPENAI_BASE_URL=...] [EXP_BENCH_JUDGE_MODEL=o3-mini] \
+    ANTHROPIC_API_KEY=... [EXP_BENCH_JUDGE_MODEL=claude-haiku-5-5] (or OPENAI_API_KEY / OPENAI_BASE_URL) \
     uv run --with openai==1.66.3 --with tiktoken==0.9.0 --with langchain-text-splitters==0.3.6 \
         python scripts/judge_deferred.py <job-dir> [<job-dir> ...] [--force]
 """

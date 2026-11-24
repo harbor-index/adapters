@@ -36,7 +36,7 @@ WORKSPACE = Path("/workspace")
 AGENT_LOG_DIR = Path("/logs/agent")
 VERIFIER_DIR = Path("/logs/verifier")
 
-JUDGE_MODEL = os.environ.get("EXP_BENCH_JUDGE_MODEL") or "o3-mini"
+JUDGE_MODEL = os.environ.get("EXP_BENCH_JUDGE_MODEL") or "claude-haiku-5-5"
 EXEC_CHECK = os.environ.get("EXP_BENCH_EXEC_CHECK", "1") != "0"
 EXEC_TIMEOUT_SEC = int(os.environ.get("EXP_BENCH_EXEC_TIMEOUT_SEC", "3600"))
 # Oracle validation only: skip the log monitor and execution check, which judge an
@@ -61,7 +61,7 @@ CONTEXT_LENGTHS = {
     "gemini-2.5-pro-preview-03-25": 200000,
 }
 
-# Optional Claude judges (not upstream) via Anthropic's OpenAI-compatible endpoint. Token
+# Claude judges (the default; upstream used o3-mini) via Anthropic's OpenAI-compatible endpoint. Token
 # budgets use tiktoken, which undercounts Claude tokens by ~1.4x, hence 650k of 1M. The
 # endpoint rejects an empty user turn, `temperature` and `json_object` (see llm_query_plain).
 CLAUDE_JUDGE = JUDGE_MODEL.startswith("claude-")
@@ -111,14 +111,14 @@ def count_tokens(text: str) -> int:
         return 0
 
 
-def get_messages_needed(msg: str) -> int:
-    max_tokens = context_length() - 1000
+def get_messages_needed(msg: str, reserve: int = 0) -> int:
+    max_tokens = max(context_length() - 1000 - reserve, 1000)
     return (count_tokens(msg) // max_tokens) + 1
 
 
-def breakdown_message(msg: str) -> list[str]:
+def breakdown_message(msg: str, reserve: int = 0) -> list[str]:
     splitter = RecursiveCharacterTextSplitter(
-        chunk_size=context_length() - 10000,
+        chunk_size=max(context_length() - 10000 - reserve, 1000),
         chunk_overlap=100,
         length_function=count_tokens,
         is_separator_regex=False,
@@ -130,8 +130,12 @@ def breakdown_message(msg: str) -> list[str]:
 
 
 def make_client() -> OpenAI:
+    # Claude judges use Anthropic's OpenAI-compatible endpoint unless OPENAI_BASE_URL is set.
     # Transport-level retries (connection errors, 429, 5xx) do not change what is judged.
-    return OpenAI(api_key=os.environ["OPENAI_API_KEY"], base_url=os.environ.get("OPENAI_BASE_URL") or None, max_retries=6)
+    if CLAUDE_JUDGE and not os.environ.get("OPENAI_BASE_URL"):
+        api_key = os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("OPENAI_API_KEY")
+        return OpenAI(api_key=api_key, base_url="https://api.anthropic.com/v1/", max_retries=6)
+    return OpenAI(api_key=os.environ.get("OPENAI_API_KEY"), base_url=os.environ.get("OPENAI_BASE_URL") or None, max_retries=6)
 
 
 CLIENT = None
@@ -483,8 +487,11 @@ def grade(
         # 2. Setup, chunked like upstream when the patch exceeds the context.
         setup_template = load_prompt("eval_judge_setup_prompt.txt")
         partial_template = load_prompt("eval_judge_setup_partial_prompt.txt")
-        if get_messages_needed(setup_output_str) > 1:
-            chunks = breakdown_message(setup_output_str)
+        # Not upstream: leave room for the reference files that every chunk repeats (upstream
+        # sizes chunks from the context alone and fails when the reference files are large).
+        reserve = count_tokens(setup_scripts)
+        if get_messages_needed(setup_output_str, reserve) > 1:
+            chunks = breakdown_message(setup_output_str, reserve)
             log(f"patch too large: judging it in {len(chunks)} chunks")
             setup_response = dict(default_setup_json_output)
             for i, chunk in enumerate(chunks):

@@ -12,16 +12,17 @@ conclusion.
   (CC-BY-4.0); harness in [Just-Curieous/Curie](https://github.com/Just-Curieous/Curie/tree/main/benchmark/exp_bench) (Apache-2.0).
 - **Task types:** type 1 (210) masks source files to re-implement, type 2 (123) masks the
   scripts that run an experiment, type 3 (128) masks only the README.
-- **This adapter: 421 tasks.** 40 tasks cannot be graded by the upstream pipeline and are
+- **This adapter: 425 tasks.** 36 tasks cannot be run by the upstream pipeline and are
   excluded (see Notes & Caveats).
 - **Main adaptations:** repositories are pinned to the commit current when the tasks were
-  built (upstream clones `HEAD`), and the judge uses any OpenAI-compatible endpoint
-  (upstream uses Azure). Prompts, masking, judge prompts and scores are unchanged.
+  built (upstream clones `HEAD`); the judge is Claude Haiku 5.5 by default (upstream:
+  o3-mini on Azure), and any OpenAI-compatible endpoint works. Prompts, masking, judge
+  prompts and scores are unchanged.
 
 ## What is EXP-Bench?
 
 Each task gives a research question, a method description and optional step-by-step
-instructions, plus the masked repository. An LLM judge (o3-mini) grades the run:
+instructions, plus the masked repository. An LLM judge grades the run:
 
 - **D (design):** share of ground-truth design variables matched.
 - **I (implementation):** share of setup requirements met by the agent's git diff.
@@ -42,7 +43,8 @@ The paper's best configuration (OpenHands + o3-mini) reached D 18.4, I 20.3, C 2
 - Instruction: upstream `eval_gen_prompt.txt`, filled as upstream fills it for its agents.
 - Verifier (`tests/judge.py`): a port of upstream `judge.py` (diff generation, the four
   judge prompts, retries, chunking of large diffs, log monitor, 1-hour execution check),
-  with judge dependencies pinned to upstream's.
+  with judge dependencies pinned to upstream's. It runs as a separate verifier on the
+  agent's `/workspace` and `/logs/agent`, collected as artifacts.
 - Rewards (`/logs/verifier/reward.json`): `design`, `implementation`, `conclusion`,
   `execution`, conjunctive metrics, `monitor_pass`, and `reward` (= `conclusion`).
 - Any Harbor agent can run the tasks; no custom agent.
@@ -80,8 +82,9 @@ harbor run -d just-curieous/exp-bench -a claude-code -m "<model>"
 harbor run -d just-curieous/exp-bench@parity -a claude-code -m "<model>"
 ```
 
-The verifier needs `OPENAI_API_KEY` (and `OPENAI_BASE_URL` for a non-OpenAI endpoint).
-`EXP_BENCH_JUDGE_MODEL` defaults to `o3-mini`.
+The verifier needs `ANTHROPIC_API_KEY` for the default judge (`claude-haiku-5-5`). For
+upstream's judge set `EXP_BENCH_JUDGE_MODEL=o3-mini` and `OPENAI_API_KEY`; `OPENAI_BASE_URL`
+selects any other OpenAI-compatible endpoint.
 
 **Deferred judging.** With `EXP_BENCH_DEFER_JUDGE=1` the verifier saves the agent's answer,
 patch, logs and execution check to `verifier/judge_inputs.json` instead of calling the
@@ -89,7 +92,7 @@ judge; grade the job later with the same judge code:
 
 ```bash
 cd src/exp-bench
-OPENAI_API_KEY=... uv run --with openai==1.66.3 --with tiktoken==0.9.0 \
+ANTHROPIC_API_KEY=... uv run --with openai==1.66.3 --with tiktoken==0.9.0 \
     --with langchain-text-splitters==0.3.6 python scripts/judge_deferred.py <job-dir>
 ```
 
@@ -113,7 +116,7 @@ harbor trial start -p datasets/exp-bench/neurips2024-98316-5 -a claude-code -m "
 ```bash
 cd src/exp-bench
 uv sync
-uv run exp-bench --output-dir ../../datasets/exp-bench                     # all 421 tasks
+uv run exp-bench --output-dir ../../datasets/exp-bench                     # all 425 tasks
 uv run exp-bench --split parity --gpus 1 --output-dir ../../datasets/exp-bench-parity
 uv run exp-bench --task-ids neurips2024-97649-0 --overwrite
 uv run exp-bench --gpus 1 --agent-timeout-hours 1 --output-dir ../../datasets/exp-bench-gpu
@@ -128,7 +131,7 @@ Parity has not been run yet. Values are reported as mean ± sample SEM.
 
 | Agent | Model | Metric | Number of Runs | Dataset Size | Original Benchmark Performance | Harbor Adapter Performance |
 |-------|-------|--------|------------------|--------------|------------------------------|----------------------------|
-| claude-code@2.1.330 | claude-haiku-5-5 (proposed) | conclusion (C) | 3 | 57 (13.5%) | TBD | TBD |
+| claude-code@2.1.330 | claude-haiku-5-5 (proposed) | conclusion (C) | 3 | 57 (13.4%) | TBD | TBD |
 
 Plan (to be confirmed with the Harbor team):
 
@@ -139,8 +142,7 @@ Plan (to be confirmed with the Harbor team):
 - **Agent:** Claude Code at a pinned version, one low-cost model, 30-minute limit. Upstream
   only ships an OpenHands build from Feb 2025 that cannot call current models, so Claude
   Code is added to the original harness with Harbor's install command and flags.
-- **Judge:** `claude-haiku-5-5` on both sides (`EXP_BENCH_JUDGE_MODEL=claude-haiku-5-5`,
-  `OPENAI_BASE_URL=https://api.anthropic.com/v1/`, an Anthropic key in `OPENAI_API_KEY`).
+- **Judge:** `claude-haiku-5-5` (the default) on both sides.
 - **Runs:** 5-task sanity check, then 1 full run, then 3 runs per side. Main metric C; D, I
   and E are also compared, by overlap of run ranges and per-task MSE.
 - **Original side:** branch [`harbor-parity`](https://github.com/Just-Curieous/Curie/tree/harbor-parity)
@@ -156,30 +158,34 @@ Plan (to be confirmed with the Harbor team):
 - **Pinned repositories.** Each repository is fetched at the last commit before its
   paper's tasks were built (recorded in `task.toml`); reference sources for the setup
   judge come from that commit, where upstream downloads them from `main`/`master`.
-- **40 excluded tasks** (`EXPBenchAdapter.invalid_reason`). 36 fail upstream's masking
-  step (33 list a file that never existed in the repository, 3 list `README.md`) and
-  upstream skips them as `invalid_task`. For 4 (`iclr2024-18447-11`,
-  `neurips2024-97791-5`, `iclr2024-18439-0`, `iclr2024-18439-2`) the reference files alone
-  exceed o3-mini's 200k-token context, so the released judge cannot grade them; the
-  authors' earlier runs could, because reference files were added to the prompt only in
-  May 2025. `scripts/audit_judge_context.py` recomputes the list for another judge.
-  `neurips2024-94391-12` leaves about 7k tokens for the agent's patch.
+- **36 excluded tasks** (`EXPBenchAdapter.invalid_reason`), which upstream's masking step
+  rejects as `invalid_task`: for 33, the masked source files are scripts the
+  benchmark-construction agent wrote and never committed to the paper repository; 3 list
+  `README.md`, which upstream has already removed.
 - **Environment.** Upstream runs agents in the OpenHands sandbox with the repository
   mounted at `/workspace`; here the repository is baked into a miniconda image (the base
   of upstream's image).
-- **Execution check** runs in the agent's container after the agent finishes; upstream
-  starts a fresh container, so packages installed outside `/workspace` do not carry over
-  there and E can be higher here.
+- **Execution check** runs in Harbor's separate verifier: a fresh task container that
+  receives the agent's `/workspace` and logs as artifacts, as upstream runs it in a fresh
+  container with the workspace mounted. Packages the agent installed outside `/workspace`
+  do not carry over, on either side.
+- **Large patches.** When the agent's patch is split into chunks for the setup judge, each
+  chunk leaves room for the reference files that every chunk repeats; upstream sizes
+  chunks from the context alone and fails with a context-length error when the reference
+  files are large.
 - **Monitor input** is the agent's console log (`/logs/agent/openhands.txt` or
   `claude-code.txt`; all text logs for other agents), truncated head and tail to fit the
   judge context where upstream would fail.
 - **Credentials folder.** `setup_apis_exp/env.sh` exports `OPENAI_API_KEY` /
   `OPENAI_BASE_URL` from `EXP_BENCH_TASK_OPENAI_API_KEY` / `EXP_BENCH_TASK_OPENAI_BASE_URL`
   (empty unless set), and is excluded from the judged diff.
-- **Claude judge (optional).** `EXP_BENCH_JUDGE_MODEL=claude-*` with
-  `OPENAI_BASE_URL=https://api.anthropic.com/v1/` sends a one-line user turn instead of an
-  empty one, a strict JSON schema instead of `json_object`, and no `temperature`; prompts
-  are unchanged. Scores are not comparable to o3-mini scores.
+- **Judge model.** The default judge is `claude-haiku-5-5` (1M-token context) through
+  Anthropic's OpenAI-compatible endpoint, which needs a one-line user turn instead of an
+  empty one, a strict JSON schema instead of `json_object`, and no `temperature`; prompts are
+  unchanged. Upstream used o3-mini, which can still be selected, but its 200k context cannot
+  hold the reference files of 4 tasks (`iclr2024-18447-11`, `neurips2024-97791-5`,
+  `iclr2024-18439-0`, `iclr2024-18439-2`; see `scripts/audit_judge_context.py`), and
+  `neurips2024-94391-12` leaves it about 7k tokens for the agent's patch.
 - **Conjunctive metrics.** The paper does not state their cut-offs; `all_correct` here
   requires D = I = 100 and C correct.
 - **Time limit** is 0.5 hours (upstream default; the paper mentions a 40-minute soft limit).
@@ -196,7 +202,8 @@ Plan (to be confirmed with the Harbor team):
 - Docker (or a Harbor cloud environment such as Daytona)
 - Harbor: `uv tool install harbor`
 - `cd src/exp-bench && uv sync`
-- Judge credentials: `OPENAI_API_KEY`, optional `OPENAI_BASE_URL`, `EXP_BENCH_JUDGE_MODEL`.
+- Judge credentials: `ANTHROPIC_API_KEY` (default judge), or `OPENAI_API_KEY` with
+  `EXP_BENCH_JUDGE_MODEL` (and optional `OPENAI_BASE_URL`).
 - Optional credentials for experiments that call an LLM: `EXP_BENCH_TASK_OPENAI_API_KEY`,
   `EXP_BENCH_TASK_OPENAI_BASE_URL`.
 
