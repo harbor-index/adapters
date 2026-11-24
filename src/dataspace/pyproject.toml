@@ -1,0 +1,19 @@
+[project]
+name = "harbor-dataspace-adapter"
+version = "0.1.0"
+description = "Harbor adapter for DataSpace, a benchmark of data agents over heterogeneous task-local workspaces"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "huggingface-hub>=0.34",
+]
+
+[project.scripts]
+dataspace = "dataspace.main:main"
+
+[build-system]
+requires = ["uv_build>=0.12.5,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "dataspace"

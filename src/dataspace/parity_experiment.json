@@ -1,0 +1,26 @@
+[
+  {
+    "adapter_name": "dataspace",
+    "agent": "<agent>@<version>",
+    "model": "<model>",
+    "date": "YYYY-MM-DD",
+    "adapted_benchmark_size": 60,
+    "parity_benchmark_size": null,
+    "number_of_runs": null,
+    "notes": "Parity not yet run. Planned: claude-code and codex on all 60 public-reference tasks, at least three runs per side, upstream side via dataspace-baselines batch with the same model and 1800 s wall-clock limit.",
+    "original_parity_repo": "https://github.com/HKUSTDial/DataSpace",
+    "adapter_pr": ["https://github.com/harbor-index/adapters/pull/22"],
+    "dataset_pr": [],
+    "parity_pr": [],
+    "metrics": [
+      {
+        "benchmark_name": "DataSpace",
+        "metric": "task_accuracy",
+        "original": "<mean +/- sample_SEM>",
+        "harbor": "<mean +/- sample_SEM>",
+        "original_runs": [],
+        "harbor_runs": []
+      }
+    ]
+  }
+]
