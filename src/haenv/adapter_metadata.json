@@ -1,0 +1,40 @@
+[
+  {
+    "adapter_name": "haenv",
+    "adapter_builders": [
+      "Jieshu Huang (jieshuh2@illinois.edu)"
+    ],
+    "original_benchmark": [
+      {
+        "split": "diagnosis",
+        "size": 100,
+        "harness": "agent",
+        "supported_agents": [
+          "None"
+        ],
+        "adaptable": true,
+        "notes": "HAEnv Pack 1 (M2 differential diagnosis), N=100 audited deterministic pack (v1.4 English, commit 94761fb). Upstream uses an OpenAI-compatible query/tool-calling harness."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "diagnosis",
+        "adapted_benchmark_size": 100,
+        "parity_benchmark_size": 0,
+        "parity_sampling_rate": 0.0,
+        "registry_benchmark_size": 100,
+        "added_agents": [
+          "None"
+        ],
+        "parity_matching_agents": [
+          "None"
+        ],
+        "parity_unmatching_agents": [
+          "None"
+        ],
+        "parity_costs": null,
+        "notes": "WIP: Steps 1-3 complete (N=100 M2 diagnosis tasks with Docker Compose EHR sidecar and upstream S=G*D*(1+Q)/2 verifier). Parity pending Step 4 Harbor-team coordination."
+      }
+    ]
+  }
+]

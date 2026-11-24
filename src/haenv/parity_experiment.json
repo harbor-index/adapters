@@ -1,0 +1,26 @@
+[
+  {
+    "adapter_name": "haenv",
+    "agent": "pending",
+    "model": "pending",
+    "date": "2026-11-24",
+    "adapted_benchmark_size": 100,
+    "parity_benchmark_size": 0,
+    "number_of_runs": 0,
+    "notes": "Parity pending Step 4 Harbor-team approval and API key provisioning (solver + management-rubric-v7 judge).",
+    "original_parity_repo": "https://github.com/thetahealth/mirobody-env",
+    "adapter_pr": [],
+    "dataset_pr": [],
+    "parity_pr": [],
+    "metrics": [
+      {
+        "benchmark_name": "Health Agent Environment (M2 Diagnosis)",
+        "metric": "S = G * D * (1 + Q) / 2",
+        "original": "pending",
+        "harbor": "pending",
+        "original_runs": [],
+        "harbor_runs": []
+      }
+    ]
+  }
+]

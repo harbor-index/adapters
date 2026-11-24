@@ -1,0 +1,22 @@
+[project]
+name = "harbor-haenv-adapter"
+version = "0.1.0"
+description = "Harbor adapter for Health Agent Environment (HAEnv) clinical reasoning benchmark"
+readme = "README.md"
+authors = [
+    { name = "Jieshu Huang", email = "jieshuh2@illinois.edu" },
+]
+requires-python = ">=3.12"
+dependencies = [
+    "pyyaml>=6.0",
+]
+
+[project.scripts]
+haenv = "haenv.main:main"
+
+[build-system]
+requires = ["uv_build>=0.10.9,<0.11.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "haenv"
