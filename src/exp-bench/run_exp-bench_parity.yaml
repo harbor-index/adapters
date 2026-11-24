@@ -1,6 +1,7 @@
-# Parity subset (uv run exp-bench --split parity --output-dir ../../datasets/exp-bench-parity).
+# Parity subset (uv run exp-bench --split parity --gpus 1 --output-dir ../../datasets/exp-bench-parity).
 # Agent version, model and judge model must match the original-side run.
-# Host env: ANTHROPIC_API_KEY (agent), OPENAI_API_KEY / OPENAI_BASE_URL / EXP_BENCH_JUDGE_MODEL (judge).
+# Host env: ANTHROPIC_API_KEY (agent); judge: EXP_BENCH_JUDGE_MODEL=claude-haiku-5-5,
+# OPENAI_BASE_URL=https://api.anthropic.com/v1/, OPENAI_API_KEY=<Anthropic key>.
 jobs_dir: jobs
 n_attempts: 1
 timeout_multiplier: 1.0

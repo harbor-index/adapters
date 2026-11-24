@@ -114,7 +114,7 @@ harbor trial start -p datasets/exp-bench/neurips2024-98316-5 -a claude-code -m "
 cd src/exp-bench
 uv sync
 uv run exp-bench --output-dir ../../datasets/exp-bench                     # all 421 tasks
-uv run exp-bench --split parity --output-dir ../../datasets/exp-bench-parity
+uv run exp-bench --split parity --gpus 1 --output-dir ../../datasets/exp-bench-parity
 uv run exp-bench --task-ids neurips2024-97649-0 --overwrite
 uv run exp-bench --gpus 1 --agent-timeout-hours 1 --output-dir ../../datasets/exp-bench-gpu
 ```
@@ -128,23 +128,26 @@ Parity has not been run yet. Values are reported as mean ± sample SEM.
 
 | Agent | Model | Metric | Number of Runs | Dataset Size | Original Benchmark Performance | Harbor Adapter Performance |
 |-------|-------|--------|------------------|--------------|------------------------------|----------------------------|
-| claude-code@2.1.330 | TBD | conclusion (C) | 3 | 27 (6.4%) | TBD | TBD |
+| claude-code@2.1.330 | claude-haiku-5-5 (proposed) | conclusion (C) | 3 | 57 (13.5%) | TBD | TBD |
 
 Plan (to be confirmed with the Harbor team):
 
-- **Subset:** the 27 tasks (20 papers) in `src/exp_bench/data/parity_task_ids.txt`, whose
-  experiments can finish on CPU within the time limit; no GPUs on either side.
+- **Subset:** 57 tasks from 40 papers in `src/exp_bench/data/parity_task_ids.txt`: 27 tasks
+  whose experiments can finish on CPU within the time limit, plus a random sample of 30
+  tasks that need a GPU, stratified by task type (selection rule in the file header). Each
+  task gets 1 GPU on both sides.
 - **Agent:** Claude Code at a pinned version, one low-cost model, 30-minute limit. Upstream
   only ships an OpenHands build from Feb 2025 that cannot call current models, so Claude
   Code is added to the original harness with Harbor's install command and flags.
-- **Judge:** the same model and endpoint on both sides.
-- **Runs:** 5-task sanity check, then 1 full run, then 3 runs per side. C, D, I and E are
-  compared by overlap of run ranges and per-task MSE.
+- **Judge:** `claude-haiku-5-5` on both sides (`EXP_BENCH_JUDGE_MODEL=claude-haiku-5-5`,
+  `OPENAI_BASE_URL=https://api.anthropic.com/v1/`, an Anthropic key in `OPENAI_API_KEY`).
+- **Runs:** 5-task sanity check, then 1 full run, then 3 runs per side. Main metric C; D, I
+  and E are also compared, by overlap of run ranges and per-task MSE.
 - **Original side:** branch [`harbor-parity`](https://github.com/Just-Curieous/Curie/tree/harbor-parity)
   of the official EXP-Bench repository; commands in `benchmark/exp_bench/harbor_parity/README.md`.
 - **Harbor side:**
   ```bash
-  uv run exp-bench --split parity --output-dir ../../datasets/exp-bench-parity
+  uv run exp-bench --split parity --gpus 1 --output-dir ../../datasets/exp-bench-parity
   harbor run -c src/exp-bench/run_exp-bench_parity.yaml
   ```
 

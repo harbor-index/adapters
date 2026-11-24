@@ -16,14 +16,14 @@
       {
         "split": "full",
         "adapted_benchmark_size": 421,
-        "parity_benchmark_size": 27,
-        "parity_sampling_rate": 0.0641,
+        "parity_benchmark_size": 57,
+        "parity_sampling_rate": 0.1354,
         "registry_benchmark_size": 421,
         "added_agents": ["None"],
         "parity_matching_agents": [],
         "parity_unmatching_agents": ["None"],
         "parity_costs": null,
-        "notes": "Parity pending. Subset: 27 tasks from 20 papers whose experiment can be finished on CPU within the 30-minute limit (selection rule in src/exp_bench/data/parity_task_ids.txt); both sides run Claude Code without GPUs. Claude Code is added to the original harness because its OpenHands build cannot call current models."
+        "notes": "Parity pending. Subset: 57 tasks from 40 papers: 27 whose experiment can finish on CPU within the 30-minute limit plus a stratified random sample of 30 GPU tasks (rule in src/exp_bench/data/parity_task_ids.txt); 1 GPU per task on both sides. Both sides run Claude Code; it is added to the original harness because its OpenHands build cannot call current models."
       }
     ]
   }

@@ -1,6 +1,7 @@
 #!/bin/bash
-# EXP-Bench verifier. Judge dependencies (pinned as in upstream's environment.yml) go into
-# a fresh venv, ignoring pip configuration, so nothing the agent installed affects the judge.
+# EXP-Bench verifier. judge.py writes /logs/verifier/reward.txt (conclusion) and reward.json.
+# Judge dependencies (pinned as in upstream's environment.yml) go into a fresh venv, ignoring
+# pip configuration, so nothing the agent installed affects the judge.
 set -uo pipefail
 
 mkdir -p /logs/verifier
