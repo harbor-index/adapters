@@ -1,0 +1,40 @@
+[
+  {
+    "adapter_name": "ether0-benchmark",
+    "agent": "codex@0.166.0",
+    "model": "gpt-5-mini",
+    "date": "2026-11-21",
+    "adapted_benchmark_size": 250,
+    "parity_benchmark_size": 250,
+    "number_of_runs": 3,
+    "notes": "All 250 adapted tasks, 3 runs per side, codex@0.166.0 with gpt-5-mini (reasoning effort medium) on both sides. The Harbor side ran on Harbor 0.26.0. The 2077AI endpoint used for parity offers only the gpt-5-mini alias, with no dated snapshot; both sides used the same endpoint, and the two sides of each run ran concurrently. The original side (Lloyd-Jahn/ether0, branch harbor-parity) runs the same codex command in the same container image with byte-identical prompts and scores /app/answer.txt with ether0's own reward functions. Accuracy is the percentage of the 250 tasks with reward 1. Trials that failed for infrastructure reasons (API or network errors) were rerun with identical settings, so every run is scored on all 250 tasks. Run-score ranges overlap: original [37.6, 40.0], Harbor [39.2, 40.0]. The parity runs used the adapter's earlier shared-verifier layout. After the switch to the separate verifier, all 1,500 parity submissions (3 runs x 250 tasks x 2 sides) were regraded with it on Harbor 0.27.0, and every reward was identical. The earlier layout did not save the Harbor-side answer files, so they were rebuilt offline by replaying each agent's logged write commands.",
+    "original_parity_repo": "https://github.com/Lloyd-Jahn/ether0/tree/harbor-parity",
+    "adapter_pr": [
+      "https://github.com/harbor-index/adapters/pull/13"
+    ],
+    "dataset_pr": [
+      "https://github.com/harbor-framework/harbor-datasets/pull/289"
+    ],
+    "parity_pr": [
+      "https://huggingface.co/datasets/harborframework/parity-experiments/discussions/295"
+    ],
+    "metrics": [
+      {
+        "benchmark_name": "ether0-benchmark",
+        "metric": "Accuracy (%)",
+        "original": "39.07 ± 0.74",
+        "harbor": "39.73 ± 0.27",
+        "original_runs": [
+          40.0,
+          37.6,
+          39.6
+        ],
+        "harbor_runs": [
+          40.0,
+          39.2,
+          40.0
+        ]
+      }
+    ]
+  }
+]

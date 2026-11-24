@@ -1,0 +1,23 @@
+[project]
+name = "harbor-ether0-benchmark-adapter"
+version = "0.1.0"
+description = "Harbor adapter for FutureHouse ether0-benchmark (chemistry problems answered with a molecule)"
+readme = "README.md"
+authors = [
+    { name = "Yi Jiang", email = "lloyd_jahn@sjtu.edu.cn" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "huggingface-hub>=0.25",
+    "pyarrow>=15",
+]
+
+[project.scripts]
+ether0-benchmark = "ether0_benchmark.main:main"
+
+[build-system]
+requires = ["uv_build>=0.13.8,<0.14.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "ether0_benchmark"
