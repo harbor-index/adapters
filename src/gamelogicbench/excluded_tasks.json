@@ -1,0 +1,23 @@
+{
+  "atom_light_occlusion": "Rendered project submissions need a separate trusted rendering interface.",
+  "atom_root_motion_3d": "Controller mutates a live CharacterBody3D and its physics state.",
+  "repo_abyssal_enemy_engine": "Project module submissions need an isolated game-object mutation interface.",
+  "repo_amsg_movement_engine": "Project module submissions need an isolated game-object mutation interface.",
+  "repo_dothop_move_engine": "Project module submissions need an isolated game-object mutation interface.",
+  "repo_euwar_conquest_engine": "Project module submissions need an isolated game-object mutation interface.",
+  "repo_factory_grid_lifeline": "Project module submissions need an isolated game-object mutation interface.",
+  "repo_ftl_weapon_charge": "Project module submissions need an isolated game-object mutation interface.",
+  "repo_openrpg_battle_ai": "Controller mutates typed Battler/CombatAI object graphs.",
+  "repo_openrpg_status_engine": "Project module submissions need an isolated game-object mutation interface.",
+  "repo_rts_engagement_chain": "Project module submissions need an isolated game-object mutation interface.",
+  "repo_rts_harvest_engine": "Project module submissions need an isolated game-object mutation interface.",
+  "repo_slayrobot_action_stack": "Project module submissions need an isolated game-object mutation interface.",
+  "repo_slayrobot_deck_ledger": "Project module submissions need an isolated game-object mutation interface.",
+  "repo_slayrobot_interceptor_chain": "Project module submissions need an isolated game-object mutation interface.",
+  "repo_turbofat_piece_phase": "Project module submissions need an isolated game-object mutation interface.",
+  "repo_valley_day_engine": "Project module submissions need an isolated game-object mutation interface.",
+  "repo_wwii_battle_doctrine": "Project module submissions need an isolated game-object mutation interface.",
+  "repo_youtd2_attack_cycle": "Project module submissions need an isolated game-object mutation interface.",
+  "repo_youtd2_buff_aura_engine": "Project module submissions need an isolated game-object mutation interface.",
+  "repo_youtd2_projectile_engine": "Project module submissions need an isolated game-object mutation interface."
+}

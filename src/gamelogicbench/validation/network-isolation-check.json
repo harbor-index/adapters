@@ -1,0 +1,10 @@
+{
+  "status": "pass",
+  "scope": "Read-only configuration inspection of one active Harbor egress sidecar; not a penetration test",
+  "observed_initial_network_mode": "no-network",
+  "observed_allowlist_entries": 0,
+  "nftables_table": "inet gost_egress",
+  "tcp_proxy_redirect_installed": true,
+  "non_tcp_reject_rule_installed": true,
+  "static_task_policy_check": "All 72 generated agent/verifier configurations request no-network"
+}

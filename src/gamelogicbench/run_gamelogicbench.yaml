@@ -1,0 +1,13 @@
+jobs_dir: ../../jobs/gamelogicbench
+n_attempts: 1
+orchestrator:
+  type: local
+  n_concurrent_trials: 2
+environment:
+  type: docker
+  force_build: false
+  delete: true
+agents:
+  - name: oracle
+datasets:
+  - path: ../../datasets/gamelogicbench

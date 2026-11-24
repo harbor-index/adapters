@@ -1,0 +1,1136 @@
+{
+  "model": "gpt-5-mini",
+  "agent": "codex@0.144.1",
+  "harbor_version": "0.23.0",
+  "date": "2026-11-20",
+  "score_scale": "0 to 1",
+  "subset_size": 24,
+  "full_size": 72,
+  "cells_per_run": 472,
+  "pilot_excluded": true,
+  "summary": {
+    "overall": {
+      "original": {
+        "runs": [
+          0.16666666666666666,
+          0.08333333333333333,
+          0.16666666666666666
+        ],
+        "mean": 0.1388888888888889,
+        "sample_sem": 0.027777777777777776,
+        "range": [
+          0.08333333333333333,
+          0.16666666666666666
+        ]
+      },
+      "harbor": {
+        "runs": [
+          0.25,
+          0.16666666666666666,
+          0.125
+        ],
+        "mean": 0.18055555555555555,
+        "sample_sem": 0.03674654598700821,
+        "range": [
+          0.125,
+          0.25
+        ]
+      },
+      "ranges_overlap": true,
+      "both_at_floor": false
+    },
+    "atom": {
+      "original": {
+        "runs": [
+          0.375,
+          0.25,
+          0.375
+        ],
+        "mean": 0.3333333333333333,
+        "sample_sem": 0.041666666666666664,
+        "range": [
+          0.25,
+          0.375
+        ]
+      },
+      "harbor": {
+        "runs": [
+          0.5,
+          0.5,
+          0.375
+        ],
+        "mean": 0.4583333333333333,
+        "sample_sem": 0.041666666666666664,
+        "range": [
+          0.375,
+          0.5
+        ]
+      },
+      "ranges_overlap": true,
+      "both_at_floor": false
+    },
+    "combo": {
+      "original": {
+        "runs": [
+          0.125,
+          0.0,
+          0.125
+        ],
+        "mean": 0.08333333333333333,
+        "sample_sem": 0.041666666666666664,
+        "range": [
+          0.0,
+          0.125
+        ]
+      },
+      "harbor": {
+        "runs": [
+          0.125,
+          0.0,
+          0.0
+        ],
+        "mean": 0.041666666666666664,
+        "sample_sem": 0.041666666666666664,
+        "range": [
+          0.0,
+          0.125
+        ]
+      },
+      "ranges_overlap": true,
+      "both_at_floor": false
+    },
+    "repo": {
+      "original": {
+        "runs": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "mean": 0.0,
+        "sample_sem": 0.0,
+        "range": [
+          0.0,
+          0.0
+        ]
+      },
+      "harbor": {
+        "runs": [
+          0.125,
+          0.0,
+          0.0
+        ],
+        "mean": 0.041666666666666664,
+        "sample_sem": 0.041666666666666664,
+        "range": [
+          0.0,
+          0.125
+        ]
+      },
+      "ranges_overlap": true,
+      "both_at_floor": false
+    }
+  },
+  "runs": {
+    "run-1": {
+      "original": {
+        "scores": {
+          "overall": 0.16666666666666666,
+          "atom": 0.375,
+          "combo": 0.125,
+          "repo": 0.0
+        },
+        "tasks": {
+          "atom_move_navigation": {
+            "reward": 0,
+            "passed_cells": 5,
+            "total_cells": 20,
+            "outcome": "completed"
+          },
+          "atom_dodge_hold": {
+            "reward": 1,
+            "passed_cells": 15,
+            "total_cells": 15,
+            "outcome": "completed"
+          },
+          "atom_light_occlusion": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 17,
+            "outcome": "completed"
+          },
+          "atom_target_selection": {
+            "reward": 0,
+            "passed_cells": 10,
+            "total_cells": 15,
+            "outcome": "completed"
+          },
+          "atom_root_motion_3d": {
+            "reward": 1,
+            "passed_cells": 11,
+            "total_cells": 11,
+            "outcome": "timeout"
+          },
+          "atom_keeper_arc": {
+            "reward": 0,
+            "passed_cells": 1,
+            "total_cells": 20,
+            "outcome": "completed"
+          },
+          "atom_patrol_edge": {
+            "reward": 0,
+            "passed_cells": 10,
+            "total_cells": 25,
+            "outcome": "completed"
+          },
+          "atom_hitbox": {
+            "reward": 1,
+            "passed_cells": 21,
+            "total_cells": 21,
+            "outcome": "completed"
+          },
+          "combo_jump_reach_graph": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 23,
+            "outcome": "timeout"
+          },
+          "combo_sweep_collision": {
+            "reward": 0,
+            "passed_cells": 17,
+            "total_cells": 21,
+            "outcome": "completed"
+          },
+          "combo_push_commit": {
+            "reward": 0,
+            "passed_cells": 5,
+            "total_cells": 20,
+            "outcome": "completed"
+          },
+          "combo_formation_commit": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 20,
+            "outcome": "timeout"
+          },
+          "combo_squad": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 15,
+            "outcome": "completed"
+          },
+          "combo_search_last_known": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 15,
+            "outcome": "timeout"
+          },
+          "combo_chaser": {
+            "reward": 1,
+            "passed_cells": 21,
+            "total_cells": 21,
+            "outcome": "timeout"
+          },
+          "combo_jump_x_platform_phase": {
+            "reward": 0,
+            "passed_cells": 7,
+            "total_cells": 18,
+            "outcome": "completed"
+          },
+          "repo_slayrobot_deck_ledger": {
+            "reward": 0,
+            "passed_cells": 3,
+            "total_cells": 23,
+            "outcome": "completed"
+          },
+          "repo_openrpg_status_engine": {
+            "reward": 0,
+            "passed_cells": 6,
+            "total_cells": 12,
+            "outcome": "completed"
+          },
+          "repo_openrpg_battle_ai": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 17,
+            "outcome": "completed"
+          },
+          "repo_valley_day_engine": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 30,
+            "outcome": "completed"
+          },
+          "repo_youtd2_projectile_engine": {
+            "reward": 0,
+            "passed_cells": 9,
+            "total_cells": 15,
+            "outcome": "completed"
+          },
+          "repo_slayrobot_interceptor_chain": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 20,
+            "outcome": "completed"
+          },
+          "repo_ftl_weapon_charge": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 17,
+            "outcome": "completed"
+          },
+          "repo_damage_control": {
+            "reward": 0,
+            "passed_cells": 35,
+            "total_cells": 41,
+            "outcome": "completed"
+          }
+        }
+      },
+      "harbor": {
+        "scores": {
+          "overall": 0.25,
+          "atom": 0.5,
+          "combo": 0.125,
+          "repo": 0.125
+        },
+        "tasks": {
+          "repo_slayrobot_interceptor_chain": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 20,
+            "outcome": "timeout"
+          },
+          "combo_chaser": {
+            "reward": 1,
+            "passed_cells": 21,
+            "total_cells": 21,
+            "outcome": "completed"
+          },
+          "atom_keeper_arc": {
+            "reward": 0,
+            "passed_cells": 10,
+            "total_cells": 20,
+            "outcome": "completed"
+          },
+          "combo_push_commit": {
+            "reward": 0,
+            "passed_cells": 5,
+            "total_cells": 20,
+            "outcome": "completed"
+          },
+          "repo_damage_control": {
+            "reward": 1,
+            "passed_cells": 41,
+            "total_cells": 41,
+            "outcome": "completed"
+          },
+          "atom_move_navigation": {
+            "reward": 1,
+            "passed_cells": 20,
+            "total_cells": 20,
+            "outcome": "completed"
+          },
+          "combo_squad": {
+            "reward": 0,
+            "passed_cells": 8,
+            "total_cells": 15,
+            "outcome": "completed"
+          },
+          "repo_valley_day_engine": {
+            "reward": 0,
+            "passed_cells": 3,
+            "total_cells": 30,
+            "outcome": "timeout"
+          },
+          "atom_patrol_edge": {
+            "reward": 0,
+            "passed_cells": 10,
+            "total_cells": 25,
+            "outcome": "completed"
+          },
+          "combo_formation_commit": {
+            "reward": 0,
+            "passed_cells": 8,
+            "total_cells": 20,
+            "outcome": "completed"
+          },
+          "repo_youtd2_projectile_engine": {
+            "reward": 0,
+            "passed_cells": 6,
+            "total_cells": 15,
+            "outcome": "timeout"
+          },
+          "atom_light_occlusion": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 17,
+            "outcome": "completed"
+          },
+          "atom_dodge_hold": {
+            "reward": 1,
+            "passed_cells": 15,
+            "total_cells": 15,
+            "outcome": "completed"
+          },
+          "repo_slayrobot_deck_ledger": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 23,
+            "outcome": "completed"
+          },
+          "repo_openrpg_status_engine": {
+            "reward": 0,
+            "passed_cells": 3,
+            "total_cells": 12,
+            "outcome": "completed"
+          },
+          "atom_hitbox": {
+            "reward": 1,
+            "passed_cells": 21,
+            "total_cells": 21,
+            "outcome": "completed"
+          },
+          "combo_sweep_collision": {
+            "reward": 0,
+            "passed_cells": 17,
+            "total_cells": 21,
+            "outcome": "completed"
+          },
+          "combo_jump_x_platform_phase": {
+            "reward": 0,
+            "passed_cells": 5,
+            "total_cells": 18,
+            "outcome": "completed"
+          },
+          "atom_target_selection": {
+            "reward": 0,
+            "passed_cells": 10,
+            "total_cells": 15,
+            "outcome": "completed"
+          },
+          "atom_root_motion_3d": {
+            "reward": 1,
+            "passed_cells": 11,
+            "total_cells": 11,
+            "outcome": "completed"
+          },
+          "repo_openrpg_battle_ai": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 17,
+            "outcome": "completed"
+          },
+          "repo_ftl_weapon_charge": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 17,
+            "outcome": "completed"
+          },
+          "combo_search_last_known": {
+            "reward": 0,
+            "passed_cells": 5,
+            "total_cells": 15,
+            "outcome": "completed"
+          },
+          "combo_jump_reach_graph": {
+            "reward": 0,
+            "passed_cells": 5,
+            "total_cells": 23,
+            "outcome": "completed"
+          }
+        }
+      }
+    },
+    "run-2": {
+      "original": {
+        "scores": {
+          "overall": 0.08333333333333333,
+          "atom": 0.25,
+          "combo": 0.0,
+          "repo": 0.0
+        },
+        "tasks": {
+          "atom_move_navigation": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 20,
+            "outcome": "timeout"
+          },
+          "atom_dodge_hold": {
+            "reward": 0,
+            "passed_cells": 5,
+            "total_cells": 15,
+            "outcome": "completed"
+          },
+          "atom_light_occlusion": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 17,
+            "outcome": "completed"
+          },
+          "atom_target_selection": {
+            "reward": 0,
+            "passed_cells": 10,
+            "total_cells": 15,
+            "outcome": "completed"
+          },
+          "atom_root_motion_3d": {
+            "reward": 1,
+            "passed_cells": 11,
+            "total_cells": 11,
+            "outcome": "completed"
+          },
+          "atom_keeper_arc": {
+            "reward": 0,
+            "passed_cells": 5,
+            "total_cells": 20,
+            "outcome": "completed"
+          },
+          "atom_patrol_edge": {
+            "reward": 0,
+            "passed_cells": 10,
+            "total_cells": 25,
+            "outcome": "completed"
+          },
+          "atom_hitbox": {
+            "reward": 1,
+            "passed_cells": 21,
+            "total_cells": 21,
+            "outcome": "completed"
+          },
+          "combo_jump_reach_graph": {
+            "reward": 0,
+            "passed_cells": 11,
+            "total_cells": 23,
+            "outcome": "completed"
+          },
+          "combo_sweep_collision": {
+            "reward": 0,
+            "passed_cells": 17,
+            "total_cells": 21,
+            "outcome": "completed"
+          },
+          "combo_push_commit": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 20,
+            "outcome": "timeout"
+          },
+          "combo_formation_commit": {
+            "reward": 0,
+            "passed_cells": 5,
+            "total_cells": 20,
+            "outcome": "timeout"
+          },
+          "combo_squad": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 15,
+            "outcome": "timeout"
+          },
+          "combo_search_last_known": {
+            "reward": 0,
+            "passed_cells": 5,
+            "total_cells": 15,
+            "outcome": "completed"
+          },
+          "combo_chaser": {
+            "reward": 0,
+            "passed_cells": 16,
+            "total_cells": 21,
+            "outcome": "completed"
+          },
+          "combo_jump_x_platform_phase": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 18,
+            "outcome": "completed"
+          },
+          "repo_slayrobot_deck_ledger": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 23,
+            "outcome": "completed"
+          },
+          "repo_openrpg_status_engine": {
+            "reward": 0,
+            "passed_cells": 6,
+            "total_cells": 12,
+            "outcome": "completed"
+          },
+          "repo_openrpg_battle_ai": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 17,
+            "outcome": "completed"
+          },
+          "repo_valley_day_engine": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 30,
+            "outcome": "completed"
+          },
+          "repo_youtd2_projectile_engine": {
+            "reward": 0,
+            "passed_cells": 9,
+            "total_cells": 15,
+            "outcome": "completed"
+          },
+          "repo_slayrobot_interceptor_chain": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 20,
+            "outcome": "completed"
+          },
+          "repo_ftl_weapon_charge": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 17,
+            "outcome": "completed"
+          },
+          "repo_damage_control": {
+            "reward": 0,
+            "passed_cells": 35,
+            "total_cells": 41,
+            "outcome": "completed"
+          }
+        }
+      },
+      "harbor": {
+        "scores": {
+          "overall": 0.16666666666666666,
+          "atom": 0.5,
+          "combo": 0.0,
+          "repo": 0.0
+        },
+        "tasks": {
+          "atom_hitbox": {
+            "reward": 1,
+            "passed_cells": 21,
+            "total_cells": 21,
+            "outcome": "completed"
+          },
+          "repo_openrpg_battle_ai": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 17,
+            "outcome": "timeout"
+          },
+          "combo_push_commit": {
+            "reward": 0,
+            "passed_cells": 5,
+            "total_cells": 20,
+            "outcome": "completed"
+          },
+          "repo_ftl_weapon_charge": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 17,
+            "outcome": "timeout"
+          },
+          "repo_damage_control": {
+            "reward": 0,
+            "passed_cells": 32,
+            "total_cells": 41,
+            "outcome": "completed"
+          },
+          "repo_valley_day_engine": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 30,
+            "outcome": "completed"
+          },
+          "repo_youtd2_projectile_engine": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 15,
+            "outcome": "completed"
+          },
+          "atom_dodge_hold": {
+            "reward": 1,
+            "passed_cells": 15,
+            "total_cells": 15,
+            "outcome": "completed"
+          },
+          "atom_keeper_arc": {
+            "reward": 0,
+            "passed_cells": 5,
+            "total_cells": 20,
+            "outcome": "completed"
+          },
+          "repo_openrpg_status_engine": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 12,
+            "outcome": "timeout"
+          },
+          "combo_sweep_collision": {
+            "reward": 0,
+            "passed_cells": 17,
+            "total_cells": 21,
+            "outcome": "completed"
+          },
+          "combo_squad": {
+            "reward": 0,
+            "passed_cells": 12,
+            "total_cells": 15,
+            "outcome": "completed"
+          },
+          "combo_jump_reach_graph": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 23,
+            "outcome": "timeout"
+          },
+          "atom_root_motion_3d": {
+            "reward": 1,
+            "passed_cells": 11,
+            "total_cells": 11,
+            "outcome": "completed"
+          },
+          "combo_search_last_known": {
+            "reward": 0,
+            "passed_cells": 13,
+            "total_cells": 15,
+            "outcome": "timeout"
+          },
+          "repo_slayrobot_deck_ledger": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 23,
+            "outcome": "completed"
+          },
+          "atom_move_navigation": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 20,
+            "outcome": "timeout"
+          },
+          "repo_slayrobot_interceptor_chain": {
+            "reward": 0,
+            "passed_cells": 17,
+            "total_cells": 20,
+            "outcome": "completed"
+          },
+          "combo_chaser": {
+            "reward": 0,
+            "passed_cells": 18,
+            "total_cells": 21,
+            "outcome": "timeout"
+          },
+          "atom_light_occlusion": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 17,
+            "outcome": "completed"
+          },
+          "combo_formation_commit": {
+            "reward": 0,
+            "passed_cells": 8,
+            "total_cells": 20,
+            "outcome": "completed"
+          },
+          "combo_jump_x_platform_phase": {
+            "reward": 0,
+            "passed_cells": 17,
+            "total_cells": 18,
+            "outcome": "completed"
+          },
+          "atom_patrol_edge": {
+            "reward": 0,
+            "passed_cells": 10,
+            "total_cells": 25,
+            "outcome": "completed"
+          },
+          "atom_target_selection": {
+            "reward": 1,
+            "passed_cells": 15,
+            "total_cells": 15,
+            "outcome": "completed"
+          }
+        }
+      }
+    },
+    "run-3": {
+      "original": {
+        "scores": {
+          "overall": 0.16666666666666666,
+          "atom": 0.375,
+          "combo": 0.125,
+          "repo": 0.0
+        },
+        "tasks": {
+          "atom_move_navigation": {
+            "reward": 1,
+            "passed_cells": 20,
+            "total_cells": 20,
+            "outcome": "completed"
+          },
+          "atom_dodge_hold": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 15,
+            "outcome": "timeout"
+          },
+          "atom_light_occlusion": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 17,
+            "outcome": "completed"
+          },
+          "atom_target_selection": {
+            "reward": 0,
+            "passed_cells": 10,
+            "total_cells": 15,
+            "outcome": "completed"
+          },
+          "atom_root_motion_3d": {
+            "reward": 1,
+            "passed_cells": 11,
+            "total_cells": 11,
+            "outcome": "completed"
+          },
+          "atom_keeper_arc": {
+            "reward": 0,
+            "passed_cells": 10,
+            "total_cells": 20,
+            "outcome": "completed"
+          },
+          "atom_patrol_edge": {
+            "reward": 0,
+            "passed_cells": 10,
+            "total_cells": 25,
+            "outcome": "completed"
+          },
+          "atom_hitbox": {
+            "reward": 1,
+            "passed_cells": 21,
+            "total_cells": 21,
+            "outcome": "completed"
+          },
+          "combo_jump_reach_graph": {
+            "reward": 0,
+            "passed_cells": 17,
+            "total_cells": 23,
+            "outcome": "completed"
+          },
+          "combo_sweep_collision": {
+            "reward": 0,
+            "passed_cells": 17,
+            "total_cells": 21,
+            "outcome": "completed"
+          },
+          "combo_push_commit": {
+            "reward": 0,
+            "passed_cells": 14,
+            "total_cells": 20,
+            "outcome": "completed"
+          },
+          "combo_formation_commit": {
+            "reward": 0,
+            "passed_cells": 6,
+            "total_cells": 20,
+            "outcome": "completed"
+          },
+          "combo_squad": {
+            "reward": 0,
+            "passed_cells": 8,
+            "total_cells": 15,
+            "outcome": "completed"
+          },
+          "combo_search_last_known": {
+            "reward": 0,
+            "passed_cells": 5,
+            "total_cells": 15,
+            "outcome": "completed"
+          },
+          "combo_chaser": {
+            "reward": 1,
+            "passed_cells": 21,
+            "total_cells": 21,
+            "outcome": "completed"
+          },
+          "combo_jump_x_platform_phase": {
+            "reward": 0,
+            "passed_cells": 11,
+            "total_cells": 18,
+            "outcome": "completed"
+          },
+          "repo_slayrobot_deck_ledger": {
+            "reward": 0,
+            "passed_cells": 3,
+            "total_cells": 23,
+            "outcome": "completed"
+          },
+          "repo_openrpg_status_engine": {
+            "reward": 0,
+            "passed_cells": 9,
+            "total_cells": 12,
+            "outcome": "completed"
+          },
+          "repo_openrpg_battle_ai": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 17,
+            "outcome": "completed"
+          },
+          "repo_valley_day_engine": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 30,
+            "outcome": "completed"
+          },
+          "repo_youtd2_projectile_engine": {
+            "reward": 0,
+            "passed_cells": 9,
+            "total_cells": 15,
+            "outcome": "completed"
+          },
+          "repo_slayrobot_interceptor_chain": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 20,
+            "outcome": "completed"
+          },
+          "repo_ftl_weapon_charge": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 17,
+            "outcome": "completed"
+          },
+          "repo_damage_control": {
+            "reward": 0,
+            "passed_cells": 32,
+            "total_cells": 41,
+            "outcome": "completed"
+          }
+        }
+      },
+      "harbor": {
+        "scores": {
+          "overall": 0.125,
+          "atom": 0.375,
+          "combo": 0.0,
+          "repo": 0.0
+        },
+        "tasks": {
+          "combo_search_last_known": {
+            "reward": 0,
+            "passed_cells": 5,
+            "total_cells": 15,
+            "outcome": "completed"
+          },
+          "combo_chaser": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 21,
+            "outcome": "completed"
+          },
+          "repo_valley_day_engine": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 30,
+            "outcome": "completed"
+          },
+          "combo_jump_x_platform_phase": {
+            "reward": 0,
+            "passed_cells": 2,
+            "total_cells": 18,
+            "outcome": "completed"
+          },
+          "repo_slayrobot_interceptor_chain": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 20,
+            "outcome": "completed"
+          },
+          "combo_sweep_collision": {
+            "reward": 0,
+            "passed_cells": 17,
+            "total_cells": 21,
+            "outcome": "completed"
+          },
+          "atom_hitbox": {
+            "reward": 1,
+            "passed_cells": 21,
+            "total_cells": 21,
+            "outcome": "completed"
+          },
+          "combo_squad": {
+            "reward": 0,
+            "passed_cells": 8,
+            "total_cells": 15,
+            "outcome": "completed"
+          },
+          "combo_push_commit": {
+            "reward": 0,
+            "passed_cells": 5,
+            "total_cells": 20,
+            "outcome": "completed"
+          },
+          "repo_openrpg_status_engine": {
+            "reward": 0,
+            "passed_cells": 9,
+            "total_cells": 12,
+            "outcome": "completed"
+          },
+          "repo_slayrobot_deck_ledger": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 23,
+            "outcome": "completed"
+          },
+          "repo_openrpg_battle_ai": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 17,
+            "outcome": "completed"
+          },
+          "repo_ftl_weapon_charge": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 17,
+            "outcome": "completed"
+          },
+          "repo_damage_control": {
+            "reward": 0,
+            "passed_cells": 32,
+            "total_cells": 41,
+            "outcome": "completed"
+          },
+          "atom_light_occlusion": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 17,
+            "outcome": "completed"
+          },
+          "atom_dodge_hold": {
+            "reward": 1,
+            "passed_cells": 15,
+            "total_cells": 15,
+            "outcome": "completed"
+          },
+          "combo_formation_commit": {
+            "reward": 0,
+            "passed_cells": 8,
+            "total_cells": 20,
+            "outcome": "completed"
+          },
+          "atom_target_selection": {
+            "reward": 0,
+            "passed_cells": 10,
+            "total_cells": 15,
+            "outcome": "completed"
+          },
+          "repo_youtd2_projectile_engine": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 15,
+            "outcome": "completed"
+          },
+          "atom_keeper_arc": {
+            "reward": 0,
+            "passed_cells": 5,
+            "total_cells": 20,
+            "outcome": "completed"
+          },
+          "combo_jump_reach_graph": {
+            "reward": 0,
+            "passed_cells": 0,
+            "total_cells": 23,
+            "outcome": "timeout"
+          },
+          "atom_move_navigation": {
+            "reward": 0,
+            "passed_cells": 5,
+            "total_cells": 20,
+            "outcome": "completed"
+          },
+          "atom_patrol_edge": {
+            "reward": 0,
+            "passed_cells": 10,
+            "total_cells": 25,
+            "outcome": "completed"
+          },
+          "atom_root_motion_3d": {
+            "reward": 1,
+            "passed_cells": 11,
+            "total_cells": 11,
+            "outcome": "completed"
+          }
+        }
+      }
+    }
+  },
+  "usage": {
+    "scope": "Sessions with a final usage record, including excluded infrastructure attempts; pending sessions excluded. Pilot kept separate from formal runs.",
+    "pricing_source": "Harbor installed LiteLLM model_cost snapshot; estimate, not the 2077 invoice",
+    "completed_sessions": 156,
+    "tokens": {
+      "input_tokens": 128410838,
+      "cached_input_tokens": 123512832,
+      "output_tokens": 1431338
+    },
+    "estimated_usd": "7.174998300"
+  },
+  "excluded_unusable_attempts": [
+    {
+      "side": "original",
+      "stage": "run-1",
+      "task": "combo_formation_commit",
+      "reason": "Responses stream failed after all eight reconnection attempts; no terminal completion event",
+      "status": "complete"
+    },
+    {
+      "side": "original",
+      "stage": "run-2",
+      "task": "combo_push_commit",
+      "reason": "Responses stream failed after all eight reconnection attempts; no terminal completion event",
+      "status": "complete"
+    },
+    {
+      "side": "harbor",
+      "stage": "run-1",
+      "task": "atom_target_selection",
+      "reason": "Agent pkill cleanup matched prompt in Harbor launcher argv; SIGTERM exit 143; corrected to upstream stdin/file prompt delivery",
+      "status": "complete"
+    },
+    {
+      "side": "harbor",
+      "stage": "run-3",
+      "task": "atom_light_occlusion",
+      "reason": "API rejected model-generated tool arguments above the 1 MiB input-field limit after max_output_tokens truncation; no turn.completed. One replacement follows the original scaffold no-terminal-session policy. Original verifier reward 0 is retained and will be reported as a sensitivity check.",
+      "status": "complete",
+      "original_verifier_reward": 0
+    }
+  ],
+  "harbor_driver_patch": {
+    "harbor_version": "0.23.0",
+    "baseline_sha256": "ee0ca8ec43617f3909d2195afe8f9e7cbd7313a8b3b558b01fde388f65b7c39c",
+    "patched_sha256": "b9df0d27fb268a65dcaf636b857d176a714f65aa90cb875e7335111159b93436",
+    "reason": "Codex prompt argv is matched by model pkill -f cleanup; align with upstream file/stdin prompt delivery"
+  },
+  "sensitivity": {
+    "description": "Count the excluded oversized-tool-argument session's original zero reward instead of its replacement; all other scores unchanged.",
+    "harbor_overall": {
+      "runs": [
+        0.25,
+        0.16666666666666666,
+        0.125
+      ],
+      "mean": 0.18055555555555555,
+      "sample_sem": 0.03674654598700821,
+      "range": [
+        0.125,
+        0.25
+      ]
+    },
+    "overall_ranges_overlap": true
+  },
+  "acceptance_status": {
+    "ready_for_review": false,
+    "scores": "historical mixed-driver cohort; provisional",
+    "grading_integrity": "negative result-forgery test failed in both evaluators",
+    "details": "acceptance.md"
+  }
+}

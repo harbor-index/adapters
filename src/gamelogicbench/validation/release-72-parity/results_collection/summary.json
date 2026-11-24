@@ -1,0 +1,129 @@
+{
+  "model": "gpt-5-mini",
+  "agent": "codex@0.144.1",
+  "solve_budget_seconds": 3600,
+  "metrics": {
+    "overall": {
+      "original": {
+        "rounds": [
+          0.08333333333333333,
+          0.125,
+          0.125
+        ],
+        "mean": 0.1111111111111111,
+        "sample_sem": 0.013888888888888892
+      },
+      "harbor": {
+        "rounds": [
+          0.08333333333333333,
+          0.041666666666666664,
+          0.08333333333333333
+        ],
+        "mean": 0.06944444444444445,
+        "sample_sem": 0.013888888888888888
+      }
+    },
+    "atom": {
+      "original": {
+        "rounds": [
+          0.2,
+          0.2,
+          0.3
+        ],
+        "mean": 0.23333333333333334,
+        "sample_sem": 0.033333333333333326
+      },
+      "harbor": {
+        "rounds": [
+          0.2,
+          0.1,
+          0.2
+        ],
+        "mean": 0.16666666666666669,
+        "sample_sem": 0.03333333333333334
+      }
+    },
+    "combo": {
+      "original": {
+        "rounds": [
+          0.0,
+          0.125,
+          0.0
+        ],
+        "mean": 0.041666666666666664,
+        "sample_sem": 0.041666666666666664
+      },
+      "harbor": {
+        "rounds": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "mean": 0.0,
+        "sample_sem": 0.0
+      }
+    },
+    "repo": {
+      "original": {
+        "rounds": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "mean": 0.0,
+        "sample_sem": 0.0
+      },
+      "harbor": {
+        "rounds": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "mean": 0.0,
+        "sample_sem": 0.0
+      }
+    }
+  },
+  "target_release_tasks": 72,
+  "evaluated_tasks": 24,
+  "reused_tasks": [
+    "atom_dice_read",
+    "atom_dodge_hold",
+    "atom_hitstun_recovery",
+    "atom_jump_landing",
+    "atom_move_slide_3d",
+    "atom_plan_orchestrator",
+    "atom_platform_ride",
+    "atom_production_queue",
+    "combo_alert_escalation_loop",
+    "combo_chaser",
+    "combo_escort_tow",
+    "combo_formation_commit",
+    "combo_interest_ledger",
+    "combo_kite",
+    "combo_search_last_known",
+    "combo_sweep_collision",
+    "repo_damage_control",
+    "repo_td_income",
+    "repo_watch_rotation",
+    "repo_worldwarii_conquest"
+  ],
+  "new_tasks": {
+    "atom_light_occlusion": {
+      "cases": 17,
+      "selection_reason": "Rendered pixel evaluation with lighting and shadows"
+    },
+    "atom_root_motion_3d": {
+      "cases": 11,
+      "selection_reason": "Live CharacterBody3D movement and physics"
+    },
+    "repo_dothop_move_engine": {
+      "cases": 20,
+      "selection_reason": "Single module with typed mutable puzzle state"
+    },
+    "repo_rts_harvest_engine": {
+      "cases": 21,
+      "selection_reason": "Multiple project scripts with live node lifecycle and interactions"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "result": "pass",
+  "counts": {
+    "tasks": 72,
+    "cells": 1474,
+    "scenarios": 410,
+    "atom": 21,
+    "combo": 28,
+    "repo": 23
+  },
+  "harbor_version": "0.23.0",
+  "checks": [
+    "TaskConfig schema",
+    "unique stable names",
+    "offline separate verifier",
+    "no frozen test files in game context",
+    "generated verifiers match final source",
+    "AMD64 pin for the native GDExtension task"
+  ]
+}

@@ -1,0 +1,105 @@
+{
+  "status": "pass",
+  "run_commit": "8243e330b954bf464a5988ae539c4c862b03ac13",
+  "submission_commit": "f3f08e3601e212e5e6e8b148d971ca66f248b1a0",
+  "changed_files": [
+    "src/gamelogicbench/README.md",
+    "src/gamelogicbench/validation/README.md",
+    "src/gamelogicbench/validation/adapter-validator.md",
+    "src/gamelogicbench/validation/differential-summary.json",
+    "src/gamelogicbench/validation/network-isolation-check.json",
+    "src/gamelogicbench/validation/oracle-cli-transcript.txt",
+    "src/gamelogicbench/validation/oracle-log-render.png",
+    "src/gamelogicbench/validation/oracle-per-task.csv",
+    "src/gamelogicbench/validation/oracle-summary.json",
+    "src/gamelogicbench/validation/prompt-fidelity.json",
+    "src/gamelogicbench/validation/structural-validation.json",
+    "src/gamelogicbench/validation/task-inclusion.csv",
+    "src/gamelogicbench/validation/versions.json"
+  ],
+  "unchanged_functional_files": 19,
+  "functional_file_blobs": {
+    "src/gamelogicbench/adapter_metadata.json": {
+      "mode": "100644",
+      "git_blob": "d7276ddcd9b4b9f6609c69403f79ea929cee9d67"
+    },
+    "src/gamelogicbench/parity_experiment.json": {
+      "mode": "100644",
+      "git_blob": "6037adb4d02bb8607c0b78a90cde8c1d0e9957ab"
+    },
+    "src/gamelogicbench/pyproject.toml": {
+      "mode": "100644",
+      "git_blob": "6f8540a3478efb856bb9526f1731c225fea4b984"
+    },
+    "src/gamelogicbench/run_gamelogicbench.yaml": {
+      "mode": "100644",
+      "git_blob": "07d96b392fd89064791b577d181a0723f1a4ac3f"
+    },
+    "src/gamelogicbench/runtime/Dockerfile": {
+      "mode": "100644",
+      "git_blob": "22b241bbd278e77eb159cb30253c4ce492240cbf"
+    },
+    "src/gamelogicbench/src/gamelogicbench/__init__.py": {
+      "mode": "100644",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "src/gamelogicbench/src/gamelogicbench/adapter.py": {
+      "mode": "100644",
+      "git_blob": "ddc937ee7de306cae3101e237bf72a4707defa1e"
+    },
+    "src/gamelogicbench/src/gamelogicbench/main.py": {
+      "mode": "100644",
+      "git_blob": "f594c398b277e8332f0742bba97ccc34b8e4b439"
+    },
+    "src/gamelogicbench/src/gamelogicbench/sources.py": {
+      "mode": "100644",
+      "git_blob": "772daf2556b7405a84b09465f3a5ea3ea74035c7"
+    },
+    "src/gamelogicbench/src/gamelogicbench/task-template/environment/Dockerfile": {
+      "mode": "100644",
+      "git_blob": "b349b76c2167e70de2b682d33fa5bda736c0ef94"
+    },
+    "src/gamelogicbench/src/gamelogicbench/task-template/instruction.md": {
+      "mode": "100644",
+      "git_blob": "f2f331c0f134272bc4d3a9cb0e2facabd6cf3d11"
+    },
+    "src/gamelogicbench/src/gamelogicbench/task-template/solution/solve.sh": {
+      "mode": "100755",
+      "git_blob": "d4c5babd2b2986644acb0c01dce1f62be778e525"
+    },
+    "src/gamelogicbench/src/gamelogicbench/task-template/task.toml": {
+      "mode": "100644",
+      "git_blob": "77db535152aa1c4e39e34621348a5d8ac453eb04"
+    },
+    "src/gamelogicbench/src/gamelogicbench/task-template/tests/Dockerfile": {
+      "mode": "100644",
+      "git_blob": "fcef0cba047648f3477ecbff681c9e2280d141c4"
+    },
+    "src/gamelogicbench/src/gamelogicbench/task-template/tests/test.sh": {
+      "mode": "100755",
+      "git_blob": "4355cbdd3052c26a1661ef6447e7e679770e242a"
+    },
+    "src/gamelogicbench/src/gamelogicbench/task-template/tests/verify.py": {
+      "mode": "100644",
+      "git_blob": "e39ac1d9544af299e406eb4200c414adc908c42b"
+    },
+    "src/gamelogicbench/tests/test_adapter.py": {
+      "mode": "100644",
+      "git_blob": "aeb4adb79e60909a3b746511f388389eb88c42dd"
+    },
+    "src/gamelogicbench/tests/test_verifier.py": {
+      "mode": "100644",
+      "git_blob": "09e1ac24abe77f7b5e2e9e89a8bf5a82b3984bed"
+    },
+    "src/gamelogicbench/uv.lock": {
+      "mode": "100644",
+      "git_blob": "2a366df26f9b8d8b563b5e098d84fc2fa95a2f88"
+    }
+  },
+  "runtime_logic_changed": false,
+  "rerun_required": false,
+  "oracle_result_reusable": true,
+  "oracle_run": "oracle-full",
+  "oracle_log_sha256": "2712e387c6c1f9591185105165bfd1da587b5a1e726c089d90a340a0dfde5ec5",
+  "scope": "All files outside adapter README and validation evidence compared by Git blob and file mode; includes generator, runtime Dockerfile, task templates, run configuration, metadata, locks and tests."
+}

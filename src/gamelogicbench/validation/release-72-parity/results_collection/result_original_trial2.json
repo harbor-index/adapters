@@ -1,0 +1,156 @@
+{
+  "side": "original",
+  "run": 2,
+  "model": "gpt-5-mini",
+  "tasks": {
+    "atom_dice_read": {
+      "reward": 0,
+      "outcome": "completed",
+      "paused_seconds": 285.062,
+      "source": "verified_prior_round"
+    },
+    "atom_dodge_hold": {
+      "reward": 0,
+      "outcome": "completed",
+      "paused_seconds": 531.353,
+      "source": "verified_prior_round"
+    },
+    "atom_hitstun_recovery": {
+      "reward": 0,
+      "outcome": "completed",
+      "paused_seconds": 10.648,
+      "source": "verified_prior_round"
+    },
+    "atom_jump_landing": {
+      "reward": 0,
+      "outcome": "completed",
+      "paused_seconds": 324.055,
+      "source": "verified_prior_round"
+    },
+    "atom_move_slide_3d": {
+      "reward": 0,
+      "outcome": "completed",
+      "paused_seconds": 247.188,
+      "source": "verified_prior_round"
+    },
+    "atom_plan_orchestrator": {
+      "reward": 0,
+      "outcome": "completed",
+      "paused_seconds": 408.479,
+      "source": "verified_prior_round"
+    },
+    "atom_platform_ride": {
+      "reward": 0,
+      "outcome": "completed",
+      "paused_seconds": 184.77,
+      "source": "verified_prior_round"
+    },
+    "atom_production_queue": {
+      "reward": 1,
+      "outcome": "completed",
+      "paused_seconds": 378.578,
+      "source": "verified_prior_round"
+    },
+    "combo_alert_escalation_loop": {
+      "reward": 0,
+      "outcome": "completed",
+      "paused_seconds": 104.691,
+      "source": "verified_prior_round"
+    },
+    "combo_chaser": {
+      "reward": 0,
+      "outcome": "timeout",
+      "paused_seconds": 53.746,
+      "source": "verified_prior_round"
+    },
+    "combo_escort_tow": {
+      "reward": 0,
+      "outcome": "completed",
+      "paused_seconds": 229.667,
+      "source": "verified_prior_round"
+    },
+    "combo_formation_commit": {
+      "reward": 0,
+      "outcome": "completed",
+      "paused_seconds": 435.814,
+      "source": "verified_prior_round"
+    },
+    "combo_interest_ledger": {
+      "reward": 0,
+      "outcome": "completed",
+      "paused_seconds": 228.96,
+      "source": "verified_prior_round"
+    },
+    "combo_kite": {
+      "reward": 0,
+      "outcome": "completed",
+      "paused_seconds": 305.9,
+      "source": "verified_prior_round"
+    },
+    "combo_search_last_known": {
+      "reward": 0,
+      "outcome": "completed",
+      "paused_seconds": 139.242,
+      "source": "verified_prior_round"
+    },
+    "combo_sweep_collision": {
+      "reward": 1,
+      "outcome": "completed",
+      "paused_seconds": 234.512,
+      "source": "verified_prior_round"
+    },
+    "repo_damage_control": {
+      "reward": 0,
+      "outcome": "completed",
+      "paused_seconds": 104.697,
+      "source": "verified_prior_round"
+    },
+    "repo_td_income": {
+      "reward": 0,
+      "outcome": "completed",
+      "paused_seconds": 297.032,
+      "source": "verified_prior_round"
+    },
+    "repo_watch_rotation": {
+      "reward": 0,
+      "outcome": "completed",
+      "paused_seconds": 105.704,
+      "source": "verified_prior_round"
+    },
+    "repo_worldwarii_conquest": {
+      "reward": 0,
+      "outcome": "completed",
+      "paused_seconds": 126.367,
+      "source": "verified_prior_round"
+    },
+    "atom_light_occlusion": {
+      "status": "complete",
+      "reward": 0,
+      "cells": 17,
+      "paused_seconds": 0.0,
+      "source": "new_model_run"
+    },
+    "atom_root_motion_3d": {
+      "status": "complete",
+      "reward": 1,
+      "cells": 11,
+      "paused_seconds": 0.0,
+      "source": "new_model_run"
+    },
+    "repo_dothop_move_engine": {
+      "status": "complete",
+      "reward": 0,
+      "cells": 20,
+      "paused_seconds": 0.0,
+      "source": "new_model_run"
+    },
+    "repo_rts_harvest_engine": {
+      "status": "complete",
+      "reward": 0,
+      "cells": 21,
+      "paused_seconds": 0.0,
+      "source": "new_model_run"
+    }
+  },
+  "score": 0.125
+}

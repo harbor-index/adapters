@@ -1,0 +1,137 @@
+{
+  "completed_at": "2026-11-21T05:45:14.968315+00:00",
+  "model_api_calls": 0,
+  "submissions": 14,
+  "cells": 294,
+  "matches": 294,
+  "rows": [
+    {
+      "stage": "run-1",
+      "task": "atom_move_navigation",
+      "source": "original",
+      "judge": "harbor",
+      "cells": 20,
+      "matches": 20,
+      "workspace_sha256": "8dce01d31370cdcd0429254a3bb4341eb949f31a6784562345384bbf31869365"
+    },
+    {
+      "stage": "run-1",
+      "task": "repo_damage_control",
+      "source": "original",
+      "judge": "harbor",
+      "cells": 41,
+      "matches": 41,
+      "workspace_sha256": "2173f00140bb7f76f563d20d654219af8693f23256f278d2b11bf8977612fbc9"
+    },
+    {
+      "stage": "run-1",
+      "task": "atom_move_navigation",
+      "source": "harbor",
+      "judge": "original",
+      "cells": 20,
+      "matches": 20,
+      "workspace_sha256": "2d81ebc2ef7a627d0971a539f5eebfa07dc5ed273360386f2ed30f5247c925bc"
+    },
+    {
+      "stage": "run-1",
+      "task": "repo_damage_control",
+      "source": "harbor",
+      "judge": "original",
+      "cells": 41,
+      "matches": 41,
+      "workspace_sha256": "70c16239ef5afb15554bf0532dafa973e296615826813d7c55fb9c2fbd051f8c"
+    },
+    {
+      "stage": "run-2",
+      "task": "atom_dodge_hold",
+      "source": "original",
+      "judge": "harbor",
+      "cells": 15,
+      "matches": 15,
+      "workspace_sha256": "44cb9f3166485c93e7e047e949f51d06353f62004432481b1c2f05aad61a8ec8"
+    },
+    {
+      "stage": "run-2",
+      "task": "atom_target_selection",
+      "source": "original",
+      "judge": "harbor",
+      "cells": 15,
+      "matches": 15,
+      "workspace_sha256": "c7a75ee1d0bd5ac861b3b9678b65d9ae4a9149f53aa18fe178f1317b5d1432f3"
+    },
+    {
+      "stage": "run-2",
+      "task": "atom_dodge_hold",
+      "source": "harbor",
+      "judge": "original",
+      "cells": 15,
+      "matches": 15,
+      "workspace_sha256": "fd24d30846fe7d6afa12ec021b8e76b5f6c7466fafae2706b451b9c003e18dee"
+    },
+    {
+      "stage": "run-2",
+      "task": "atom_target_selection",
+      "source": "harbor",
+      "judge": "original",
+      "cells": 15,
+      "matches": 15,
+      "workspace_sha256": "eee32a112a6b8885dd13c9d2f930f28fba32bbb835be1b93704158c5f1c86bd7"
+    },
+    {
+      "stage": "run-3",
+      "task": "atom_dodge_hold",
+      "source": "original",
+      "judge": "harbor",
+      "cells": 15,
+      "matches": 15,
+      "workspace_sha256": "6d0414b9f105493bb032a70b2540895cc647615ab7dc814facda42059611d701"
+    },
+    {
+      "stage": "run-3",
+      "task": "atom_move_navigation",
+      "source": "original",
+      "judge": "harbor",
+      "cells": 20,
+      "matches": 20,
+      "workspace_sha256": "a1920b7bc6ae2599bb48445afffc7779dd9932c0e1a846d8e0badf0caf38dfdc"
+    },
+    {
+      "stage": "run-3",
+      "task": "combo_chaser",
+      "source": "original",
+      "judge": "harbor",
+      "cells": 21,
+      "matches": 21,
+      "workspace_sha256": "50e1a2286e00695b9711f2cea4dbe2ec1977c0634085dfa58f4cfb3d01fe4156"
+    },
+    {
+      "stage": "run-3",
+      "task": "atom_dodge_hold",
+      "source": "harbor",
+      "judge": "original",
+      "cells": 15,
+      "matches": 15,
+      "workspace_sha256": "c7a7e22dc2dee04e47e24aaac5744e1694b6918d4d80920a940460b2448403a7"
+    },
+    {
+      "stage": "run-3",
+      "task": "atom_move_navigation",
+      "source": "harbor",
+      "judge": "original",
+      "cells": 20,
+      "matches": 20,
+      "workspace_sha256": "eba0b480dfe48e7f93be3fc5b523d426aaefbc10f2f749779c1b2e5964d72275"
+    },
+    {
+      "stage": "run-3",
+      "task": "combo_chaser",
+      "source": "harbor",
+      "judge": "original",
+      "cells": 21,
+      "matches": 21,
+      "workspace_sha256": "fb6b95f0e5cb9c35d0eddba7cb097ab4a82ee3f55b725cdb48fde6d50cf1f6e1"
+    }
+  ],
+  "all_match": true,
+  "scope": "All seven formal whole-task disagreement pairs, replayed on the opposite judge; not an adversarial integrity proof or replacement for frozen-configuration parity."
+}

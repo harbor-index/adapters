@@ -1,0 +1,332 @@
+{
+  "tasks": 21,
+  "reference_cases": 419,
+  "negative_control_cases": 419,
+  "matched_case_verdicts": 838,
+  "controls": {
+    "atom_light_occlusion": {
+      "proper": {
+        "cases": 17,
+        "passed": 17,
+        "matching_verdict_cases": 17
+      },
+      "naive": {
+        "cases": 17,
+        "passed": 5,
+        "matching_verdict_cases": 17
+      }
+    },
+    "atom_root_motion_3d": {
+      "proper": {
+        "cases": 11,
+        "passed": 11,
+        "matching_verdict_cases": 11
+      },
+      "naive": {
+        "cases": 11,
+        "passed": 5,
+        "matching_verdict_cases": 11
+      }
+    },
+    "repo_abyssal_enemy_engine": {
+      "proper": {
+        "cases": 26,
+        "passed": 26,
+        "matching_verdict_cases": 26,
+        "matching_broken_links": 26,
+        "matching_metrics": 26
+      },
+      "naive": {
+        "cases": 26,
+        "passed": 5,
+        "matching_verdict_cases": 26,
+        "matching_broken_links": 26,
+        "matching_metrics": 26
+      }
+    },
+    "repo_amsg_movement_engine": {
+      "proper": {
+        "cases": 23,
+        "passed": 23,
+        "matching_verdict_cases": 23,
+        "matching_broken_links": 23,
+        "matching_metrics": 23
+      },
+      "naive": {
+        "cases": 23,
+        "passed": 8,
+        "matching_verdict_cases": 23,
+        "matching_broken_links": 23,
+        "matching_metrics": 23
+      }
+    },
+    "repo_dothop_move_engine": {
+      "proper": {
+        "cases": 20,
+        "passed": 20,
+        "matching_verdict_cases": 20
+      },
+      "naive": {
+        "cases": 20,
+        "passed": 5,
+        "matching_verdict_cases": 20
+      }
+    },
+    "repo_euwar_conquest_engine": {
+      "proper": {
+        "cases": 26,
+        "passed": 26,
+        "matching_verdict_cases": 26,
+        "matching_broken_links": 26,
+        "matching_metrics": 26
+      },
+      "naive": {
+        "cases": 26,
+        "passed": 5,
+        "matching_verdict_cases": 26,
+        "matching_broken_links": 26,
+        "matching_metrics": 26
+      }
+    },
+    "repo_factory_grid_lifeline": {
+      "proper": {
+        "cases": 27,
+        "passed": 27,
+        "matching_verdict_cases": 27,
+        "matching_broken_links": 27,
+        "matching_metrics": 27
+      },
+      "naive": {
+        "cases": 27,
+        "passed": 3,
+        "matching_verdict_cases": 27,
+        "matching_broken_links": 27,
+        "matching_metrics": 27
+      }
+    },
+    "repo_ftl_weapon_charge": {
+      "proper": {
+        "cases": 17,
+        "passed": 17,
+        "matching_verdict_cases": 17,
+        "matching_broken_links": 17,
+        "matching_metrics": 17
+      },
+      "naive": {
+        "cases": 17,
+        "passed": 2,
+        "matching_verdict_cases": 17,
+        "matching_broken_links": 17,
+        "matching_metrics": 17
+      }
+    },
+    "repo_openrpg_battle_ai": {
+      "proper": {
+        "cases": 17,
+        "passed": 17,
+        "matching_verdict_cases": 17,
+        "matching_broken_links": 17,
+        "matching_metrics": 17
+      },
+      "naive": {
+        "cases": 17,
+        "passed": 5,
+        "matching_verdict_cases": 17,
+        "matching_broken_links": 17,
+        "matching_metrics": 17
+      }
+    },
+    "repo_openrpg_status_engine": {
+      "proper": {
+        "cases": 12,
+        "passed": 12,
+        "matching_verdict_cases": 12,
+        "matching_broken_links": 12,
+        "matching_metrics": 12
+      },
+      "naive": {
+        "cases": 12,
+        "passed": 3,
+        "matching_verdict_cases": 12,
+        "matching_broken_links": 12,
+        "matching_metrics": 12
+      }
+    },
+    "repo_rts_engagement_chain": {
+      "proper": {
+        "cases": 30,
+        "passed": 30,
+        "matching_verdict_cases": 30,
+        "matching_broken_links": 30,
+        "matching_metrics": 30
+      },
+      "naive": {
+        "cases": 30,
+        "passed": 3,
+        "matching_verdict_cases": 30,
+        "matching_broken_links": 30,
+        "matching_metrics": 30
+      }
+    },
+    "repo_rts_harvest_engine": {
+      "proper": {
+        "cases": 21,
+        "passed": 21,
+        "matching_verdict_cases": 21,
+        "matching_broken_links": 21,
+        "matching_metrics": 21
+      },
+      "naive": {
+        "cases": 21,
+        "passed": 6,
+        "matching_verdict_cases": 21,
+        "matching_broken_links": 21,
+        "matching_metrics": 21
+      }
+    },
+    "repo_slayrobot_action_stack": {
+      "proper": {
+        "cases": 14,
+        "passed": 14,
+        "matching_verdict_cases": 14,
+        "matching_broken_links": 14,
+        "matching_metrics": 14
+      },
+      "naive": {
+        "cases": 14,
+        "passed": 5,
+        "matching_verdict_cases": 14,
+        "matching_broken_links": 14,
+        "matching_metrics": 14
+      }
+    },
+    "repo_slayrobot_deck_ledger": {
+      "proper": {
+        "cases": 23,
+        "passed": 23,
+        "matching_verdict_cases": 23,
+        "matching_broken_links": 23,
+        "matching_metrics": 23
+      },
+      "naive": {
+        "cases": 23,
+        "passed": 5,
+        "matching_verdict_cases": 23,
+        "matching_broken_links": 23,
+        "matching_metrics": 23
+      }
+    },
+    "repo_slayrobot_interceptor_chain": {
+      "proper": {
+        "cases": 20,
+        "passed": 20,
+        "matching_verdict_cases": 20,
+        "matching_broken_links": 20,
+        "matching_metrics": 20
+      },
+      "naive": {
+        "cases": 20,
+        "passed": 5,
+        "matching_verdict_cases": 20,
+        "matching_broken_links": 20,
+        "matching_metrics": 20
+      }
+    },
+    "repo_turbofat_piece_phase": {
+      "proper": {
+        "cases": 20,
+        "passed": 20,
+        "matching_verdict_cases": 20,
+        "matching_broken_links": 20,
+        "matching_metrics": 20
+      },
+      "naive": {
+        "cases": 20,
+        "passed": 5,
+        "matching_verdict_cases": 20,
+        "matching_broken_links": 20,
+        "matching_metrics": 20
+      }
+    },
+    "repo_valley_day_engine": {
+      "proper": {
+        "cases": 30,
+        "passed": 30,
+        "matching_verdict_cases": 30,
+        "matching_broken_links": 30,
+        "matching_metrics": 30
+      },
+      "naive": {
+        "cases": 30,
+        "passed": 3,
+        "matching_verdict_cases": 30,
+        "matching_broken_links": 30,
+        "matching_metrics": 30
+      }
+    },
+    "repo_wwii_battle_doctrine": {
+      "proper": {
+        "cases": 10,
+        "passed": 10,
+        "matching_verdict_cases": 10,
+        "matching_broken_links": 10,
+        "matching_metrics": 10
+      },
+      "naive": {
+        "cases": 10,
+        "passed": 1,
+        "matching_verdict_cases": 10,
+        "matching_broken_links": 10,
+        "matching_metrics": 10
+      }
+    },
+    "repo_youtd2_attack_cycle": {
+      "proper": {
+        "cases": 17,
+        "passed": 17,
+        "matching_verdict_cases": 17,
+        "matching_broken_links": 17,
+        "matching_metrics": 17
+      },
+      "naive": {
+        "cases": 17,
+        "passed": 2,
+        "matching_verdict_cases": 17,
+        "matching_broken_links": 17,
+        "matching_metrics": 17
+      }
+    },
+    "repo_youtd2_buff_aura_engine": {
+      "proper": {
+        "cases": 23,
+        "passed": 23,
+        "matching_verdict_cases": 23,
+        "matching_broken_links": 23,
+        "matching_metrics": 23
+      },
+      "naive": {
+        "cases": 23,
+        "passed": 2,
+        "matching_verdict_cases": 23,
+        "matching_broken_links": 23,
+        "matching_metrics": 23
+      }
+    },
+    "repo_youtd2_projectile_engine": {
+      "proper": {
+        "cases": 15,
+        "passed": 15,
+        "matching_verdict_cases": 15,
+        "matching_broken_links": 15,
+        "matching_metrics": 15
+      },
+      "naive": {
+        "cases": 15,
+        "passed": 3,
+        "matching_verdict_cases": 15,
+        "matching_broken_links": 15,
+        "matching_metrics": 15
+      }
+    }
+  }
+}

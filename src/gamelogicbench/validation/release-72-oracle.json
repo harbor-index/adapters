@@ -1,0 +1,368 @@
+{
+  "dataset": "nju-link/gamelogicbench",
+  "tasks": 72,
+  "cases": 1474,
+  "parallelism": 16,
+  "trials": {
+    "nju-link/atom-active-frames": {
+      "digest": "sha256:117fd2ccb8635f830f06a9bb8d5b1784ed69ed5a28889c37ccdad087da6cd856",
+      "reward": 1,
+      "passed_cases": 15
+    },
+    "nju-link/atom-attack-cooldown": {
+      "digest": "sha256:a20d90a1d43a5ba30d8f19a4ab7d32b7199845950e1df2578a4c75de1a8204f6",
+      "reward": 1,
+      "passed_cases": 17
+    },
+    "nju-link/atom-boids": {
+      "digest": "sha256:90af3dc1d208ab2d7b37a2e43f3b1f07b5c77b2e5c37720c5e80952ab9c563e5",
+      "reward": 1,
+      "passed_cases": 25
+    },
+    "nju-link/atom-death-trigger": {
+      "digest": "sha256:12ce2b76d7e9282ecfb016d2470f540d84ea6ba1733594cab47de27efb319274",
+      "reward": 1,
+      "passed_cases": 15
+    },
+    "nju-link/atom-dice-read": {
+      "digest": "sha256:844b5df7482183a1d175c2d2ca75651cb9f325a7b5dbb5a4c5e99ea4dccad910",
+      "reward": 1,
+      "passed_cases": 20
+    },
+    "nju-link/atom-dodge-hold": {
+      "digest": "sha256:d30692cdd6e0e65d4a52feae3b4b833aef2f3768be43856d139d52f73d4be7d3",
+      "reward": 1,
+      "passed_cases": 15
+    },
+    "nju-link/atom-group-avoidance": {
+      "digest": "sha256:38ef92cc6b910db8779de1bf3104013b1f4af068bbd7b866fa5f26ea53023b35",
+      "reward": 1,
+      "passed_cases": 10
+    },
+    "nju-link/atom-hitbox": {
+      "digest": "sha256:46179e39e0d85e001b0fa350833c63f89fd0690f71bd0140aade814fbc4b79a5",
+      "reward": 1,
+      "passed_cases": 21
+    },
+    "nju-link/atom-hitstun-recovery": {
+      "digest": "sha256:09f631c8fc7dffec1b228918c5d4753af46622f8e76efd2834e50855ae28178d",
+      "reward": 1,
+      "passed_cases": 19
+    },
+    "nju-link/atom-jump-landing": {
+      "digest": "sha256:f86b51b6536c31a305a5671f094cfcc4caed899fa2b917510ffe1e460e98684d",
+      "reward": 1,
+      "passed_cases": 15
+    },
+    "nju-link/atom-keeper-arc": {
+      "digest": "sha256:ce76ba4e7f716df14907ceb2a9d20bacbcfeffbfd7ae097e2ce4fca902543455",
+      "reward": 1,
+      "passed_cases": 20
+    },
+    "nju-link/atom-light-occlusion": {
+      "digest": "sha256:fd8e1d8cedaf056f96c2fef349d07511469f93301d570c14253a9de5f4c0bdb8",
+      "reward": 1,
+      "passed_cases": 17
+    },
+    "nju-link/atom-move-navigation": {
+      "digest": "sha256:8b713c7ac2da0c7d7288f19a5127f8c0cd6103c19bfb8ffbd1f594ba59f6d256",
+      "reward": 1,
+      "passed_cases": 20
+    },
+    "nju-link/atom-move-navigation-3d": {
+      "digest": "sha256:897fcde26e9b8fa3ede5b9d02fecb77dc714c4000a61afb0e5b2fe4bad8bd099",
+      "reward": 1,
+      "passed_cases": 20
+    },
+    "nju-link/atom-move-slide-3d": {
+      "digest": "sha256:f9c93d4c7c48f99d77b3abc08352e04d1286a45bd7f18658f06038b5c9d615c2",
+      "reward": 1,
+      "passed_cases": 17
+    },
+    "nju-link/atom-patrol-edge": {
+      "digest": "sha256:b55baaec68da5e8db6cd48a8584248fbef71c0cf49d0e63ca55d2d748fa65488",
+      "reward": 1,
+      "passed_cases": 25
+    },
+    "nju-link/atom-plan-orchestrator": {
+      "digest": "sha256:f0792b1d151b60ec33e270ca9e55096401a41ffadf55af8929a9c6bc050aa73d",
+      "reward": 1,
+      "passed_cases": 23
+    },
+    "nju-link/atom-platform-ride": {
+      "digest": "sha256:7300ed82e92081354bd0027647f58f49417feec6f7207cc1d36d584cb842d722",
+      "reward": 1,
+      "passed_cases": 15
+    },
+    "nju-link/atom-production-queue": {
+      "digest": "sha256:a5c69ac167d8859d30633f60221e48d2c8935c0f24921aa77206af152fc5306e",
+      "reward": 1,
+      "passed_cases": 17
+    },
+    "nju-link/atom-root-motion-3d": {
+      "digest": "sha256:cd7e8c726f66c1ed0233497457e6269af1c0d7e2eec03af81e00070a42cf8c29",
+      "reward": 1,
+      "passed_cases": 11
+    },
+    "nju-link/atom-target-selection": {
+      "digest": "sha256:6f85fa1a767df113632deb46ac014f6fbac6c09b07429c27d877ec6249829978",
+      "reward": 1,
+      "passed_cases": 15
+    },
+    "nju-link/combo-alert-escalation-loop": {
+      "digest": "sha256:b7b67f512ed3205e417d825b0587669e9780c41147907919e503662c4e34d858",
+      "reward": 1,
+      "passed_cases": 30
+    },
+    "nju-link/combo-anim-events": {
+      "digest": "sha256:0e0cac5646cf912e66ece946850c10584288f36bef6394c6088fbd1d1639c36a",
+      "reward": 1,
+      "passed_cases": 20
+    },
+    "nju-link/combo-boss": {
+      "digest": "sha256:9e94fed1bde4a6832cf68cd1ce94a7c483c18845dc719a8c6122151731b2a670",
+      "reward": 1,
+      "passed_cases": 17
+    },
+    "nju-link/combo-chaser": {
+      "digest": "sha256:61df0ff086517abc77da73ffd1407d50b8bdcbf7d8ec3e3e310aa8b40ef154c2",
+      "reward": 1,
+      "passed_cases": 21
+    },
+    "nju-link/combo-corridor-deadlock": {
+      "digest": "sha256:35b63e8f5fe3a14c5a02254b083a39e1261701e4f0b01bfa3149cc4340d2ea36",
+      "reward": 1,
+      "passed_cases": 14
+    },
+    "nju-link/combo-crew-slots": {
+      "digest": "sha256:ef3bf934f1c4843755f03a7cc73c1137a515ccbedff3c0ee7b8fde2974a6a7f9",
+      "reward": 1,
+      "passed_cases": 20
+    },
+    "nju-link/combo-dualgrid-terrain": {
+      "digest": "sha256:c17bd97e3ab0f58dc791b0724e596f5831f63d596035c3f96687beb94843a95e",
+      "reward": 1,
+      "passed_cases": 23
+    },
+    "nju-link/combo-duelist": {
+      "digest": "sha256:ed1e48061cc9656e889d5d3967d035e1048d6b6bae7a4446109dfb6302822798",
+      "reward": 1,
+      "passed_cases": 17
+    },
+    "nju-link/combo-escort-tow": {
+      "digest": "sha256:2dc2672d63dfd4fedbb8c03be60e778616a4dfb67ce60bc9a4eb6ba53bc51ac8",
+      "reward": 1,
+      "passed_cases": 15
+    },
+    "nju-link/combo-formation-commit": {
+      "digest": "sha256:5ce2fd1ddef5ba10c40b74dbabcb11ee4c95081ae0a0ad1318d3f801e40dfb06",
+      "reward": 1,
+      "passed_cases": 20
+    },
+    "nju-link/combo-harvest-gate": {
+      "digest": "sha256:b4ff534bb6b545027752d87478e4dba40efe1e4d6cefcccd43e00a8b8f6050ba",
+      "reward": 1,
+      "passed_cases": 25
+    },
+    "nju-link/combo-interest-ledger": {
+      "digest": "sha256:881551135dfb60e138c2b3e191606505bf56a10ab612edbf4ea6f6dbfacfa16c",
+      "reward": 1,
+      "passed_cases": 20
+    },
+    "nju-link/combo-jump-reach-graph": {
+      "digest": "sha256:011062de1f1b344dd8494b874abdd12ef2a50ac7171b0370f6b0562370deea15",
+      "reward": 1,
+      "passed_cases": 23
+    },
+    "nju-link/combo-jump-x-platform-phase": {
+      "digest": "sha256:e46b70df0ddd3253fb1086b389475f8a83076a071514a07f32b432e65fa5ee2c",
+      "reward": 1,
+      "passed_cases": 18
+    },
+    "nju-link/combo-kite": {
+      "digest": "sha256:79efdd69645cf52c8cf562a99816faf17048cac727e299b3b06659b2941a9080",
+      "reward": 1,
+      "passed_cases": 26
+    },
+    "nju-link/combo-lane-deny": {
+      "digest": "sha256:74af380b933ee4f7ef8d82d1dbe9584d1395c527a38adcca70ffcfe6adb74060",
+      "reward": 1,
+      "passed_cases": 14
+    },
+    "nju-link/combo-magnus-roll-3d": {
+      "digest": "sha256:4ec364fd2c2eebf2109b2ec379b5391d4cc91245691befb9eb6395de3069e1e2",
+      "reward": 1,
+      "passed_cases": 29
+    },
+    "nju-link/combo-platform-guard": {
+      "digest": "sha256:7570e242f9989d2b3e84afde06d43edb460ad155b4ad946b78b285aaa015c00d",
+      "reward": 1,
+      "passed_cases": 30
+    },
+    "nju-link/combo-push-commit": {
+      "digest": "sha256:3a2a99532c2dab7c8907d059839beb5fb65471cfd24751e44f028fc40d6fe503",
+      "reward": 1,
+      "passed_cases": 20
+    },
+    "nju-link/combo-reverse-dock": {
+      "digest": "sha256:4263da40a9211b4e97d17f546ac9df89c90e27991cdc5fa0ef49b4e40550892c",
+      "reward": 1,
+      "passed_cases": 17
+    },
+    "nju-link/combo-search-last-known": {
+      "digest": "sha256:6e58d47ac179ce4b2c20dbd66809f2446be85545d65495ea09bec1b3b7ef6b54",
+      "reward": 1,
+      "passed_cases": 15
+    },
+    "nju-link/combo-snake-forage": {
+      "digest": "sha256:a551d26c58a9267b8fb3bca36c4a4c4b996e851bf9fe6a6520a3fd1170af969d",
+      "reward": 1,
+      "passed_cases": 17
+    },
+    "nju-link/combo-squad": {
+      "digest": "sha256:f80f564f3ca51f8bf08f2ef7bacdb673b6d88523901896048d6094b34ba3ae32",
+      "reward": 1,
+      "passed_cases": 15
+    },
+    "nju-link/combo-supply-lines": {
+      "digest": "sha256:9ed4182034f0e6cf429590bef12fdb0e2fe520fb45745dd0bc04b09a6d73b64b",
+      "reward": 1,
+      "passed_cases": 20
+    },
+    "nju-link/combo-sweep-collision": {
+      "digest": "sha256:b7ad8b0ee415d6c79386c7b0ddd3cabbd664d3feb8cef3cb34c974942361322c",
+      "reward": 1,
+      "passed_cases": 21
+    },
+    "nju-link/combo-tactics-turn": {
+      "digest": "sha256:d44b0674ad448518e3b7f79db0321d11a583d51460e99d7683f480c3e840fcce",
+      "reward": 1,
+      "passed_cases": 32
+    },
+    "nju-link/combo-throw-tech": {
+      "digest": "sha256:2d5a9057a3dc59e66d3e2f7fea829951971638973a6d2bea6c0e17ce114c5689",
+      "reward": 1,
+      "passed_cases": 20
+    },
+    "nju-link/combo-wolfpack": {
+      "digest": "sha256:d71e5d99da0ac07675d3f2cd78ac318b2a682c61708f085a577ab508de0dfe4a",
+      "reward": 1,
+      "passed_cases": 23
+    },
+    "nju-link/repo-abyssal-enemy-engine": {
+      "digest": "sha256:508b41977d1fb7571c5ac0064ba25445f4462e89579a205a026ad832f4dbc1ad",
+      "reward": 1,
+      "passed_cases": 26
+    },
+    "nju-link/repo-amsg-movement-engine": {
+      "digest": "sha256:7929be21f05324ad7b9c9a5984959728501f0b08181bcee33c0fd8659c94683d",
+      "reward": 1,
+      "passed_cases": 23
+    },
+    "nju-link/repo-damage-control": {
+      "digest": "sha256:90459f120b4716ec2e39b1e9959df9ad4e40784e007f509c3a0d71cd21163161",
+      "reward": 1,
+      "passed_cases": 41
+    },
+    "nju-link/repo-dothop-move-engine": {
+      "digest": "sha256:f490d003bdb95e490bad2665a2bc3e1305482a24ecf58b050749e8958137063f",
+      "reward": 1,
+      "passed_cases": 20
+    },
+    "nju-link/repo-euwar-conquest-engine": {
+      "digest": "sha256:4ef49d42f5ea16da35e3a4e49e86cb2be041f989a536d16952f5e08bca027e9b",
+      "reward": 1,
+      "passed_cases": 26
+    },
+    "nju-link/repo-factory-grid-lifeline": {
+      "digest": "sha256:9f77acf1f3c3e104a23d15012daf0ee40126eac2899db2efdce3ea33564ab902",
+      "reward": 1,
+      "passed_cases": 27
+    },
+    "nju-link/repo-ftl-weapon-charge": {
+      "digest": "sha256:b1a65a8c73b73d8ce31c33928be65f73252a3cfc3a749a21afc46505604d7379",
+      "reward": 1,
+      "passed_cases": 17
+    },
+    "nju-link/repo-openrpg-battle-ai": {
+      "digest": "sha256:925e6b847b24419eebb10b4914f570a0245ed523c6107ef06d2d92f706d3e3c2",
+      "reward": 1,
+      "passed_cases": 17
+    },
+    "nju-link/repo-openrpg-status-engine": {
+      "digest": "sha256:61e52d80d66c28158c3a0b16734d844a3592f91afa50706236459ba0993b7532",
+      "reward": 1,
+      "passed_cases": 12
+    },
+    "nju-link/repo-rts-engagement-chain": {
+      "digest": "sha256:682b52a9f82a44c206e0f8fc21b6697c28293d07cb9e46f213c74dac9e203f1b",
+      "reward": 1,
+      "passed_cases": 30
+    },
+    "nju-link/repo-rts-harvest-engine": {
+      "digest": "sha256:1ab80a7821ad1677c16a4b007e301ebbec7d8d8a06b071da73d081451afdc351",
+      "reward": 1,
+      "passed_cases": 21
+    },
+    "nju-link/repo-slayrobot-action-stack": {
+      "digest": "sha256:5e1a3ca0fc4561117fa46c73d862077b91826105a7010af7a7839f2b17fb798a",
+      "reward": 1,
+      "passed_cases": 14
+    },
+    "nju-link/repo-slayrobot-deck-ledger": {
+      "digest": "sha256:ed2d744305879b519c805597d19f5d12e58e6b29e73e94ba1aef006360756c46",
+      "reward": 1,
+      "passed_cases": 23
+    },
+    "nju-link/repo-slayrobot-interceptor-chain": {
+      "digest": "sha256:6f220846610d9058ac8c4bb2ceafa7d80adb0089a4dd678c8c28745442c72beb",
+      "reward": 1,
+      "passed_cases": 20
+    },
+    "nju-link/repo-td-income": {
+      "digest": "sha256:1a039eb62db4fd17d19f0ff967840eb6d43fc1b3041ec182949e4c2d4e08eec1",
+      "reward": 1,
+      "passed_cases": 32
+    },
+    "nju-link/repo-turbofat-piece-phase": {
+      "digest": "sha256:8b9a1671ca852f83457066549818e0f6f9a32ab4b1dea1b1b7e28bd8a1e9485b",
+      "reward": 1,
+      "passed_cases": 20
+    },
+    "nju-link/repo-valley-day-engine": {
+      "digest": "sha256:533a662756f850d2748a0e7e9b3606fbc41a87a3e9dea27dbd089f98f0665d23",
+      "reward": 1,
+      "passed_cases": 30
+    },
+    "nju-link/repo-watch-rotation": {
+      "digest": "sha256:7f5f9df1e29603bca567bc58116bcf8a6e1f0fcd7d8bd657d51b8782a011525b",
+      "reward": 1,
+      "passed_cases": 36
+    },
+    "nju-link/repo-worldwarii-conquest": {
+      "digest": "sha256:a200bc971554d2666b26b032671132274e35dca9aeaa3019dcc5d6f7f2b1a382",
+      "reward": 1,
+      "passed_cases": 20
+    },
+    "nju-link/repo-wwii-battle-doctrine": {
+      "digest": "sha256:ee8fae92230c82e9bb2cdc285c2216d2d5ad2f64e888cbacaf6cc0aed8b30aa9",
+      "reward": 1,
+      "passed_cases": 10
+    },
+    "nju-link/repo-youtd2-attack-cycle": {
+      "digest": "sha256:e9dafb6103ba1aa20546ead5f3fb3c987bb66686bdfe8642f88173951f0d8b36",
+      "reward": 1,
+      "passed_cases": 17
+    },
+    "nju-link/repo-youtd2-buff-aura-engine": {
+      "digest": "sha256:fb8fb6601fe1e41b68c7a674dd07b5845a525b984dc0add25aef17b3a66bf6e4",
+      "reward": 1,
+      "passed_cases": 23
+    },
+    "nju-link/repo-youtd2-projectile-engine": {
+      "digest": "sha256:9ec5b281d237461d311bb6506aa6d048b7f11c0fec180f6f8c7215fd180b80e4",
+      "reward": 1,
+      "passed_cases": 15
+    }
+  }
+}

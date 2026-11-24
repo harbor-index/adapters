@@ -1,0 +1,7 @@
+{
+  "scope": "One-task Harbor Oracle smoke test of the license-inclusive publication package",
+  "task": "nju-link/atom-active-frames",
+  "digest": "sha256:b649df11bfdfb2f7b3e56e56260f4ba597bb324fa6b8376ce02215f342d9a565",
+  "reward": 1,
+  "passed_cases": 15
+}

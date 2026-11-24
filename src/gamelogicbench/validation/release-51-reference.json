@@ -1,0 +1,625 @@
+{
+  "native_reference_comparison": {
+    "comparisons": {
+      "naive:atom_active_frames": {
+        "matched": 15,
+        "total": 15
+      },
+      "naive:combo_dualgrid_terrain": {
+        "matched": 23,
+        "total": 23
+      },
+      "naive:repo_watch_rotation": {
+        "matched": 36,
+        "total": 36
+      },
+      "proper:atom_active_frames": {
+        "matched": 15,
+        "total": 15
+      },
+      "proper:combo_dualgrid_terrain": {
+        "matched": 23,
+        "total": 23
+      },
+      "proper:repo_watch_rotation": {
+        "matched": 36,
+        "total": 36
+      }
+    },
+    "matched": 148,
+    "total": 148
+  },
+  "oracle_and_nop": {
+    "exceptions": 0,
+    "harbor_version": "0.23.0",
+    "nop_tasks_reward_zero": 51,
+    "oracle_cells_passed": 1055,
+    "oracle_tasks_passed": 51,
+    "per_task": {
+      "nop": {
+        "atom_active_frames": {
+          "reward": 0.0
+        },
+        "atom_attack_cooldown": {
+          "reward": 0.0
+        },
+        "atom_boids": {
+          "reward": 0.0
+        },
+        "atom_death_trigger": {
+          "reward": 0.0
+        },
+        "atom_dice_read": {
+          "reward": 0.0
+        },
+        "atom_dodge_hold": {
+          "reward": 0.0
+        },
+        "atom_group_avoidance": {
+          "reward": 0.0
+        },
+        "atom_hitbox": {
+          "reward": 0.0
+        },
+        "atom_hitstun_recovery": {
+          "reward": 0.0
+        },
+        "atom_jump_landing": {
+          "reward": 0.0
+        },
+        "atom_keeper_arc": {
+          "reward": 0.0
+        },
+        "atom_move_navigation": {
+          "reward": 0.0
+        },
+        "atom_move_navigation_3d": {
+          "reward": 0.0
+        },
+        "atom_move_slide_3d": {
+          "reward": 0.0
+        },
+        "atom_patrol_edge": {
+          "reward": 0.0
+        },
+        "atom_plan_orchestrator": {
+          "reward": 0.0
+        },
+        "atom_platform_ride": {
+          "reward": 0.0
+        },
+        "atom_production_queue": {
+          "reward": 0.0
+        },
+        "atom_target_selection": {
+          "reward": 0.0
+        },
+        "combo_alert_escalation_loop": {
+          "reward": 0.0
+        },
+        "combo_anim_events": {
+          "reward": 0.0
+        },
+        "combo_boss": {
+          "reward": 0.0
+        },
+        "combo_chaser": {
+          "reward": 0.0
+        },
+        "combo_corridor_deadlock": {
+          "reward": 0.0
+        },
+        "combo_crew_slots": {
+          "reward": 0.0
+        },
+        "combo_dualgrid_terrain": {
+          "reward": 0.0
+        },
+        "combo_duelist": {
+          "reward": 0.0
+        },
+        "combo_escort_tow": {
+          "reward": 0.0
+        },
+        "combo_formation_commit": {
+          "reward": 0.0
+        },
+        "combo_harvest_gate": {
+          "reward": 0.0
+        },
+        "combo_interest_ledger": {
+          "reward": 0.0
+        },
+        "combo_jump_reach_graph": {
+          "reward": 0.0
+        },
+        "combo_jump_x_platform_phase": {
+          "reward": 0.0
+        },
+        "combo_kite": {
+          "reward": 0.0
+        },
+        "combo_lane_deny": {
+          "reward": 0.0
+        },
+        "combo_magnus_roll_3d": {
+          "reward": 0.0
+        },
+        "combo_platform_guard": {
+          "reward": 0.0
+        },
+        "combo_push_commit": {
+          "reward": 0.0
+        },
+        "combo_reverse_dock": {
+          "reward": 0.0
+        },
+        "combo_search_last_known": {
+          "reward": 0.0
+        },
+        "combo_snake_forage": {
+          "reward": 0.0
+        },
+        "combo_squad": {
+          "reward": 0.0
+        },
+        "combo_supply_lines": {
+          "reward": 0.0
+        },
+        "combo_sweep_collision": {
+          "reward": 0.0
+        },
+        "combo_tactics_turn": {
+          "reward": 0.0
+        },
+        "combo_throw_tech": {
+          "reward": 0.0
+        },
+        "combo_wolfpack": {
+          "reward": 0.0
+        },
+        "repo_damage_control": {
+          "reward": 0.0
+        },
+        "repo_td_income": {
+          "reward": 0.0
+        },
+        "repo_watch_rotation": {
+          "reward": 0.0
+        },
+        "repo_worldwarii_conquest": {
+          "reward": 0.0
+        }
+      },
+      "oracle": {
+        "atom_active_frames": {
+          "cells": 15,
+          "reward": 1.0
+        },
+        "atom_attack_cooldown": {
+          "cells": 17,
+          "reward": 1.0
+        },
+        "atom_boids": {
+          "cells": 25,
+          "reward": 1.0
+        },
+        "atom_death_trigger": {
+          "cells": 15,
+          "reward": 1.0
+        },
+        "atom_dice_read": {
+          "cells": 20,
+          "reward": 1.0
+        },
+        "atom_dodge_hold": {
+          "cells": 15,
+          "reward": 1.0
+        },
+        "atom_group_avoidance": {
+          "cells": 10,
+          "reward": 1.0
+        },
+        "atom_hitbox": {
+          "cells": 21,
+          "reward": 1.0
+        },
+        "atom_hitstun_recovery": {
+          "cells": 19,
+          "reward": 1.0
+        },
+        "atom_jump_landing": {
+          "cells": 15,
+          "reward": 1.0
+        },
+        "atom_keeper_arc": {
+          "cells": 20,
+          "reward": 1.0
+        },
+        "atom_move_navigation": {
+          "cells": 20,
+          "reward": 1.0
+        },
+        "atom_move_navigation_3d": {
+          "cells": 20,
+          "reward": 1.0
+        },
+        "atom_move_slide_3d": {
+          "cells": 17,
+          "reward": 1.0
+        },
+        "atom_patrol_edge": {
+          "cells": 25,
+          "reward": 1.0
+        },
+        "atom_plan_orchestrator": {
+          "cells": 23,
+          "reward": 1.0
+        },
+        "atom_platform_ride": {
+          "cells": 15,
+          "reward": 1.0
+        },
+        "atom_production_queue": {
+          "cells": 17,
+          "reward": 1.0
+        },
+        "atom_target_selection": {
+          "cells": 15,
+          "reward": 1.0
+        },
+        "combo_alert_escalation_loop": {
+          "cells": 30,
+          "reward": 1.0
+        },
+        "combo_anim_events": {
+          "cells": 20,
+          "reward": 1.0
+        },
+        "combo_boss": {
+          "cells": 17,
+          "reward": 1.0
+        },
+        "combo_chaser": {
+          "cells": 21,
+          "reward": 1.0
+        },
+        "combo_corridor_deadlock": {
+          "cells": 14,
+          "reward": 1.0
+        },
+        "combo_crew_slots": {
+          "cells": 20,
+          "reward": 1.0
+        },
+        "combo_dualgrid_terrain": {
+          "cells": 23,
+          "reward": 1.0
+        },
+        "combo_duelist": {
+          "cells": 17,
+          "reward": 1.0
+        },
+        "combo_escort_tow": {
+          "cells": 15,
+          "reward": 1.0
+        },
+        "combo_formation_commit": {
+          "cells": 20,
+          "reward": 1.0
+        },
+        "combo_harvest_gate": {
+          "cells": 25,
+          "reward": 1.0
+        },
+        "combo_interest_ledger": {
+          "cells": 20,
+          "reward": 1.0
+        },
+        "combo_jump_reach_graph": {
+          "cells": 23,
+          "reward": 1.0
+        },
+        "combo_jump_x_platform_phase": {
+          "cells": 18,
+          "reward": 1.0
+        },
+        "combo_kite": {
+          "cells": 26,
+          "reward": 1.0
+        },
+        "combo_lane_deny": {
+          "cells": 14,
+          "reward": 1.0
+        },
+        "combo_magnus_roll_3d": {
+          "cells": 29,
+          "reward": 1.0
+        },
+        "combo_platform_guard": {
+          "cells": 30,
+          "reward": 1.0
+        },
+        "combo_push_commit": {
+          "cells": 20,
+          "reward": 1.0
+        },
+        "combo_reverse_dock": {
+          "cells": 17,
+          "reward": 1.0
+        },
+        "combo_search_last_known": {
+          "cells": 15,
+          "reward": 1.0
+        },
+        "combo_snake_forage": {
+          "cells": 17,
+          "reward": 1.0
+        },
+        "combo_squad": {
+          "cells": 15,
+          "reward": 1.0
+        },
+        "combo_supply_lines": {
+          "cells": 20,
+          "reward": 1.0
+        },
+        "combo_sweep_collision": {
+          "cells": 21,
+          "reward": 1.0
+        },
+        "combo_tactics_turn": {
+          "cells": 32,
+          "reward": 1.0
+        },
+        "combo_throw_tech": {
+          "cells": 20,
+          "reward": 1.0
+        },
+        "combo_wolfpack": {
+          "cells": 23,
+          "reward": 1.0
+        },
+        "repo_damage_control": {
+          "cells": 41,
+          "reward": 1.0
+        },
+        "repo_td_income": {
+          "cells": 32,
+          "reward": 1.0
+        },
+        "repo_watch_rotation": {
+          "cells": 36,
+          "reward": 1.0
+        },
+        "repo_worldwarii_conquest": {
+          "cells": 20,
+          "reward": 1.0
+        }
+      }
+    },
+    "runtime_image_id": "sha256:431735ec28366146605fa4f7464258d210a7956194c8dbe27e828bdeb21da9d8",
+    "verifier_sha256": {
+      "controller_proxy.gd": "c29d726b609de5ed58aa25fbc42e2a4cbc16c983515374a84822b021ed818aa2",
+      "controller_worker.gd": "1bb2d897552de6a5206584ca4d5075a296d02e5e45e369fff79b021fe54c6f62",
+      "verify.py": "95c164fd55d5d2aad10ce51762f6821d2425fe71623fae5833129a4c61ca25ef"
+    }
+  },
+  "scope": "51 headless controller tasks",
+  "self_contained_dockerfiles": {
+    "cli_log_sha256": "006d416b45504e5794f772f62a1516ed6a2c05109f9a6dd027d2fd79395cc51d",
+    "exceptions": 0,
+    "harbor_version": "0.27.0",
+    "oracle_cells_passed": 1055,
+    "oracle_smoke_passed": 2,
+    "oracle_tasks_passed": 51,
+    "per_task": {
+      "atom_active_frames": {
+        "cells": 15,
+        "reward": 1.0
+      },
+      "atom_attack_cooldown": {
+        "cells": 17,
+        "reward": 1.0
+      },
+      "atom_boids": {
+        "cells": 25,
+        "reward": 1.0
+      },
+      "atom_death_trigger": {
+        "cells": 15,
+        "reward": 1.0
+      },
+      "atom_dice_read": {
+        "cells": 20,
+        "reward": 1.0
+      },
+      "atom_dodge_hold": {
+        "cells": 15,
+        "reward": 1.0
+      },
+      "atom_group_avoidance": {
+        "cells": 10,
+        "reward": 1.0
+      },
+      "atom_hitbox": {
+        "cells": 21,
+        "reward": 1.0
+      },
+      "atom_hitstun_recovery": {
+        "cells": 19,
+        "reward": 1.0
+      },
+      "atom_jump_landing": {
+        "cells": 15,
+        "reward": 1.0
+      },
+      "atom_keeper_arc": {
+        "cells": 20,
+        "reward": 1.0
+      },
+      "atom_move_navigation": {
+        "cells": 20,
+        "reward": 1.0
+      },
+      "atom_move_navigation_3d": {
+        "cells": 20,
+        "reward": 1.0
+      },
+      "atom_move_slide_3d": {
+        "cells": 17,
+        "reward": 1.0
+      },
+      "atom_patrol_edge": {
+        "cells": 25,
+        "reward": 1.0
+      },
+      "atom_plan_orchestrator": {
+        "cells": 23,
+        "reward": 1.0
+      },
+      "atom_platform_ride": {
+        "cells": 15,
+        "reward": 1.0
+      },
+      "atom_production_queue": {
+        "cells": 17,
+        "reward": 1.0
+      },
+      "atom_target_selection": {
+        "cells": 15,
+        "reward": 1.0
+      },
+      "combo_alert_escalation_loop": {
+        "cells": 30,
+        "reward": 1.0
+      },
+      "combo_anim_events": {
+        "cells": 20,
+        "reward": 1.0
+      },
+      "combo_boss": {
+        "cells": 17,
+        "reward": 1.0
+      },
+      "combo_chaser": {
+        "cells": 21,
+        "reward": 1.0
+      },
+      "combo_corridor_deadlock": {
+        "cells": 14,
+        "reward": 1.0
+      },
+      "combo_crew_slots": {
+        "cells": 20,
+        "reward": 1.0
+      },
+      "combo_dualgrid_terrain": {
+        "cells": 23,
+        "reward": 1.0
+      },
+      "combo_duelist": {
+        "cells": 17,
+        "reward": 1.0
+      },
+      "combo_escort_tow": {
+        "cells": 15,
+        "reward": 1.0
+      },
+      "combo_formation_commit": {
+        "cells": 20,
+        "reward": 1.0
+      },
+      "combo_harvest_gate": {
+        "cells": 25,
+        "reward": 1.0
+      },
+      "combo_interest_ledger": {
+        "cells": 20,
+        "reward": 1.0
+      },
+      "combo_jump_reach_graph": {
+        "cells": 23,
+        "reward": 1.0
+      },
+      "combo_jump_x_platform_phase": {
+        "cells": 18,
+        "reward": 1.0
+      },
+      "combo_kite": {
+        "cells": 26,
+        "reward": 1.0
+      },
+      "combo_lane_deny": {
+        "cells": 14,
+        "reward": 1.0
+      },
+      "combo_magnus_roll_3d": {
+        "cells": 29,
+        "reward": 1.0
+      },
+      "combo_platform_guard": {
+        "cells": 30,
+        "reward": 1.0
+      },
+      "combo_push_commit": {
+        "cells": 20,
+        "reward": 1.0
+      },
+      "combo_reverse_dock": {
+        "cells": 17,
+        "reward": 1.0
+      },
+      "combo_search_last_known": {
+        "cells": 15,
+        "reward": 1.0
+      },
+      "combo_snake_forage": {
+        "cells": 17,
+        "reward": 1.0
+      },
+      "combo_squad": {
+        "cells": 15,
+        "reward": 1.0
+      },
+      "combo_supply_lines": {
+        "cells": 20,
+        "reward": 1.0
+      },
+      "combo_sweep_collision": {
+        "cells": 21,
+        "reward": 1.0
+      },
+      "combo_tactics_turn": {
+        "cells": 32,
+        "reward": 1.0
+      },
+      "combo_throw_tech": {
+        "cells": 20,
+        "reward": 1.0
+      },
+      "combo_wolfpack": {
+        "cells": 23,
+        "reward": 1.0
+      },
+      "repo_damage_control": {
+        "cells": 41,
+        "reward": 1.0
+      },
+      "repo_td_income": {
+        "cells": 32,
+        "reward": 1.0
+      },
+      "repo_watch_rotation": {
+        "cells": 36,
+        "reward": 1.0
+      },
+      "repo_worldwarii_conquest": {
+        "cells": 20,
+        "reward": 1.0
+      }
+    },
+    "run_finished_at": "2026-11-21T05:36:10.753555",
+    "run_started_at": "2026-11-21T04:45:02.574480"
+  }
+}

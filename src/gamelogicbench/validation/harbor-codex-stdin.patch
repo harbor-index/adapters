@@ -1,0 +1,17 @@
+--- a/harbor/agents/installed/codex.py
++++ b/harbor/agents/installed/codex.py
+@@ -1334,2 +1333,0 @@
+-        escaped_instruction = shlex.quote(instruction)
+-
+@@ -1431,0 +1430,5 @@
++        # Keep prompt text out of argv so agent pkill patterns cannot terminate this launcher.
++        instruction_path = (self._REMOTE_CODEX_SECRETS_DIR / "instruction.txt").as_posix()
++        await self._upload_config_text(
++            environment, content=instruction, remote_path=instruction_path, filename="instruction.txt"
++        )
+@@ -1444,3 +1447,2 @@
+-                    "-- "  # end of flags
+-                    f"{escaped_instruction} "
+-                    f"2>&1 </dev/null | tee {
++                    f"- < {shlex.quote(instruction_path)} "
++                    f"2>&1 | tee {

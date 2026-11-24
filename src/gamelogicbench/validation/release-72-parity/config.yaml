@@ -1,0 +1,48 @@
+benchmark: GameLogicBench
+source:
+  harness: https://github.com/NJU-LINK/GameLogicBench
+  harness_revision: 979cd919689c8bba021ef56808887bc58e49f3db
+  tasks: https://github.com/NJU-LINK/GameLogicBench-Tasks
+  tasks_revision: fcc0b01fcc2fd2d95998478152222e6ab916fcdf
+harbor_verifier: independent judge
+dataset_task_count: 72
+sample_task_count: 24
+rounds_per_side: 3
+agent: codex@0.144.1
+model: gpt-5-mini
+reasoning_effort: high
+effective_solve_budget_seconds: 3600
+reused_task_ids:
+- atom_dice_read
+- atom_dodge_hold
+- atom_hitstun_recovery
+- atom_jump_landing
+- atom_move_slide_3d
+- atom_plan_orchestrator
+- atom_platform_ride
+- atom_production_queue
+- combo_alert_escalation_loop
+- combo_chaser
+- combo_escort_tow
+- combo_formation_commit
+- combo_interest_ledger
+- combo_kite
+- combo_search_last_known
+- combo_sweep_collision
+- repo_damage_control
+- repo_td_income
+- repo_watch_rotation
+- repo_worldwarii_conquest
+new_tasks:
+  atom_light_occlusion:
+    cases: 17
+    selection_reason: Rendered pixel evaluation with lighting and shadows
+  atom_root_motion_3d:
+    cases: 11
+    selection_reason: Live CharacterBody3D movement and physics
+  repo_dothop_move_engine:
+    cases: 20
+    selection_reason: Single module with typed mutable puzzle state
+  repo_rts_harvest_engine:
+    cases: 21
+    selection_reason: Multiple project scripts with live node lifecycle and interactions

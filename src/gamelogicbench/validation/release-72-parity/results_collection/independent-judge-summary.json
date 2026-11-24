@@ -1,0 +1,51 @@
+{
+  "prior_runs": {
+    "fair-1-original-full": {
+      "submissions": 20,
+      "cells": 438,
+      "matched": 438,
+      "model_api_calls": 0
+    },
+    "fair-1-harbor-disagreements": {
+      "submissions": 2,
+      "cells": 32,
+      "matched": 32,
+      "model_api_calls": 0
+    },
+    "fair-2-disagreements": {
+      "submissions": 6,
+      "cells": 106,
+      "matched": 106,
+      "model_api_calls": 0
+    },
+    "fair-3-disagreement": {
+      "submissions": 2,
+      "cells": 30,
+      "matched": 30,
+      "model_api_calls": 0
+    }
+  },
+  "round_two_root_motion": {
+    "task": "atom_root_motion_3d",
+    "round": 2,
+    "model_api_calls": 0,
+    "results": {
+      "original": {
+        "cases": 11,
+        "matching_cases": 11,
+        "initial_reward": 1,
+        "other_judge_reward": 1,
+        "stored_controller_sha256": "fa54b3fb492e685a8b9812eb1434761c8569422fe24869198988f83c5f1b03ef",
+        "differences": []
+      },
+      "harbor": {
+        "cases": 11,
+        "matching_cases": 11,
+        "initial_reward": 0,
+        "other_judge_reward": 0,
+        "stored_controller_sha256": "40a78efa17c1552de8e5ffefde9cf129e2b20e50cef238e84ae5764363fb0f19",
+        "differences": []
+      }
+    }
+  }
+}

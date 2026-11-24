@@ -1,0 +1,86 @@
+[
+  {
+    "adapter_name": "gamelogicbench",
+    "agent": "codex@0.144.1",
+    "model": "gpt-5-mini",
+    "date": "2026-11-24",
+    "adapted_benchmark_size": 72,
+    "parity_benchmark_size": 24,
+    "number_of_runs": 3,
+    "original_parity_repo": "https://github.com/NJU-LINK/GameLogicBench",
+    "adapter_pr": [
+      "https://github.com/harbor-index/adapters/pull/19"
+    ],
+    "dataset_pr": [
+      "https://github.com/harbor-framework/harbor-datasets/pull/302"
+    ],
+    "parity_pr": null,
+    "metrics": [
+      {
+        "benchmark_name": "GameLogicBench",
+        "metric": "task_pass_rate_percent",
+        "original": "11.1111 ± 1.3889",
+        "original_runs": [
+          8.333333333333332,
+          12.5,
+          12.5
+        ],
+        "harbor": "6.9444 ± 1.3889",
+        "harbor_runs": [
+          8.333333333333332,
+          4.166666666666666,
+          8.333333333333332
+        ]
+      },
+      {
+        "benchmark_name": "GameLogicBench/atom",
+        "metric": "task_pass_rate_percent",
+        "original": "23.3333 ± 3.3333",
+        "original_runs": [
+          20.0,
+          20.0,
+          30.0
+        ],
+        "harbor": "16.6667 ± 3.3333",
+        "harbor_runs": [
+          20.0,
+          10.0,
+          20.0
+        ]
+      },
+      {
+        "benchmark_name": "GameLogicBench/combo",
+        "metric": "task_pass_rate_percent",
+        "original": "4.1667 ± 4.1667",
+        "original_runs": [
+          0.0,
+          12.5,
+          0.0
+        ],
+        "harbor": "0.0000 ± 0.0000",
+        "harbor_runs": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "benchmark_name": "GameLogicBench/repo",
+        "metric": "task_pass_rate_percent",
+        "original": "0.0000 ± 0.0000",
+        "original_runs": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "harbor": "0.0000 ± 0.0000",
+        "harbor_runs": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      }
+    ],
+    "notes": "Three paired rounds. Twenty tasks reuse verified prior scores; four tasks were newly evaluated through the reviewer API."
+  }
+]

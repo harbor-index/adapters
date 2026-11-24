@@ -1,0 +1,20 @@
+{
+  "kind": "User-captured terminal screenshot displaying saved original Harbor Oracle output",
+  "oracle_run": "oracle-full",
+  "run_commit_displayed": "8243e330",
+  "previous_submission_commit_displayed": "f3f08e36",
+  "original_image_sha256": "dd1e030e64090fbbcc6a09e16042aa817832f9c2bc97c51a38277b9c1e5e56cd",
+  "published_image_sha256": "6ce27c2a94c0d7bb67ea5eb585b6e7e6877bcb90596033395042f617830e6831",
+  "original_dimensions": [
+    1530,
+    670
+  ],
+  "crop_box": [
+    0,
+    108,
+    1530,
+    670
+  ],
+  "editing": "Lossless crop removes login banner and local command paths above the saved-output heading; result text is unchanged.",
+  "oracle_log_sha256": "2712e387c6c1f9591185105165bfd1da587b5a1e726c089d90a340a0dfde5ec5"
+}

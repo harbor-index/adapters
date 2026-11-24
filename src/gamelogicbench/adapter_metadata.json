@@ -1,0 +1,38 @@
+[
+  {
+    "adapter_name": "gamelogicbench",
+    "adapter_builders": [
+      "ShawVentus (937585404@qq.com)"
+    ],
+    "original_benchmark": [
+      {
+        "split": "full",
+        "size": 72,
+        "harness": "agent",
+        "supported_agents": [
+          "claude-code",
+          "codex",
+          "opencode"
+        ],
+        "adaptable": true,
+        "notes": "Pinned public source snapshot contains 72 tasks, 410 scenarios and 1474 cells."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "full",
+        "adapted_benchmark_size": 72,
+        "parity_benchmark_size": 24,
+        "parity_sampling_rate": 0.3333333333333333,
+        "registry_benchmark_size": 0,
+        "added_agents": [
+          "None"
+        ],
+        "parity_matching_agents": [],
+        "parity_unmatching_agents": [],
+        "parity_costs": null,
+        "notes": "The adapter generates 72 tasks from the licensed upstream revisions. Parity compares 24 tasks across three paired rounds. The final registry publication is pending."
+      }
+    ]
+  }
+]

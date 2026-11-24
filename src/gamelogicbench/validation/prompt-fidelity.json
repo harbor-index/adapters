@@ -1,0 +1,5 @@
+{
+  "status": "pass",
+  "tasks": 72,
+  "check": "Generated instructions equal the upstream offline brief after workspace path mapping; all game READMEs are byte-identical"
+}
