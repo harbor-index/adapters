@@ -8,7 +8,7 @@ MotifBench (from *Critic's Eye: Review-Grounded Graph Reasoning for Long-Form Mo
 - **Provenance & license:** [Acture/MotifBench](https://huggingface.co/datasets/Acture/MotifBench) (CC BY-NC 4.0; Folger Shakespeare Library digital edition CC BY-NC 3.0). Note that this literary benchmark is unrelated to the protein-design benchmark of the same name (`arXiv:2502.12479`); tasks are namespaced under `critics-eye/motifbench__*`.
 - **Task count:** **12 tasks** (default `--granularity scene-group`), covering **270 cleaned query lines** and **449 line–motif associations** over **218 clean candidate motifs** (derived from the 314 lines / 277 motifs in `Acture/MotifBench/macbeth/macbeth.jsonl` after anti-leakage sanitization; `--granularity act` [5 tasks] and `--granularity query` [270 tasks] are also supported).
 - **Main modifications for Harbor:**
-  - Provides the complete *Macbeth* play (2,456 lines, ~19.6k words) as both `/app/macbeth.txt` and `/app/macbeth.pdf` inside an offline container.
+  - Provides the complete *Macbeth* play (2,456 lines, ~19.6k words) as both `/app/macbeth.txt` and `/app/macbeth.pdf` under read-only `/app/`. The agent environment stays online so Harbor can install the agent and call the model API. The separate verifier is offline.
   - Filters out 59 leaky motif descriptors (19 explicit Act/Scene/Line citations such as `(4.1.138)` and 40 verbatim passage-pointer descriptors) and 60 pairs with verbatim 3-gram overlap within ±15 lines, eliminating trivial regex/`grep` reward-hacking surfaces while retaining **96.4%** zero content-word overlap and **36.5%** >50-line dispersion.
   - Groups contiguous scenes within each Act into 12 balanced batch tasks (13–36 queries/task, modeled on `src/locomo`) so aggregate `Hit@5` is smooth under partial observation.
 
@@ -19,7 +19,7 @@ Most long-context benchmarks evaluate **locating** an explicitly stated answer s
 ## Adapter Features
 
 - **Zero-dependency adapter:** Pure Python standard library (`dependencies = []`); auto-downloads dataset assets from HuggingFace `Acture/MotifBench` pinned at revision `12fadc6a46aa8d2fcc7848777574122afeccf59f`, or reads a local export via `--data-dir`.
-- **Dual-format full play in workspace:** Mounts complete *Macbeth* as both `/app/macbeth.txt` and searchable `/app/macbeth.pdf` (with pinned `pypdf==7.1.1`) alongside `/app/motifs.json` and `/app/queries.json` under read-only `/app/`. The agent environment runs with `network_mode = "no-network"`.
+- **Dual-format full play in workspace:** Mounts complete *Macbeth* as both `/app/macbeth.txt` and searchable `/app/macbeth.pdf` (with pinned `pypdf==7.1.1`) alongside `/app/motifs.json` and `/app/queries.json` under read-only `/app/`. The agent environment does not set `network_mode`, so Harbor can install `mini-swe-agent` and call the model API. Only the verifier environment sets `network_mode = "no-network"`.
 - **100% deterministic verifier:** Programmatic Python scoring (`tests/verifier.py`) with zero LLM-as-a-Judge dependency and fail-safe zero initialization. The verifier runs in a separate container (`environment_mode = "separate"`, `tests/Dockerfile`, no extra packages, `network_mode = "no-network"`) and reads the transferred artifact at `/workspace/predictions.json`.
 - **Multi-granularity & parity support:** Supports `--granularity scene-group` (12 tasks, default), `act` (5 tasks), and `query` (270 tasks), plus `--split parity`, `--limit`, `--overwrite`, and `--task-ids`.
 - **Dataset-level micro aggregation:** Includes `src/motifbench/metric.py` to compute query-micro-averaged `Hit@5` across all 270 queries.
@@ -54,7 +54,9 @@ src/motifbench/
 ├── parity_experiment.json
 ├── pyproject.toml
 ├── motifbench.yaml
-├── run_motifbench_parity_codex.yaml
+├── run_motifbench_parity.yaml
+├── configs/
+│   └── mini_swe_agent.yaml
 └── src/motifbench/
     ├── __init__.py
     ├── adapter.py
@@ -107,8 +109,8 @@ harbor run -p datasets/motifbench -a <agent_name> -m "<model_name>"
 # Single task with oracle
 harbor trial start -p datasets/motifbench/macbeth-act1-s1-s2 -a oracle
 
-# Single task with an agent
-harbor trial start -p datasets/motifbench/macbeth-act1-s1-s2 -a codex -m "openai/gpt-5-mini"
+# Single task with the parity agent (the pinned job is run_motifbench_parity.yaml)
+harbor trial start -p datasets/motifbench/macbeth-act1-s1-s2 -a mini-swe-agent -m "openai/gpt-5.4-mini"
 ```
 
 ## Usage: Create Task Directories
@@ -138,37 +140,48 @@ Available flags:
 
 ## Comparison with Original Benchmark (Parity)
 
-Parity experiments follow Harbor **Scenario 2** (LLM-based non-agentic benchmark adapted with a matching `codex` runner on both the upstream evaluation harness and Harbor). Both sides read the same cleaned export (`macbeth_full.txt`, `macbeth_full.pdf`, `motifs_clean.json`, `macbeth_clean.jsonl`) and the same rendered `instruction.md`, whose read-only inputs are `/app/macbeth.txt`, `/app/macbeth.pdf`, `/app/motifs.json`, and `/app/queries.json`. The upstream runner is `scripts/motifbench_harbor/run_parity_codex.py` in the Critic's Eye repository. It rebuilds the Harbor tasks, stages those `/app` inputs, scores with `scripts/motifbench_harbor/evaluate.py` (`Hit@5`, `Hit@1`, `Hit@10`, `MRR@20`, `nDCG@10`, and micro-averaged `Hit@5`), and writes `result_original_trial{n}.json` plus a mean ± sample SEM summary. Live model numbers stay pending Harbor-team approval of `parity_experiment.json`. The deterministic oracle path scores **1.0000** micro Hit@5 on all 12 scene-group tasks / 270 queries.
+Parity experiments follow Harbor **Scenario 2**. Both sides run `mini-swe-agent==2.2.8` with `openai/gpt-5.4-mini` through LiteLLM chat completions (`model_api_format = openai_chat_completions`). They read the same cleaned export (`macbeth_full.txt`, `macbeth_full.pdf`, `motifs_clean.json`, `macbeth_clean.jsonl`) and the same rendered `instruction.md`, whose read-only inputs are `/app/macbeth.txt`, `/app/macbeth.pdf`, `/app/motifs.json`, and `/app/queries.json`. The upstream runner is `scripts/motifbench_harbor/run_parity_mini_swe_agent.py` in the Critic's Eye repository (`Acture/critics-eye@harbor-parity`). It rebuilds the Harbor tasks, stages those `/app` inputs, scores with `scripts/motifbench_harbor/evaluate.py` (`Hit@5`, `Hit@1`, `Hit@10`, `MRR@20`, `nDCG@10`, and micro-averaged `Hit@5`), and writes `result_original_trial{n}.json` plus a mean ± sample SEM summary. The deterministic oracle path scores **1.0000** on all 12 scene-group tasks / 270 queries, and the NOP path scores **0.0000** (`harbor lint` empty).
+
+Primary `Hit@5 (micro)` is `score_sum / 270`. `Hit@5 (macro)` is the unweighted mean of the 12 task rewards. Sample SEM is `stdev / sqrt(3)`. The two micro ranges overlap (`max(original) >= min(harbor)` and `max(harbor) >= min(original)`). Offline rescore of all 36 Harbor `predictions.json` files matches `reward.json` with max absolute difference 0. Harbor run 3's agent trials are the paid source; its verifier rewards come from `harbor jobs regrade` after the separate-verifier no-network probe failed under load. Agent predictions were not rerun.
 
 | Agent | Model | Metric | Number of Runs | Dataset Size | Original Benchmark Performance | Harbor Adapter Performance |
 |-------|-------|--------|------------------|--------------|------------------------------|----------------------------|
-| TBD | TBD | Hit@5 (micro) | 3 | 12 (270 queries) | Pending | Pending |
+| mini-swe-agent@2.2.8 | openai/gpt-5.4-mini | Hit@5 (micro) | 3 | 12 (270 queries) | 0.2901 +/- 0.0193 | 0.2593 +/- 0.0119 |
+| mini-swe-agent@2.2.8 | openai/gpt-5.4-mini | Hit@5 (macro) | 3 | 12 (270 queries) | 0.2977 +/- 0.0197 | 0.2663 +/- 0.0095 |
 
-Reproduction commands. Upstream, from the Critic's Eye checkout. `--mode oracle` and `--mode dry-run` do not call a paid API:
+Original micro runs: 0.32222222222222224, 0.25555555555555554, 0.29259259259259257. Harbor micro runs: 0.2777777777777778, 0.23703703703703705, 0.26296296296296295. Query-weighted means over the same three runs: Hit@1 0.1074 +/- 0.0057 vs 0.0741 +/- 0.0021, Hit@10 0.2914 +/- 0.0203 vs 0.2617 +/- 0.0125, MRR@20 0.1735 +/- 0.0059 vs 0.1435 +/- 0.0056, nDCG@10 0.1547 +/- 0.0056 vs 0.1272 +/- 0.0044. Spend is original $0.68481615, Harbor $0.53542530, and a 2-task pilot $0.04940985 (combined $1.26965130).
+
+- **Adapter PR:** <https://github.com/harbor-index/adapters/pull/35>
+- **Dataset Registry PR:** <https://github.com/harbor-framework/harbor-datasets/pull/301>
+- **Parity Experiments PR:** <https://huggingface.co/datasets/harborframework/parity-experiments/discussions/302> (complete 722-file mirror: <https://huggingface.co/datasets/Acture/motifbench-parity-experiments>)
+- **Upstream Scenario-2 Harness:** <https://github.com/Acture/critics-eye/tree/harbor-parity>
+
+Reproduction commands. Upstream, from `Acture/critics-eye@harbor-parity`. `--mode oracle` and `--mode dry-run` do not call a paid API (when `--data-dir` is omitted, the pinned revision `Acture/MotifBench@12fadc6a46aa8d2fcc7848777574122afeccf59f` is downloaded automatically):
 
 ```bash
-uv run python scripts/motifbench_harbor/run_parity_codex.py \
+python3 scripts/motifbench_harbor/run_parity_mini_swe_agent.py \
   --mode oracle \
-  --data-dir /home/actur/data/motifbench_harbor/macbeth \
-  --harbor-root /home/actur/repos/harbor \
   --granularity scene-group \
   --split parity \
-  --runs 1
+  --runs 1 \
+  --output-dir /tmp/motifbench-oracle
 ```
 
-`--mode dry-run` only stages `/app` and the instruction text. The paid path is explicit: `--mode codex --model openai/gpt-5-mini --codex-version 0.117.0 --runs 3` with `OPENAI_API_KEY` set.
+`--mode dry-run` only stages `/app` and the instruction text. The paid path is `--mode mini-swe --model openai/gpt-5.4-mini --agent-version 2.2.8 --timeout-sec 1200 --concurrency 4`. Set the environment variable named `OPENAI_API_KEY` in the process environment before launching. Do not print it. Repeat `--output-dir` for `run1`, `run2`, and `run3`.
 
-Harbor side, from this repository root, with the standalone Harbor CLI:
+Harbor side, from this repository root, with the standalone Harbor CLI. The same environment variable is read through `model_api_key_name`:
 
 ```bash
-harbor run -c src/motifbench/run_motifbench_parity_codex.yaml
+harbor run -c src/motifbench/run_motifbench_parity.yaml --job-name motifbench-parity-run1
+harbor run -c src/motifbench/run_motifbench_parity.yaml --job-name motifbench-parity-run2
+harbor run -c src/motifbench/run_motifbench_parity.yaml --job-name motifbench-parity-run3
 ```
 
 ## Notes & Caveats
 
 - **Anti-leakage sanitization:** From the 277 raw motifs and 585 line rows in `Acture/MotifBench` (`macbeth/macbeth.jsonl`), the cleaning pipeline removes 19 motifs containing explicit Act/Scene/Line citations, 40 passage-pointer descriptors (e.g., `"the passage at 1.2.40"`, `"the line 'he loves us not'"`), and 60 local-window (±15 lines) verbatim 3-gram pairs. This yields 218 motifs, 270 query lines, and 449 pairs with 96.4% zero content-word overlap and 36.5% >50-line dispersion.
 - **Partial observation:** Published criticism is selective rather than exhaustive; an unrecorded motif is not necessarily wrong. Accordingly, the primary metric is query-averaged **Hit@5** (top-5 recovery), which is monotonic under additional valid observations.
-- **Verifier isolation:** `task.toml` uses schema 1.3, `artifacts = ["/workspace/predictions.json"]`, and `[verifier] environment_mode = "separate"`. Both the agent environment and the verifier environment set `network_mode = "no-network"`. Harbor copies the artifact into the verifier container at `/workspace/predictions.json`; `tests/Dockerfile` bakes `test.sh`, `verifier.py`, and `ground_truth.json` into `/tests/` with no extra packages.
+- **Verifier isolation:** `task.toml` uses schema 1.3, `artifacts = ["/workspace/predictions.json"]`, and `[verifier] environment_mode = "separate"`. The agent environment does not set `network_mode`. The verifier environment sets `network_mode = "no-network"`. Harbor copies the artifact into the verifier container at `/workspace/predictions.json`; `tests/Dockerfile` bakes `test.sh`, `verifier.py`, and `ground_truth.json` into `/tests/` with no extra packages.
 - **Reward schema:** `verifier.py` writes `/logs/verifier/reward.json` with `"reward"` (`Hit@5`) as the alphabetically first key, alongside `score_hit_at_1`, `score_hit_at_5`, `score_hit_at_10`, `score_mrr_at_20`, `score_ndcg_at_10`, `score_sum`, and `total_queries`.
 - **Licensing:** Primary text derives from the Folger Digital Edition of *Macbeth* (CC BY-NC 3.0); dataset release is CC BY-NC 4.0.
 
@@ -208,4 +221,4 @@ This adapter is developed and maintained by [Xinyu Sun](mailto:sunxy23@m.fudan.e
 
 ## Acknowledgement
 
-API inference compute for running parity tests will be acknowledged here if supported by Harbor team credits.
+The 3×12 parity runs plus the 2-task pilot used $1.26965130 of API spend (original $0.68481615, Harbor $0.53542530, pilot $0.04940985).

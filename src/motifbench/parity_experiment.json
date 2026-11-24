@@ -1,21 +1,55 @@
 [
   {
     "adapter_name": "motifbench",
-    "agent": "TBD",
-    "model": "TBD",
+    "agent": "mini-swe-agent@2.2.8",
+    "model": "openai/gpt-5.4-mini",
     "date": "2026-11-23",
+    "number_of_runs": 3,
     "adapted_benchmark_size": 12,
     "parity_benchmark_size": 12,
-    "notes": "Scenario-2 model parity is pending Harbor-team approval before [Ready for review]. original and harbor stay null so unpublished scores are not invented. The deterministic oracle path is a verifier check, not a parity score.",
-    "adapter_pr": null,
-    "dataset_pr": null,
-    "parity_pr": null,
+    "original_parity_repo": "https://github.com/Acture/critics-eye/tree/harbor-parity",
+    "adapter_pr": [
+      "https://github.com/harbor-index/adapters/pull/35"
+    ],
+    "dataset_pr": [
+      "https://github.com/harbor-framework/harbor-datasets/pull/301"
+    ],
+    "parity_pr": [
+      "https://huggingface.co/datasets/harborframework/parity-experiments/discussions/302"
+    ],
+    "notes": "Scenario-2 parity uses Harbor's mini-swe-agent 2.2.8 with openai/gpt-5.4-mini through LiteLLM openai_chat_completions. Each side ran 3 full passes of the 12 scene-group tasks (270 queries). Primary metric is query-micro Hit@5 (score_sum / total_queries). Harbor run 3's agent trials finished, then the separate verifier was regraded with harbor jobs regrade after a Docker no-network probe failure; predictions were not regenerated. Offline rescore of all 36 Harbor predictions.json files against reward.json has max absolute difference 0. Sample SEM is stdev / sqrt(n). Complete 722-file parity and oracle artifact mirror: https://huggingface.co/datasets/Acture/motifbench-parity-experiments.",
     "metrics": [
       {
         "benchmark_name": "MotifBench Macbeth scene-group",
         "metric": "Hit@5 (micro)",
-        "original": null,
-        "harbor": null
+        "original": "0.2901 +/- 0.0193",
+        "harbor": "0.2593 +/- 0.0119",
+        "original_runs": [
+          0.32222222222222224,
+          0.25555555555555554,
+          0.29259259259259257
+        ],
+        "harbor_runs": [
+          0.2777777777777778,
+          0.23703703703703705,
+          0.26296296296296295
+        ]
+      },
+      {
+        "benchmark_name": "MotifBench Macbeth scene-group",
+        "metric": "Hit@5 (macro)",
+        "original": "0.2977 +/- 0.0197",
+        "harbor": "0.2663 +/- 0.0095",
+        "original_runs": [
+          0.33145575,
+          0.26337275,
+          0.2982105
+        ],
+        "harbor_runs": [
+          0.28114666666666666,
+          0.24851366666666666,
+          0.26931466666666665
+        ]
       }
     ]
   }

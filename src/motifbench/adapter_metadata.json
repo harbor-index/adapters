@@ -25,10 +25,12 @@
         "parity_sampling_rate": 1.0,
         "registry_benchmark_size": 12,
         "added_agents": null,
-        "parity_matching_agents": [],
+        "parity_matching_agents": [
+          "mini-swe-agent@2.2.8 + openai/gpt-5.4-mini"
+        ],
         "parity_unmatching_agents": null,
-        "parity_costs": null,
-        "notes": "Pending Scenario-2 parity runs with Harbor team approval."
+        "parity_costs": "$1.26965130",
+        "notes": "Scenario-2 parity, 2026-11-23: mini-swe-agent 2.2.8 + openai/gpt-5.4-mini, 3 runs x 12 tasks x 2 sides (270 queries each). Original $0.68481615, Harbor $0.53542530, 2-task pilot $0.04940985, combined $1.26965130. Primary Hit@5 (micro) original 0.2901 +/- 0.0193, Harbor 0.2593 +/- 0.0119; ranges overlap. Offline rescore max abs diff 0."
       }
     ]
   }
