@@ -1,0 +1,20 @@
+[project]
+name = "harbor-explicit-edit-adapter"
+version = "0.1.0"
+description = "Harbor adapter for the Explicit Edit Benchmark (byte-exact explicit file edits)"
+readme = "README.md"
+authors = [
+    { name = "SeraphimHuang", email = "104009197+SeraphimHuang@users.noreply.github.com" }
+]
+requires-python = ">=3.12"
+dependencies = []
+
+[project.scripts]
+explicit-edit = "explicit_edit.main:main"
+
+[build-system]
+requires = ["uv_build>=0.8.19,<0.9.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "explicit_edit"
