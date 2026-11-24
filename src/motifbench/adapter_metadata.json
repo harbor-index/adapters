@@ -1,0 +1,37 @@
+[
+  {
+    "adapter_name": "motifbench",
+    "adapter_builders": [
+      {
+        "name": "Xinyu Sun",
+        "email": "sunxy23@m.fudan.edu.cn"
+      }
+    ],
+    "original_benchmark": [
+      {
+        "split": "test",
+        "size": 12,
+        "harness": "llm",
+        "supported_agents": null,
+        "adaptable": true,
+        "notes": "MotifBench (Critic's Eye, EMNLP 2026 Findings) Macbeth benchmark from Acture/MotifBench. After anti-leakage sanitization (removing 19 explicit Act/Scene/Line citation motifs, 40 passage-pointer motifs, and 60 local ±15-line verbatim 3-gram pairs), 218 clean candidate motifs and 270 query lines (449 pairs, 96.4% zero content-word overlap) are grouped into 12 contiguous Act-respecting scene-group tasks (13-36 queries/task; single-query 270-task mode also supported via --granularity query). Full play provided in both TXT and PDF formats under /app/."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "test",
+        "adapted_benchmark_size": 12,
+        "parity_benchmark_size": 12,
+        "parity_sampling_rate": 1.0,
+        "registry_benchmark_size": 12,
+        "added_agents": null,
+        "parity_matching_agents": [
+          "mini-swe-agent@2.2.8 + openai/gpt-5.4-mini"
+        ],
+        "parity_unmatching_agents": null,
+        "parity_costs": "$1.26965130",
+        "notes": "Scenario-2 parity, 2026-11-23: mini-swe-agent 2.2.8 + openai/gpt-5.4-mini, 3 runs x 12 tasks x 2 sides (270 queries each). Original $0.68481615, Harbor $0.53542530, 2-task pilot $0.04940985, combined $1.26965130. Primary Hit@5 (micro) original 0.2901 +/- 0.0193, Harbor 0.2593 +/- 0.0119; ranges overlap. Offline rescore max abs diff 0."
+      }
+    ]
+  }
+]

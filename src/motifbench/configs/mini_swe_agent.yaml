@@ -1,0 +1,8 @@
+agent:
+  step_limit: 40
+  cost_limit: 1.0
+environment:
+  timeout: 60
+model:
+  model_kwargs:
+    drop_params: true
