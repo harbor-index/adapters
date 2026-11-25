@@ -1,0 +1,27 @@
+# Parity configuration (Harbor side). Run once per parity run (3 runs).
+# Keep agent version, model and kwargs identical to the original-side runner
+# (harbor_parity/run_codex_original.py in the parity fork).
+jobs_dir: jobs
+n_attempts: 1
+timeout_multiplier: 1.0
+orchestrator:
+  type: local
+  n_concurrent_trials: 8
+  quiet: false
+environment:
+  type: daytona
+  # type: docker
+  force_build: true
+  delete: true
+  env:
+    OPENAI_API_KEY: ${OPENAI_API_KEY}
+    OPENAI_BASE_URL: ${OPENAI_BASE_URL}
+    DAYTONA_API_KEY: ${DAYTONA_API_KEY}
+agents:
+  - name: codex
+    model_name: openai/TODO_MODEL
+    kwargs:
+      version: "TODO_CODEX_VERSION"
+      reasoning_effort: low
+datasets:
+  - path: datasets/cmphysbench

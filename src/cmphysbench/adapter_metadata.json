@@ -1,0 +1,40 @@
+[
+  {
+    "adapter_name": "cmphysbench",
+    "adapter_builders": [
+      "dreiw2580 (360579977+dreiw2580@users.noreply.github.com)"
+    ],
+    "original_benchmark": [
+      {
+        "split": "full",
+        "size": 96,
+        "harness": "llm",
+        "supported_agents": [
+          "None"
+        ],
+        "adaptable": true,
+        "notes": "CMPhysBench has 520 problems; only 100 have public reference answers (final_answer). 2 of those (ids 55, 74) contain \\int/\\sum, which upstream SEED always scores 0, 2 more (ids 56, 89) state the answer in the question, so 96 are adaptable. Upstream harness: vLLM single call + first boxed answer + SEED."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "full",
+        "adapted_benchmark_size": 96,
+        "parity_benchmark_size": 96,
+        "parity_sampling_rate": 1.0,
+        "registry_benchmark_size": 96,
+        "added_agents": [
+          "None"
+        ],
+        "parity_matching_agents": [
+          "codex@TODO_CODEX_VERSION+TODO_MODEL"
+        ],
+        "parity_unmatching_agents": [
+          "None"
+        ],
+        "parity_costs": "TODO_USD",
+        "notes": "Parity on all 96 tasks, 3 runs per side. Original side: codex in a fork of CMPhysBench/CMPhysBench scored with upstream SEED."
+      }
+    ]
+  }
+]

@@ -1,0 +1,40 @@
+[
+  {
+    "adapter_name": "cmphysbench",
+    "agent": "codex@TODO_CODEX_VERSION",
+    "model": "TODO_MODEL",
+    "date": "TODO_YYYY-MM-DD",
+    "adapted_benchmark_size": 96,
+    "parity_benchmark_size": 96,
+    "number_of_runs": 3,
+    "notes": "TODO: Harbor revision, reasoning_effort, Harbor side on Daytona, original side on local Docker (same image packages, codex version and flags). Metrics are per-run means over 96 tasks; mean +/- sample SEM over runs.",
+    "original_parity_repo": "https://github.com/dreiw2580/CMPhysBench/tree/harbor-parity",
+    "adapter_pr": [
+      "https://github.com/harbor-index/adapters/pull/45"
+    ],
+    "dataset_pr": [
+      "https://github.com/laude-institute/harbor-datasets/pull/TODO"
+    ],
+    "parity_pr": [
+      "https://huggingface.co/datasets/harborframework/parity-experiments/discussions/TODO"
+    ],
+    "metrics": [
+      {
+        "benchmark_name": "CMPhysBench",
+        "metric": "SEED score",
+        "original": "TODO ± TODO",
+        "harbor": "TODO ± TODO",
+        "original_runs": [],
+        "harbor_runs": []
+      },
+      {
+        "benchmark_name": "CMPhysBench",
+        "metric": "Accuracy (%)",
+        "original": "TODO ± TODO",
+        "harbor": "TODO ± TODO",
+        "original_runs": [],
+        "harbor_runs": []
+      }
+    ]
+  }
+]
