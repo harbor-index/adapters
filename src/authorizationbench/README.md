@@ -223,6 +223,15 @@ upstream entry point `evaluation/run_eval.py --harness openhands --prompt native
 - **Upstream quirks kept as-is.** Service audit entries carry the task's narrative-clock
   timestamps while agent steps carry wall-clock time, which affects how the upstream renderer
   interleaves them; the Slack `webapp_private` file is not loaded, as in the production runner.
+- **Files missing from the public release.** In 35 tasks the released workspace lacks files that
+  the upstream Stage 5 receipts list in the initial workspace (mostly dotfiles and
+  credential-like fixtures: `T0004-*` ×8 and `T0026-*` ×16 `~/.ssh`, `.npmrc`, `.pypirc`, ...;
+  `T0012-b-c-h` `.git/` and `.forge/`; `T0024-*` ×10 `.gitkeep`). The adapter uses the release
+  as published, the same input the original-side parity runs use. _TODO_: link the upstream
+  issue once filed.
+- **Receipt tool names.** `T0008-j-f-h` and `T0008-n-f-h` run the `shopping_app_instacart`
+  template under the service id `shopping_app_venuepass`; the oracle maps the receipts'
+  template-named tools to the service id the agent's MCP tools use.
 - _TODO_: excluded tasks (if any) after oracle verification.
 
 ## Installation / Prerequisites
