@@ -97,7 +97,7 @@ EXCLUDED_INSTANCES: dict[str, str] = {
 
 # Parity subset: a fixed random sample of the sorted, non-excluded instance ids.
 PARITY_SEED = 42
-PARITY_SIZE = 50
+PARITY_SIZE = 20
 
 # The CMD statement of an upstream env-spec Dockerfile (same shape as the last
 # group of susvibes.env_specs.constants.DOCKERFILE_PATTERN).

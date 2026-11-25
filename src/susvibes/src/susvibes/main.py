@@ -58,7 +58,7 @@ def main() -> None:
         "--split",
         choices=["full", "parity"],
         default="full",
-        help="'full' generates the 178 adapted instances; 'parity' the fixed 50-task subset",
+        help="'full' generates the 178 adapted instances; 'parity' the fixed 20-task subset",
     )
     parser.add_argument(
         "--susvibes-root",

@@ -35,7 +35,7 @@ The paper evaluates SWE-agent, OpenHands and Claude Code with several models. Wi
 - `tests/sv_eval.py` contains copies of the original functions that filter the patch, parse the test logs and compare failure counts. It only needs the Python standard library, so it runs on the interpreter already in the image
 - Writes `reward.json` with `reward` (same as `sec_pass`), `func_pass` and `sec_pass`, plus a `report.json` in the original per-instance format and the logs of both test runs
 - `solution/solve.sh` applies the golden patch. All 178 tasks get reward 1.0 with the oracle agent
-- `--split parity` generates a fixed 50-task subset (seed 42)
+- `--split parity` generates a fixed 20-task subset (seed 42)
 
 ## Generated Task Structure
 
@@ -138,7 +138,7 @@ Available flags:
 - `--limit`: generate only the first N tasks
 - `--overwrite`: overwrite existing tasks
 - `--task-ids`: generate only these tasks, given as SusVibes instance ids
-- `--split`: `full` (default, 178 tasks) or `parity` (the 50-task parity subset)
+- `--split`: `full` (default, 178 tasks) or `parity` (the 20-task parity subset)
 - `--susvibes-root`: read the upstream files from a local checkout of `LeiLiLab/susvibes` at the pinned commit instead of downloading them
 - `--cache-dir`: where downloaded upstream files are cached (default: `~/.cache/harbor-susvibes-adapter`)
 
@@ -157,12 +157,12 @@ Reproduction steps (these will be updated once the parity fork of the original r
   ```bash
   cd evaluation_harness/claude_code
   export ANTHROPIC_API_KEY=<key> ANTHROPIC_MODEL=<model>
-  python batch_run_docker.py --jsonl_file <parity_subset.jsonl> --num_instances 50 --model <label>
+  python batch_run_docker.py --jsonl_file <parity_subset.jsonl> --num_instances 20 --model <label>
   python convert.py --input_dir results/<label>/<timestamp>
   cd ../..
   python -m susvibes.eval.core --run_id parity --predictions_path <the .trials.json written by convert.py> --max_workers 4
   ```
-  `<parity_subset.jsonl>` holds the lines of `datasets/default/susvibes_dataset.jsonl` whose `instance_id` is one of the 50 task directories that `--split parity` generates.
+  `<parity_subset.jsonl>` holds the lines of `datasets/default/susvibes_dataset.jsonl` whose `instance_id` is one of the 20 task directories that `--split parity` generates.
 - Harbor adapter:
   ```bash
   cd src/susvibes && uv run susvibes --split parity --output-dir ../../datasets/susvibes-parity && cd ../..

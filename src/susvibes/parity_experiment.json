@@ -5,7 +5,7 @@
     "model": "TBD",
     "date": "TBD",
     "adapted_benchmark_size": 178,
-    "parity_benchmark_size": 50,
+    "parity_benchmark_size": 20,
     "number_of_runs": null,
     "notes": "Parity experiments have not been run yet; this entry is a placeholder until the parity plan is agreed with the Harbor team.",
     "original_parity_repo": "https://github.com/LeiLiLab/susvibes",
