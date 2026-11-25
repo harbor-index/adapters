@@ -64,6 +64,7 @@ src/susvibes/
 ├── parity_experiment.json
 ├── pyproject.toml
 ├── run_susvibes.yaml
+├── run_susvibes_parity.yaml      # Harbor job config of the parity runs
 ├── parity/
 │   ├── setup-env-parity.sh       # setup script given to the original runner for parity
 │   └── parity_task_ids.txt       # the 20 parity tasks
@@ -179,6 +180,7 @@ Reproduction steps:
     --ak allowed_tools=Bash,Edit,Write,Read,Glob,Grep,LS,WebFetch,NotebookEdit,NotebookRead,TodoRead,TodoWrite,Agent \
     --ae FORCE_AUTO_BACKGROUND_TASKS=1 --ae ENABLE_BACKGROUND_TASKS=1
   ```
+  `src/susvibes/run_susvibes_parity.yaml` has the same settings as a job config (`harbor run -c src/susvibes/run_susvibes_parity.yaml`).
 
 Harbor's `reward` is the per-task SecPass result, so the mean reward of a run is the SecPass rate, and `func_pass` in `reward.json` gives FuncPass. The original evaluator reports the same two rates as `sec_pass` and `func_pass` in `summary.json`, over all instances it was given. Harbor's mean leaves out errored trials, so for parity both rates are computed over all tasks and errored trials count as not passed.
 
