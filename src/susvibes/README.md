@@ -64,6 +64,9 @@ src/susvibes/
 ├── parity_experiment.json
 ├── pyproject.toml
 ├── run_susvibes.yaml
+├── parity/
+│   ├── setup-env-parity.sh       # setup script given to the original runner for parity
+│   └── parity_task_ids.txt       # the 20 parity tasks
 └── src/susvibes/
     ├── __init__.py
     ├── adapter.py
@@ -144,34 +147,42 @@ Available flags:
 
 ## Comparison with Original Benchmark (Parity)
 
-Parity experiments have not been run yet. The plan is Claude Code on both sides, with the same version and model: the original runner (`evaluation_harness/claude_code`, scored with `python -m susvibes.eval.core`) against Harbor's `claude-code` agent on the parity subset.
+Parity was run with Claude Code on both sides: the original runner (`evaluation_harness/claude_code`, scored with `python -m susvibes.eval.core`) against Harbor's `claude-code` agent, on the 20-task parity subset, 3 runs per side.
 
 | Agent | Model | Metric | Number of Runs | Dataset Size | Original Benchmark Performance | Harbor Adapter Performance |
 |-------|-------|--------|----------------|--------------|--------------------------------|----------------------------|
-| TBD | TBD | SecPass (%) | TBD | TBD | TBD | TBD |
-| TBD | TBD | FuncPass (%) | TBD | TBD | TBD | TBD |
+| claude-code@2.1.330 | claude-haiku-4-5-20251001 | SecPass (%) | 3 | 20 of 178 tasks (11.2%) | 6.67 ± 1.6667 | 3.33 ± 1.6667 |
+| claude-code@2.1.330 | claude-haiku-4-5-20251001 | FuncPass (%) | 3 | 20 of 178 tasks (11.2%) | 66.67 ± 1.6667 | 68.33 ± 1.6667 |
 
-Reproduction steps (these will be updated once the parity fork of the original repository exists):
+Values are mean ± sample SEM over the runs. Per run, SecPass was 5, 10, 5 on the original side and 5, 5, 0 in Harbor. FuncPass was 65, 65, 70 and 65, 70, 70. The run ranges overlap for both metrics. With 20 tasks one task is 5 points, so SecPass comes down to 0 to 2 tasks per run. All 120 task runs ended with a verdict: there were no agent errors, no evaluation errors and no empty patches on either side.
 
-- Original benchmark: clone [LeiLiLab/susvibes](https://github.com/LeiLiLab/susvibes) at commit `5d957e6f1850595623d551d089193532e6fa60ce` and install it (`pip install -r requirements.txt && pip install -e .`). The Claude Code runner takes the model from the `ANTHROPIC_MODEL` environment variable (`--model` only names the results directory) and installs the Claude Code version pinned in `setup-env.sh` (`1.0.128` upstream). Run it on the parity instances, convert the results, and score them:
+What was the same on both sides: Claude Code 2.1.330, the model, the prompt, the task images, the working directory `/project`, the 3000 second agent timeout, `CLAUDE_CODE_MAX_OUTPUT_TOKENS=50000`, the default permission mode and the tool list of the original runner. The original runner was not modified. It takes a setup script as an option, and `parity/setup-env-parity.sh` installs Claude Code with the same command and version that Harbor's agent uses (the original script pins `1.0.128`). Harbor ran version 0.27.0.
+
+Reproduction steps:
+
+- Original benchmark: clone [LeiLiLab/susvibes](https://github.com/LeiLiLab/susvibes) at commit `5d957e6f1850595623d551d089193532e6fa60ce` and install it (`pip install -r requirements.txt && pip install -e .`). The runner takes the model from the `ANTHROPIC_MODEL` environment variable (`--model` only names the results directory). Copy `parity/setup-env-parity.sh` from this adapter into `evaluation_harness/claude_code`, then:
   ```bash
   cd evaluation_harness/claude_code
-  export ANTHROPIC_API_KEY=<key> ANTHROPIC_MODEL=<model>
-  python batch_run_docker.py --jsonl_file <parity_subset.jsonl> --num_instances 20 --model <label>
-  python convert.py --input_dir results/<label>/<timestamp>
+  export ANTHROPIC_API_KEY=<key> ANTHROPIC_MODEL=claude-haiku-4-5-20251001 CLAUDE_CODE_MAX_OUTPUT_TOKENS=50000
+  python batch_run_docker.py --jsonl_file <parity_subset.jsonl> --num_instances 20 --model parity --setup_script setup-env-parity.sh
+  python convert.py --input_dir results/parity/<timestamp>
   cd ../..
-  python -m susvibes.eval.core --run_id parity --predictions_path <the .trials.json written by convert.py> --max_workers 4
+  python -m susvibes.eval.core --run_id parity --predictions_path <the .trials.json written by convert.py> --max_workers 2 --instance_ids '<JSON list of the 20 ids>'
   ```
-  `<parity_subset.jsonl>` holds the lines of `datasets/default/susvibes_dataset.jsonl` whose `instance_id` is one of the 20 task directories that `--split parity` generates.
+  `<parity_subset.jsonl>` holds the lines of `datasets/default/susvibes_dataset.jsonl` whose `instance_id` is listed in `parity/parity_task_ids.txt`. These are the task directories that `--split parity` generates.
 - Harbor adapter:
   ```bash
   cd src/susvibes && uv run susvibes --split parity --output-dir ../../datasets/susvibes-parity && cd ../..
-  harbor run -p datasets/susvibes-parity -a claude-code -m "<model>" --ak version=<the Claude Code version used on the original side>
+  export ANTHROPIC_API_KEY=<key> CLAUDE_CODE_MAX_OUTPUT_TOKENS=50000
+  harbor run -p datasets/susvibes-parity -a claude-code -m anthropic/claude-haiku-4-5-20251001 \
+    --ak version=2.1.330 --ak permission_mode=default \
+    --ak allowed_tools=Bash,Edit,Write,Read,Glob,Grep,LS,WebFetch,NotebookEdit,NotebookRead,TodoRead,TodoWrite,Agent \
+    --ae FORCE_AUTO_BACKGROUND_TASKS=1 --ae ENABLE_BACKGROUND_TASKS=1
   ```
 
 Harbor's `reward` is the per-task SecPass result, so the mean reward of a run is the SecPass rate, and `func_pass` in `reward.json` gives FuncPass. The original evaluator reports the same two rates as `sec_pass` and `func_pass` in `summary.json`, over all instances it was given. Harbor's mean leaves out errored trials, so for parity both rates are computed over all tasks and errored trials count as not passed.
 
-Links: [original benchmark](https://github.com/LeiLiLab/susvibes). The adapter PR, dataset PR and parity upload links will be added to `parity_experiment.json` once they exist.
+Links: [original benchmark](https://github.com/LeiLiLab/susvibes), [adapter PR](https://github.com/harbor-index/adapters/pull/33). The dataset PR and parity upload links will be added to `parity_experiment.json` once they exist.
 
 ## Notes & Caveats
 

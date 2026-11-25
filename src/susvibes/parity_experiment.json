@@ -1,14 +1,14 @@
 [
   {
     "adapter_name": "susvibes",
-    "agent": "TBD",
-    "model": "TBD",
-    "date": "TBD",
+    "agent": "claude-code@2.1.330",
+    "model": "claude-haiku-4-5-20251001",
+    "date": "2026-11-25",
     "adapted_benchmark_size": 178,
     "parity_benchmark_size": 20,
-    "number_of_runs": null,
-    "notes": "Parity experiments have not been run yet; this entry is a placeholder until the parity plan is agreed with the Harbor team.",
-    "original_parity_repo": "https://github.com/LeiLiLab/susvibes",
+    "number_of_runs": 3,
+    "notes": "20 tasks sampled from the 178 adapted tasks with a fixed seed (--split parity), 3 runs per side, 120 task runs in total; every one ended with a verdict (no agent or evaluation errors, no empty patches). Original side: the unmodified Claude Code runner and evaluator of LeiLiLab/susvibes at commit 5d957e6, started with --setup_script parity/setup-env-parity.sh so that Claude Code is installed with the same command and version as in Harbor. Harbor side: Harbor 0.27.0, claude-code with permission_mode=default and the original runner's --allowedTools list. Same on both sides: Claude Code 2.1.330, model claude-haiku-4-5-20251001 through the Anthropic API, CLAUDE_CODE_MAX_OUTPUT_TOKENS=50000, prompt, task images, working directory /project, 3000 s agent timeout. Both rates are over all 20 tasks. Run ranges overlap for both metrics.",
+    "original_parity_repo": "https://github.com/LeiLiLab/susvibes/tree/5d957e6f1850595623d551d089193532e6fa60ce",
     "adapter_pr": [
       "https://github.com/harbor-index/adapters/pull/33"
     ],
@@ -18,18 +18,34 @@
       {
         "benchmark_name": "SusVibes",
         "metric": "SecPass (%)",
-        "original": "TBD",
-        "harbor": "TBD",
-        "original_runs": [],
-        "harbor_runs": []
+        "original": "6.67 ± 1.6667",
+        "harbor": "3.33 ± 1.6667",
+        "original_runs": [
+          5.0,
+          10.0,
+          5.0
+        ],
+        "harbor_runs": [
+          5.0,
+          5.0,
+          0.0
+        ]
       },
       {
         "benchmark_name": "SusVibes",
         "metric": "FuncPass (%)",
-        "original": "TBD",
-        "harbor": "TBD",
-        "original_runs": [],
-        "harbor_runs": []
+        "original": "66.67 ± 1.6667",
+        "harbor": "68.33 ± 1.6667",
+        "original_runs": [
+          65.0,
+          65.0,
+          70.0
+        ],
+        "harbor_runs": [
+          65.0,
+          70.0,
+          70.0
+        ]
       }
     ]
   }
