@@ -1,0 +1,38 @@
+[
+  {
+    "adapter_name": "dare-bench",
+    "adapter_builders": [
+      "Abdul Waheed (abdulw@cs.cmu.edu)"
+    ],
+    "original_benchmark": [
+      {
+        "split": "test",
+        "size": 324,
+        "harness": "agent",
+        "supported_agents": [
+          "DARE-Bench agentic_reason loop (python_executor tool, SandboxFusion)"
+        ],
+        "adaptable": true,
+        "notes": "Public evaluation release: 162 entries x 2 question variants. The paper's 352-task full set and training data are not released."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "test",
+        "adapted_benchmark_size": 324,
+        "parity_benchmark_size": 30,
+        "parity_sampling_rate": 0.0926,
+        "registry_benchmark_size": 324,
+        "added_agents": [
+          "dare-bench-parity-agent"
+        ],
+        "parity_matching_agents": [
+          "dare-bench-parity-agent@1.3.0+gpt-6.1-sol"
+        ],
+        "parity_unmatching_agents": null,
+        "parity_costs": "$30",
+        "notes": "Parity on a fixed 30-task split (5 per category), 3 runs per side: original 0.791 \u00b1 0.017, Harbor 0.801 \u00b1 0.005. Run ranges overlap overall and in every category. Standard agent check: codex@0.171.0 + gpt-6.1-sol scores 0.806 \u00b1 0.009 on the same split (Harbor only)."
+      }
+    ]
+  }
+]

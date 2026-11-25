@@ -1,0 +1,46 @@
+schema_version = "1.0"
+# Only the prediction leaves the agent container; the verifier scores it in a fresh copy of the
+# task image, so nothing the agent changes (packages, interpreter, /tests) can affect grading.
+artifacts = ["/workspace/prediction.csv"]
+
+[task]
+name = "snowflake-labs/dare-bench__{task_id}"
+authors = [
+    {{ name = "Fan Shu" }},
+    {{ name = "Yite Wang" }},
+    {{ name = "Ruofan Wu" }},
+    {{ name = "Boyi Liu" }},
+    {{ name = "Zhewei Yao" }},
+    {{ name = "Yuxiong He" }},
+    {{ name = "Feng Yan" }},
+]
+keywords = ["data-science", "machine-learning", "dare-bench", "{task_type}", "{family}"]
+
+[metadata]
+difficulty = "medium"
+category = "data-science"
+source = "https://github.com/Snowflake-Labs/dare-bench"
+dare_file_path = "{file_path}"
+dare_variant = "{variant}"
+dare_task_type = "{task_type}"
+dare_family = "{family}"
+dare_metric = "{metric}"
+dataset_license = "{license}"
+
+[verifier]
+environment_mode = "separate"
+timeout_sec = 900.0
+
+[agent]
+# The paper's standard setting is 5 agent turns with a 200 s sandbox limit per code run
+# (about 1000 s of user wait time); this budget adds headroom for model latency.
+timeout_sec = 1200.0
+
+[environment]
+build_timeout_sec = 1800.0
+# Fits Daytona's default per-sandbox cap (4 vCPU / 8 GiB / 10 GiB). The full oracle gives
+# identical rewards at 8 GiB and 16 GiB.
+cpus = 4
+memory_mb = 8192
+storage_mb = 10240
+gpus = 0
