@@ -1,59 +1,59 @@
-# Refer to https://harborframework.com/docs/task-format for more details.
+schema_version = "1.4"
 
-schema_version = "1.0"
+# Evidence for the separate verifier. The sidecar entry is written by a
+# collect hook after the agent container has stopped.
+artifacts = []
 
-# =============================================================================
-# Task Section
-# Task identity, authors, and keywords.
-# =============================================================================
 [task]
-# Task name format: "<org>/<benchmark>__<task_id>", e.g. "openai/mmmlu__mmmlu-ar-xy-00000"
-# The adapter fills in {task_id} per task when rendering this template.
-name = "peach-research-lab/authorizationbench__{task_id}"
-
-# description = "Optional short description of the task."
-
-# Authors should be sourced from the benchmark's BibTeX citation.
+name = "{task_name}"
+description = "{description}"
 authors = [
     { name = "Zhiping Zhang" },
     { name = "Franklin Mingzhe Li" },
     { name = "Raio Zihao Huang" },
     { name = "Tianshi Li" },
 ]
+keywords = ["authorizationbench", "authorization", "agent-safety", "tool-use", "{domain}"]
 
-# Keywords for filtering and categorization.
-keywords = ["authorizationbench", "authorization", "agent-safety", "tool-use"]
-
-# =============================================================================
-# Metadata Section
-# =============================================================================
 [metadata]
-# Task difficulty: "easy", "medium", "hard"
-difficulty = "easy"
-
-# Category of the task (e.g., "programming", "debugging", "refactoring")
+difficulty = "medium"
 category = "agent-safety"
+upstream_task_id = "{task_id}"
+source_case_id = "{source_case_id}"
+case_type = "{case_type}"
+domain = "{domain}"
+direct_harm = "{harm}"
+situational_trigger = "{trigger}"
 
-# =============================================================================
-# Verifier Section
-# Settings for the verification/grading process
-# =============================================================================
-[verifier]
-# Maximum time (in seconds) allowed for verification to complete
-timeout_sec = 120.0
-
-# =============================================================================
-# Agent Section
-# Settings for the AI agent solving the task
-# =============================================================================
 [agent]
-# Maximum time (in seconds) allowed for the agent to complete the task
+# Upstream pauses the agent after 300 s of wall clock; standard Harbor agents
+# get a hard limit with headroom for agent start-up.
+timeout_sec = 600.0
+
+[verifier]
+timeout_sec = 900.0
+environment_mode = "separate"
+env = { AUTHZ_JUDGE_MODEL = "${AUTHZ_JUDGE_MODEL:-anthropic/claude-opus-5-5}", AUTHZ_JUDGE_API_KEY = "${AUTHZ_JUDGE_API_KEY}", AUTHZ_JUDGE_BASE_URL = "${AUTHZ_JUDGE_BASE_URL:-}", AUTHZ_JUDGE_COMPLETION_KWARGS = "${AUTHZ_JUDGE_COMPLETION_KWARGS:-}", AUTHZ_JUDGE_FALLBACK_MODEL = "${AUTHZ_JUDGE_FALLBACK_MODEL:-}" }
+
+[verifier.environment]
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 4096
+
+[[verifier.collect]]
+service = "authz-env"
+command = "python3 /opt/authz/collect.py"
 timeout_sec = 120.0
 
-# =============================================================================
-# Environment Section
-# Docker container and resource settings
-# =============================================================================
 [environment]
-# Maximum time (in seconds) allowed for building the Docker image
-build_timeout_sec = 600.0
+build_timeout_sec = 900.0
+cpus = 2
+memory_mb = 4096
+storage_mb = 10240
+env = { AUTHZ_ORACLE_MODEL = "${AUTHZ_ORACLE_MODEL:-openrouter/xiaomi/mimo-v2.6-pro}", AUTHZ_ORACLE_API_KEY = "${AUTHZ_ORACLE_API_KEY}", AUTHZ_ORACLE_BASE_URL = "${AUTHZ_ORACLE_BASE_URL:-}", AUTHZ_ORACLE_COMPLETION_KWARGS = "${AUTHZ_ORACLE_COMPLETION_KWARGS:-}" }
+
+[[environment.mcp_servers]]
+name = "authorization-bench"
+transport = "streamable-http"
+url = "http://authz-env:8000/mcp"

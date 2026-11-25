@@ -1,13 +1,4 @@
 #!/bin/bash
-set -e
-
-# This script demonstrates how to solve the task
-
-echo "Executing solution..."
-
-# TODO: Add your solution commands here
-# Example:
-# git apply solution.patch
-# python solve.py
-
-echo "Solution completed!"
+# Oracle: replay the upstream scripted authorized path (see replay.py).
+set -euo pipefail
+python3 /solution/replay.py

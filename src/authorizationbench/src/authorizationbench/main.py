@@ -40,6 +40,13 @@ def main() -> None:
         default=None,
         help="Only generate these task IDs",
     )
+    parser.add_argument(
+        "--source-dir",
+        type=Path,
+        default=None,
+        help="Existing AuthorizationBench checkout at the pinned commit "
+        "(default: fetch it into ~/.cache/harbor-authorizationbench)",
+    )
     args = parser.parse_args()
 
     adapter = AuthorizationBenchAdapter(
@@ -47,6 +54,7 @@ def main() -> None:
         overwrite=args.overwrite,
         limit=args.limit,
         task_ids=args.task_ids,
+        source_dir=args.source_dir,
     )
 
     adapter.run()

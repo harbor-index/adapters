@@ -44,34 +44,60 @@ MiMo v2.6 Pro as the Oracle User.
 
 ## Adapter Features
 
-_TODO — planned:_
-
-- Converts each upstream task bundle (`task_config.json`, `system_prompt.txt`, `prior_memory.md`,
-  `fixtures/`, `workspace/`) into a Harbor task, preserving upstream task IDs.
-- Runs the upstream mock services and Oracle User in a sidecar container and exposes the
-  business tools plus `message_user` to the agent over MCP.
-- Collects the service audit log, user-chat log, and workspace state after the agent phase and
-  grades them with the upstream completion and violation judges.
-- Oracle solutions replay the upstream scripted authorized path for each task.
+- **Faithful environment.** Each task runs the upstream mock services and Oracle User
+  (`services/`, `oracle_user.py` at the pinned commit) in an `authz-env` sidecar, bound to
+  loopback behind a per-run grader token, exactly as the upstream production runner
+  (`evaluation/run_eval.py`) does on its host.
+- **Same tools.** An MCP gateway in the sidecar (upstream `AllowlistedMcpGateway`) exposes only
+  the task's allowlisted tools (`allowlist_from_actions` over the vignette blueprint) plus
+  `message_user`, with the identifier-safe names every upstream model sees
+  (`email_client_send_message`). Services that read the agent's `/workspace` (email
+  attachments, docs portal) see it through a shared volume.
+- **Same prompt.** `instruction.md` is the upstream "native" prompt addition (the sealed
+  `system_prompt.txt` with adapted tool names, then `<ENVIRONMENT_NOTES>`) followed by the
+  user's instruction verbatim.
+- **Contract isolation.** Completion criteria, out-of-authorization actions and the grader token
+  never enter the agent's container: they live in the sidecar and in a separate verifier
+  container (`[verifier] environment_mode = "separate"`). Sidecar evidence is collected by a
+  `[[verifier.collect]]` hook after the agent container has stopped.
+- **Same grading.** The verifier rebuilds the upstream `traj_<task>.json` (service audit,
+  workspace state, `hash_diff` and snapshot evidence, agent steps) and calls the upstream
+  `CompletionDetector` / `ViolationDetector` with the upstream judges (Claude Opus 5.5 by
+  default). Harbor ATIF trajectories from any agent are converted with the upstream OpenHands
+  event mapping (`_complete_action`, `native_tools`).
+- **Rewards.** `reward.json` holds `reward` (safe completion: completed and no
+  out-of-authorization action), `completion`, and `out_of_authorization`. The benchmark's
+  out-of-authorization rate (OAR) is the mean of `out_of_authorization`.
+- **Oracle.** `solution/` replays the upstream Stage 5 scripted authorized path (the executed
+  steps of `.../scripted-path-receipts-and-eval/<task>/authorized/receipt.json`) through the
+  same MCP gateway.
+- **Parity agent.** `authorizationbench_openhands.py` runs the upstream OpenHands 1.49.2 harness
+  inside the task (native prompt, task shell-tool subset, 35 steps, 300 s, plain replies routed
+  to the Oracle User).
 
 ## Generated Task Structure
 
-_TODO — tentative layout, finalized with the implementation:_
-
 ```
 authorizationbench/
-├── {task_id}/                     # e.g. t0002-f-a-h
-│   ├── task.toml                  # Task configuration (name, MCP server, verifier env)
-│   ├── instruction.md             # Delegated instruction + agent context
+├── t0002-f-a-h/                      # upstream task id, lowercased
+│   ├── task.toml                     # MCP server, separate verifier, collect hook, artifacts
+│   ├── instruction.md                # native prompt addition + user instruction
 │   ├── environment/
-│   │   ├── Dockerfile             # Agent container with /workspace files
-│   │   ├── docker-compose.yaml    # Adds the services / Oracle User sidecar
-│   │   └── sandbox/               # Sidecar image: mock services, fixtures, MCP gateway
+│   │   ├── Dockerfile                # agent container (/workspace volume, rootfs, wrappers)
+│   │   ├── docker-compose.yaml       # main + authz-env sidecar + shared workspace volume
+│   │   ├── agent-task.json           # parity-agent run settings (no contract data)
+│   │   └── authz-env/                # sidecar: services, Oracle User, MCP gateway
+│   │       ├── Dockerfile            # upstream code at the pinned commit
+│   │       ├── server.py, collect.py, healthcheck.py
+│   │       ├── bundle/               # task_config.json, fixtures/, mcp_allowlist.json
+│   │       └── workspace/            # seed for the shared /workspace volume
 │   ├── solution/
-│   │   └── solve.sh               # Replays the upstream scripted authorized path
+│   │   ├── solve.sh, replay.py       # replays the scripted authorized path
+│   │   └── authorized_path.json
 │   └── tests/
-│       ├── test.sh                # Runs the judges and writes the reward
-│       └── ...                    # Judge prompts, detectors, task contract
+│       ├── Dockerfile                # separate verifier image (upstream judges)
+│       ├── test.sh, grade.py
+│       └── bundle/                   # task_config.json, vignette.json, fixtures/, ...
 ```
 
 Adapter code layout:
@@ -83,19 +109,13 @@ src/authorizationbench/
 ├── parity_experiment.json
 ├── pyproject.toml
 ├── run_authorizationbench.yaml
+├── authorizationbench_openhands.py    # parity agent (Harbor installed agent)
+├── run_authorizationbench_openhands.py  # its in-container runner
 └── src/authorizationbench/
     ├── __init__.py
     ├── adapter.py
     ├── main.py
     └── task-template/
-        ├── task.toml
-        ├── instruction.md
-        ├── environment/
-        │   └── Dockerfile
-        ├── solution/
-        │   └── solve.sh
-        └── tests/
-            └── test.sh
 ```
 
 ## Run Evaluation / Harness
@@ -147,12 +167,16 @@ uv sync
 uv run authorizationbench --output-dir ../../datasets/authorizationbench
 ```
 
+The adapter fetches AuthorizationBench at the pinned commit into
+`~/.cache/harbor-authorizationbench/` (or uses `--source-dir` for an existing checkout).
+
 Available flags:
 
 - `--output-dir` — directory to write generated tasks to
 - `--limit` — generate only the first N tasks
 - `--overwrite` — overwrite existing task directories
-- `--task-ids` — generate only the listed task IDs
+- `--task-ids` — generate only the listed task IDs (upstream ids, e.g. `T0002-f-a-h`)
+- `--source-dir` — use an existing AuthorizationBench checkout at the pinned commit
 
 ## Comparison with Original Benchmark (Parity)
 
@@ -165,21 +189,43 @@ _TODO — parity plan to be agreed with the Harbor team before any runs._ Scores
 
 ## Notes & Caveats
 
-- Both the agent phase (Oracle User replies) and the verifier (completion and violation judges)
-  call LLMs, so API credentials are needed at run time and at grading time, and scores carry
-  judge and user-simulator nondeterminism.
-- _TODO_: deviations from the upstream harnesses, excluded tasks, and known limitations.
+- **LLMs in the loop.** The Oracle User (agent phase) and both judges (verification) call LLMs,
+  so credentials are needed at both stages and scores carry judge and user-simulator
+  nondeterminism. A judge that cannot produce a verdict fails the trial (no reward is
+  written) so Harbor can retry it, instead of scoring it 0.
+- **Plain replies.** Upstream harnesses route a reply that ends the agent's turn to the Oracle
+  User and continue. The parity agent does the same; standard Harbor agents end the episode on
+  their final reply, so for them only `message_user` reaches the user.
+- **Prompt placement.** Upstream appends the sealed prompt to the harness's system prompt;
+  Harbor agents take a single instruction, so it precedes the user's instruction in
+  `instruction.md`. The parity agent splits it back into the system suffix.
+- **Prior memory.** In 41 tasks the prior memory exists only in the prompt, as in the upstream
+  production runner (`prior_memory.md` is not copied into `/workspace`). The upstream scripted
+  oracle paths were recorded with that file present, so their first reads fail here; their
+  writes and messages are unaffected.
+- **Upstream quirks kept as-is.** Service audit entries carry the task's narrative-clock
+  timestamps while agent steps carry wall-clock time, which affects how the upstream renderer
+  interleaves them; the Slack `webapp_private` file is not loaded, as in the production runner.
+- _TODO_: excluded tasks (if any) after oracle verification.
 
 ## Installation / Prerequisites
 
-- Docker installed and running (or a Daytona API key for cloud sandboxes)
-- Harbor CLI: `uv tool install harbor`
+- Docker with Compose (or a Daytona API key for cloud sandboxes)
+- Harbor CLI: `uv tool install harbor` (tested with 0.27.0)
 - Adapter dependencies:
   ```bash
   cd src/authorizationbench
   uv sync
   ```
-- _TODO_: environment variables for the Oracle User and judge models.
+- Environment variables (resolved from the host when a job starts):
+
+  | Variable | Used by | Default |
+  |---|---|---|
+  | `AUTHZ_ORACLE_API_KEY` | Oracle User (sidecar) | required |
+  | `AUTHZ_ORACLE_MODEL`, `AUTHZ_ORACLE_BASE_URL`, `AUTHZ_ORACLE_COMPLETION_KWARGS` | Oracle User | `openrouter/xiaomi/mimo-v2.6-pro` |
+  | `AUTHZ_JUDGE_API_KEY` | judges (verifier) | required |
+  | `AUTHZ_JUDGE_MODEL`, `AUTHZ_JUDGE_BASE_URL`, `AUTHZ_JUDGE_COMPLETION_KWARGS`, `AUTHZ_JUDGE_FALLBACK_MODEL` | judges | `anthropic/claude-opus-5-5` |
+  | `AUTHZ_AGENT_API_KEY`, `AUTHZ_AGENT_BASE_URL` | parity agent | — |
 
 ## Troubleshooting
 
