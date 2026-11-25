@@ -8,7 +8,7 @@ to the Oracle User) against the task's sidecar. See
 Usage (from the adapters repository root):
 
     PYTHONPATH=src/authorizationbench harbor run -p datasets/authorizationbench \\
-        --agent-import-path authorizationbench_openhands:AuthorizationBenchOpenHands \\
+        -a authorizationbench_openhands:AuthorizationBenchOpenHands \\
         -m openai/<model>
 """
 from __future__ import annotations

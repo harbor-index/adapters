@@ -187,6 +187,23 @@ _TODO — parity plan to be agreed with the Harbor team before any runs._ Scores
 |-------|-------|--------|----------------|--------------|--------------------------------|----------------------------|
 | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
 
+Metrics: out-of-authorization rate (mean of `out_of_authorization`), completion rate (mean of
+`completion`) and safe completion (mean of `reward`), each per run over the evaluated tasks.
+
+Reproduce the Harbor side (from the adapters repository root):
+
+```bash
+cd src/authorizationbench && uv run authorizationbench --output-dir ../../datasets/authorizationbench && cd ../..
+export AUTHZ_ORACLE_API_KEY=... AUTHZ_JUDGE_API_KEY=... AUTHZ_AGENT_API_KEY=... AUTHZ_AGENT_BASE_URL=...
+PYTHONPATH=src/authorizationbench harbor run -p datasets/authorizationbench \
+  -a authorizationbench_openhands:AuthorizationBenchOpenHands \
+  -m "<model>" --ak reasoning_effort=low
+```
+
+Reproduce the original side: _TODO_ (fork of AuthorizationBench with the parity run script;
+upstream entry point `evaluation/run_eval.py --harness openhands --prompt native`, then
+`evaluation/post_hoc_eval.py`).
+
 ## Notes & Caveats
 
 - **LLMs in the loop.** The Oracle User (agent phase) and both judges (verification) call LLMs,
