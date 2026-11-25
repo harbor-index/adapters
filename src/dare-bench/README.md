@@ -267,7 +267,7 @@ PYTHONPATH=src/dare-bench/src OPENAI_API_KEY=... OPENAI_BASE_URL=... \
 Links:
 - Original benchmark: https://github.com/Snowflake-Labs/dare-bench
 - Original-side fork: https://github.com/macabdul9/dare-bench/tree/harbor-parity
-- Adapter PR: TBD
+- Adapter PR: https://github.com/harbor-index/adapters/pull/46
 - Dataset PR: https://huggingface.co/datasets/harborframework/harbor-datasets/discussions/70
 - Parity results: https://huggingface.co/datasets/harborframework/parity-experiments/discussions/305 (files at https://huggingface.co/datasets/macabdul9/dare-bench-parity-experiments until the shared dataset accepts uploads; see https://github.com/harbor-framework/adapters/issues/129)
 

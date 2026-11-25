@@ -9,7 +9,9 @@
     "number_of_runs": 3,
     "notes": "Fixed seeded split of 30 tasks (5 per category; parity_task_ids.txt), 3 runs per side, mean +/- sample SEM over run means. Original = upstream harness at commit 01447145 with a 5-line patch (3 files) that routes gpt-6* names to upstream's existing gpt-5 Responses API path; Harbor = port of the same agent loop (5 turns, 200 s tool timeout, max_output_tokens 16384, reasoning effort high, summary auto, verbosity medium). Model served through an OpenAI-compatible LiteLLM gateway. 0 exceptions and 0 harness crashes in 180 runs. Harbor side used 1.67M input / 0.27M output tokens.",
     "original_parity_repo": "https://github.com/macabdul9/dare-bench/tree/harbor-parity",
-    "adapter_pr": [],
+    "adapter_pr": [
+      "https://github.com/harbor-index/adapters/pull/46"
+    ],
     "dataset_pr": [
       "https://huggingface.co/datasets/harborframework/harbor-datasets/discussions/70"
     ],
@@ -141,7 +143,9 @@
     "number_of_runs": 3,
     "notes": "Standard CLI agent run on the Harbor side only, showing the tasks work outside the custom 5-turn loop. Not comparable to the original harness (codex has a full shell and no turn limit) or to paper numbers. Same 30-task split, default codex settings, 1200 s agent timeout. Trials that hit the gateway's token rate limit were re-run (harbor jobs resume); 1 of 90 trials ended in an agent timeout and scores 0.",
     "original_parity_repo": null,
-    "adapter_pr": [],
+    "adapter_pr": [
+      "https://github.com/harbor-index/adapters/pull/46"
+    ],
     "dataset_pr": [
       "https://huggingface.co/datasets/harborframework/harbor-datasets/discussions/70"
     ],
