@@ -264,10 +264,19 @@ class AuthorizationBenchAdapter:
     def _write_solution(out: Path, source: Path, task_id: str, config: dict) -> None:
         receipt_path = source / RECEIPTS / task_id / "authorized" / "receipt.json"
         receipt = json.loads(receipt_path.read_text())
+        # Receipts name service tools by template; the environment and the MCP
+        # allowlist use the service id. They differ for a few expanded tasks
+        # (e.g. id shopping_app_venuepass, template shopping_app_instacart).
+        by_template = {s["template"]: s["id"] for s in config.get("services") or []
+                       if s.get("id") and s.get("template") and s["id"] != s["template"]}
         steps = []
         for step in receipt["steps"]:
             if step.get("execution") == "tool":
-                steps.append({"index": step["index"], "tool": step["tool"],
+                tool = step["tool"]
+                prefix, dot, operation = tool.partition(".")
+                if dot and prefix in by_template:
+                    tool = f"{by_template[prefix]}.{operation}"
+                steps.append({"index": step["index"], "tool": tool,
                               "arguments": step.get("arguments") or {}})
             elif step.get("execution") == "user_message":
                 steps.append({"index": step["index"], "tool": "user_message",
