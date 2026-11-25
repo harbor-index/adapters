@@ -1,0 +1,30 @@
+[
+  {
+    "adapter_name": "phybench",
+    "adapter_builders": ["dreiw2580 (360579977+dreiw2580@users.noreply.github.com)"],
+    "original_benchmark": [
+      {
+        "split": "fullques_v1",
+        "size": 100,
+        "harness": "llm",
+        "supported_agents": ["None"],
+        "adaptable": true,
+        "notes": "PHYBench releases 500 questions; only the 100 in PHYBench-fullques_v1.json have reference answers. Upstream provides the EED scorer but no inference harness (single LLM call, boxed answer, EED)."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "fullques_v1",
+        "adapted_benchmark_size": 100,
+        "parity_benchmark_size": 100,
+        "parity_sampling_rate": 1.0,
+        "registry_benchmark_size": 100,
+        "added_agents": ["None"],
+        "parity_matching_agents": ["codex@TODO_CODEX_VERSION+TODO_MODEL"],
+        "parity_unmatching_agents": ["None"],
+        "parity_costs": "TODO_USD",
+        "notes": "Parity on all 100 tasks, 3 runs per side. Original side: codex in a fork of phybench-official/phybench scored with upstream EED."
+      }
+    ]
+  }
+]

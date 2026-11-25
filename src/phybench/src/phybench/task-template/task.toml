@@ -1,0 +1,35 @@
+schema_version = "1.0"
+
+# The agent writes /app/answer.txt. Only that file is handed to a fresh
+# verifier container, so the agent cannot read the reference answer or
+# modify the scoring code or its Python environment.
+artifacts = ["/app/answer.txt"]
+
+[task]
+name = "phybench/{task_id}"
+authors = [
+    { name = "Shi Qiu" },
+    { name = "Shaoyang Guo" },
+    { name = "Zhuo-Yang Song" },
+    { name = "Yunbo Sun" },
+]
+keywords = ["physics", "symbolic-reasoning", "{tag_lower}"]
+
+[metadata]
+difficulty = "hard"
+category = "physics"
+subject = "{tag}"
+
+[agent]
+timeout_sec = 1800.0
+
+[verifier]
+timeout_sec = 600.0
+environment_mode = "separate"
+
+[environment]
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
