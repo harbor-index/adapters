@@ -1,0 +1,22 @@
+jobs_dir: jobs
+n_attempts: 1
+timeout_multiplier: 1.0
+orchestrator:
+  type: local
+  n_concurrent_trials: 8
+  quiet: false
+environment:
+  type: docker
+  # type: daytona
+  force_build: false
+  delete: true
+agents:
+  - name: oracle
+  # Parity agent (port of the original DARE-Bench loop); needs PYTHONPATH=src/dare-bench/src,
+  # OPENAI_API_KEY and optionally OPENAI_BASE_URL:
+  # - import_path: dare_bench.dare_parity_agent:DAREBenchParityAgent
+  #   model_name: openai/gpt-4.1
+  # - name: claude-code
+  #   model_name: anthropic/claude-sonnet-4-5
+datasets:
+  - path: datasets/dare-bench

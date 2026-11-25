@@ -1,0 +1,170 @@
+[
+  {
+    "adapter_name": "dare-bench",
+    "agent": "dare-bench-parity-agent@1.3.0",
+    "model": "gpt-6.1-sol",
+    "date": "2026-11-20",
+    "adapted_benchmark_size": 324,
+    "parity_benchmark_size": 30,
+    "number_of_runs": 3,
+    "notes": "Fixed seeded split of 30 tasks (5 per category; parity_task_ids.txt), 3 runs per side, mean +/- sample SEM over run means. Original = upstream harness at commit 01447145 with a 5-line patch (3 files) that routes gpt-6* names to upstream's existing gpt-5 Responses API path; Harbor = port of the same agent loop (5 turns, 200 s tool timeout, max_output_tokens 16384, reasoning effort high, summary auto, verbosity medium). Model served through an OpenAI-compatible LiteLLM gateway. 0 exceptions and 0 harness crashes in 180 runs. Harbor side used 1.67M input / 0.27M output tokens.",
+    "original_parity_repo": "https://github.com/macabdul9/dare-bench/tree/harbor-parity",
+    "adapter_pr": [
+      "https://github.com/harbor-index/adapters/pull/46"
+    ],
+    "dataset_pr": [
+      "https://huggingface.co/datasets/harborframework/harbor-datasets/discussions/70"
+    ],
+    "parity_pr": [
+      "https://huggingface.co/datasets/harborframework/parity-experiments/discussions/305"
+    ],
+    "metrics": [
+      {
+        "benchmark_name": "DARE-Bench (30-task parity split)",
+        "metric": "mean reward",
+        "original": "0.791 +/- 0.017",
+        "harbor": "0.801 +/- 0.005",
+        "original_runs": [
+          0.8086,
+          0.8077,
+          0.7558
+        ],
+        "harbor_runs": [
+          0.7921,
+          0.8026,
+          0.8085
+        ]
+      },
+      {
+        "benchmark_name": "DARE-Bench classification IF (class-v1), 5 tasks",
+        "metric": "mean reward",
+        "original": "1.000 +/- 0.000",
+        "harbor": "1.000 +/- 0.000",
+        "original_runs": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "harbor_runs": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "benchmark_name": "DARE-Bench classification MM (class-v2), 5 tasks",
+        "metric": "mean reward",
+        "original": "0.539 +/- 0.040",
+        "harbor": "0.486 +/- 0.009",
+        "original_runs": [
+          0.6182,
+          0.5123,
+          0.4869
+        ],
+        "harbor_runs": [
+          0.4695,
+          0.4871,
+          0.5017
+        ]
+      },
+      {
+        "benchmark_name": "DARE-Bench regression IF (reg-v1), 5 tasks",
+        "metric": "mean reward",
+        "original": "1.000 +/- 0.000",
+        "harbor": "1.000 +/- 0.000",
+        "original_runs": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "harbor_runs": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "benchmark_name": "DARE-Bench regression MM (reg-v2), 5 tasks",
+        "metric": "mean reward",
+        "original": "0.745 +/- 0.001",
+        "harbor": "0.689 +/- 0.037",
+        "original_runs": [
+          0.7438,
+          0.7433,
+          0.748
+        ],
+        "harbor_runs": [
+          0.6845,
+          0.628,
+          0.7546
+        ]
+      },
+      {
+        "benchmark_name": "DARE-Bench time series XF (ts-v1), 5 tasks",
+        "metric": "mean reward",
+        "original": "0.795 +/- 0.046",
+        "harbor": "0.863 +/- 0.024",
+        "original_runs": [
+          0.7469,
+          0.8867,
+          0.7517
+        ],
+        "harbor_runs": [
+          0.8896,
+          0.883,
+          0.8157
+        ]
+      },
+      {
+        "benchmark_name": "DARE-Bench time series CF (ts-v2), 5 tasks",
+        "metric": "mean reward",
+        "original": "0.665 +/- 0.059",
+        "harbor": "0.769 +/- 0.032",
+        "original_runs": [
+          0.7429,
+          0.7037,
+          0.5483
+        ],
+        "harbor_runs": [
+          0.7091,
+          0.8178,
+          0.7791
+        ]
+      }
+    ]
+  },
+  {
+    "adapter_name": "dare-bench",
+    "agent": "codex@0.171.0",
+    "model": "gpt-6.1-sol",
+    "date": "2026-11-21",
+    "adapted_benchmark_size": 324,
+    "parity_benchmark_size": 30,
+    "number_of_runs": 3,
+    "notes": "Standard CLI agent run on the Harbor side only, showing the tasks work outside the custom 5-turn loop. Not comparable to the original harness (codex has a full shell and no turn limit) or to paper numbers. Same 30-task split, default codex settings, 1200 s agent timeout. Trials that hit the gateway's token rate limit were re-run (harbor jobs resume); 1 of 90 trials ended in an agent timeout and scores 0.",
+    "original_parity_repo": null,
+    "adapter_pr": [
+      "https://github.com/harbor-index/adapters/pull/46"
+    ],
+    "dataset_pr": [
+      "https://huggingface.co/datasets/harborframework/harbor-datasets/discussions/70"
+    ],
+    "parity_pr": [
+      "https://huggingface.co/datasets/harborframework/parity-experiments/discussions/305"
+    ],
+    "metrics": [
+      {
+        "benchmark_name": "DARE-Bench (30-task parity split)",
+        "metric": "mean reward",
+        "original": null,
+        "harbor": "0.806 +/- 0.009",
+        "original_runs": [],
+        "harbor_runs": [
+          0.8169,
+          0.8145,
+          0.7879
+        ]
+      }
+    ]
+  }
+]
