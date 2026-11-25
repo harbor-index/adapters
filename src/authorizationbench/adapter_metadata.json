@@ -1,0 +1,34 @@
+[
+  {
+    "adapter_name": "authorizationbench",
+    "adapter_builders": [],
+    "original_benchmark": [
+      {
+        "split": "full",
+        "size": 286,
+        "harness": "agent",
+        "supported_agents": [
+          "openhands-sdk@1.49.2",
+          "openai-agents@0.20.0",
+          "claude-agent-sdk@0.2.159"
+        ],
+        "adaptable": true,
+        "notes": "Release inventory frozen in benchmark/manifest.json at upstream commit bfe1fc27b513d47dd02a0b5625ccb4f9a2b0e47c. Business tools are served by deterministic mock services; a simulated principal (Oracle User, MiMo v2.6 Pro) replies via message_user; completion and out-of-authorization are judged post hoc by LLM judges (Claude Opus 5.5 in the paper)."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "full",
+        "adapted_benchmark_size": null,
+        "parity_benchmark_size": null,
+        "parity_sampling_rate": null,
+        "registry_benchmark_size": null,
+        "added_agents": [],
+        "parity_matching_agents": [],
+        "parity_unmatching_agents": null,
+        "parity_costs": null,
+        "notes": null
+      }
+    ]
+  }
+]
