@@ -40,11 +40,12 @@ def main() -> None:
         default=None,
         help="Only export tasks matching these problem IDs (e.g. L1/001_gelu_activation_forward).",
     )
-    parser.add_argument(
-        "--include-unstable",
-        action="store_true",
-        help="Include known unstable problems that are excluded from the Harbor v1 subset.",
-    )
+    scope = parser.add_mutually_exclusive_group()
+    scope.add_argument("--historical-subset", action="store_true",
+                       help="Generate the 194-task subset used in the original oracle experiment.")
+    scope.add_argument("--include-unstable", dest="historical_subset", action="store_false",
+                       help=argparse.SUPPRESS)
+    parser.set_defaults(historical_subset=False)
     parser.add_argument(
         "--overwrite",
         action="store_true",
@@ -68,7 +69,7 @@ def main() -> None:
     adapter = SOLExecBenchAdapter(
         benchmark_dir=benchmark_dir,
         output_dir=args.output_dir,
-        include_unstable=args.include_unstable,
+        include_unstable=not args.historical_subset,
         categories=args.category,
         limit=args.limit,
         verifier_timeout_sec=args.verifier_timeout_sec,

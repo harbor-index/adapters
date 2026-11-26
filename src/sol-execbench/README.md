@@ -4,7 +4,7 @@
 
 This adapter converts [SOL-ExecBench](https://github.com/nvidia/sol-execbench) GPU kernel optimization problems into Harbor task directories.
 
-SOL-ExecBench is an execution-based benchmark from NVIDIA that evaluates GPU kernel implementations across multiple categories. The original benchmark contains **235** problems. This adapter targets a **stable subset of 194 tasks** (`stable_subset_v1`), excluding 41 tasks that failed oracle validation due to baseline OOM, invalid float4 reference runtime, baseline timeout, known runner/import issues, or numerical instability.
+By default the adapter generates all 235 upstream problems across four categories. Use `--historical-subset` to reproduce the task selection from the original local oracle experiment.
 
 The adapter currently exposes a Python/PyTorch candidate interface, consistent with the upstream repository's practical local generation path (`scripts/generate_and_run.py`). The original SOL-ExecBench benchmark itself is multi-language and supports PyTorch, Triton, CUTLASS, cuDNN, CuTe DSL, cuTile, and CUDA C++ solutions.
 
@@ -28,7 +28,7 @@ SOL-ExecBench (Speed-of-Light Execution Benchmark) is an execution-based benchma
 - Automatically downloads the public `flashinfer-ai/flashinfer-trace` dataset at image build time
 - Uses the official `sol-execbench` CLI as the verifier for correctness evaluation
 - Includes AST-based destination-passing-style (DPS) inference for solution wrapping
-- Excludes known-unstable problems via a curated `UNSTABLE_PROBLEMS` set
+- Preserves upstream task coverage and supports task ID and category filters
 - Provides local oracle validation scripts for pre-submission verification
 
 ## Generated Task Structure
@@ -89,16 +89,14 @@ Matched upstream and Harbor agent runs are pending. The dataset is pending regis
 To repeat a local check on a GPU host with the environment described below:
 
 ```bash
-python validate_local_oracle_batch.py datasets/sol-execbench --output oracle-results.json
+uv run sol-execbench --historical-subset --benchmark-dir /path/to/SOL-ExecBench/data/benchmark --output-dir datasets/sol-execbench-historical
+python validate_local_oracle_batch.py datasets/sol-execbench-historical --output oracle-results.json
 ```
 
 ## Notes & Caveats
 
-- This is a stable-subset adapter (194/235 tasks), not the full benchmark.
 - The Harbor reward is currently correctness-only. Speedup is not yet encoded as a reward threshold.
-- The Docker image requires GPU access (NVIDIA CUDA 12.6.3) and downloads ~1 GB of FlashInfer traces at build time.
-- Some large L2/MoE tasks are excluded due to baseline OOM in local validation.
-- Quant `nvfp4/float4` tasks with invalid reference runtime are excluded.
+- The Docker image requires GPU access (NVIDIA CUDA 13.1.1) and downloads ~1 GB of FlashInfer traces at build time.
 - The bundled `sol_execbench/` environment snapshot is from commit `834c7c17df2b602cbb51cffe9b861d98754d321c`.
 - Full multi-language solution fidelity (Triton, CUTLASS, CUDA C++, etc.) is future work.
 
@@ -135,7 +133,7 @@ uv run --no-project --with datasets python scripts/download_solexecbench.py
 - **Docker build fails on FlashInfer trace download**: Ensure the build environment has internet access to download from Hugging Face (`flashinfer-ai/flashinfer-trace`).
 - **GPU not available in container**: Verify `docker-compose.yaml` GPU reservations and that `nvidia-container-toolkit` is installed on the host.
 - **Local oracle validation fails**: Ensure `FLASHINFER_TRACE_DIR` points to a valid FlashInfer trace directory and that `sol-execbench` is installed in the Python environment specified by `HARBOR_PYTHON_BIN`.
-- **OOM on large L2/MoE tasks**: These tasks are excluded from `stable_subset_v1` by default. Use `--include-unstable` only if your GPU has sufficient memory.
+- **GPU memory:** Some full workloads allocate large intermediate tensors. Record the GPU model and workload ID when reporting an out-of-memory failure.
 
 ## Citation
 

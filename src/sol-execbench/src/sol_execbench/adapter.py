@@ -12,10 +12,8 @@ from textwrap import dedent
 
 CATEGORIES = ("FlashInfer-Bench", "L1", "L2", "Quant")
 
-# Stable Harbor v1 subset: exclude problems that failed before effective evaluation
-# due to baseline OOM, invalid float4 reference runtime, baseline timeout, or
-# known runner/import issues.
-UNSTABLE_PROBLEMS = {
+# Membership of the historical local oracle experiment (stable_subset_v1).
+HISTORICAL_SUBSET_EXCLUSIONS = {
     "FlashInfer-Bench/014_gqa_paged_prefill_causal_h32_kv4_d128_ps1",
     "FlashInfer-Bench/019_mla_paged_prefill_causal_h16_ckv512_kpe64_ps1",
     "L1/026_video_patch_embedding_projection",
@@ -147,14 +145,14 @@ def _difficulty_for_category(category: str) -> str:
 
 
 class SOLExecBenchAdapter:
-    """Generate Harbor tasks from a stable SOL-ExecBench subset."""
+    """Generate Harbor tasks from the SOL-ExecBench dataset."""
 
     def __init__(
         self,
         benchmark_dir: Path,
         output_dir: Path,
         *,
-        include_unstable: bool = False,
+        include_unstable: bool = True,
         categories: list[str] | None = None,
         limit: int | None = None,
         template_dir: Path | None = None,
@@ -191,7 +189,7 @@ class SOLExecBenchAdapter:
                 if not definition_path.exists() or not workload_path.exists():
                     continue
                 problem_id = f"{category}/{problem_dir.name}"
-                if not self.include_unstable and problem_id in UNSTABLE_PROBLEMS:
+                if not self.include_unstable and problem_id in HISTORICAL_SUBSET_EXCLUSIONS:
                     continue
                 definition = json.loads(definition_path.read_text())
                 records.append(
@@ -294,7 +292,7 @@ class SOLExecBenchAdapter:
             "uses_custom_inputs": bool(record.definition.get("custom_inputs_entrypoint")),
             "source_benchmark_dir": record.problem_id,
             "excluded_from_full_adapter": False,
-            "stable_subset_v1": True,
+            "stable_subset_v1": record.problem_id not in HISTORICAL_SUBSET_EXCLUSIONS,
         }
         paths.meta_json.write_text(json.dumps(meta, indent=2, ensure_ascii=False) + "\n")
 
@@ -352,6 +350,6 @@ def stable_subset_size() -> int:
         for problem_dir in category_dir.iterdir():
             if not problem_dir.is_dir():
                 continue
-            if f"{category}/{problem_dir.name}" not in UNSTABLE_PROBLEMS:
+            if f"{category}/{problem_dir.name}" not in HISTORICAL_SUBSET_EXCLUSIONS:
                 total += 1
     return total
