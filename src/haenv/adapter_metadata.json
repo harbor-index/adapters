@@ -1,0 +1,40 @@
+[
+  {
+    "adapter_name": "haenv",
+    "adapter_builders": [
+      "Jieshu Huang (jieshuh2@illinois.edu)"
+    ],
+    "original_benchmark": [
+      {
+        "split": "diagnosis",
+        "size": 100,
+        "harness": "agent",
+        "supported_agents": [
+          "None"
+        ],
+        "adaptable": true,
+        "notes": "HAEnv Pack 1 (M2 differential diagnosis), N=100 audited deterministic pack (v1.4 English, commit 94761fbf793a034fd3a2430e128f6fca6c07dd5b). Upstream uses an OpenAI-compatible query/tool-calling harness (solve_gated_round)."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "diagnosis",
+        "adapted_benchmark_size": 100,
+        "parity_benchmark_size": 30,
+        "parity_sampling_rate": 0.3,
+        "registry_benchmark_size": 100,
+        "added_agents": [
+          "haenv-parity-agent@1.0.0"
+        ],
+        "parity_matching_agents": [
+          "haenv-parity-agent@1.0.0+deepseek-ai/deepseek-v4.1-flash-1017"
+        ],
+        "parity_unmatching_agents": [
+          "None"
+        ],
+        "parity_costs": "$5",
+        "notes": "Completed N=100 live-judge oracle (100/100 trials, 0 exceptions, 100% G=1 & D=1, 0 safety hits, mean_S=0.9217 live / 1.0000 offline stub) and symmetric k=3 parity on deterministic stratified N=30 subset (--split parity): Original 0.6944 ± 0.0255 vs Harbor 0.6685 ± 0.0451 (overlap matched). Total parity token usage across 6 runs (180 trials): 19.20M input + 3.28M output tokens (~$5 estimated on api.aiand.com with deepseek-ai/deepseek-v4.1-flash-1017)."
+      }
+    ]
+  }
+]

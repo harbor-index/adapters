@@ -1,0 +1,40 @@
+[
+  {
+    "adapter_name": "haenv",
+    "agent": "haenv-parity-agent@1.0.0",
+    "model": "deepseek-ai/deepseek-v4.1-flash-1017",
+    "date": "2026-11-26",
+    "adapted_benchmark_size": 100,
+    "parity_benchmark_size": 30,
+    "number_of_runs": 3,
+    "notes": "Symmetric k=3 parity on the deterministic stratified N=30 subset (--split parity, Hamilton/Largest Remainder across frame x join_gold strata, seed haenv-parity-v1) extracted from the audited N=100 English v1.4 M2 pack (thetahealth/mirobody-env@94761fbf793a034fd3a2430e128f6fca6c07dd5b). Both sides used identical pinned settings via https://api.aiand.com/v1: solver deepseek-ai/deepseek-v4.1-flash-1017 (temperature=0.0, max_tokens=16384, max_rounds=32, max_calls=256, max_points=400) and live management-rubric-v7 judge deepseek-ai/deepseek-v4.1-flash-1017 (HAENV_OFFLINE_JUDGE=0, temperature=0.0, reason-first JSON schema ordering). Zero infrastructure/API exceptions across all 180 parity trials (90 Original + 90 Harbor). Original runner applies the upstream v1.6.0 (8dca0a7) canonical-target resolution fix for purchased non-ASCII test-* IDs in solve_gated_round so bought lab results are returned symmetrically to Harbor's ehr-server. Harbor range [0.594444, 0.750000] overlaps Original range [0.644444, 0.727778]. Harbor CLI v0.27.0. While harborframework/parity-experiments is blocked by Hugging Face's 1,000,000-file repo limit (harbor-framework/adapters#129), the full adapters/haenv/ artifact bundle is hosted verbatim at https://huggingface.co/datasets/jessica23huang/haenv-parity-experiments (commit 1b25b07d128fe101e59e08282cef5b8e2c426a8c) and linked from discussions/316.",
+    "original_parity_repo": "https://github.com/thetahealth/mirobody-env",
+    "adapter_pr": [
+      "https://github.com/harbor-index/adapters/pull/42"
+    ],
+    "dataset_pr": [
+      "https://github.com/harbor-framework/harbor-datasets/pull/312"
+    ],
+    "parity_pr": [
+      "https://huggingface.co/datasets/harborframework/parity-experiments/discussions/316"
+    ],
+    "metrics": [
+      {
+        "benchmark_name": "Health Agent Environment (M2 Diagnosis)",
+        "metric": "S = G * D * (1 + Q) / 2",
+        "original": "0.6944 ± 0.0255",
+        "harbor": "0.6685 ± 0.0451",
+        "original_runs": [
+          0.644444,
+          0.727778,
+          0.711111
+        ],
+        "harbor_runs": [
+          0.594444,
+          0.661111,
+          0.75
+        ]
+      }
+    ]
+  }
+]
