@@ -121,6 +121,15 @@ def main() -> int:
             "test_stderr": test.stderr,
             "verifier_logs_dir": str(verifier_logs_dir),
         }
+        trace_file = verifier_logs_dir / "benchmark.jsonl"
+        if trace_file.is_file():
+            traces = [json.loads(line) for line in trace_file.read_text().splitlines() if line.strip()]
+            result["observed_workloads"] = len(traces)
+            result["failed_workloads"] = [
+                {"uuid": t["workload"]["uuid"], "status": t["evaluation"]["status"],
+                 "log": t["evaluation"].get("log", "")[-2000:]}
+                for t in traces if t.get("evaluation") and t["evaluation"]["status"] != "PASSED"
+            ]
         print(json.dumps(result, indent=2))
         return 0 if reward == "1" else 1
     finally:

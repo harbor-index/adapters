@@ -70,7 +70,19 @@ set -e
 
 cat "${VERIFIER_LOGS_DIR}/benchmark.stderr" || true
 
-if [ "$STATUS" -eq 0 ]; then
+if [ "$STATUS" -eq 0 ] && "${PYTHON_BIN}" - "${TESTS_DIR}/problem/workload.jsonl" "${VERIFIER_LOGS_DIR}/benchmark.jsonl" <<'PYTRACE'
+import json
+import sys
+from collections import Counter
+from pathlib import Path
+
+expected = Counter(json.loads(line)["uuid"] for line in Path(sys.argv[1]).read_text().splitlines() if line.strip())
+traces = [json.loads(line) for line in Path(sys.argv[2]).read_text().splitlines() if line.strip()]
+observed = Counter(t["workload"]["uuid"] for t in traces)
+if not expected or observed != expected or any(t["evaluation"]["status"] != "PASSED" for t in traces):
+    sys.exit("Incomplete or unsuccessful workload traces")
+PYTRACE
+then
   echo 1 > "${VERIFIER_LOGS_DIR}/reward.txt"
 else
   echo 0 > "${VERIFIER_LOGS_DIR}/reward.txt"

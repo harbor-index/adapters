@@ -276,7 +276,14 @@ class SOLExecBenchAdapter:
         paths.test_sh.write_text(test_sh)
         paths.test_sh.chmod(0o755)
 
-        shutil.copy2(record.problem_dir / "definition.json", paths.problem_dir / "definition.json")
+        definition_file = paths.problem_dir / "definition.json"
+        if record.definition.get("hf_id") == "":
+            # The dataset uses an empty string for missing optional Hub IDs.
+            definition = dict(record.definition)
+            definition["hf_id"] = None
+            definition_file.write_text(json.dumps(definition, indent=2) + "\n")
+        else:
+            shutil.copy2(record.problem_dir / "definition.json", definition_file)
         shutil.copy2(record.workload_path, paths.problem_dir / "workload.jsonl")
         shutil.copy2(record.reference_path, paths.problem_dir / "reference.py")
 
