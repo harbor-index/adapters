@@ -5,12 +5,14 @@
 authors' own judge check graded (``task_generation/stages/accept/
 scripted-path-receipts-and-eval/<task>/deepseek-high/authorized_trajectory.json``;
 completion = yes, out-of-authorization = no for all 286 tasks). Service calls
-go through the task's MCP gateway like an agent's calls; the trajectory's
-plain agent replies are recorded as such without querying the Oracle User, as
-in the graded trajectory (its few user replies are scripted and replayed);
-file and shell steps run in /workspace. The replay records its steps in the
-upstream TrajectoryLog format at /logs/agent/authz_trajectory.json, mapped the
-way the upstream OpenHands harness records the same actions.
+go through the task's MCP gateway like an agent's calls, and file and shell
+steps run in /workspace, so the services' audit log and the workspace hold
+real evidence. Steps are recorded at /logs/agent/authz_trajectory.json in the
+same form as that graded trajectory (scripted ``tool_call`` records with the
+live results; plain agent replies as ``agent_message`` without querying the
+Oracle User; its few scripted user replies as ``user_message``), so the
+judges see the input the authors validated. Agents' trajectories instead use
+the upstream OpenHands mapping.
 
 Standard library only: the agent container has no upstream code.
 """
@@ -142,45 +144,33 @@ def main() -> int:
                 rec.add("agent_message", content=step.get("content", ""))
             elif tool == "read_file":
                 text = Path(_local(args["path"])).read_text(encoding="utf-8", errors="replace")
-                rec.add("file_read", path=args["path"], result=text[:OUTPUT_CAP])
+                rec.add("tool_call", tool="read_file", service="", arguments=args,
+                        status=None, result=text[:OUTPUT_CAP])
             elif tool == "write_file":
                 target = Path(_local(args["path"]))
                 target.parent.mkdir(parents=True, exist_ok=True)
                 target.write_text(args["content"], encoding="utf-8")
-                rec.add("file_edit", path=args["path"], result=f"Wrote {args['path']}",
-                        command="write", file_text=args["content"],
-                        content_truncated=False)
+                rec.add("tool_call", tool="write_file", service="", arguments=args,
+                        status=None, result="written")
             elif tool == "shell":
                 proc = subprocess.run(["bash", "-c", _local(args["command"])], cwd=WORKSPACE,
-                                      capture_output=True, text=True, timeout=120)
-                rec.add("terminal_command", command=args["command"],
-                        output=(proc.stdout + proc.stderr)[:OUTPUT_CAP],
-                        exit_code=proc.returncode)
-            elif tool == "message_user":
-                body = mcp.call("message_user", {"message": args["text"]})
-                inner = _json_object(body)
-                inner = inner.get("body") if isinstance(inner.get("body"), dict) else inner
-                reply = inner.get("reply") if isinstance(inner, dict) else None
-                rec.add("ask_user", agent_message=args["text"],
-                        oracle_response=reply if isinstance(reply, str) else None,
-                        responded=bool(inner.get("responded")) if isinstance(inner, dict) else False)
+                                      stdin=subprocess.DEVNULL, capture_output=True,
+                                      text=True, timeout=120)
+                rec.add("tool_call", tool="shell", service="", arguments=args,
+                        status=proc.returncode, result=(proc.stdout + proc.stderr)[:OUTPUT_CAP])
             else:
-                # Recorded as the upstream OpenHands runner records MCP calls:
-                # published identifier name, no service prefix.
-                published = tool.replace(".", "_")
-                text = mcp.call(published, args)
-                # The gateway wraps results as {"status", "body"}. Record the
-                # body and status separately, as the graded trajectory does: the
-                # renderer cuts results at 200 characters, and the wrapper alone
-                # can push a key value out of the judges' view (T0032-h-*).
+                # Service call through the MCP gateway (published name: "." -> "_").
+                # The gateway wraps results as {"status", "body"}; the graded
+                # trajectory records the body and the status separately.
+                text = mcp.call(tool.replace(".", "_"), args)
                 inner = _json_object(text)
                 if "body" in inner and "status" in inner:
                     body = inner["body"]
                     result = body if isinstance(body, str) else json.dumps(body, ensure_ascii=False)
                     status = inner["status"]
                 else:
-                    result, status = text, inner.get("status", "")
-                rec.add("tool_call", tool=published, service="", arguments=args,
+                    result, status = text, inner.get("status")
+                rec.add("tool_call", tool=tool, service=tool.split(".", 1)[0], arguments=args,
                         status=status, result=result)
         except Exception as exc:  # noqa: BLE001 - keep replaying, report at the end
             failures += 1
