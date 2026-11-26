@@ -4,9 +4,10 @@
 ``authorized_path.json`` holds the steps of the authorized trajectory that the
 authors' own judge check graded (``task_generation/stages/accept/
 scripted-path-receipts-and-eval/<task>/deepseek-high/authorized_trajectory.json``;
-completion = yes, out-of-authorization = no for all 286 tasks). Service calls,
-plain agent replies (sent as ``message_user``) and ``message_user`` go through
-the task's MCP gateway like an agent's calls;
+completion = yes, out-of-authorization = no for all 286 tasks). Service calls
+go through the task's MCP gateway like an agent's calls; the trajectory's
+plain agent replies are recorded as such without querying the Oracle User, as
+in the graded trajectory (its few user replies are scripted and replayed);
 file and shell steps run in /workspace. The replay records its steps in the
 upstream TrajectoryLog format at /logs/agent/authz_trajectory.json, mapped the
 way the upstream OpenHands harness records the same actions.
@@ -137,6 +138,8 @@ def main() -> int:
         try:
             if tool == "user_message":
                 rec.add("user_message", content=step.get("content", ""))
+            elif tool == "agent_message":
+                rec.add("agent_message", content=step.get("content", ""))
             elif tool == "read_file":
                 text = Path(_local(args["path"])).read_text(encoding="utf-8", errors="replace")
                 rec.add("file_read", path=args["path"], result=text[:OUTPUT_CAP])
@@ -165,9 +168,20 @@ def main() -> int:
                 # Recorded as the upstream OpenHands runner records MCP calls:
                 # published identifier name, no service prefix.
                 published = tool.replace(".", "_")
-                body = mcp.call(published, args)
+                text = mcp.call(published, args)
+                # The gateway wraps results as {"status", "body"}. Record the
+                # body and status separately, as the graded trajectory does: the
+                # renderer cuts results at 200 characters, and the wrapper alone
+                # can push a key value out of the judges' view (T0032-h-*).
+                inner = _json_object(text)
+                if "body" in inner and "status" in inner:
+                    body = inner["body"]
+                    result = body if isinstance(body, str) else json.dumps(body, ensure_ascii=False)
+                    status = inner["status"]
+                else:
+                    result, status = text, inner.get("status", "")
                 rec.add("tool_call", tool=published, service="", arguments=args,
-                        status=_json_object(body).get("status", ""), result=body)
+                        status=status, result=result)
         except Exception as exc:  # noqa: BLE001 - keep replaying, report at the end
             failures += 1
             print(f"step {step.get('index')} {tool} failed: {exc}", file=sys.stderr)

@@ -37,6 +37,26 @@ DATASET_NAME = "authorizationbench"
 SANDBOX = "authorization_eva_sandbox"
 RECEIPTS = f"{SANDBOX}/task_generation/stages/accept/scripted-path-receipts-and-eval"
 JUDGED_TRAJECTORY = "deepseek-high/authorized_trajectory.json"
+MEMORY_FILE = "/workspace/prior_memory.md"
+
+
+def _without_memory_file(tool: str, arguments: dict) -> dict | None:
+    """Drop oracle reads of prior_memory.md (None = skip the step).
+
+    The graded trajectories were recorded with prior_memory.md in the
+    workspace. In production the memory is only in the prompt (PRIOR_MEMORY),
+    so those reads would fail and add noise to the judges' input. Commands
+    that also read other files keep them.
+    """
+    if tool == "read_file" and arguments.get("path") == MEMORY_FILE:
+        return None
+    command = arguments.get("command") if tool == "shell" else None
+    if isinstance(command, str) and MEMORY_FILE in command:
+        rest = command.replace(MEMORY_FILE, "").strip()
+        if "/workspace/" not in rest:
+            return None
+        return {**arguments, "command": command.replace(" " + MEMORY_FILE, "")}
+    return arguments
 TEMPLATE_DIR = Path(__file__).resolve().parent / "task-template"
 DEFAULT_CACHE = Path.home() / ".cache" / "harbor-authorizationbench"
 
@@ -283,16 +303,22 @@ class AuthorizationBenchAdapter:
                     steps.append({"index": index, "tool": "user_message",
                                   "content": str(data.get("content") or "")})
             elif kind == "agent_message":
-                # A plain reply reaches the Oracle User, as message_user does.
-                steps.append({"index": index, "tool": "message_user",
-                              "arguments": {"text": str(data.get("content") or "")}})
+                # Recorded as a plain reply without querying the Oracle User, as
+                # in the graded trajectory (it has user replies only where they
+                # are scripted). A live, LLM-generated reply would change the
+                # judges' input from the one the authors validated.
+                steps.append({"index": index, "tool": "agent_message",
+                              "content": str(data.get("content") or "")})
             elif kind == "tool_call":
                 tool = str(data.get("tool") or "")
+                arguments = data.get("arguments") or {}
+                arguments = _without_memory_file(tool, arguments)
+                if arguments is None:
+                    continue
                 prefix, dot, operation = tool.partition(".")
                 if dot and prefix in by_template:
                     tool = f"{by_template[prefix]}.{operation}"
-                steps.append({"index": index, "tool": tool,
-                              "arguments": data.get("arguments") or {}})
+                steps.append({"index": index, "tool": tool, "arguments": arguments})
         path = {"task_id": task_id, "instruction": str(config["instruction"]),
                 "upstream_trajectory": rel, "steps": steps}
         (out / "solution" / "authorized_path.json").write_text(
