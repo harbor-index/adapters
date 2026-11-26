@@ -1,0 +1,30 @@
+[
+  {
+    "adapter_name": "exp-bench",
+    "adapter_builders": ["Jingjia Peng (jingjia@umich.edu)"],
+    "original_benchmark": [
+      {
+        "split": "full",
+        "size": 461,
+        "harness": "agent",
+        "supported_agents": ["openhands", "inspectai-iterative-agent"],
+        "adaptable": true,
+        "notes": "461 tasks from 51 ICLR/NeurIPS 2024 papers. 36 tasks fail upstream's own masking step (33 list scripts the construction agent wrote that are not in the paper repository, 3 list README.md) and are skipped by the upstream harness as invalid_task. Upstream judges with o3-mini; 4 tasks exceed its 200k-token context and need a long-context judge."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "full",
+        "adapted_benchmark_size": 425,
+        "parity_benchmark_size": 57,
+        "parity_sampling_rate": 0.1341,
+        "registry_benchmark_size": 425,
+        "added_agents": ["None"],
+        "parity_matching_agents": [],
+        "parity_unmatching_agents": ["None"],
+        "parity_costs": null,
+        "notes": "Parity pending. Subset: 57 tasks from 40 papers: 27 whose experiment can finish on CPU within the 30-minute limit plus a stratified random sample of 30 GPU tasks (rule in src/exp_bench/data/parity_task_ids.txt); 1 GPU per task on both sides. Both sides run Claude Code; it is added to the original harness because its OpenHands build cannot call current models."
+      }
+    ]
+  }
+]

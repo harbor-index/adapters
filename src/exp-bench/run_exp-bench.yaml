@@ -1,0 +1,25 @@
+# Reference config for the full EXP-Bench dataset.
+# Host environment needed by the verifier (judge): OPENAI_API_KEY, optional
+# OPENAI_BASE_URL and EXP_BENCH_JUDGE_MODEL (default o3-mini).
+# For the oracle, also export EXP_BENCH_ORACLE_VALIDATION=1 (skips the log monitor and
+# execution check, which judge a real agent trajectory).
+jobs_dir: jobs
+n_attempts: 1
+timeout_multiplier: 1.0
+orchestrator:
+  type: local
+  n_concurrent_trials: 4
+  quiet: false
+environment:
+  type: docker
+  # type: daytona
+  force_build: true
+  delete: true
+agents:
+  - name: oracle
+  # - name: openhands
+  #   model_name: openai/gpt-5-mini
+  # - name: claude-code
+  #   model_name: anthropic/claude-haiku-4-5
+datasets:
+  - path: datasets/exp-bench

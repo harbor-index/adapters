@@ -1,0 +1,21 @@
+# Parity subset (uv run exp-bench --split parity --gpus 1 --output-dir ../../datasets/exp-bench-parity).
+# Agent version, model and judge model must match the original-side run.
+# Host env: ANTHROPIC_API_KEY (agent); judge: EXP_BENCH_JUDGE_MODEL=claude-haiku-5-5,
+# OPENAI_BASE_URL=https://api.anthropic.com/v1/, OPENAI_API_KEY=<Anthropic key>.
+jobs_dir: jobs
+n_attempts: 1
+timeout_multiplier: 1.0
+orchestrator:
+  type: local
+  n_concurrent_trials: 8
+environment:
+  type: daytona
+  force_build: true
+  delete: true
+agents:
+  - name: claude-code
+    model_name: anthropic/claude-haiku-5-5  # to be agreed with the Harbor team
+    kwargs:
+      version: 2.1.330
+datasets:
+  - path: datasets/exp-bench-parity
