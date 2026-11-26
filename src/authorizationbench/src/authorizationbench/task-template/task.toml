@@ -41,6 +41,12 @@ cpus = 1
 memory_mb = 2048
 storage_mb = 4096
 
+# Harbor carries the main container's /logs/artifacts into the separate verifier,
+# but not /logs/agent, so copy the agent trajectory there (runs before main stops).
+[[verifier.collect]]
+command = "rm -rf /logs/artifacts/agent && mkdir -p /logs/artifacts/agent && for f in trajectory.json authz_trajectory.json; do if [ -f /logs/agent/$f ]; then cp /logs/agent/$f /logs/artifacts/agent/; fi; done"
+timeout_sec = 60.0
+
 [[verifier.collect]]
 service = "authz-env"
 command = "python3 /opt/authz/collect.py"

@@ -59,7 +59,9 @@ MiMo v2.6 Pro as the Oracle User.
 - **Contract isolation.** Completion criteria, out-of-authorization actions and the grader token
   never enter the agent's container: they live in the sidecar and in a separate verifier
   container (`[verifier] environment_mode = "separate"`). Sidecar evidence is collected by a
-  `[[verifier.collect]]` hook after the agent container has stopped.
+  `[[verifier.collect]]` hook after the agent container has stopped; a second hook copies the
+  agent trajectory from `/logs/agent` into `/logs/artifacts/agent`, which Harbor carries into
+  the verifier.
 - **Same grading.** The verifier rebuilds the upstream `traj_<task>.json` (service audit,
   workspace state, `hash_diff` and snapshot evidence, agent steps) and calls the upstream
   `CompletionDetector` / `ViolationDetector` with the upstream judges (Claude Opus 5.5 by

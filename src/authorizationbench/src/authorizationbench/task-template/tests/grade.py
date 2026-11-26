@@ -6,15 +6,17 @@ Runs in Harbor's separate verifier container. It rebuilds the upstream
 the agent cannot write to, then calls the upstream ``CompletionDetector`` and
 ``ViolationDetector`` unchanged.
 
-Evidence (``/logs/artifacts``):
-  env/        sidecar dump: audit.json, state_before.json, state_after.json,
-              events.json, clock.json
-  workspace/  the final /workspace
-  agent/      agent logs. ``authz_trajectory.json`` (upstream TrajectoryLog
-              format, written by the oracle replay or the parity agent) is used
-              when present; otherwise Harbor's ATIF ``trajectory.json`` is
-              converted with the upstream OpenHands event mapping.
-  tool_invocations.jsonl, rootfs/   only for tasks that stage them
+Evidence (Harbor re-creates each artifact at its source path in the verifier):
+  /collected               sidecar dump: audit.json, state_before.json,
+                           state_after.json, events.json, clock.json
+  /workspace               the final workspace
+  /logs/artifacts/agent    agent trajectory, copied there by the main collect
+                           hook. ``authz_trajectory.json`` (upstream TrajectoryLog
+                           format, written by the oracle replay or the parity
+                           agent) is used when present; otherwise Harbor's ATIF
+                           ``trajectory.json`` is converted with the upstream
+                           OpenHands event mapping.
+  /tmp/tool_invocations.jsonl   only for tasks with command wrappers
 
 Outputs (``/logs/verifier``): reward.json, verdict.json, traj_<task>.json.
 """
@@ -233,12 +235,6 @@ def _tool_invocations(path: Path) -> list[dict]:
     return out
 
 
-def _hash_tree(root: Path, prefix: str) -> dict[str, str]:
-    from authorization_eva_sandbox.evaluation.task_bundle import _hash_dir_on_host
-
-    return {f"{prefix}/{rel}": h for rel, h in _hash_dir_on_host(str(root)).items()}
-
-
 def _services_changed(before: dict, after: dict) -> dict:
     """Same summary as upstream ``evaluate_service_state_checks`` (no checks are declared)."""
     import hashlib
@@ -253,7 +249,8 @@ def _services_changed(before: dict, after: dict) -> dict:
     return {"checks": [], "services_changed": changed}
 
 
-def build_trajectory(bundle: Path, artifacts: Path) -> tuple[dict, dict]:
+def build_trajectory(bundle: Path, env: Path, workspace: Path, agent_dir: Path,
+                     invocations_path: Path) -> tuple[dict, dict]:
     from authorization_eva_sandbox.evaluation.run_eval import (
         collect_external_integrity,
         collect_workspace_file_snapshots,
@@ -264,31 +261,22 @@ def build_trajectory(bundle: Path, artifacts: Path) -> tuple[dict, dict]:
     task_config = _read_json(bundle / "task_config.json", {})
     task_id = str(task_config.get("task_id") or "")
     allowlist = _read_json(bundle / "mcp_allowlist.json", ["message_user"])
-    env = artifacts / "env"
-    workspace = artifacts / "workspace"
-
     traj = TrajectoryLog(task_id=task_id, model="")
-    source = load_agent_steps(artifacts / "agent", traj, allowlist)
+    source = load_agent_steps(agent_dir, traj, allowlist)
     now = time.time()
     traj.model = str(source.get("model") or "")
     traj.timestamp_start = float(source.get("timestamp_start") or now)
     traj.timestamp_end = float(source.get("timestamp_end") or traj.timestamp_start)
 
     logs = normalize_audit_to_action_logs(_read_json(env / "audit.json", {}))
-    invocations = _tool_invocations(artifacts / "tool_invocations.jsonl")
+    invocations = _tool_invocations(invocations_path)
     if invocations:
         logs["tool_invocations"] = invocations
     traj.web_app_action_logs = logs
 
-    rootfs_after = None
-    roots = _read_json(bundle / "rootfs_roots.json", [])
-    if roots:
-        rootfs_after = {}
-        for root in roots:
-            rootfs_after.update(_hash_tree(artifacts / "rootfs" / root, root))
+    # No task combines a rootfs overlay with hash_diff, so rootfs hashes are not needed.
     traj.external_integrity = collect_external_integrity(
         bundle, workspace if workspace.is_dir() else None, task_config,
-        rootfs_after=rootfs_after,
     )
     traj.workspace_file_snapshots = collect_workspace_file_snapshots(
         task_id, workspace if workspace.is_dir() else None, task_config,
@@ -309,14 +297,19 @@ def build_trajectory(bundle: Path, artifacts: Path) -> tuple[dict, dict]:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--bundle", type=Path, default=Path("/tests/bundle"))
-    parser.add_argument("--artifacts", type=Path, default=Path("/logs/artifacts"))
+    parser.add_argument("--env-dir", type=Path, default=Path("/collected"))
+    parser.add_argument("--workspace", type=Path, default=Path("/workspace"))
+    parser.add_argument("--agent-dir", type=Path, default=Path("/logs/artifacts/agent"))
+    parser.add_argument("--tool-invocations", type=Path,
+                        default=Path("/tmp/tool_invocations.jsonl"))
     parser.add_argument("--out", type=Path, default=Path("/logs/verifier"))
     parser.add_argument("--eval-dir", type=Path, default=UPSTREAM_EVAL)
     args = parser.parse_args()
     args.out.mkdir(parents=True, exist_ok=True)
 
     judge_models = write_judge_config(args.eval_dir)
-    traj, task_config = build_trajectory(args.bundle, args.artifacts)
+    traj, task_config = build_trajectory(args.bundle, args.env_dir, args.workspace,
+                                         args.agent_dir, args.tool_invocations)
     traj_path = args.out / f"traj_{task_config.get('task_id', 'task')}.json"
     traj_path.write_text(json.dumps(traj, indent=2, default=str), encoding="utf-8")
 
@@ -367,4 +360,9 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    code = main()
+    # Skip interpreter teardown: litellm's leftover event loops otherwise print a
+    # harmless "Exception ignored in BaseEventLoop.__del__" traceback after grading.
+    sys.stdout.flush()
+    sys.stderr.flush()
+    os._exit(code)

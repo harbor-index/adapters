@@ -293,7 +293,6 @@ class AuthorizationBenchAdapter:
         artifacts = [
             '{ source = "/collected", service = "authz-env", destination = "env" }',
             '{ source = "/workspace", destination = "workspace" }',
-            '{ source = "/logs/agent", destination = "agent" }',
         ]
         if wrappers:
             artifacts.append(

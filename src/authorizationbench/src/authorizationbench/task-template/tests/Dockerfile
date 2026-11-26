@@ -22,3 +22,8 @@ RUN git init -q /opt/ab \
 
 ENV PYTHONPATH=/opt/ab:/opt/ab/authorization_eva_sandbox \
     PYTHONUNBUFFERED=1
+
+# A tests/Dockerfile makes Harbor treat /tests as bundled in the image (it does
+# not upload tests/ at verify time), so copy the build context in.
+COPY . /tests/
+RUN chmod +x /tests/test.sh && rm -f /tests/Dockerfile

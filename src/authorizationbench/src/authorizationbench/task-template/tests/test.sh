@@ -9,5 +9,8 @@ set -uo pipefail
 mkdir -p /logs/verifier
 python3 /tests/grade.py \
     --bundle /tests/bundle \
-    --artifacts /logs/artifacts \
+    --env-dir /collected \
+    --workspace /workspace \
+    --agent-dir /logs/artifacts/agent \
+    --tool-invocations /tmp/tool_invocations.jsonl \
     --out /logs/verifier

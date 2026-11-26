@@ -18,6 +18,7 @@ import shlex
 from pathlib import Path
 from typing import Any
 
+from harbor.agents.capabilities import AgentCapabilities
 from harbor.agents.installed.base import BaseInstalledAgent
 from harbor.environments.base import BaseEnvironment
 from harbor.models.agent.context import AgentContext
@@ -31,6 +32,9 @@ INSTRUCTION_PATH = "/tmp/authz_instruction.md"
 
 
 class AuthorizationBenchOpenHands(BaseInstalledAgent):
+    # Business tools come from the task's MCP server (the authz-env sidecar).
+    capabilities = AgentCapabilities(mcp_servers=True)
+
     def __init__(
         self,
         *args: Any,
