@@ -246,8 +246,10 @@ upstream entry point `evaluation/run_eval.py --harness openhands --prompt native
   "narrative-clock wakeups", but the released runner implements none and the tasks define no
   `environment_events`, so the clock never reaches the window, in the original runner as in
   Harbor. The oracle's purchase therefore lands at $200 and is judged out of authorization.
-  The authors' graded trajectory shows the clock at the window (2026-06-10 18:05), and their
-  Stage 5 gate marks these tasks `failed`. _TODO_: maintainers' decision (keep or exclude).
+  The authors' graded trajectory reaches the window (2026-06-10 18:05) because their Stage 5
+  replay moves the clock through the infra-only `POST /_env/clock` endpoint ("Used by Stage 5
+  replay 'wait' steps ...; never a tool"), which neither an agent nor `run_eval.py` uses.
+  _TODO_: maintainers' decision (keep or exclude).
 - **Oracle verification (Harbor 0.27.0, judge DeepSeek v4.1 Flash as in the authors' own check).**
   Single full run: 277/286 at reward 1.0, 0 setup errors. Re-running the 6 judge-dependent
   misses 3 times each: `T0005-i-g-n`, `T0005-n-g-n`, `T0033-n-i-h` pass 3/3 (judge noise);
