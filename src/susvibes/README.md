@@ -184,7 +184,7 @@ Reproduction steps:
 
 Harbor's `reward` is the per-task SecPass result, so the mean reward of a run is the SecPass rate, and `func_pass` in `reward.json` gives FuncPass. The original evaluator reports the same two rates as `sec_pass` and `func_pass` in `summary.json`, over all instances it was given. Harbor's mean leaves out errored trials, so for parity both rates are computed over all tasks and errored trials count as not passed.
 
-Links: [original benchmark](https://github.com/LeiLiLab/susvibes), [adapter PR](https://github.com/harbor-index/adapters/pull/33). The dataset PR and parity upload links will be added to `parity_experiment.json` once they exist.
+Links: [original benchmark](https://github.com/LeiLiLab/susvibes), [adapter PR](https://github.com/harbor-index/adapters/pull/33), [dataset PR](https://github.com/harbor-framework/harbor-datasets/pull/308), [parity results](https://huggingface.co/datasets/harborframework/parity-experiments/discussions/311). The parity repository is over the Hub's file limit, so the result files are at [zhaihaotian/susvibes-parity-experiments](https://huggingface.co/datasets/zhaihaotian/susvibes-parity-experiments/tree/main/adapters/susvibes) for now.
 
 ## Notes & Caveats
 
