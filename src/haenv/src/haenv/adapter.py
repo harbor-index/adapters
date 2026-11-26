@@ -10,8 +10,10 @@ Each generated task runs:
 
 from __future__ import annotations
 
+from collections import defaultdict
 import hashlib
 import json
+import math
 import re
 import shlex
 import shutil
@@ -21,8 +23,64 @@ from pathlib import Path
 
 
 UPSTREAM_REPO_URL = "https://github.com/thetahealth/mirobody-env.git"
-UPSTREAM_PIN = "94761fb"
+UPSTREAM_PIN = "94761fbf793a034fd3a2430e128f6fca6c07dd5b"
 DEFAULT_PACK_SIZE = 100
+PARITY_SUBSET_SIZE = 30
+PARITY_SPLIT_SEED = "haenv-parity-v1"
+
+
+def select_parity_subset(
+    rows: list[dict],
+    target_n: int = PARITY_SUBSET_SIZE,
+    seed: str = PARITY_SPLIT_SEED,
+) -> list[dict]:
+    """Deterministically select a stratified parity subset balanced across (frame, join_gold).
+
+    Uses Hamilton / Largest Remainder apportionment over (frame, join_gold) strata with
+    SHA-256 hash ordering within each stratum, independent of input ordering, then returns
+    the selected rows in their original order.
+    """
+    if target_n <= 0 or not rows:
+        return []
+    if len(rows) <= target_n:
+        return list(rows)
+
+    groups: dict[tuple[str, str], list[dict]] = defaultdict(list)
+    for row in rows:
+        key = (str(row.get("frame") or "F0"), str(row.get("join_gold") or "unified"))
+        groups[key].append(row)
+
+    for key, members in groups.items():
+        members.sort(
+            key=lambda r: (
+                hashlib.sha256(f"{seed}|{r['case_id']}".encode("utf-8")).hexdigest(),
+                str(r["case_id"]),
+            )
+        )
+
+    total = len(rows)
+    exact_quotas = {k: (target_n * len(members)) / total for k, members in groups.items()}
+    quotas = {k: math.floor(q) for k, q in exact_quotas.items()}
+    remaining = target_n - sum(quotas.values())
+
+    if remaining > 0:
+        ranked_strata = sorted(
+            groups.keys(),
+            key=lambda k: (-(exact_quotas[k] - quotas[k]), -len(groups[k]), k),
+        )
+        for key in ranked_strata:
+            if remaining == 0:
+                break
+            if quotas[key] < len(groups[key]):
+                quotas[key] += 1
+                remaining -= 1
+
+    selected_ids: set[str] = set()
+    for key, count in quotas.items():
+        for row in groups[key][:count]:
+            selected_ids.add(str(row["case_id"]))
+
+    return [row for row in rows if str(row["case_id"]) in selected_ids]
 
 
 class HealthAgentEnvironmentAdapter:
@@ -96,12 +154,12 @@ class HealthAgentEnvironmentAdapter:
             subprocess.run(
                 ["git", "fetch", "--depth", "1", "origin", UPSTREAM_PIN],
                 cwd=repo_dir,
-                check=False,
+                check=True,
             )
             subprocess.run(
                 ["git", "checkout", UPSTREAM_PIN],
                 cwd=repo_dir,
-                check=False,
+                check=True,
             )
         return repo_dir
 
@@ -128,7 +186,9 @@ class HealthAgentEnvironmentAdapter:
                 "--out",
                 str(pack_out),
                 "--gen-workers",
-                "4",
+                "2",
+                "--jobs",
+                "2",
             ]
             if self.seed is not None:
                 cmd.extend(["--seed", self.seed])
@@ -159,7 +219,7 @@ class HealthAgentEnvironmentAdapter:
                 self.lang,
             ]
         )
-        if self.limit is not None:
+        if self.limit is not None and self.split != "parity":
             cmd.extend(["--limit", str(self.limit)])
         if self.task_ids:
             cmd.append("--task-ids")
@@ -244,11 +304,14 @@ class HealthAgentEnvironmentAdapter:
 
         # 4. solution/solve.sh (real deterministic oracle)
         orders = row.get("oracle_orders") or []
+        cmds = [
+            "haenv-ehr get-profile > /dev/null",
+            "haenv-ehr get-notes > /dev/null",
+        ]
         if orders:
             quoted = " ".join(shlex.quote(str(t)) for t in orders)
-            order_commands = f"haenv-ehr order-test {quoted} > /dev/null"
-        else:
-            order_commands = "haenv-ehr get-profile > /dev/null"
+            cmds.append(f"haenv-ehr order-test {quoted} > /dev/null")
+        order_commands = "\n".join(cmds)
 
         oracle_json = json.dumps(row["oracle_answer"], ensure_ascii=False, indent=2)
         solve_tpl = (self.template_dir / "solution" / "solve.sh").read_text(encoding="utf-8")
@@ -283,8 +346,12 @@ class HealthAgentEnvironmentAdapter:
             batch_dir, repo_dir = self._ensure_pack_batch(work_root)
             extracted_jsonl = work_root / "extracted_cases.jsonl"
             rows = self._extract_cases(batch_dir, repo_dir, extracted_jsonl)
+            if self.split == "parity" and not self.task_ids:
+                rows = select_parity_subset(rows, target_n=PARITY_SUBSET_SIZE)
+                if self.limit is not None:
+                    rows = rows[: self.limit]
 
             for row in rows:
                 self._render_task(row)
 
-        print(f"Generated {len(rows)} HAEnv M2 diagnosis tasks in {self.output_dir}")
+        print(f"Generated {len(rows)} HAEnv M2 {self.split} tasks in {self.output_dir}")

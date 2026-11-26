@@ -1,10 +1,10 @@
-# HAEnv Clinical Reasoning Task (Diagnosis Track — M2)
+# Clinical Reasoning Task
 
 {question}
 
 ---
 
-## Harbor Execution & EHR Tool Instructions
+## EHR Tool Instructions
 
 Patient records and the budgeted investigation menu are served by an isolated EHR service. Use the `haenv-ehr` CLI (JSON output on stdout) to query available records up to index time `T` and to order tests within the declared purchase budget:
 

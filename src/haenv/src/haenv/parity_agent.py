@@ -11,7 +11,7 @@ Mirrors upstream `haenv.interaction.query.gated.solve_gated_round`:
 Usage (from adapters repo root):
   PYTHONPATH="$PWD/src/haenv/src" harbor run \\
     -p datasets/haenv \\
-    --agent-import-path haenv.parity_agent:HAEnvParityAgent \\
+    -a haenv.parity_agent:HAEnvParityAgent \\
     -m openai/gpt-5-mini
 """
 
@@ -22,6 +22,7 @@ import base64
 import json
 import os
 import shlex
+import time
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -73,7 +74,8 @@ class HAEnvParityAgent(BaseAgent):
         model = self.model_name
         base_url = (
             self._api_base
-            or self.base_url
+            or getattr(self, "base_url", None)
+            or getattr(self, "_base_url", None)
             or os.environ.get("HAENV_PARITY_BASE_URL")
             or ""
         ).strip()
@@ -134,17 +136,36 @@ class HAEnvParityAgent(BaseAgent):
             body["tools"] = [{"type": "function", "function": t} for t in tools]
             body["tool_choice"] = tool_choice
 
-        req = urllib.request.Request(
-            url,
-            data=json.dumps(body, ensure_ascii=False).encode("utf-8"),
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {api_key}",
-            },
-            method="POST",
-        )
-        with urllib.request.urlopen(req, timeout=self._request_timeout_sec) as resp:
-            return json.loads(resp.read().decode("utf-8"))
+        payload_bytes = json.dumps(body, ensure_ascii=False).encode("utf-8")
+        last_exc: Exception | None = None
+        for attempt in range(1, 5):
+            req = urllib.request.Request(
+                url,
+                data=payload_bytes,
+                headers={
+                    "Content-Type": "application/json",
+                    "Authorization": f"Bearer {api_key}",
+                },
+                method="POST",
+            )
+            try:
+                with urllib.request.urlopen(req, timeout=self._request_timeout_sec) as resp:
+                    data = json.loads(resp.read().decode("utf-8"))
+                if isinstance(data, dict) and data.get("error") and not data.get("choices"):
+                    raise RuntimeError(f"API error body: {str(data['error'])[:300]}")
+                return data
+            except urllib.error.HTTPError as exc:
+                err_body = exc.read().decode("utf-8", errors="replace")[:300]
+                last_exc = RuntimeError(f"Chat HTTP {exc.code}: {err_body}")
+                if exc.code not in (408, 429, 500, 502, 503, 504) or attempt == 4:
+                    raise last_exc from exc
+                time.sleep(min(2.0 * attempt, 10.0))
+            except Exception as exc:  # noqa: BLE001
+                last_exc = exc
+                if attempt == 4:
+                    raise
+                time.sleep(min(2.0 * attempt, 10.0))
+        raise last_exc or RuntimeError("Chat request failed")
 
     async def _ehr_get(self, environment: BaseEnvironment, path: str) -> dict[str, Any]:
         cmd = (

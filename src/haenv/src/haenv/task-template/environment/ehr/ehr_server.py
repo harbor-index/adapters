@@ -17,6 +17,7 @@ import json
 import os
 import tempfile
 import threading
+import time
 import urllib.error
 import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -282,7 +283,7 @@ class _ReplaySolver:
         return out
 
 
-def _call_live_judge(req, judge_env: dict, policy: dict) -> str:
+def _call_live_judge(req, judge_env: dict, policy: dict) -> tuple[str, dict]:
     """Call OpenAI-compatible or OpenRouter endpoint for management-rubric-v7 judge."""
     model = judge_env.get("HAENV_JUDGE_MODEL") or policy["judge"]["model_id"]
     base_url = judge_env.get("HAENV_JUDGE_BASE_URL", "").strip()
@@ -302,34 +303,74 @@ def _call_live_judge(req, judge_env: dict, policy: dict) -> str:
     else:
         raise RuntimeError("No judge API key supplied (OPENROUTER_API_KEY / OPENAI_API_KEY / GOOGLE_API_KEY)")
 
+    response_format = req.response_format
     body: dict = {
         "model": model,
         "messages": [{"role": "user", "content": req.prompt}],
         "max_tokens": int(policy["judge"].get("max_tokens", 12000)),
-        "response_format": req.response_format,
+        "response_format": response_format,
     }
     if "openrouter.ai" in base_url and policy["judge"].get("reasoning_effort"):
         body["reasoning"] = {"effort": policy["judge"]["reasoning_effort"]}
+    else:
+        body["temperature"] = 0.0
+        # On OpenAI-compatible endpoints where strict json_schema disables hidden
+        # reasoning tokens, place `reason` and `evidence` before `label` (same
+        # JSON object semantics) so the judge reasons before emitting `label`.
+        rf_copy = copy.deepcopy(response_format)
+        verdicts_props = (
+            (((rf_copy.get("json_schema") or {}).get("schema") or {}).get("properties") or {})
+            .get("verdicts", {})
+            .get("properties")
+        )
+        if isinstance(verdicts_props, dict):
+            for atom in verdicts_props.values():
+                if isinstance(atom, dict) and isinstance(atom.get("properties"), dict):
+                    p = atom["properties"]
+                    if {"reason", "evidence", "label"} <= set(p):
+                        atom["required"] = ["reason", "evidence", "label"]
+                        atom["properties"] = {
+                            "reason": p["reason"],
+                            "evidence": p["evidence"],
+                            "label": p["label"],
+                        }
+        body["response_format"] = rf_copy
 
-    http_req = urllib.request.Request(
-        base_url,
-        data=json.dumps(body, ensure_ascii=False).encode("utf-8"),
-        headers={
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {api_key}",
-        },
-        method="POST",
-    )
-    with urllib.request.urlopen(http_req, timeout=180) as resp:
-        raw_resp = json.loads(resp.read().decode("utf-8"))
-
-    choices = raw_resp.get("choices") or []
-    if not choices:
-        raise RuntimeError(f"Empty judge response choices: {raw_resp}")
-    content = (choices[0].get("message") or {}).get("content") or ""
-    if not content.strip():
-        raise RuntimeError(f"Empty judge content: {raw_resp}")
-    return content
+    payload_bytes = json.dumps(body, ensure_ascii=False).encode("utf-8")
+    last_exc: Exception | None = None
+    raw_resp: dict = {}
+    for attempt in range(1, 5):
+        http_req = urllib.request.Request(
+            base_url,
+            data=payload_bytes,
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {api_key}",
+            },
+            method="POST",
+        )
+        try:
+            with urllib.request.urlopen(http_req, timeout=180) as resp:
+                raw_resp = json.loads(resp.read().decode("utf-8"))
+            choices = raw_resp.get("choices") or []
+            if not choices:
+                raise RuntimeError(f"Empty judge response choices: {raw_resp}")
+            content = (choices[0].get("message") or {}).get("content") or ""
+            if not content.strip():
+                raise RuntimeError(f"Empty judge content: {raw_resp}")
+            return content, (raw_resp.get("usage") or {})
+        except urllib.error.HTTPError as exc:
+            err_body = exc.read().decode("utf-8", errors="replace")[:300]
+            last_exc = RuntimeError(f"Judge HTTP {exc.code}: {err_body}")
+            if exc.code not in (408, 429, 500, 502, 503, 504) or attempt == 4:
+                raise last_exc from exc
+            time.sleep(min(2.0 * attempt, 10.0))
+        except Exception as exc:  # noqa: BLE001
+            last_exc = exc
+            if attempt == 4:
+                raise
+            time.sleep(min(2.0 * attempt, 10.0))
+    raise last_exc or RuntimeError("Judge request failed")
 
 
 def grade_submission(session: IsolatedM2Session, answer_text: str, gold_case: dict, judge_env: dict) -> dict:
@@ -430,13 +471,14 @@ def grade_submission(session: IsolatedM2Session, answer_text: str, gold_case: di
         "yes",
     )
 
+    judge_usage: dict = {}
     if offline_requested or not has_api_key:
         judge_mode = "offline_stub"
         reply = stub_reply(rubric["items"], answer_obj)
         raw_judge_text = reply.raw
     else:
         judge_mode = "live_llm"
-        raw_judge_text = _call_live_judge(req, judge_env, policy)
+        raw_judge_text, judge_usage = _call_live_judge(req, judge_env, policy)
 
     verdicts = parse_reply(raw_judge_text, rubric["items"], answer_obj)
     mgmt_summary = score(
@@ -457,6 +499,10 @@ def grade_submission(session: IsolatedM2Session, answer_text: str, gold_case: di
         "D": D,
         "Q": round(Q, 6),
         "judge_mode": judge_mode,
+        "judge_usage": {
+            "prompt_tokens": int(judge_usage.get("prompt_tokens") or 0),
+            "completion_tokens": int(judge_usage.get("completion_tokens") or 0),
+        },
         "overall": overall,
         "hard_gates": hard_gates,
         "propensity_gates": propensity_gates,

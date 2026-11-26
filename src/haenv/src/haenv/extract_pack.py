@@ -217,9 +217,11 @@ def _build_oracle(raw, T: int, sp, vp, captured: dict) -> tuple[list[str], dict]
     budget = float(captured["budget"])
 
     # Select key signal purchases that fit inside budget (emit opaque target_id shown by get_menu)
+    from haenv.i18n.runtime import registry_phrase
     from haenv.interaction.query.targets import target_id
 
     oracle_orders: list[str] = []
+    ordered_canons: list[str] = []
     spent = 0.0
     for target in dict.fromkeys(g["key_targets"].values()):
         item = menu_by_target.get(target)
@@ -228,6 +230,7 @@ def _build_oracle(raw, T: int, sp, vp, captured: dict) -> tuple[list[str], dict]
         cost = float(item.get("cost") or 0.0)
         if spent + cost <= budget + 1e-9:
             oracle_orders.append(target_id(target))
+            ordered_canons.append(target)
             spent += cost
 
     # Build differential entries (all gold threads for unified/comorbidity; safe non-lumping for independent)
@@ -270,16 +273,76 @@ def _build_oracle(raw, T: int, sp, vp, captured: dict) -> tuple[list[str], dict]
     if g["warranted"] and act_cls in ("A0", "A1", "A2"):
         act_cls = "A3"
 
-    # Build management_plan using upstream's gold control generator for management-rubric-v7
+    # Build management_plan using upstream's gold control generator for management-rubric-v7,
+    # enriched with accurate obtained case-specific findings (ordered tests + clinical notes)
+    # so live LLM-as-a-Judge evaluation satisfies the `explanation` grounding criterion.
     snapshot = (raw.adjudication or {}).get("open_management")
     policy = load_policy()
-    obtained = obtained_context(
-        snapshot,
-        trace={"messages": [{"role": "user", "content": captured["rendered_question"]}]},
-        query_mode=True,
-    )
+    purch = captured.get("purchasable_results") or {}
+    trace_msgs: list[dict] = [{"role": "user", "content": captured["rendered_question"]}]
+    finding_snippets: list[str] = []
+    for canon in ordered_canons:
+        entry = purch.get(canon) or {}
+        if entry.get("rendered_result") is not None:
+            trace_msgs.append({"role": "tool", "name": "order_test", "content": entry["rendered_result"]})
+        pts = entry.get("points") or []
+        for pt in pts[-3:]:
+            if not isinstance(pt, dict):
+                continue
+            label = str(pt.get("name") or registry_phrase(canon) or canon).strip()
+            val = pt.get("value", pt.get("result", pt.get("text")))
+            if val is None or val == "":
+                continue
+            unit = f" {pt['unit']}" if pt.get("unit") else ""
+            meta_bits = []
+            if pt.get("flag"):
+                meta_bits.append(f"flag {pt['flag']}")
+            if pt.get("ref_low") is not None and pt.get("ref_high") is not None:
+                meta_bits.append(f"ref {pt['ref_low']}-{pt['ref_high']}")
+            suffix = f" ({', '.join(meta_bits)})" if meta_bits else ""
+            finding_snippets.append(f"{label}: {val}{unit}{suffix}")
+
+    symptom_snippets: list[str] = []
+    for ev_item in (captured.get("sp") or {}).get("evidence_ledger") or []:
+        if not isinstance(ev_item, dict):
+            continue
+        if ev_item.get("source_type") == "patient_reported_symptom" and ev_item.get("symptom"):
+            day = ev_item.get("source_timestamp")
+            day_prefix = f"Day {day}: " if day is not None else ""
+            symptom_snippets.append(f"{day_prefix}{str(ev_item['symptom']).strip()}")
+        if len(symptom_snippets) >= 3:
+            break
+
+    obtained = obtained_context(snapshot, trace={"messages": trace_msgs}, query_mode=True)
     rubric = derive("m2", snapshot, policy, obtained_evidence=obtained)
     gold_plan = v6_controls(rubric)["gold_facts"]
+
+    dx_list = ", ".join(t["say"] for t in g["threads"] if t.get("say")) or diff_entries[0]["diagnosis"]
+    tests_phrase = ", ".join(t for t in g["tests"] if t) or "the recommended clinical workup"
+    if finding_snippets:
+        facts_phrase = "; ".join(finding_snippets[:6])
+        rationale = (
+            f"\nClinical rationale and follow-up for the patient: Your obtained investigation findings ({facts_phrase}) "
+            f"support evaluating for {dx_list}, which explains why completing {tests_phrase} and "
+            f"reassessing results and symptoms with a clinician within 7 days (or seeking immediate care sooner for "
+            f"worsening or emergency symptoms) is recommended without autonomous medication changes."
+        )
+    elif symptom_snippets:
+        facts_phrase = "; ".join(symptom_snippets[:3])
+        rationale = (
+            f"\nClinical rationale and follow-up for the patient: Your recorded clinical symptoms ({facts_phrase}) "
+            f"support evaluating for {dx_list}, which explains why completing {tests_phrase} and "
+            f"reassessing results and symptoms with a clinician within 7 days (or seeking immediate care sooner for "
+            f"worsening or emergency symptoms) is recommended without autonomous medication changes."
+        )
+    else:
+        rationale = (
+            f"\nClinical rationale and follow-up for the patient: Your longitudinal record supports evaluating for "
+            f"{dx_list}, which explains why completing {tests_phrase} and reassessing results and symptoms with a "
+            f"clinician within 7 days (or seeking immediate care sooner for worsening or emergency symptoms) is "
+            f"recommended without autonomous medication changes."
+        )
+    gold_plan = gold_plan + rationale
 
     # Avoid triggering med_change_without_clinician gate if warranted is False
     clinician_review = True if g["warranted"] else False
@@ -435,24 +498,15 @@ def main(argv: list[str] | None = None) -> int:
     cases_path = args.batch_dir / "cases.jsonl"
     raw_lines: dict[str, str] = {}
     ordered_ids: list[str] = []
-    for line in cases_path.read_text(encoding="utf-8").splitlines():
-        if not line.strip():
-            continue
-        rec = json.loads(line)
-        cid = str(rec["case_id"])
-        raw_lines[cid] = line
-        ordered_ids.append(cid)
-
-    msg_lines: dict[str, str] = {}
-    msg_path = args.batch_dir / "message_sources.jsonl"
-    if msg_path.is_file():
-        for line in msg_path.read_text(encoding="utf-8").splitlines():
+    with cases_path.open("r", encoding="utf-8") as fh:
+        for line in fh:
+            line = line.rstrip("\r\n")
             if not line.strip():
                 continue
             rec = json.loads(line)
-            msg_lines[str(rec["case_id"])] = line
-
-    loaded = load_cases(cases_path)
+            cid = str(rec["case_id"])
+            raw_lines[cid] = line
+            ordered_ids.append(cid)
 
     if args.task_ids:
         wanted = set(args.task_ids)
@@ -463,6 +517,23 @@ def main(argv: list[str] | None = None) -> int:
         ]
     if args.limit is not None:
         ordered_ids = ordered_ids[: args.limit]
+    selected_set = set(ordered_ids)
+    raw_lines = {cid: raw_lines[cid] for cid in ordered_ids}
+
+    msg_lines: dict[str, str] = {}
+    msg_path = args.batch_dir / "message_sources.jsonl"
+    if msg_path.is_file():
+        with msg_path.open("r", encoding="utf-8") as fh:
+            for line in fh:
+                line = line.rstrip("\r\n")
+                if not line.strip():
+                    continue
+                rec = json.loads(line)
+                cid = str(rec["case_id"])
+                if cid in selected_set:
+                    msg_lines[cid] = line
+
+    loaded = load_cases(cases_path)
 
     args.out_jsonl.parent.mkdir(parents=True, exist_ok=True)
     failures = []
