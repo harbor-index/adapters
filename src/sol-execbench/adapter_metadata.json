@@ -1,0 +1,36 @@
+[
+  {
+    "adapter_name": "sol-execbench",
+    "adapter_builders": [
+      "Yingxuan Yang (60939421+zoe-yyx@users.noreply.github.com)"
+    ],
+    "original_benchmark": [
+      {
+        "split": "full",
+        "size": 235,
+        "harness": "None",
+        "supported_agents": [
+          "None"
+        ],
+        "adaptable": true,
+        "notes": "Upstream evaluates submitted GPU kernels."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "stable_subset_v1",
+        "adapted_benchmark_size": 194,
+        "parity_benchmark_size": 0,
+        "parity_sampling_rate": 0,
+        "registry_benchmark_size": 0,
+        "added_agents": [
+          "None"
+        ],
+        "parity_matching_agents": [],
+        "parity_unmatching_agents": [],
+        "parity_costs": null,
+        "notes": "Matched agent parity and registry publication pending. Historical local oracle validation covered 194 tasks."
+      }
+    ]
+  }
+]
