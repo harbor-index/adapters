@@ -145,6 +145,10 @@ Plan (to be confirmed with the Harbor team):
 - **Judge:** `claude-haiku-5-5` (the default) on both sides.
 - **Runs:** 5-task sanity check, then 1 full run, then 3 runs per side. Main metric C; D, I
   and E are also compared, by overlap of run ranges and per-task MSE.
+- **Failures:** one rule on both sides. A run whose Claude Code stream ends with `success`
+  or `error_max_turns`, or that hits the time limit, is scored (0 without an answer); any
+  other run (API error, `error_during_execution`, no result event, setup or build failure)
+  is an infrastructure failure, rerun and reported per side.
 - **Original side:** branch [`harbor-parity`](https://github.com/Just-Curieous/Curie/tree/harbor-parity)
   of the official EXP-Bench repository; commands in `benchmark/exp_bench/harbor_parity/README.md`.
 - **Harbor side:**
