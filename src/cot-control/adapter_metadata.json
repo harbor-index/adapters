@@ -1,0 +1,38 @@
+[
+  {
+    "adapter_name": "cot-control",
+    "adapter_builders": ["Run-Ze Fan (runze.fan@icloud.com)"],
+    "original_benchmark": [
+      {
+        "split": "qa",
+        "size": 10836,
+        "harness": "llm",
+        "supported_agents": ["None"],
+        "adaptable": true,
+        "notes": "CoT-Control-QA: GPQA (445), HLE (469) and MMLU-Pro (300) questions x 9 CoT instruction types. The paper counts 10,926 instances; the released harness skips the 45 questions without keyword data for the two word-suppression types, which leaves the 10,836 instances it actually runs."
+      },
+      {
+        "split": "agent",
+        "size": 3150,
+        "harness": "agent",
+        "supported_agents": ["None"],
+        "adaptable": true,
+        "notes": "CoT-Control-Agent: SWE-bench Verified (200) and BFCL (150) x 9 instruction types, run with inspect_ai. Adaptable in principle but not adapted in this version: upstream publishes no script from trajectories to the graded table, does not specify how multi-turn reasoning is concatenated, and leaves inspect_ai/inspect_evals unpinned."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "qa",
+        "adapted_benchmark_size": 10836,
+        "parity_benchmark_size": 675,
+        "parity_sampling_rate": 0.0623,
+        "registry_benchmark_size": 10836,
+        "added_agents": ["cot-control-llm@0.1.0"],
+        "parity_matching_agents": ["cot-control-llm@0.1.0+deepseek-v4-1-flash-261017"],
+        "parity_unmatching_agents": ["None"],
+        "parity_costs": "$26",
+        "notes": "Parity on a 675-task subset (25 questions per source dataset x 9 instruction types, --split parity), 3 runs per side, with deepseek-v4.1-flash as the evaluated model and as the LLM judge on both sides (a deviation: upstream's judge is gpt-5-mini; the key available for the runs served deepseek-v4.1-flash only). parity_costs is estimated from the gateway's bill for the six runs and includes repeated requests, the judge calls and the part of original-side run 1 that was run again after an interruption. Standard CLI agents are not supported: the benchmark scores the model's raw reasoning trace, which only the adapter's single-call agent captures."
+      }
+    ]
+  }
+]

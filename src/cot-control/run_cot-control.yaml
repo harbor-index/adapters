@@ -1,0 +1,44 @@
+# Reference configuration for the CoT-Control adapter.
+#
+# 1. Generate the tasks (from src/cot-control):
+#      uv run cot-control --output-dir ../../datasets/cot-control
+# 2. Run from the repository root:
+#      harbor run -c src/cot-control/run_cot-control.yaml
+#
+# Verifier environment (read from the host, see [verifier.env] in each task.toml):
+#   OPENAI_API_KEY               needed by the LLM judge: always for `ignore_question`
+#                                tasks, and for the secondary meta-discussion metric
+#   COT_CONTROL_JUDGE_MODEL      judge model (default: gpt-5-mini-2025-08-07)
+#   COT_CONTROL_META_DISCUSSION  auto (default) | required | skip
+
+jobs_dir: jobs
+n_attempts: 1
+timeout_multiplier: 1.0
+
+orchestrator:
+  type: local
+  n_concurrent_trials: 4
+  quiet: false
+
+environment:
+  type: docker
+  force_build: false
+  delete: true
+
+# Default: oracle agent for verification
+agents:
+  - name: oracle
+
+# CoT-Control agent: one chat-completion request per task, exactly as upstream, with the
+# reasoning trace recorded for the verifier. Harbor must be able to import it:
+#   PYTHONPATH=src/cot-control/src harbor run -c src/cot-control/run_cot-control.yaml
+# Needs OPENROUTER_API_KEY (or --ak api_base=... / api_key_env=... for another
+# OpenAI-compatible endpoint that returns the reasoning trace).
+# agents:
+#   - import_path: cot_control.agent:CoTControlLLMAgent
+#     model_name: deepseek/deepseek-r1
+#     kwargs:
+#       reasoning: auto
+
+datasets:
+  - path: datasets/cot-control

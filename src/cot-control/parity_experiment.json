@@ -1,0 +1,42 @@
+[
+  {
+    "adapter_name": "cot-control",
+    "agent": "cot-control-llm@0.1.0",
+    "model": "deepseek-v4-1-flash-261017",
+    "date": "2026-11-25",
+    "adapted_benchmark_size": 10836,
+    "parity_benchmark_size": 675,
+    "number_of_runs": 3,
+    "notes": "JUDGE DEVIATION FROM UPSTREAM: the LLM judge on both sides was deepseek-v4.1-flash, NOT upstream's gpt-5-mini (set with COT_CONTROL_JUDGE_MODEL, COT_CONTROL_JUDGE_MAX_RETRIES=6), because the API key available for the runs served that model only. Prompts, request parameters and verdict logic of the judge are upstream's. The judge decides the ignore_question type (75 of the 675 tasks) and the meta-discussion check, so those numbers are not comparable with the paper; the other eight instruction types are graded by rules and answer accuracy needs no judge. Subset: 675 tasks = 25 questions per source dataset (seeded hash, seed 42) x 9 instruction types, generated with --split parity; the same questions were exported for the original harness with --export-upstream-subset. Scores are percentages, macro-averaged over the 27 (dataset, instruction type) pairs. Original side: upstream commit 5d78aeffe0152ba087c2d31cd07712d029c64785 with run_cceval.py, prompts.py, grading.py and grade_compliance_csv.py unmodified, one line changed in llm.py (endpoint from OPENROUTER_BASE_URL), driven by harbor_parity/run_original.sh of the fork; Python 3.12 with harbor_parity/requirements.txt. Harbor side: Harbor 0.27.0, Docker, agent cot_control.agent:CoTControlLLMAgent. Model: requested as deepseek-v4.1-flash from one OpenAI-compatible gateway on both sides; every response stored on the Harbor side names the snapshot deepseek-v4-1-flash-261017 (the upstream harness does not store that field). Request on both sides: one user message, max_tokens 25000, temperature 0.0, no system prompt, no tools, no reasoning field, timeout 300 s. Failed requests: up to 3 requests per instance on both sides (harbor run --max-retries 2; ATTEMPTS=3 in harbor_parity/run_pair.py); an instance still without an answer is excluded from the averages. That happened in run 1 only: 2 instances on the original side, 4 on the Harbor side, all timeouts. Concurrency: 16 trials in Harbor; 3 run_cceval.py processes x 8 requests on the original side. Order: 27-task check on both sides, run 1 on both sides and a comparison, then runs 2 and 3 on both sides at the same time. Run 1 was interrupted when the host went to sleep after 91 Harbor trials and 3 of the 27 original-side pairs: the Harbor job continued afterwards (one trial whose verifier timed out during the sleep was run again with harbor jobs resume) and the other 24 original-side pairs were run from scratch. Offline checks on the saved outputs of all six runs: the 2,025 request bodies saved by the Harbor agent are identical to those built by the upstream code, and grading each side's traces with the other side's grader gives identical compliance (rule-based types, 1,798 instances per direction) and identical correctness (2,021 and 2,023 instances). The Controllability Score of this model rests on 6 to 13 compliant instances per run, all in the two word-suppression types. harborframework/parity-experiments is over the Hub's limit of 1,000,000 files and rejects pushes (harbor-framework/adapters#129), so the files of the parity PR are mirrored in the same layout at https://huggingface.co/datasets/Vfrz/cot-control-harbor-parity/tree/b16d817859ff49eddc9e45f1f71b5e7b37ffef1a/adapters/cot-control and will be pushed to the PR unchanged once pushes are accepted.",
+    "original_parity_repo": "https://github.com/RZFan525/CoTControl/tree/harbor-parity",
+    "adapter_pr": ["https://github.com/harbor-index/adapters/pull/37"],
+    "dataset_pr": ["https://github.com/harbor-framework/harbor-datasets/pull/310"],
+    "parity_pr": ["https://huggingface.co/datasets/harborframework/parity-experiments/discussions/313"],
+    "metrics": [
+      {
+        "benchmark_name": "CoT-Control",
+        "metric": "Controllability Score (macro-average over dataset x instruction type, %)",
+        "original": "1.5802 ± 0.2750",
+        "harbor": "1.3333 ± 0.2263",
+        "original_runs": [1.9259, 1.7778, 1.037],
+        "harbor_runs": [0.8889, 1.4815, 1.6296]
+      },
+      {
+        "benchmark_name": "CoT-Control",
+        "metric": "Controllability Score without meta-discussion (macro-average over dataset x instruction type, %)",
+        "original": "0.0494 ± 0.0494",
+        "harbor": "0.0000 ± 0.0000",
+        "original_runs": [0.0, 0.1481, 0.0],
+        "harbor_runs": [0.0, 0.0, 0.0]
+      },
+      {
+        "benchmark_name": "CoT-Control",
+        "metric": "Answer accuracy (macro-average over dataset x instruction type, %)",
+        "original": "68.2654 ± 0.6465",
+        "harbor": "67.2881 ± 0.7288",
+        "original_runs": [67.0185, 68.5926, 69.1852],
+        "harbor_runs": [66.4568, 68.7407, 66.6667]
+      }
+    ]
+  }
+]
