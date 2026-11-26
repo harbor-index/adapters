@@ -1,0 +1,46 @@
+schema_version = "1.0"
+
+# The agent's v2 submission is collected from the agent container and re-created at the
+# same path in the separate verifier container (Harbor re-materializes artifacts at their source path).
+artifacts = ["/app/output"]
+
+[task]
+name = "osunlp/online-mind2web__{task_slug}"
+description = "Online-Mind2Web task {task_id} on {website}"
+authors = [
+    { name = "Tianci Xue" },
+    { name = "Weijian Qi" },
+    { name = "Tianneng Shi" },
+    { name = "Chan Hee Song" },
+    { name = "Boyu Gou" },
+    { name = "Dawn Song" },
+    { name = "Huan Sun" },
+    { name = "Yu Su" },
+]
+keywords = ["web-agent", "browser", "online-mind2web", "live-website", "llm-judge"]
+
+[metadata]
+difficulty = "{difficulty}"
+category = "web-navigation"
+upstream_task_id = "{task_id}"
+website = "{website}"
+reference_length = {reference_length}
+
+[verifier]
+# Grade in a fresh container built from the same environment, not in the agent's workspace.
+environment_mode = "separate"
+timeout_sec = 900.0
+
+[verifier.env]
+OPENAI_API_KEY = "${OPENAI_API_KEY}"
+JUDGE_MODEL = "gpt-6-luna"
+JUDGE_SCORE_THRESHOLD = "3"
+
+[agent]
+timeout_sec = 2400.0
+
+[environment]
+build_timeout_sec = 1200.0
+cpus = 2
+memory_mb = 8192
+storage_mb = 10240

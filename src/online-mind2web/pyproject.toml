@@ -1,0 +1,23 @@
+[project]
+name = "harbor-online-mind2web-adapter"
+version = "0.1.0"
+description = "Harbor adapter for Online-Mind2Web (live-website web agent benchmark, WebJudge-scored)"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "huggingface_hub>=0.30",
+]
+
+[project.optional-dependencies]
+# Needed only to run the custom Browser Use agent (online_mind2web.browser_use_agent).
+harbor = ["harbor[daytona]==0.24.0", "daytona>=0.210.0,<2"]
+
+[project.scripts]
+online-mind2web = "online_mind2web.main:main"
+
+[build-system]
+requires = ["uv_build>=0.12.23,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "online_mind2web"

@@ -1,0 +1,38 @@
+[
+  {
+    "adapter_name": "online-mind2web",
+    "agent": "browser-use@0.13.14",
+    "model": "gpt-6-luna",
+    "date": "2026-11-25",
+    "adapted_benchmark_size": 300,
+    "parity_benchmark_size": 100,
+    "number_of_runs": 3,
+    "notes": "Parity on a 100-task difficulty-stratified subset of all 300 tasks (seed 42; easy 27 / medium 47 / hard 26), 3 runs per side. Both sides run the same Browser Use runner and prompt (max_steps=50, max_actions_per_step=1, reasoning_effort=low). Original: Browser Use on host Google Chrome (macOS), scored with upstream src/run.py (WebJudge Online-Mind2Web mode, gpt-6-luna, threshold 3), missing trajectories counted as 0 (none were missing). Harbor: Daytona, harbor 0.24.0, 8 GB per task, WebJudge as the Harbor verifier (shared mode; the adapter now uses a separate verifier with identical grading code). Live websites: per-task outcomes vary run to run; 0 errors on either side.",
+    "original_parity_repo": "https://github.com/adityalahiri/Online-Mind2Web/tree/harbor-parity",
+    "adapter_pr": [
+      "https://github.com/harbor-index/adapters/pull/47"
+    ],
+    "dataset_pr": [],
+    "parity_pr": [
+      "https://huggingface.co/datasets/harborframework/parity-experiments/discussions/315"
+    ],
+    "metrics": [
+      {
+        "benchmark_name": "Online-Mind2Web",
+        "metric": "Success rate (%)",
+        "original": "33.00 \u00b1 1.53",
+        "harbor": "32.33 \u00b1 0.67",
+        "original_runs": [
+          30.0,
+          35.0,
+          34.0
+        ],
+        "harbor_runs": [
+          31.0,
+          33.0,
+          33.0
+        ]
+      }
+    ]
+  }
+]
