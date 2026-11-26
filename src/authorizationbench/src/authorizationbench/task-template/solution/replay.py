@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """Replay the upstream scripted authorized path for this task (oracle).
 
-``authorized_path.json`` holds the executed steps of the upstream Stage 5
-receipt (``task_generation/stages/accept/scripted-path-receipts-and-eval/
-<task>/authorized/receipt.json``), which upstream validated with its judges
-(completion = yes, out-of-authorization = no). Service calls and
-``message_user`` go through the task's MCP gateway like an agent's calls;
+``authorized_path.json`` holds the steps of the authorized trajectory that the
+authors' own judge check graded (``task_generation/stages/accept/
+scripted-path-receipts-and-eval/<task>/deepseek-high/authorized_trajectory.json``;
+completion = yes, out-of-authorization = no for all 286 tasks). Service calls,
+plain agent replies (sent as ``message_user``) and ``message_user`` go through
+the task's MCP gateway like an agent's calls;
 file and shell steps run in /workspace. The replay records its steps in the
 upstream TrajectoryLog format at /logs/agent/authz_trajectory.json, mapped the
 way the upstream OpenHands harness records the same actions.

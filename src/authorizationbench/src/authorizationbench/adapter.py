@@ -36,6 +36,7 @@ DATASET_NAME = "authorizationbench"
 
 SANDBOX = "authorization_eva_sandbox"
 RECEIPTS = f"{SANDBOX}/task_generation/stages/accept/scripted-path-receipts-and-eval"
+JUDGED_TRAJECTORY = "deepseek-high/authorized_trajectory.json"
 TEMPLATE_DIR = Path(__file__).resolve().parent / "task-template"
 DEFAULT_CACHE = Path.home() / ".cache" / "harbor-authorizationbench"
 
@@ -262,28 +263,38 @@ class AuthorizationBenchAdapter:
 
     @staticmethod
     def _write_solution(out: Path, source: Path, task_id: str, config: dict) -> None:
-        receipt_path = source / RECEIPTS / task_id / "authorized" / "receipt.json"
-        receipt = json.loads(receipt_path.read_text())
-        # Receipts name service tools by template; the environment and the MCP
-        # allowlist use the service id. They differ for a few expanded tasks
-        # (e.g. id shopping_app_venuepass, template shopping_app_instacart).
+        # The oracle replays the authorized trajectory the authors' own judge
+        # check graded (deepseek-high/authorized_trajectory.json; all 286 pass).
+        # The Stage 5 receipt alone is not enough: in 59 tasks it labels steps
+        # of that graded trajectory "not_run", "skipped" or "arguments_rejected"
+        # (e.g. T0009-b-g-h's quote, preview and order steps).
+        rel = f"{RECEIPTS}/{task_id}/{JUDGED_TRAJECTORY}"
+        judged = json.loads((source / rel).read_text())
+        # Upstream records name service tools by template; the environment and
+        # the MCP allowlist use the service id. They differ for a few expanded
+        # tasks (e.g. id shopping_app_venuepass, template shopping_app_instacart).
         by_template = {s["template"]: s["id"] for s in config.get("services") or []
                        if s.get("id") and s.get("template") and s["id"] != s["template"]}
         steps = []
-        for step in receipt["steps"]:
-            if step.get("execution") == "tool":
-                tool = step["tool"]
+        for index, step in enumerate(judged["trajectory"]):
+            kind, data = step.get("type"), step.get("data") or {}
+            if kind == "user_message":
+                if index:  # the first one is the instruction
+                    steps.append({"index": index, "tool": "user_message",
+                                  "content": str(data.get("content") or "")})
+            elif kind == "agent_message":
+                # A plain reply reaches the Oracle User, as message_user does.
+                steps.append({"index": index, "tool": "message_user",
+                              "arguments": {"text": str(data.get("content") or "")}})
+            elif kind == "tool_call":
+                tool = str(data.get("tool") or "")
                 prefix, dot, operation = tool.partition(".")
                 if dot and prefix in by_template:
                     tool = f"{by_template[prefix]}.{operation}"
-                steps.append({"index": step["index"], "tool": tool,
-                              "arguments": step.get("arguments") or {}})
-            elif step.get("execution") == "user_message":
-                steps.append({"index": step["index"], "tool": "user_message",
-                              "content": str(step.get("result") or "")})
+                steps.append({"index": index, "tool": tool,
+                              "arguments": data.get("arguments") or {}})
         path = {"task_id": task_id, "instruction": str(config["instruction"]),
-                "upstream_receipt": f"{RECEIPTS}/{task_id}/authorized/receipt.json",
-                "steps": steps}
+                "upstream_trajectory": rel, "steps": steps}
         (out / "solution" / "authorized_path.json").write_text(
             json.dumps(path, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
