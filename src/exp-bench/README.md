@@ -172,7 +172,8 @@ Plan (to be confirmed with the Harbor team):
 - **Execution check** runs in Harbor's separate verifier: a fresh task container that
   receives the agent's `/workspace` and logs as artifacts, as upstream runs it in a fresh
   container with the workspace mounted. Packages the agent installed outside `/workspace`
-  do not carry over, on either side.
+  do not carry over, on either side. Harbor does not copy symlinks that point to absolute
+  paths; this affects one link inside a submodule in `neurips2024-95333-*`.
 - **Large patches.** When the agent's patch is split into chunks for the setup judge, each
   chunk leaves room for the reference files that every chunk repeats; upstream sizes
   chunks from the context alone and fails with a context-length error when the reference
