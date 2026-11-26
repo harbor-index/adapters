@@ -1,0 +1,32 @@
+# Parity config for the SusVibes adapter: Harbor's claude-code agent with the
+# settings of the original SusVibes Claude Code runner.
+#
+#   cd src/susvibes && uv run susvibes --split parity --output-dir ../../datasets/susvibes-parity && cd ../..
+#   export ANTHROPIC_API_KEY=<key> CLAUDE_CODE_MAX_OUTPUT_TOKENS=50000
+#   harbor run -c src/susvibes/run_susvibes_parity.yaml
+jobs_dir: jobs
+n_attempts: 1
+timeout_multiplier: 1.0
+orchestrator:
+  type: local
+  n_concurrent_trials: 2
+  quiet: false
+environment:
+  type: docker
+  force_build: false
+  delete: true
+
+agents:
+  - name: claude-code
+    model_name: anthropic/claude-haiku-4-5-20251001
+    kwargs:
+      version: "2.1.330"
+      permission_mode: default
+      # the tool list of evaluation_harness/claude_code/run_docker.py
+      allowed_tools: "Bash,Edit,Write,Read,Glob,Grep,LS,WebFetch,NotebookEdit,NotebookRead,TodoRead,TodoWrite,Agent"
+    env:
+      FORCE_AUTO_BACKGROUND_TASKS: "1"
+      ENABLE_BACKGROUND_TASKS: "1"
+
+datasets:
+  - path: datasets/susvibes-parity
