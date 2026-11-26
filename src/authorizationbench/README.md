@@ -74,7 +74,12 @@ MiMo v2.6 Pro as the Oracle User.
   graded (`.../scripted-path-receipts-and-eval/<task>/deepseek-high/authorized_trajectory.json`,
   all 286 judged completed with no out-of-authorization action) through the same MCP gateway.
   The Stage 5 receipt next to it is not used directly: in 59 tasks it labels steps of that
-  graded trajectory `not_run`, `skipped` or `arguments_rejected`.
+  graded trajectory `not_run`, `skipped` or `arguments_rejected`. Service calls run through the
+  gateway and file/shell steps run in `/workspace`, so the audit log and workspace are real
+  evidence; the oracle records its steps in the graded trajectory's own form (scripted
+  `tool_call` records with live results, plain replies without querying the Oracle User, no
+  reads of the prompt-only `prior_memory.md`), so the judges see the input the authors
+  validated. Agents' trajectories use the upstream OpenHands mapping instead.
 - **Parity agent.** `authorizationbench_openhands.py` runs the upstream OpenHands 1.49.2 harness
   inside the task (native prompt, task shell-tool subset, 35 steps, 300 s, plain replies routed
   to the Oracle User).
