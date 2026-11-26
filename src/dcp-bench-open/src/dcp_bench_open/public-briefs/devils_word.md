@@ -1,0 +1,4 @@
+Given an array of integers, insert '+' or '-' operators before each integer in the array so that summing them up will
+result in 666.
+
+Print the array with the correct signs (result).

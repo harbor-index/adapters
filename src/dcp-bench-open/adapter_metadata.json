@@ -1,0 +1,40 @@
+[
+  {
+    "adapter_name": "dcp-bench-open",
+    "adapter_builders": [
+      "Baojian Zhou (baojian.zh@gmail.com)"
+    ],
+    "original_benchmark": [
+      {
+        "split": "full",
+        "size": 164,
+        "harness": "llm",
+        "supported_agents": [
+          "None"
+        ],
+        "adaptable": true,
+        "notes": "DCP-Bench-Open v0.3.0, Python/CPMpy, 634 distinct native instances."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "full",
+        "adapted_benchmark_size": 164,
+        "parity_benchmark_size": 0,
+        "parity_sampling_rate": 0,
+        "registry_benchmark_size": 0,
+        "added_agents": [
+          "None"
+        ],
+        "parity_matching_agents": [
+          "None"
+        ],
+        "parity_unmatching_agents": [
+          "None"
+        ],
+        "parity_costs": "$0",
+        "notes": "Full release. One task per modeling problem, scored over all distinct native instances. Model parity and registry publication are pending."
+      }
+    ]
+  }
+]

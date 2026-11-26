@@ -1,0 +1,7 @@
+services:
+  main:
+    privileged: true
+    tmpfs:
+      - /var/lib/dcp-verifier:rw,exec,size=3g
+    # A verifier-private daemon, never a mount of the host Docker socket.
+    # The agent environment has no Compose override and remains unprivileged.

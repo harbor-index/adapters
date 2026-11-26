@@ -1,0 +1,20 @@
+[project]
+name = "harbor-dcp-bench-open-adapter"
+version = "0.1.0"
+description = "DCP-Bench-Open v0.3.0 Harbor adapter for the Python/CPMpy track"
+readme = "README.md"
+authors = [
+    { name = "Baojian Zhou", email = "baojian.zh@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = []
+
+[project.scripts]
+dcp-bench-open = "dcp_bench_open.main:main"
+
+[build-system]
+requires = ["hatchling==1.27.0"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/dcp_bench_open"]
