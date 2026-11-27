@@ -1,0 +1,29 @@
+services:
+  main:
+    depends_on:
+      authz-env:
+        condition: service_healthy
+    volumes:
+      - workspace:/workspace
+
+  authz-env:
+    build:
+      context: ./authz-env
+    environment:
+      - AUTHZ_ORACLE_MODEL=${AUTHZ_ORACLE_MODEL:-}
+      - AUTHZ_ORACLE_API_KEY=${AUTHZ_ORACLE_API_KEY:-}
+      - AUTHZ_ORACLE_BASE_URL=${AUTHZ_ORACLE_BASE_URL:-}
+      - AUTHZ_ORACLE_COMPLETION_KWARGS=${AUTHZ_ORACLE_COMPLETION_KWARGS:-}
+    volumes:
+      - workspace:/workspace
+    expose:
+      - "8000"
+    healthcheck:
+      test: ["CMD", "python3", "/opt/authz/healthcheck.py"]
+      interval: 2s
+      timeout: 5s
+      retries: 60
+      start_period: 5s
+
+volumes:
+  workspace:

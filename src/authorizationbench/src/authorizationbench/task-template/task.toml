@@ -1,0 +1,65 @@
+schema_version = "1.4"
+
+# Evidence for the separate verifier. The sidecar entry is written by a
+# collect hook after the agent container has stopped.
+artifacts = []
+
+[task]
+name = "{task_name}"
+description = "{description}"
+authors = [
+    { name = "Zhiping Zhang" },
+    { name = "Franklin Mingzhe Li" },
+    { name = "Raio Zihao Huang" },
+    { name = "Tianshi Li" },
+]
+keywords = ["authorizationbench", "authorization", "agent-safety", "tool-use", "{domain}"]
+
+[metadata]
+difficulty = "medium"
+category = "agent-safety"
+upstream_task_id = "{task_id}"
+source_case_id = "{source_case_id}"
+case_type = "{case_type}"
+domain = "{domain}"
+direct_harm = "{harm}"
+situational_trigger = "{trigger}"
+
+[agent]
+# Upstream pauses the agent after 300 s of wall clock; standard Harbor agents
+# get a hard limit with headroom for agent start-up.
+timeout_sec = 600.0
+
+[verifier]
+timeout_sec = 900.0
+environment_mode = "separate"
+env = { AUTHZ_JUDGE_MODEL = "${AUTHZ_JUDGE_MODEL:-anthropic/claude-opus-5-5}", AUTHZ_JUDGE_API_KEY = "${AUTHZ_JUDGE_API_KEY}", AUTHZ_JUDGE_BASE_URL = "${AUTHZ_JUDGE_BASE_URL:-}", AUTHZ_JUDGE_COMPLETION_KWARGS = "${AUTHZ_JUDGE_COMPLETION_KWARGS:-}", AUTHZ_JUDGE_FALLBACK_MODEL = "${AUTHZ_JUDGE_FALLBACK_MODEL:-}" }
+
+[verifier.environment]
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 4096
+
+# Harbor carries the main container's /logs/artifacts into the separate verifier,
+# but not /logs/agent, so copy the agent trajectory there (runs before main stops).
+[[verifier.collect]]
+command = "rm -rf /logs/artifacts/agent && mkdir -p /logs/artifacts/agent && for f in trajectory.json authz_trajectory.json; do if [ -f /logs/agent/$f ]; then cp /logs/agent/$f /logs/artifacts/agent/; fi; done"
+timeout_sec = 60.0
+
+[[verifier.collect]]
+service = "authz-env"
+command = "python3 /opt/authz/collect.py"
+timeout_sec = 120.0
+
+[environment]
+build_timeout_sec = 900.0
+cpus = 2
+memory_mb = 4096
+storage_mb = 10240
+env = { AUTHZ_ORACLE_MODEL = "${AUTHZ_ORACLE_MODEL:-openrouter/xiaomi/mimo-v2.6-pro}", AUTHZ_ORACLE_API_KEY = "${AUTHZ_ORACLE_API_KEY}", AUTHZ_ORACLE_BASE_URL = "${AUTHZ_ORACLE_BASE_URL:-}", AUTHZ_ORACLE_COMPLETION_KWARGS = "${AUTHZ_ORACLE_COMPLETION_KWARGS:-}" }
+
+[[environment.mcp_servers]]
+name = "authorization-bench"
+transport = "streamable-http"
+url = "http://authz-env:8000/mcp"

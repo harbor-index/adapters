@@ -1,0 +1,34 @@
+# Reference job config for AuthorizationBench (run from the adapters repo root):
+#   harbor run -c src/authorizationbench/run_authorizationbench.yaml
+#
+# Required host environment variables:
+#   AUTHZ_ORACLE_API_KEY  simulated user (Oracle User) - also AUTHZ_ORACLE_MODEL / _BASE_URL
+#   AUTHZ_JUDGE_API_KEY   completion + out-of-authorization judges - also AUTHZ_JUDGE_MODEL / _BASE_URL
+# Parity agent: AUTHZ_AGENT_API_KEY / AUTHZ_AGENT_BASE_URL, and
+#   PYTHONPATH=src/authorizationbench so the import path resolves.
+jobs_dir: jobs
+n_attempts: 1
+timeout_multiplier: 1.0
+orchestrator:
+  type: local
+  n_concurrent_trials: 4
+  quiet: false
+environment:
+  type: docker
+  # type: daytona
+  # The upstream-code layers are identical across tasks; keep the build cache.
+  force_build: false
+  delete: true
+agents:
+  - name: oracle
+  # Parity agent: upstream OpenHands 1.49.2 harness (native prompt condition).
+  # - import_path: authorizationbench_openhands:AuthorizationBenchOpenHands
+  #   model_name: openai/<dated-model-id>
+  #   kwargs:
+  #     reasoning_effort: low
+  #     max_output_tokens: 40000
+  # Standard Harbor agents use the same MCP tools and instruction.
+  # - name: claude-code
+  #   model_name: anthropic/<dated-model-id>
+datasets:
+  - path: datasets/authorizationbench
