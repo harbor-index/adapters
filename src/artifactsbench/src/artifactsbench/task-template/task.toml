@@ -1,0 +1,36 @@
+version = "1.0"
+artifacts = ["/workspace/answer.md"]
+
+[task]
+name = "tencent/artifactsbench-__ID__"
+authors = [
+  {name = "Chenchen Zhang"}, {name = "Yuhang Li"}, {name = "Can Xu"},
+  {name = "Jiaheng Liu"}, {name = "Ao Liu"}, {name = "Shihui Hu"},
+  {name = "Tencent ArtifactsBench Team"},
+]
+
+[metadata]
+difficulty = __DIFFICULTY__
+category = __CLASS__
+upstream_index = __INDEX__
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+cpus = 1
+memory_mb = 2048
+
+[verifier]
+timeout_sec = 1100.0
+environment_mode = "separate"
+
+[verifier.environment]
+cpus = 2
+memory_mb = 4096
+build_timeout_sec = 1800.0
+
+[verifier.env]
+ARTIFACTSBENCH_JUDGE_API_KEY = "${ARTIFACTSBENCH_JUDGE_API_KEY:-}"
+ARTIFACTSBENCH_JUDGE_BASE_URL = "${ARTIFACTSBENCH_JUDGE_BASE_URL:-https://generativelanguage.googleapis.com/v1beta/openai}"
+ARTIFACTSBENCH_JUDGE_MODEL = "${ARTIFACTSBENCH_JUDGE_MODEL:-gemini-2.5-pro}"

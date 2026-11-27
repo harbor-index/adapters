@@ -1,0 +1,36 @@
+[
+  {
+    "adapter_name": "artifactsbench",
+    "adapter_builders": [
+      "fatmmouse"
+    ],
+    "original_benchmark": [
+      {
+        "split": "full",
+        "size": 1825,
+        "harness": "llm",
+        "supported_agents": [
+          "None"
+        ],
+        "adaptable": true,
+        "notes": "The published pipeline accepts one complete response to each original question."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "full",
+        "adapted_benchmark_size": 1825,
+        "parity_benchmark_size": 60,
+        "parity_sampling_rate": 0.0329,
+        "registry_benchmark_size": 0,
+        "added_agents": [
+          "None"
+        ],
+        "parity_matching_agents": [],
+        "parity_unmatching_agents": [],
+        "parity_costs": "~$70 (estimate)",
+        "notes": "Development snapshot. Task generation checked on the full release. Tencent's published GPT-5 responses supply replay solutions for 1,813 of 1,825 tasks. Parity not yet run; planned as Scenario 2 with codex on both sides. Cost estimate: about 950 judge calls (judge screening, replay and codex parity) at Gemini-Pro-class pricing, plus 360 codex trials on a low-cost model."
+      }
+    ]
+  }
+]

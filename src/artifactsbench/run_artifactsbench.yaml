@@ -1,0 +1,12 @@
+# Run on the cloud worker from the directory that contains datasets/artifactsbench.
+# For an oracle run, select a dataset generated with a reference for every selected ID.
+datasets:
+  - path: datasets/artifactsbench
+agents:
+  - name: oracle
+environment:
+  type: docker
+  delete: true
+orchestrator:
+  type: local
+  n_concurrent_trials: 1
