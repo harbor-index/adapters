@@ -1,0 +1,26 @@
+[
+  {
+    "adapter_name": "medxpertqa-mm",
+    "agent": "<agent>@<version>",
+    "model": "<model>",
+    "date": "YYYY-MM-DD",
+    "adapted_benchmark_size": 2000,
+    "parity_benchmark_size": 201,
+    "number_of_runs": null,
+    "notes": "PENDING: parity experiments have not been run. Fill in after the parity plan is confirmed with the Harbor team.",
+    "original_parity_repo": null,
+    "adapter_pr": [],
+    "dataset_pr": [],
+    "parity_pr": [],
+    "metrics": [
+      {
+        "benchmark_name": "MedXpertQA-MM",
+        "metric": "accuracy",
+        "original": "PENDING",
+        "harbor": "PENDING",
+        "original_runs": [],
+        "harbor_runs": []
+      }
+    ]
+  }
+]

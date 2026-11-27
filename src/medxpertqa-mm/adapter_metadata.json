@@ -1,0 +1,38 @@
+[
+  {
+    "adapter_name": "medxpertqa-mm",
+    "adapter_builders": [
+      "Anas Zafar (anaszafar98@gmail.com)"
+    ],
+    "original_benchmark": [
+      {
+        "split": "test",
+        "size": 2000,
+        "harness": "llm",
+        "supported_agents": [
+          "None"
+        ],
+        "adaptable": true,
+        "notes": "MM (multimodal) subset of MedXpertQA, test split. The original harness calls chat-completion APIs directly (zero-shot CoT, two turns). The 5-example MM dev split holds few-shot demonstrations and is not adapted. The Text subset (2,450 questions) is out of scope for this adapter."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "test",
+        "adapted_benchmark_size": 2000,
+        "parity_benchmark_size": 201,
+        "parity_sampling_rate": 0.1005,
+        "registry_benchmark_size": 2000,
+        "added_agents": [
+          "medxpertqa-llm@0.1.0"
+        ],
+        "parity_matching_agents": [],
+        "parity_unmatching_agents": [
+          "None"
+        ],
+        "parity_costs": null,
+        "notes": "Parity experiments not run yet. Planned on the 201-task subset from --split parity (10% of each medical_task x question_type stratum, seed 42) with the added medxpertqa-llm agent, which sends the same two chat-completion requests as the original harness."
+      }
+    ]
+  }
+]

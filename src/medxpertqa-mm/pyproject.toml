@@ -1,0 +1,22 @@
+[project]
+name = "harbor-medxpertqa-mm-adapter"
+version = "0.1.0"
+description = "Harbor adapter for MedXpertQA-MM (multimodal track of MedXpertQA)"
+readme = "README.md"
+authors = [
+    { name = "Anas Zafar", email = "anaszafar98@gmail.com" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "huggingface-hub>=0.24.0",
+]
+
+[project.scripts]
+medxpertqa-mm = "medxpertqa_mm.main:main"
+
+[build-system]
+requires = ["uv_build>=0.11.32,<0.12.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "medxpertqa_mm"

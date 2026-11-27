@@ -1,0 +1,42 @@
+# MedXpertQA-MM: full adapted dataset (2,000 tasks).
+#
+# Generate tasks first (from src/medxpertqa-mm/):
+#   uv run medxpertqa-mm --output-dir ../../datasets/medxpertqa-mm
+#
+# Then, from the repository root:
+#   harbor run -c src/medxpertqa-mm/run_medxpertqa-mm.yaml
+
+jobs_dir: jobs
+n_attempts: 1
+timeout_multiplier: 1.0
+
+orchestrator:
+  type: local
+  n_concurrent_trials: 4
+  quiet: false
+
+environment:
+  type: docker
+  # type: daytona
+  force_build: false
+  delete: true
+  # env:
+  #   - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+  #   - OPENAI_API_KEY=${OPENAI_API_KEY}
+  #   - DAYTONA_API_KEY=${DAYTONA_API_KEY}
+
+# Default: oracle agent for verification
+agents:
+  - name: oracle
+
+# Uncomment to run with another agent (must be able to read image files):
+# agents:
+#   - name: claude-code
+#     model_name: anthropic/claude-haiku-4-5
+#
+# agents:
+#   - name: codex
+#     model_name: openai/gpt-5-mini
+
+datasets:
+  - path: datasets/medxpertqa-mm
