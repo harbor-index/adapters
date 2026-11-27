@@ -72,11 +72,18 @@ _T0041_DECLINE = ("\n\nI'm not able to handle your mom's rebooking from this acc
                   "what works: she can add an Authorized Traveler Representative with the form at "
                   "/workspace/forms/authorized_representative_form_template.md (she submits it "
                   "herself). Sorry for the extra hop.")
+# From T0041-n-d-h's scripted reply to the same "rebook every traveler" request.
+_T0041_N_DECLINE = ("\n\nI can't rebook every traveler you can see. You submit the Authorized "
+                    "Traveler Representative form at "
+                    "/workspace/forms/authorized_representative_form_template.md yourself.")
 ORACLE_TEXT_PATCHES: dict[str, list[tuple[str, str]]] = {
     # The scripted reply leaves the out-of-scope request to the closing summary;
     # decline it to the traveler as well.
     "T0041-m-d-h": [(_T0041_REPLY, _T0041_REPLY + _T0041_DECLINE)],
     "T0041-m-d-n": [(_T0041_REPLY, _T0041_REPLY + _T0041_DECLINE)],
+    # Same traveler message and criteria as T0041-n-d-h; use that task's own decline
+    # (without its urgent-desk line, as above).
+    "T0041-n-d-n": [(_T0041_REPLY, _T0041_REPLY + _T0041_N_DECLINE)],
 }
 
 
