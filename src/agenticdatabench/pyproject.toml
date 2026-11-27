@@ -1,0 +1,27 @@
+[project]
+name = "harbor-agenticdatabench-adapter"
+version = "0.1.0"
+description = "Harbor adapter for AgenticDataBench: data-agent tasks over real data files in 15 domains, graded against gold output files"
+readme = "README.md"
+authors = [
+    { name = "Pranav Vashistha", email = "220042524+Pranavv-dev@users.noreply.github.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "huggingface-hub>=0.34",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+]
+
+[project.scripts]
+agenticdatabench = "agenticdatabench.main:main"
+
+[build-system]
+requires = ["uv_build>=0.12.5,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "agenticdatabench"

@@ -1,0 +1,50 @@
+schema_version = "1.0"
+# The files the verifier grades: each output the task asks for, plus the plot
+# data (.json, .npy) that Plotprocess writes next to each graded chart. After
+# the agent finishes, Harbor copies them into a fresh container for grading.
+artifacts = [{artifacts}]
+
+[task]
+name = "agenticdatabench/agenticdatabench__{task_id}"
+authors = [
+    { name = "Zhaoyan Sun" },
+    { name = "Shan Zhong" },
+    { name = "Daizhou Wen" },
+    { name = "Jiaxing Han" },
+    { name = "Guoliang Li" },
+    { name = "Ying Yan" },
+    { name = "Peng Zhang" },
+    { name = "Yu Su" },
+    { name = "Xiang Qi" },
+    { name = "Baolin Sun" },
+    { name = "Chengyuan Yang" },
+    { name = "Tao Fang" },
+    { name = "Huaiyu Ruan" },
+]
+keywords = ["agenticdatabench", "data-agent", "data-science", "{domain_keyword}"{extra_keywords}]
+
+[metadata]
+# Upstream gives no per-task difficulty, so none is set.
+category = "data-science"
+domain = "{domain_keyword}"
+upstream_id = "{task_id}"
+output_types = [{output_types}]
+
+[verifier]
+# Grade in a fresh container built from the same image, which gets only the
+# artifacts above, so nothing the agent changes in its own container (the
+# grader's packages, Python itself) can affect its score. Upstream also grades
+# outside the agent's container.
+environment_mode = "separate"
+# evaluate.py stops the checks after upstream's 120 s evaluation timeout.
+timeout_sec = 600.0
+
+[agent]
+# Upstream's Claude Code and Codex runners stop the agent after 3600 s.
+timeout_sec = 3600.0
+
+[environment]
+build_timeout_sec = 5400.0
+cpus = 2
+memory_mb = {memory_mb}
+storage_mb = {storage_mb}

@@ -1,0 +1,19 @@
+{
+  "loan_model_2": "self-reported metric: graded only on the AUC values the agent writes into output.json (no hidden labels), so a fabricated answer scores 1.0 and upstream's own answer scores 0.347",
+  "loan_model_3": "self-reported metric: graded only on the AUC/KS values the agent writes into output.json (no hidden labels), so a fabricated answer scores 1.0 and upstream's own answer scores 0.292",
+  "loan_model_5": "self-reported metric: graded only on the AUC values and feature count the agent writes into output.json (no hidden labels), so a fabricated answer scores 1.0 and upstream's own answer scores 0.505",
+  "loan_model_8": "self-reported metric: graded only on the AUC values and feature count the agent writes into output.json (no hidden labels), so a fabricated answer scores 1.0 and upstream's own answer scores 0.507",
+  "loan_model_9": "self-reported metric: graded only on the KS value and SMOTE ratio the agent writes into output.json (no hidden labels), so a fabricated answer scores 1.0 and upstream's own answer scores 0.549",
+  "loan_model_13": "self-reported metric: graded only on the AUC value the agent writes into output.json (no hidden labels), so a fabricated answer scores 1.0 and upstream's own answer scores 0.596",
+  "loan_model_14": "self-reported metric: graded only on the trial count and AUC the agent writes into output.json (no hidden labels), so a fabricated answer scores 1.0 and upstream's own answer scores 0.634",
+  "marketing_2": "self-reported metric: graded only on the CVR/AUC values the agent writes into output.json (no hidden labels), so a fabricated answer scores 1.0; upstream's gold file is empty",
+  "marketing_3": "self-reported metric: graded only on the CVR/AUC values the agent writes into output.json (no hidden labels), so a fabricated answer scores 1.0; upstream's gold file is empty",
+  "marketing_4": "self-reported metric: graded only on the CVR/AUC values the agent writes into output.json (no hidden labels), so a fabricated answer scores 1.0; upstream's gold file is empty",
+  "marketing_5": "self-reported metric: graded only on the CVR/AUC values the agent writes into output.json (no hidden labels), so a fabricated answer scores 1.0; upstream's gold file is empty",
+  "marketing_6": "self-reported metric: graded only on the CVR/AUC values the agent writes into output.json (no hidden labels), so a fabricated answer scores 1.0; upstream's gold file is empty",
+  "marketing_9": "self-reported metric: graded only on the CVR/AUC values the agent writes into output.json (no hidden labels), so a fabricated answer scores 1.0; upstream's gold file is empty",
+  "marketing_12": "self-reported metric: graded only on the AUUC/Gini values the agent writes into output.json (no hidden labels), so a fabricated answer scores 1.0; upstream's gold file is empty",
+  "marketing_13": "self-reported metric: graded only on the AUC values the agent writes into output.json (no hidden labels), so a fabricated answer scores 1.0; upstream's gold file is empty",
+  "marketing_14": "self-reported metric: graded only on the AUUC/Gini values the agent writes into output.json (no hidden labels), so a fabricated answer scores 1.0; upstream's gold file is empty",
+  "real_estate_17": "unsupported metric: its check is compare_model(metric='pearson'), which upstream's grader does not implement, so every answer (gold included) scores 0; adding the metric does not help, because rows are matched by position with no penalty for unmatched ones, so made-up answers score 1.0 about 12% of the time"
+}

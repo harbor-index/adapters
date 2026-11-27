@@ -1,0 +1,39 @@
+[
+  {
+    "adapter_name": "agenticdatabench",
+    "adapter_builders": [
+      "Pranav Vashistha (220042524+Pranavv-dev@users.noreply.github.com)"
+    ],
+    "original_benchmark": [
+      {
+        "split": "test",
+        "size": 246,
+        "harness": "agent",
+        "supported_agents": [
+          "da-agent",
+          "smolagents@1.23.0",
+          "claude-code",
+          "codex"
+        ],
+        "adaptable": true,
+        "notes": "246 public tasks (testbed/tasks/dev.jsonl @ e81dda8); 98 more are private. Upstream installs the Claude Code and Codex CLIs unpinned in its agent images."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "test",
+        "adapted_benchmark_size": 229,
+        "parity_benchmark_size": null,
+        "parity_sampling_rate": null,
+        "registry_benchmark_size": 229,
+        "added_agents": [
+          "None"
+        ],
+        "parity_matching_agents": [],
+        "parity_unmatching_agents": null,
+        "parity_costs": null,
+        "notes": "17 of the 246 public tasks are excluded (excluded_tasks.json): 16 whose only check reads metrics the agent reports about itself, and real_estate_17, whose 'pearson' metric the grader does not implement. Three grader bugs are fixed (tests/metrics/SOURCE.md). Parity pending."
+      }
+    ]
+  }
+]
