@@ -1,0 +1,6 @@
+{
+  "tasks": 1040,
+  "prompt_matches": 1040,
+  "record_matches": 1040,
+  "method": "Independent original-side prepare.py reads upstream YAML and test data, without importing the Harbor adapter; full byte comparison of prompts and JSON equality of evaluator inputs."
+}
