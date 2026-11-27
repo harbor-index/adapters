@@ -66,6 +66,8 @@ Use `--source-dir /path/to/upstream` to avoid a download, `--limit 5` for a smok
 
 ## Comparison with Original Benchmark (Parity)
 
+[Original-side preparation and scoring](https://github.com/Chenghao-Zhang/LLMs-Planning/tree/82256f992bf0e426719a2fb14e39090e872effc7/harbor_parity) are published with reproduction commands. They read the upstream PDDL inputs and use VAL directly, without importing the adapter. The model runner remains pending.
+
 Parity has not run. `parity_experiment.json` is intentionally empty; this is not a completed parity claim.
 The proposed comparison uses the same pinned CLI agent, dated model, prompt, limits, and container environment on both sides, with upstream grading on the original side. Proposed configuration for team review: `codex@0.118.0`, `gpt-5-mini-2025-08-07`, three runs per side, the same reasoning effort and inference settings, and a 1,800-second task timeout. This follows the matched CLI-agent approach used in the approved CanItEdit adapter. These choices and API provisioning are not yet confirmed; no paid run has started.
 
