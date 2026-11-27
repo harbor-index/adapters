@@ -1,0 +1,66 @@
+[project]
+name = "harbor-latchbio-adapter"
+version = "0.1.0"
+description = "Harbor adapter for LatchBio's benchmarks.bio suite of agentic biology data-analysis evaluations"
+readme = "README.md"
+authors = [
+    { name = "Yingxin Jia", email = "37559580+yingxin-jia@users.noreply.github.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    # LatchBio's graders and prompt suffix. The adapter reads the prompt suffix
+    # from this release and grades every oracle answer with it at generation
+    # time; each task image installs the same release for its verifier. Only
+    # the `graders` subpackage is imported, so the harness dependencies are left
+    # out (see [[tool.uv.dependency-metadata]] below).
+    "latch-eval-tools==0.4.54",
+    # The only third-party imports of the graders. Versions match the verifier
+    # environment built into each task image.
+    "pydantic==2.12.5",
+    "anthropic==0.86.0",
+]
+
+[project.optional-dependencies]
+# Only needed for `--data-source latch` and scripts/build_data_manifest.py.
+latch = ["latch>=2.78.0"]
+# Only needed for parity/run_original.py, which drives LatchBio's own harness:
+# the Latch SDK plus the dependencies latch-eval-tools 0.4.54 declares.
+parity = [
+    "latch>=2.78.0",
+    "aiohttp>=3.0.0",
+    "jinja2~=3.1",
+    "litellm~=1.87.0",
+    "matplotlib>=3.0.0",
+    "mini-swe-agent~=2.2",
+    "numpy>=1.24.0",
+    "openai>=1.0.0",
+    "orjson>=3.0.0",
+    "scipy>=1.10.0",
+    "websockets>=12.0",
+]
+
+[dependency-groups]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+latchbio = "latchbio.main:main"
+
+[build-system]
+requires = ["uv_build>=0.11.14,<0.12.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "latchbio"
+
+# latch-eval-tools declares its agent harness's dependencies (Latch SDK, LiteLLM,
+# mini-swe-agent, ...). Generating and grading tasks imports only its `graders`
+# subpackage, which needs pydantic and anthropic; the rest is in the `parity`
+# extra for the one script that runs the harness itself.
+[[tool.uv.dependency-metadata]]
+name = "latch-eval-tools"
+version = "0.4.54"
+requires-dist = ["pydantic>=2.0.0", "anthropic>=0.72.0"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-p no:cacheprovider"

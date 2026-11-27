@@ -1,0 +1,58 @@
+# Harbor side of the LatchBio parity experiment: Claude Code on all 44 tasks,
+# configured like LatchBio's own claude-code harness (latch-eval-tools 0.4.54,
+# harness/claudecode.py + harness/_cli_runner.py). The original side is run with
+# parity/run_original.py using the same model, limits and prompt.
+#
+# From the repository root, once per run (run1, run2, run3):
+#
+#   (cd src/latchbio && uv run latchbio --output-dir ../../datasets/latchbio)
+#   export CLAUDE_CODE_OAUTH_TOKEN=...   # with CLAUDE_FORCE_OAUTH=1, or ANTHROPIC_API_KEY=...
+#   harbor run -c src/latchbio/parity/run_latchbio_parity.yaml \
+#       --job-name latchbio-parity-harbor-run1
+#
+# Every value below has a counterpart flag on parity/run_original.py; change
+# them together.
+
+jobs_dir: jobs
+n_attempts: 1
+timeout_multiplier: 1.0
+# One container at a time. In the parity experiment the two sides ran at the
+# same time on one 8-vCPU / 64 GB host, one container each.
+n_concurrent_trials: 1
+quiet: false
+
+environment:
+  type: docker
+  force_build: false
+  delete: true
+  # No overrides: every task requests 4 vCPU / 32 GB, the machine LatchBio
+  # documents for its runs (run_original.py: --cpus 4 --memory-gb 32).
+
+agents:
+  - name: claude-code
+    # run_original.py: --model claude-haiku-5-5
+    model_name: anthropic/claude-haiku-5-5
+    # The 6 hour task timeout LatchBio documents for its runs, also each task's
+    # [agent].timeout_sec (run_original.py: --eval-timeout 21600).
+    override_timeout_sec: 21600
+    kwargs:
+      # Claude Code release baked into LatchBio's agent image; Harbor reuses the
+      # preinstalled binary when the requested version matches.
+      version: "2.1.174"
+      # Upstream launches `claude --effort max --thinking-display summarized`.
+      reasoning_effort: max
+      thinking_display: summarized
+    env:
+      # Upstream sets both to eval_timeout * 1000 so long analyses are not cut
+      # off by Claude Code's default Bash timeout.
+      BASH_DEFAULT_TIMEOUT_MS: "21600000"
+      BASH_MAX_TIMEOUT_MS: "21600000"
+      NODE_DISABLE_COMPILE_CACHE: "1"
+
+# Upstream appends this note to the prompt for Claude Code only
+# (harness/claudecode.py: BACKGROUND_PROCESS_NOTE).
+extra_instruction_paths:
+  - src/latchbio/parity/claude_code_background_note.md
+
+datasets:
+  - path: datasets/latchbio

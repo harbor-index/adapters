@@ -1,0 +1,40 @@
+[
+  {
+    "adapter_name": "latchbio",
+    "agent": "claude-code@2.1.174",
+    "model": "claude-haiku-5-5",
+    "date": "2026-11-24",
+    "adapted_benchmark_size": 44,
+    "parity_benchmark_size": 44,
+    "number_of_runs": 3,
+    "notes": "Full-set parity: 4 CPUs, 32 GiB memory, 21600 s per task, BASH_*_TIMEOUT_MS=21600000 on both sides. Both sides ran at the same time on one Google Compute Engine n2-highmem-8 VM (8 vCPU, 64 GB, x86-64), one container each, the original side in reverse task order. Run-score ranges overlap: original [36.36, 43.18], Harbor [36.36, 40.91]. 33 of 44 tasks have the same number of passes on both sides (12 always pass, 20 never pass); 9 differ by one pass in three and 2 by two. No trial timed out or ended without a final result from Claude Code. Not scored and repeated: 39 original-side evaluations of run 3 that failed in data staging, before the agent started, while the Latch API was unavailable; they were repeated the same day using the cached data and the file names pinned in data_manifest.json. Nothing was repeated on the Harbor side. Agent time 26.0 h (original) vs 22.5 h (Harbor); turns 2,945 vs 2,883; API list-price cost $281 vs $270. Original side: the published latch-eval-tools 0.4.54 driven by parity/run_original.py (no fork). The script sets the harness's memory limit, swap allowance, CPU limit and timeout to the task's values, switches off its restart-after-OOM and resume-after-provider-error (Harbor invokes the agent once), and grades the two evals that define a `graders` list with the adapter's all-must-pass rule; prompt, agent command and graders are untouched. Checklist values: adapters checkout at 7b4df9d (= upstream main); Harbor 0.27.0; agent claude-code@2.1.174 on both sides (the binary preinstalled in LatchBio's agent image, pinned by digest, so there is no install step on either side); model claude-haiku-5-5 (the identifier has no dated form); CLI flags `--effort max --thinking-display summarized`, permissions bypassed, prompt on stdin, working directory /workspace; identical tool list and no turn limit on both sides; prompt byte-identical (task + upstream data instructions + upstream's Claude Code background-process note). Order followed: sanity subset on both sides, one full run on both sides, then three runs. Claude Code authenticated with a Claude subscription token on both sides. During the runs the Harbor tasks carried the grader modules in tests/; they now install the same modules (same SHA-256) from PyPI. Regrading all 474 stored answers with the current verifier reproduces every recorded verdict, and the oracle was re-run on the current tasks (44/44). A reduced-resource replication on the 38 small-data tasks (6 GiB, 1800 s, a workstation under amd64 emulation) also matches: original 45.61 +/- 2.32 vs Harbor 46.49 +/- 2.32 with every trial scored as first run; see the README.",
+    "original_parity_repo": "https://github.com/latchbio/latch-eval-tools",
+    "adapter_pr": [
+      "PARITY_ADAPTER_PR"
+    ],
+    "dataset_pr": [
+      "PARITY_DATASET_PR"
+    ],
+    "parity_pr": [
+      "PARITY_HF_PR"
+    ],
+    "metrics": [
+      {
+        "benchmark_name": "LatchBio Benchmarks",
+        "metric": "accuracy (% of evaluations passed)",
+        "original": "40.91 ± 2.27",
+        "harbor": "38.64 ± 1.31",
+        "original_runs": [
+          43.18,
+          36.36,
+          43.18
+        ],
+        "harbor_runs": [
+          36.36,
+          38.64,
+          40.91
+        ]
+      }
+    ]
+  }
+]
