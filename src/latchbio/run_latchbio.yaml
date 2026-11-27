@@ -1,0 +1,58 @@
+# Reference job config for the full LatchBio (benchmarks.bio) dataset: 44 tasks.
+#
+# Generate the tasks first (from src/latchbio/):
+#   uv run latchbio --output-dir ../../datasets/latchbio
+#
+# Then, from the repository root:
+#   harbor run -c src/latchbio/run_latchbio.yaml
+#
+# The default agent is the oracle. To run a real agent, comment out the oracle
+# block and uncomment one of the alternatives below.
+
+jobs_dir: jobs
+n_attempts: 1
+timeout_multiplier: 1.0
+n_concurrent_trials: 4
+quiet: false
+
+environment:
+  type: docker
+  # type: daytona
+  force_build: false
+  delete: true
+  # Tasks request the resources LatchBio runs with (4 vCPU / 32 GB RAM / 100 GB
+  # disk). On smaller hosts or sandboxes, override them here, e.g.:
+  # override_memory_mb: 16384
+  # override_storage_mb: 51200
+
+agents:
+  - name: oracle
+
+  # Claude Code, configured like LatchBio's own claude-code harness
+  # (latch-eval-tools: claude 2.1.174 with --effort max --thinking-display
+  # summarized and Bash timeouts equal to the task timeout). Upstream also
+  # appends one sentence to the prompt for Claude Code only; to include it,
+  # uncomment extra_instruction_paths at the bottom of this file. The parity
+  # config parity/run_latchbio_parity.yaml has all of this switched on.
+  # - name: claude-code
+  #   model_name: anthropic/claude-haiku-5-5
+  #   kwargs:
+  #     version: "2.1.174"
+  #     reasoning_effort: max
+  #     thinking_display: summarized
+  #   env:
+  #     BASH_DEFAULT_TIMEOUT_MS: "21600000"
+  #     BASH_MAX_TIMEOUT_MS: "21600000"
+
+  # Codex CLI (latch-eval-tools pins @openai/codex 0.139.0):
+  # - name: codex
+  #   model_name: openai/gpt-5.2
+  #   kwargs:
+  #     version: "0.139.0"
+
+# Claude Code only (see above):
+# extra_instruction_paths:
+#   - src/latchbio/parity/claude_code_background_note.md
+
+datasets:
+  - path: datasets/latchbio

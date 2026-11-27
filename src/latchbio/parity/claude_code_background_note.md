@@ -1,0 +1,1 @@
+Note: Do not end your turn while a background process is still running. Nothing will alert you it is done. Ending your turn may complete the session and kill the process; instead, block synchronously and poll until the job finishes before returning.

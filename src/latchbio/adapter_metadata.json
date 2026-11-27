@@ -1,0 +1,56 @@
+[
+  {
+    "adapter_name": "latchbio",
+    "adapter_builders": [
+      "Yingxin Jia (37559580+yingxin-jia@users.noreply.github.com)"
+    ],
+    "original_benchmark": [
+      {
+        "split": "public",
+        "size": 44,
+        "harness": "agent",
+        "supported_agents": [
+          "claude-code@2.1.174",
+          "codex@0.139.0",
+          "pi@0.79.10",
+          "mini-swe-agent@2.2"
+        ],
+        "adaptable": true,
+        "notes": "Public evaluations of LatchBio's benchmarks.bio suite that ship both input data and a deterministic grader and whose data is still readable: scBench 6, SpatialBench 16, VariantBench 6, MetagenomicsBench 4, TxBench-Preclinical-Pharmacology 12. Agent versions are the ones pinned by latch-eval-tools 0.4.54 and its agent image."
+      },
+      {
+        "split": "full",
+        "size": 672,
+        "harness": "agent",
+        "supported_agents": [
+          "claude-code@2.1.174",
+          "codex@0.139.0",
+          "pi@0.79.10",
+          "mini-swe-agent@2.2"
+        ],
+        "adaptable": false,
+        "notes": "Full benchmarks behind the five adapted repositories (scBench 195, SpatialBench 159, VariantBench 118, MetagenomicsBench 100, TxBench-PP 100). Upstream withholds everything outside the public subsets to prevent training contamination. The other eight benchmarks of the suite publish only prompts, or prompts without graders, and are not adaptable; see the README."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "public",
+        "adapted_benchmark_size": 44,
+        "parity_benchmark_size": 44,
+        "parity_sampling_rate": 1.0,
+        "registry_benchmark_size": 44,
+        "added_agents": [
+          "None"
+        ],
+        "parity_matching_agents": [
+          "claude-code@2.1.174+claude-haiku-5-5"
+        ],
+        "parity_unmatching_agents": [
+          "None"
+        ],
+        "parity_costs": "~$550",
+        "notes": "Parity ran on all 44 tasks (4 vCPU / 32 GB / 6 h), three runs per side: original 40.91 ± 2.27, Harbor 38.64 ± 1.31. parity_costs is what the 44-task experiment would cost at API list prices (as reported by Claude Code); the runs were billed to a Claude subscription. A reduced-resource replication on the 38 small-data tasks (6 GiB / 30 min) also matches and is described in the README (about $430 at list prices). Input data (37.8 GiB) is downloaded from a pinned Hugging Face mirror at image build time. The graders are the latch-eval-tools 0.4.54 release installed in each task image; no upstream grader code is copied into the adapter or the tasks."
+      }
+    ]
+  }
+]

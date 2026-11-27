@@ -1,0 +1,1088 @@
+{
+  "schema_version": 1,
+  "description": "Files behind the Latch Data nodes used by the adapted LatchBio evaluations. Paths are relative to /workspace/data.",
+  "mirror": {
+    "base_url": "https://huggingface.co/datasets/yxjia/latchbio-benchmarks-data/resolve/15b4c624a27e2a73bb70e07364790ba3677d2ed9",
+    "notes": "Unmodified copies of the Latch Data nodes referenced by the public eval files, laid out as <node id>/<path>. Pinned to an immutable commit of the Hugging Face dataset repository."
+  },
+  "nodes": {
+    "latch://158542059.node": {
+      "name": "Parse_10M_PBMC_100K_subset.h5ad",
+      "kind": "file",
+      "files": [
+        {
+          "path": "Parse_10M_PBMC_100K_subset.h5ad",
+          "size": 1590563176,
+          "sha256": "bf784ee3fdfd0bf2b93b9d05f194a53215437fdc5ec4e60d84388e0bd52c7f9d"
+        }
+      ]
+    },
+    "latch://193707266.node": {
+      "name": "173892278_ovary_merged_all_timepoints.h5ad",
+      "kind": "file",
+      "files": [
+        {
+          "path": "173892278_ovary_merged_all_timepoints.h5ad",
+          "size": 1102062002,
+          "sha256": "374ba290f15885a3f1bf0f5e1438e3e879ecdc4b3cacc1d27a5b37d37f162b55"
+        }
+      ]
+    },
+    "latch://193707271.node": {
+      "name": "174620337_brain_aging_merfish_raw_counts.h5ad",
+      "kind": "file",
+      "files": [
+        {
+          "path": "174620337_brain_aging_merfish_raw_counts.h5ad",
+          "size": 79003774,
+          "sha256": "2f4024612a78e0c8410c3235afddab16d0f34e32fad35605cc9b518746c06332"
+        }
+      ]
+    },
+    "latch://193707279.node": {
+      "name": "182675870_multimodal_spatial_xenium_mouse_kidney_100k.h5ad",
+      "kind": "file",
+      "files": [
+        {
+          "path": "182675870_multimodal_spatial_xenium_mouse_kidney_100k.h5ad",
+          "size": 114448832,
+          "sha256": "048caef74ce1e1fa509f4a9d11a5227b7a9c2abe3738e7554cf0a0462c69274a"
+        }
+      ]
+    },
+    "latch://193707284.node": {
+      "name": "182675935_spatial_mouse_kidney_iri_100k_nocn_no_celltype.h5ad",
+      "kind": "file",
+      "files": [
+        {
+          "path": "182675935_spatial_mouse_kidney_iri_100k_nocn_no_celltype.h5ad",
+          "size": 110823872,
+          "sha256": "3a6ed8866988d30428c2f1be78800d02b702c23bef5727f27b0ba3bc67206bea"
+        }
+      ]
+    },
+    "latch://193707287.node": {
+      "name": "192559140_GSE284089_visium_bone_stripped.h5ad",
+      "kind": "file",
+      "files": [
+        {
+          "path": "192559140_GSE284089_visium_bone_stripped.h5ad",
+          "size": 8840199,
+          "sha256": "a6cecb8920ba77592fb99d563dda52f4f8e9506362750cb6ef5085707aae68ff"
+        }
+      ]
+    },
+    "latch://193707295.node": {
+      "name": "192719216_price_dBit_seq_post_qc.h5ad",
+      "kind": "file",
+      "files": [
+        {
+          "path": "192719216_price_dBit_seq_post_qc.h5ad",
+          "size": 3209649203,
+          "sha256": "7ed29cd375704ce1140ba28a10730d45c96e9d5711cae3de3f6786d5eaebbb33"
+        }
+      ]
+    },
+    "latch://193707298.node": {
+      "name": "192719249_price_dBit_seq_post_norm.h5ad",
+      "kind": "file",
+      "files": [
+        {
+          "path": "192719249_price_dBit_seq_post_norm.h5ad",
+          "size": 6416285211,
+          "sha256": "b537cffede4e8f19c09fe2a582515628da7a9c6bf250c2efc501daa1077d8da1"
+        }
+      ]
+    },
+    "latch://193707300.node": {
+      "name": "192758735_price_dBit_seq_post_harmony_stripped.h5ad",
+      "kind": "file",
+      "files": [
+        {
+          "path": "192758735_price_dBit_seq_post_harmony_stripped.h5ad",
+          "size": 9631013975,
+          "sha256": "cdafc472c20a4b3a861c3acdfa9555ef0e242d2e54c12357aad0b0a4b536ab35"
+        }
+      ]
+    },
+    "latch://193707311.node": {
+      "name": "193494125_ct03_ovary_stripped.h5ad",
+      "kind": "file",
+      "files": [
+        {
+          "path": "193494125_ct03_ovary_stripped.h5ad",
+          "size": 639544282,
+          "sha256": "92dab8e896b0b64528fe42c41e765356eead9b1f4aade523d5cd99e8dcbe9e43"
+        }
+      ]
+    },
+    "latch://193707313.node": {
+      "name": "193334410_combined_motifs.h5ad",
+      "kind": "file",
+      "files": [
+        {
+          "path": "193334410_combined_motifs.h5ad",
+          "size": 242719808,
+          "sha256": "caf6fa26496011bbb02d2ae03388d98c51117d495ddc4af5741e6791d8c768f0"
+        }
+      ]
+    },
+    "latch://200329315.node": {
+      "name": "4T1_viable_post_norm.h5ad",
+      "kind": "file",
+      "files": [
+        {
+          "path": "4T1_viable_post_norm.h5ad",
+          "size": 80698282,
+          "sha256": "0f74712e39a5f6117f25fd4d67d9ad4aec77c6a451e39d69ce37209454cf8096"
+        }
+      ]
+    },
+    "latch://201273807.node": {
+      "name": "GSE276492_combined.h5",
+      "kind": "file",
+      "files": [
+        {
+          "path": "GSE276492_combined.h5",
+          "size": 34820121,
+          "sha256": "ee26763871dfff3211fe74cf4d8beef8578033cee79422f39c423d7cef262bf3"
+        }
+      ]
+    },
+    "latch://202832343.node": {
+      "name": "og_raw_counts.h5ad",
+      "kind": "file",
+      "files": [
+        {
+          "path": "og_raw_counts.h5ad",
+          "size": 115041272,
+          "sha256": "753bfa1ada5b4594893f2765b6f1520ad9579668c51fb80ac67f7793b92b5cf7"
+        }
+      ]
+    },
+    "latch://203180138.node": {
+      "name": "illumina_pipseeker.h5ad",
+      "kind": "file",
+      "files": [
+        {
+          "path": "illumina_pipseeker.h5ad",
+          "size": 137655877,
+          "sha256": "4ec65250f4497ee446c6f9247932ea8b55ba4e75dcecbe8f444435f3b8e28a07"
+        }
+      ]
+    },
+    "latch://203298116.node": {
+      "name": "adata_merged_noX.h5ad",
+      "kind": "file",
+      "files": [
+        {
+          "path": "adata_merged_noX.h5ad",
+          "size": 8813098,
+          "sha256": "d026f1d5b54681d58dd186e04a54590141dd2280712f8199cda7d99d4c0c7b53"
+        }
+      ]
+    },
+    "latch://209177274.node": {
+      "name": "dma_lineage_survivors.parquet",
+      "kind": "file",
+      "files": [
+        {
+          "path": "dma_lineage_survivors.parquet",
+          "size": 8651,
+          "sha256": "b67935aff2b421ca4b61a6e6e58d1452627490f7cb9ba2339234917d1327d2e2"
+        }
+      ]
+    },
+    "latch://209564255.node": {
+      "name": "cell_painting_spherized_profiles.csv.gz",
+      "kind": "file",
+      "files": [
+        {
+          "path": "cell_painting_spherized_profiles.csv.gz",
+          "size": 382631908,
+          "sha256": "dad018a65a2f2b46d370d4fb0b7d8cec81b2d99dcb4bb756f5ccd199800f046a"
+        }
+      ]
+    },
+    "latch://228946922.node": {
+      "name": "HARTER_toxfree_BLINDED_grid_legend.png",
+      "kind": "file",
+      "files": [
+        {
+          "path": "HARTER_toxfree_BLINDED_grid_legend.png",
+          "size": 767147,
+          "sha256": "f47c745a6abcdf37333db25cbada0bef8b1bcff0b87ad2d6ff99551d55ac9a14"
+        }
+      ]
+    },
+    "latch://229474375.node": {
+      "name": "Robers2021_control_compound_interpretation.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "Robers2021_control_compound_interpretation.csv",
+          "size": 14750,
+          "sha256": "219e1c4dac75671a808c78a19babbe7c5769ed5cae042f1a5c8fe80ba735bea0"
+        }
+      ]
+    },
+    "latch://230694082.node": {
+      "name": "primary_screen_plate.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "primary_screen_plate.csv",
+          "size": 696,
+          "sha256": "3f34c52c9c68917e34fbfc331f0dae54b76387265fcbce2f126ec7a09d622024"
+        }
+      ]
+    },
+    "latch://230694121.node": {
+      "name": "mechanism_validation_montage.png",
+      "kind": "file",
+      "files": [
+        {
+          "path": "mechanism_validation_montage.png",
+          "size": 171703,
+          "sha256": "a9b39c068a659d3a999564684b879406af469b7a0722cdc1b2e0fafb8ef5da12"
+        }
+      ]
+    },
+    "latch://230694144.node": {
+      "name": "toxicity_counterscreen.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "toxicity_counterscreen.csv",
+          "size": 114,
+          "sha256": "ba90c476d0089efe382eaa873785eaf5d0643420c915a1d1bee66c401ccec80c"
+        }
+      ]
+    },
+    "latch://230694178.node": {
+      "name": "dmpk_exposure.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "dmpk_exposure.csv",
+          "size": 163,
+          "sha256": "c5d614076fb5298ff073998119b64c77bcfdf281d16f3f29bd53bd83f4e950be"
+        }
+      ]
+    },
+    "latch://230736318.node": {
+      "name": "panel.png",
+      "kind": "file",
+      "files": [
+        {
+          "path": "panel.png",
+          "size": 203409,
+          "sha256": "a0601669d32b3e4bc7be9af6386fdd7dbabc2d9330ecb5dd1d35c994e15644f7"
+        }
+      ]
+    },
+    "latch://231649934.node": {
+      "name": "sarpy_rules_active_class.txt",
+      "kind": "file",
+      "files": [
+        {
+          "path": "sarpy_rules_active_class.txt",
+          "size": 2280,
+          "sha256": "b745c0d197cdf651efa4e3706a7f07a66a1565e8e24b2dc47c16e8caaded8304"
+        }
+      ]
+    },
+    "latch://231651572.node": {
+      "name": "secondary-screen-dose-response-curve-parameters.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "secondary-screen-dose-response-curve-parameters.csv",
+          "size": 264340589,
+          "sha256": "88d1013506e0cd6f191a51c5f3fdd3fb2be54f8afb4e19a5d1f8538e81fbfec8"
+        }
+      ]
+    },
+    "latch://231651604.node": {
+      "name": "primary-screen-replicate-collapsed-treatment-info.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "primary-screen-replicate-collapsed-treatment-info.csv",
+          "size": 1185606,
+          "sha256": "d649f207a437c9e9910572c5023d02f68a77c946f6e972c998b057160a3505e6"
+        }
+      ]
+    },
+    "latch://231651613.node": {
+      "name": "primary-screen-replicate-collapsed-logfold-change.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "primary-screen-replicate-collapsed-logfold-change.csv",
+          "size": 41254209,
+          "sha256": "25efc741b372b30d38629cb139a388e989663fba597e55fff5f6c2bb7cdeb75a"
+        }
+      ]
+    },
+    "latch://231651628.node": {
+      "name": "CCLE_expression.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "CCLE_expression.csv",
+          "size": 300483142,
+          "sha256": "3bafab8bbe2343b3b8ab131957eac7808682d59e7fdee2dbc8a9f6b0f421ff35"
+        }
+      ]
+    },
+    "latch://231651662.node": {
+      "name": "CRISPR.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "CRISPR.csv",
+          "size": 123135280,
+          "sha256": "71c2d8bf86745eecc690310238fb9e43fa2e19f8159bc33054b5ce01f49ea09c"
+        }
+      ]
+    },
+    "latch://231651765.node": {
+      "name": "secondary-screen-replicate-treatment-info.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "secondary-screen-replicate-treatment-info.csv",
+          "size": 15690740,
+          "sha256": "84c0043e3cdbd37a4f9b66fb62900053b5ac695f4edb6bd0a0c9d4b6168918d6"
+        }
+      ]
+    },
+    "latch://231651816.node": {
+      "name": "secondary-screen-cell-line-info.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "secondary-screen-cell-line-info.csv",
+          "size": 40979,
+          "sha256": "b93436b5f4bcf5fd14589697be4ca8f99ffd99d639223080380bc514c3718d27"
+        }
+      ]
+    },
+    "latch://231651836.node": {
+      "name": "dependency_logFC.parquet",
+      "kind": "file",
+      "files": [
+        {
+          "path": "dependency_logFC.parquet",
+          "size": 156114033,
+          "sha256": "a21ae7d912139af50732c88f9e867b2c3bd51d8e8ea3eec3c54c807e856e404a"
+        }
+      ]
+    },
+    "latch://231651856.node": {
+      "name": "cell_lines.parquet",
+      "kind": "file",
+      "files": [
+        {
+          "path": "cell_lines.parquet",
+          "size": 86500,
+          "sha256": "3320c41340baacf7f12c604c88e7d7fdc13b4cdc9b45fc0c78803e66d938cf59"
+        }
+      ]
+    },
+    "latch://231651869.node": {
+      "name": "mutations_drivers_bem.parquet",
+      "kind": "file",
+      "files": [
+        {
+          "path": "mutations_drivers_bem.parquet",
+          "size": 374712,
+          "sha256": "ba3b6b6654032b06da7ca48d6968dd9d545d9c0fb79b17e4c4e91fb35b6dd098"
+        }
+      ]
+    },
+    "latch://231651891.node": {
+      "name": "cn_drivers.parquet",
+      "kind": "file",
+      "files": [
+        {
+          "path": "cn_drivers.parquet",
+          "size": 2490609,
+          "sha256": "5a3ccd4a9608997a29ee9d4cb78101ff1e9495ecb86df1df044fa27067764731"
+        }
+      ]
+    },
+    "latch://231651906.node": {
+      "name": "cancer_drivers.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "cancer_drivers.csv",
+          "size": 9086,
+          "sha256": "fb2b623194f73d8779c78a6bebd058933a62e38d036965000fe325d71216e571"
+        }
+      ]
+    },
+    "latch://231651914.node": {
+      "name": "hgnc_genes.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "hgnc_genes.csv",
+          "size": 1475102,
+          "sha256": "21d2b7c7e69308300919b959173e0d9c93e1cda1af842e741f124df0f3ad5be2"
+        }
+      ]
+    },
+    "latch://231651920.node": {
+      "name": "README.md",
+      "kind": "file",
+      "files": [
+        {
+          "path": "README.md",
+          "size": 3327,
+          "sha256": "3f9d3d728e7054eeaecbbd82eec97b40dfc00f53a2df425c6aefa3eba307af57"
+        }
+      ]
+    },
+    "latch://231652200.node": {
+      "name": "DICTrank_binarised.csv.gz",
+      "kind": "file",
+      "files": [
+        {
+          "path": "DICTrank_binarised.csv.gz",
+          "size": 112925,
+          "sha256": "85a3b1e453677b988d7aa034c955c8f36693b3a233052c0cea097836d7f676c1"
+        }
+      ]
+    },
+    "latch://231652438.node": {
+      "name": "CellScape_processed.csv.gz",
+      "kind": "file",
+      "files": [
+        {
+          "path": "CellScape_processed.csv.gz",
+          "size": 6695259,
+          "sha256": "519e39abddf604de0fe7f4f9d85d4d35544ab80c84330807710f47c6f819874c"
+        }
+      ]
+    },
+    "latch://231652474.node": {
+      "name": "CellScape_mapping.csv.gz",
+      "kind": "file",
+      "files": [
+        {
+          "path": "CellScape_mapping.csv.gz",
+          "size": 103821,
+          "sha256": "6ce3b7bc9cf845f356886741f5349bdbc0882bc99da928391c4fb647447f1ecc"
+        }
+      ]
+    },
+    "latch://231652925.node": {
+      "name": "h1355_caspase_timecourse_raw.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "h1355_caspase_timecourse_raw.csv",
+          "size": 37364,
+          "sha256": "eff441fd8f446461153ca81bd86e67d16717b812f7f6bd97fc155e90bb14663a"
+        }
+      ]
+    },
+    "latch://231652966.node": {
+      "name": "mts_dose_response_kras_mutant_raw.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "mts_dose_response_kras_mutant_raw.csv",
+          "size": 65525,
+          "sha256": "ebff1a55816a0370d96e9f870ca68785cdd07b5e1fc7d9c158c620607622d79c"
+        }
+      ]
+    },
+    "latch://231652981.node": {
+      "name": "combination_index_calculations_raw.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "combination_index_calculations_raw.csv",
+          "size": 21669,
+          "sha256": "014b42a874df213a38a246ab7205f791eaf71622ab47dc91b9faacfab63c8d3a"
+        }
+      ]
+    },
+    "latch://231652996.node": {
+      "name": "mts_dose_response_kras_wildtype_raw.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "mts_dose_response_kras_wildtype_raw.csv",
+          "size": 45767,
+          "sha256": "e269b11203c3c53b285fb536ec7b1ce69e3a947bac572ae4dc1ec557804d4a66"
+        }
+      ]
+    },
+    "latch://231653072.node": {
+      "name": "figure4_F_G_H_if_foci_positive_cell_raw.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "figure4_F_G_H_if_foci_positive_cell_raw.csv",
+          "size": 526645,
+          "sha256": "203dc601fc995b7b61c7e88caa383148dbfc03596eaa758f581e759a381ae0c6"
+        }
+      ]
+    },
+    "latch://231653094.node": {
+      "name": "figure4_E_h1355_gammaH2AX_foci_per_nucleus_raw.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "figure4_E_h1355_gammaH2AX_foci_per_nucleus_raw.csv",
+          "size": 47264,
+          "sha256": "c2cda206bf860be8208ec12988f181032625d393f742412463fbd5e8604e4df1"
+        }
+      ]
+    },
+    "latch://231653111.node": {
+      "name": "figure4_B_h23_pcdk1_dose_matrix_raw.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "figure4_B_h23_pcdk1_dose_matrix_raw.csv",
+          "size": 2823,
+          "sha256": "90ea8714cf76147097d744cca73570041ad9d954e8ce4994cc6ec3882d9bb5aa"
+        }
+      ]
+    },
+    "latch://231653137.node": {
+      "name": "figure2_F_G_ihc_positive_cells_per_field_raw.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "figure2_F_G_ihc_positive_cells_per_field_raw.csv",
+          "size": 36618,
+          "sha256": "9d1715acb5d49a8d8ce806f3bc38592bf6e7ff3f9b712ba54f3cce165a31aa26"
+        }
+      ]
+    },
+    "latch://231653147.node": {
+      "name": "western_blot.png",
+      "kind": "file",
+      "files": [
+        {
+          "path": "western_blot.png",
+          "size": 118378,
+          "sha256": "fd06c288e66fda27c6790f57a0132b91a6c71c13f305629ca85b84e089f3c0c8"
+        }
+      ]
+    },
+    "latch://231653166.node": {
+      "name": "figure5_C_guide_perturbation_if_foci_positive_cell_raw.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "figure5_C_guide_perturbation_if_foci_positive_cell_raw.csv",
+          "size": 600120,
+          "sha256": "ed986c84a87ecd51d5e393cc544584d34a402cdcbab1876d17fd4594fcc52c4e"
+        }
+      ]
+    },
+    "latch://231653176.node": {
+      "name": "figure5_D_h23_guide_azd1775_dose_response_raw.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "figure5_D_h23_guide_azd1775_dose_response_raw.csv",
+          "size": 5047,
+          "sha256": "a7096432821a15bc536100114ada5ff291e16cf32db1d6d19f808aac345f1d1f"
+        }
+      ]
+    },
+    "latch://231653185.node": {
+      "name": "colony_formation_counts_all_models_raw.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "colony_formation_counts_all_models_raw.csv",
+          "size": 21535,
+          "sha256": "9f452193499242be30e9a10a2252a0e147a1d1e2dfa638fffb47cc9218eacb05"
+        }
+      ]
+    },
+    "latch://231653202.node": {
+      "name": "GSE214966_cell_metadata_scRNASeq_GBM_4patients.txt.gz",
+      "kind": "file",
+      "files": [
+        {
+          "path": "GSE214966_cell_metadata_scRNASeq_GBM_4patients.txt.gz",
+          "size": 237055,
+          "sha256": "4b079dc908ca7e891649819205e9e1b72ed3fdd73699cc471162eed4316feade"
+        }
+      ]
+    },
+    "latch://231653213.node": {
+      "name": "GSE214966_count_matrix_scRNASeq_GBM_4patients.txt.gz",
+      "kind": "file",
+      "files": [
+        {
+          "path": "GSE214966_count_matrix_scRNASeq_GBM_4patients.txt.gz",
+          "size": 28399574,
+          "sha256": "94e96ebba7d5fac97156612e3a694ab695e9ba49c3ae11eb31ac6142d8142bf6"
+        }
+      ]
+    },
+    "latch://231653339.node": {
+      "name": "SourceData_Fig3__Fig.3b_targets.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "SourceData_Fig3__Fig.3b_targets.csv",
+          "size": 752,
+          "sha256": "9dab9273acf3bded40e8594a116e3128886873298c519270fcef2a97d79644a2"
+        }
+      ]
+    },
+    "latch://231653358.node": {
+      "name": "SourceData_Fig5__Fig.5e.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "SourceData_Fig5__Fig.5e.csv",
+          "size": 96729,
+          "sha256": "888bb4d10beddcc7939532eb4c1e72f98d02122d6d7265f98e4da3bf79b2ebeb"
+        }
+      ]
+    },
+    "latch://231653384.node": {
+      "name": "SourceData_Fig5__Fig.5f.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "SourceData_Fig5__Fig.5f.csv",
+          "size": 5117,
+          "sha256": "e91f832c66c82808c79d72fe2436560f1f8762e06cf499d0cc771bac7464778f"
+        }
+      ]
+    },
+    "latch://231653397.node": {
+      "name": "SourceData_Fig5__Fig.5g.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "SourceData_Fig5__Fig.5g.csv",
+          "size": 4748356,
+          "sha256": "9407c1ced52bf2cb77843cbe5844c0ab641b230a3bd778aebc8bf24d3de96f1e"
+        }
+      ]
+    },
+    "latch://231653418.node": {
+      "name": "SourceData_Fig5__Fig.5h.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "SourceData_Fig5__Fig.5h.csv",
+          "size": 1626,
+          "sha256": "f7d2e896ef98eab86cfca700a8128d869f883a2552f7df6c3ab92413437777ad"
+        }
+      ]
+    },
+    "latch://231653435.node": {
+      "name": "SourceData_ED_Fig7__ExtDataFig.7a.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "SourceData_ED_Fig7__ExtDataFig.7a.csv",
+          "size": 2599,
+          "sha256": "6e6504f9744650a3a604972558d295d14883711b0536457472144faee96543c8"
+        }
+      ]
+    },
+    "latch://231653447.node": {
+      "name": "SourceData_ED_Fig7__ExtDataFig.7b.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "SourceData_ED_Fig7__ExtDataFig.7b.csv",
+          "size": 2088,
+          "sha256": "74b5581ae68d79ce05fbb6f93f5addd5d384fedda6b1f6a919045f6d7df20ad4"
+        }
+      ]
+    },
+    "latch://231653473.node": {
+      "name": "SourceData_ED_Fig7__ExtDataFig.7c.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "SourceData_ED_Fig7__ExtDataFig.7c.csv",
+          "size": 137806,
+          "sha256": "046cace7bd13ddce2f037b7d21e7d47a596887fc3d28525c2d6ec931f5567545"
+        }
+      ]
+    },
+    "latch://231653491.node": {
+      "name": "SourceData_ED_Fig7__ExtDataFig.7d.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "SourceData_ED_Fig7__ExtDataFig.7d.csv",
+          "size": 636,
+          "sha256": "9786a4176141613545682d0af60fb3fe9a4e8e182ad8ecec0797b9085c5d3cf7"
+        }
+      ]
+    },
+    "latch://231653511.node": {
+      "name": "SourceData_ED_Fig7__ExtDataFig.7e.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "SourceData_ED_Fig7__ExtDataFig.7e.csv",
+          "size": 3038060,
+          "sha256": "fec256fb51b62c61358eb7da0b58c03671ba3211730f4d59da8619d8d8b8bf36"
+        }
+      ]
+    },
+    "latch://231653536.node": {
+      "name": "SourceData_ED_Fig7__ExtDataFig.7f.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "SourceData_ED_Fig7__ExtDataFig.7f.csv",
+          "size": 52615,
+          "sha256": "542f4b04382229a08b6fd379e4521febf74814175ca168b6b2abfb10a7f2e531"
+        }
+      ]
+    },
+    "latch://236495997.node": {
+      "name": "all_hg38.psam",
+      "kind": "file",
+      "files": [
+        {
+          "path": "all_hg38.psam",
+          "size": 77820,
+          "sha256": "727a01b637d5e1ef02516a53069dc552b1fa46f442004ad50ea3d069c7741cdd"
+        }
+      ]
+    },
+    "latch://236496005.node": {
+      "name": "all_hg38.pvar.zst",
+      "kind": "file",
+      "files": [
+        {
+          "path": "all_hg38.pvar.zst",
+          "size": 583491735,
+          "sha256": "b07449dba35891c5546c05e4182b1246c6e1adad60886b8c5b12ab806ac54d6b"
+        }
+      ]
+    },
+    "latch://236496120.node": {
+      "name": "all_hg38.pgen.zst",
+      "kind": "file",
+      "files": [
+        {
+          "path": "all_hg38.pgen.zst",
+          "size": 3396789539,
+          "sha256": "61112b5cda8ca9738f81c4d98aff8f6fbdc9f3f177fe6d0870077bcb5b6a8fa3"
+        }
+      ]
+    },
+    "latch://240975074.node": {
+      "name": "Suzuki_T2DGGI_EUR_Metal_LDSC-CORR_Neff.v2.tsv.gz",
+      "kind": "file",
+      "files": [
+        {
+          "path": "Suzuki_T2DGGI_EUR_Metal_LDSC-CORR_Neff.v2.tsv.gz",
+          "size": 432341238,
+          "sha256": "c238cc2041630206adba3eb485f98c79fa122d9d9d48642f649bb906c09b2182"
+        }
+      ]
+    },
+    "latch://241099252.node": {
+      "name": "grch38_ensembl_gene_reference.tsv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "grch38_ensembl_gene_reference.tsv",
+          "size": 4396021,
+          "sha256": "01716e567a41ed2cb648ce8cfaefcf3e698005b757bbd957c150728755703196"
+        }
+      ]
+    },
+    "latch://241099352.node": {
+      "name": "meta_EUR_Total_BCAA.tsv.gz",
+      "kind": "file",
+      "files": [
+        {
+          "path": "meta_EUR_Total_BCAA.tsv.gz",
+          "size": 3635654089,
+          "sha256": "310fe4085cda5f14285e4aa0ebe27d0a0dc4c0c17143bb9d4428059173905c0e"
+        }
+      ]
+    },
+    "latch://251294251.node": {
+      "name": "region_annotations.bed.gz",
+      "kind": "file",
+      "files": [
+        {
+          "path": "region_annotations.bed.gz",
+          "size": 102817540,
+          "sha256": "7e2a088af041942c31123c0123f61aad1390d0bdb34a0d581df9dde580854d2e"
+        }
+      ]
+    },
+    "latch://251839411.node": {
+      "name": "rfc1_reads.bam.bai",
+      "kind": "file",
+      "files": [
+        {
+          "path": "rfc1_reads.bam.bai",
+          "size": 40104,
+          "sha256": "c440540c4913cfd9580b1512f1251016b51cbde7b4203ffe7c3716121cf0fa0f"
+        }
+      ]
+    },
+    "latch://251839413.node": {
+      "name": "rfc1_reads.bam",
+      "kind": "file",
+      "files": [
+        {
+          "path": "rfc1_reads.bam",
+          "size": 1288855,
+          "sha256": "9cf6bd8f2e99720148477731225fd1a7581b41c66b2efb67235902748e9c1542"
+        }
+      ]
+    },
+    "latch://252728440.node": {
+      "name": "merged_sv_callset.GRCh38.vcf.gz",
+      "kind": "file",
+      "files": [
+        {
+          "path": "merged_sv_callset.GRCh38.vcf.gz",
+          "size": 9875776,
+          "sha256": "e98a023821a841af8f83b2fe1176befbb3741aea672ede1099b13cccfdb84d47"
+        }
+      ]
+    },
+    "latch://252728532.node": {
+      "name": "merged_sv_callset.GRCh38.vcf.gz.tbi",
+      "kind": "file",
+      "files": [
+        {
+          "path": "merged_sv_callset.GRCh38.vcf.gz.tbi",
+          "size": 326902,
+          "sha256": "f54519d75764f11cfe33aa0e7a6505cbdc0d5db6b438a1e46faf3cf2aaadda16"
+        }
+      ]
+    },
+    "latch://252728625.node": {
+      "name": "human_GRCh38_no_alt_analysis_set.fasta.fai",
+      "kind": "file",
+      "files": [
+        {
+          "path": "human_GRCh38_no_alt_analysis_set.fasta.fai",
+          "size": 7804,
+          "sha256": "502a1b8fb73ccd53285c28a0f12df90c818b4fe3de1e862ef47c593ef1a0a4b4"
+        }
+      ]
+    },
+    "latch://254218708.node": {
+      "name": "quartet.anonymized.vcf",
+      "kind": "file",
+      "files": [
+        {
+          "path": "quartet.anonymized.vcf",
+          "size": 130632304,
+          "sha256": "35e66ea0d940324175153cbce5313625e6cffb3acc26262be0bcc975360f4cde"
+        }
+      ]
+    },
+    "latch://254805786.node": {
+      "name": "trans_target_genes.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "trans_target_genes.csv",
+          "size": 1823,
+          "sha256": "7398c0625851042c3bad4c3ce2045de018ec65b2d19282c0f9ecf69a2031be87"
+        }
+      ]
+    },
+    "latch://254805788.node": {
+      "name": "cis_eqtl_scan_locus_gene.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "cis_eqtl_scan_locus_gene.csv",
+          "size": 570462,
+          "sha256": "68c03330d71988bd4de6a3cae040ac431f2d2c11c90829398e022d4a039b58bc"
+        }
+      ]
+    },
+    "latch://254805790.node": {
+      "name": "cs_variant_annotations.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "cs_variant_annotations.csv",
+          "size": 642,
+          "sha256": "e08a279b232d8207d43cc344c311a52625e7e4acb42c6baf258a72403639d057"
+        }
+      ]
+    },
+    "latch://256055760.node": {
+      "name": "node_07.fasta",
+      "kind": "file",
+      "files": [
+        {
+          "path": "node_07.fasta",
+          "size": 3153506519,
+          "sha256": "2f9cd9e853a9284c53884e6a551b1c7284795dd053f255d630aeeb114d1fa81f"
+        }
+      ]
+    },
+    "latch://256055769.node": {
+      "name": "node_07.dict",
+      "kind": "file",
+      "files": [
+        {
+          "path": "node_07.dict",
+          "size": 10005,
+          "sha256": "6112a796641ad218eec49bbd620abc4f4fc34da6a921573c15ea7dc5421a0075"
+        }
+      ]
+    },
+    "latch://256055770.node": {
+      "name": "node_07.fasta.fai",
+      "kind": "file",
+      "files": [
+        {
+          "path": "node_07.fasta.fai",
+          "size": 2746,
+          "sha256": "04aa12dcb4e7131d9c7361082bfd02f8415ee11e956bf358a339f0d3c54180ab"
+        }
+      ]
+    },
+    "latch://256055779.node": {
+      "name": "node_01.vcf.gz",
+      "kind": "file",
+      "files": [
+        {
+          "path": "node_01.vcf.gz",
+          "size": 18116329,
+          "sha256": "ae1c4ecde39c17f1d627f7b176493aa3d76c751e99ec091b3865dd907e21010c"
+        }
+      ]
+    },
+    "latch://256055788.node": {
+      "name": "node_01.vcf.gz.tbi",
+      "kind": "file",
+      "files": [
+        {
+          "path": "node_01.vcf.gz.tbi",
+          "size": 912403,
+          "sha256": "efad3295edcaf37d512d931ae997fd9dfaf6b8d679beb3646f05d3adda0b74bf"
+        }
+      ]
+    },
+    "latch://256055794.node": {
+      "name": "node_02.bam.bai",
+      "kind": "file",
+      "files": [
+        {
+          "path": "node_02.bam.bai",
+          "size": 4551312,
+          "sha256": "b29e16a26a9a04388d39bdd4956669f0e80572a74df7948bc5c68e16e957a0ae"
+        }
+      ]
+    },
+    "latch://256055796.node": {
+      "name": "node_02.bam",
+      "kind": "file",
+      "files": [
+        {
+          "path": "node_02.bam",
+          "size": 4234215021,
+          "sha256": "3be881ee4818f90e29e6b66a01ca269e25b76bac8f7ec79cce4778a1fb22a991"
+        }
+      ]
+    },
+    "latch://321890136.node": {
+      "name": "module-info.txt",
+      "kind": "file",
+      "files": [
+        {
+          "path": "module-info.txt",
+          "size": 38497,
+          "sha256": "c80174b8992850c17ddf89ef3da40c8684c640c72332a3026c67757f18015fb3"
+        }
+      ]
+    },
+    "latch://321890137.node": {
+      "name": "metabolism-completeness-MATRIX.txt",
+      "kind": "file",
+      "files": [
+        {
+          "path": "metabolism-completeness-MATRIX.txt",
+          "size": 1328300,
+          "sha256": "574a7d2b0fac966b6928cc8ff4c28b48bafef58b07cb4e0ba38142dd72d10c04"
+        }
+      ]
+    },
+    "latch://331178301.node": {
+      "name": "f_pathway_abundance.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "f_pathway_abundance.csv",
+          "size": 1790177,
+          "sha256": "7b6c2bb61509dc47a9141cde90fed55f1026498241d739675b9cc9a633fdffaf"
+        }
+      ]
+    },
+    "latch://331178304.node": {
+      "name": "f_butyrate_genes_by_agegroup.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "f_butyrate_genes_by_agegroup.csv",
+          "size": 238710,
+          "sha256": "b34d0f3f107b0270addbd694bb26e6d066f69df2da1c2c92d6023370c2451525"
+        }
+      ]
+    },
+    "latch://331178317.node": {
+      "name": "f_butyrate_gene_mapping.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "f_butyrate_gene_mapping.csv",
+          "size": 1582,
+          "sha256": "da92f2858f80cdfe9029e65d27169aaf49c1fce87f87420090aad9027b0e155b"
+        }
+      ]
+    },
+    "latch://332089003.node": {
+      "name": "resistome_hits_all.csv",
+      "kind": "file",
+      "files": [
+        {
+          "path": "resistome_hits_all.csv",
+          "size": 2036973,
+          "sha256": "784da896407890576869e9094bb6d4064e51385a14d15abe1bced5979e4fd0ee"
+        }
+      ]
+    },
+    "latch://332388746.node": {
+      "name": "ileum_hostmicrobe_withhost_binned.h5ad",
+      "kind": "file",
+      "files": [
+        {
+          "path": "ileum_hostmicrobe_withhost_binned.h5ad",
+          "size": 12577704,
+          "sha256": "8c94ca00b7a8af19c862f05541124624a76a5fb6e872e181ec6af96e0f793116"
+        }
+      ]
+    }
+  }
+}
