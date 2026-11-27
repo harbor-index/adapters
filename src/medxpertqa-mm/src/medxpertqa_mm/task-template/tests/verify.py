@@ -5,6 +5,8 @@ benchmark (TsinghuaC3I/MedXpertQA, ``eval/utils.py`` and ``eval/main.py``),
 keeping only the branches that the MedXpertQA dataset reaches under the
 default zero-shot setting. The extraction regex, phrase stripping,
 first-match rule and case-insensitive comparison are unchanged.
+
+The original code is MIT licensed; see UPSTREAM_LICENSE next to this file.
 """
 
 from __future__ import annotations

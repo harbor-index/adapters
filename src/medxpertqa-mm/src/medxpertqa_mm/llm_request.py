@@ -135,18 +135,20 @@ def build_payload(
     temperature: float = UPSTREAM_TEMPERATURE,
     drop_params: tuple[str, ...] = (),
     token_param: str | None = None,
+    max_tokens: int | None = None,
 ) -> dict[str, Any]:
     """Chat-completion request body, as ``api_agent.py::get_response`` sends it.
 
-    ``drop_params`` and ``token_param`` are escape hatches for endpoints that reject one of
-    upstream's parameters (for example ``logprobs``) or want ``max_completion_tokens``.
+    ``drop_params``, ``token_param`` and ``max_tokens`` are escape hatches for endpoints that
+    reject one of upstream's parameters (for example ``logprobs``), want
+    ``max_completion_tokens``, or need a larger token limit (reasoning models).
     They are off by default; if used, the same change must be made on the original side.
     """
     if uses_reasoning_branch(model):
         payload: dict[str, Any] = {
             "messages": [m for m in messages if m["role"] != "system"],
             "model": model,
-            "max_completion_tokens": max_tokens_for(model),
+            "max_completion_tokens": max_tokens or max_tokens_for(model),
             "seed": UPSTREAM_SEED,
         }
     else:
@@ -154,7 +156,7 @@ def build_payload(
             "messages": messages,
             "model": model,
             "temperature": temperature,
-            "max_tokens": max_tokens_for(model),
+            "max_tokens": max_tokens or max_tokens_for(model),
             "logprobs": True,
             "seed": UPSTREAM_SEED,
         }

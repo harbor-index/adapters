@@ -21,6 +21,8 @@ Agent kwargs (``--ak key=value``):
     drop_params          comma-separated request fields to omit, e.g. "logprobs,seed"
     token_param          send the token limit under this name instead
                          (max_tokens or max_completion_tokens)
+    max_tokens           token limit (default: upstream's 2048, or 8192 for the model names
+                         upstream treats as reasoning models)
 
 The model sees the question and the images and nothing else: no tools, no shell.
 
@@ -118,6 +120,7 @@ class MedXpertQALLMAgent(BaseAgent):
         request_timeout_sec: float | str = DEFAULT_REQUEST_TIMEOUT_SEC,
         drop_params: str | None = None,
         token_param: str | None = None,
+        max_tokens: int | str | None = None,
         **kwargs: Any,
     ):
         super().__init__(logs_dir=logs_dir, model_name=model_name, **kwargs)
@@ -135,6 +138,7 @@ class MedXpertQALLMAgent(BaseAgent):
         if token_param not in (None, "", "max_tokens", "max_completion_tokens"):
             raise ValueError("token_param must be max_tokens or max_completion_tokens")
         self._token_param = token_param or None
+        self._max_tokens = int(max_tokens) if max_tokens else None
 
     async def setup(self, environment: BaseEnvironment) -> None:
         return
@@ -178,6 +182,7 @@ class MedXpertQALLMAgent(BaseAgent):
             temperature=self._temperature,
             drop_params=self._drop_params,
             token_param=self._token_param,
+            max_tokens=self._max_tokens,
         )
         reasoning_branch = uses_reasoning_branch(self._model_id)
         last_error: Exception | None = None
@@ -332,6 +337,7 @@ class MedXpertQALLMAgent(BaseAgent):
                             temperature=self._temperature,
                             drop_params=self._drop_params,
                             token_param=self._token_param,
+                            max_tokens=self._max_tokens,
                         ).items()
                         if k != "messages"
                     },

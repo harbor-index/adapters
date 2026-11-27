@@ -51,6 +51,7 @@ medxpertqa-mm/
 │       ├── test.sh               # runs verify.py, writes /logs/verifier/reward.txt
 │       ├── verify.py             # original answer extraction + exact match
 │       └── ground_truth.json     # label and options (only mounted for the verifier)
+│       └── UPSTREAM_LICENSE      # MIT license of the original scoring code
 ├── mm-1/
 └── ...
 ```
@@ -74,7 +75,7 @@ src/medxpertqa-mm/
         ├── instruction.md
         ├── environment/Dockerfile
         ├── solution/solve.sh
-        └── tests/{test.sh,verify.py}
+        └── tests/{test.sh,verify.py,UPSTREAM_LICENSE}
     # plus agent.py and llm_request.py (the medxpertqa-llm agent)
 ```
 
@@ -154,14 +155,14 @@ Flags:
 
 **Approach.** The original harness calls a chat-completion API directly, so both sides send the same requests:
 
-- *Original side:* fork of TsinghuaC3I/MedXpertQA, branch `harbor-parity`. `main.py`, `utils.py`, `config/` are unmodified. `model/api_agent.py` gains one branch that builds the client from `OPENAI_API_KEY` / `OPENAI_BASE_URL`. `harbor_parity/run_original.py` calls upstream's `complete_item` for the 201 IDs.
+- *Original side:* [fork of TsinghuaC3I/MedXpertQA](https://github.com/anas-zafar/MedXpertQA/tree/harbor-parity), branch `harbor-parity`. `main.py`, `utils.py`, `config/` are unmodified. `model/api_agent.py` gains one branch that builds the client from `OPENAI_API_KEY` / `OPENAI_BASE_URL`. `harbor_parity/run_original.py` calls upstream's `complete_item` for the 201 IDs.
 - *Harbor side:* the `medxpertqa-llm` agent described under Adapter Features; scoring by the task verifier.
 
-Reproduction (fork URL and commit to be added):
+Reproduction:
 
 ```bash
 # Original side
-git clone -b harbor-parity <fork of TsinghuaC3I/MedXpertQA> && cd MedXpertQA/eval
+git clone -b harbor-parity https://github.com/anas-zafar/MedXpertQA.git && cd MedXpertQA/eval
 pip install -r harbor_parity/requirements.txt
 export OPENAI_API_KEY=... OPENAI_BASE_URL=...
 python harbor_parity/run_original.py --model <model id> --run-name run1

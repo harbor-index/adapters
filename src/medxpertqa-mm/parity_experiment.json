@@ -8,7 +8,7 @@
     "parity_benchmark_size": 201,
     "number_of_runs": null,
     "notes": "PENDING: parity experiments have not been run. Fill in after the parity plan is confirmed with the Harbor team.",
-    "original_parity_repo": null,
+    "original_parity_repo": "https://github.com/anas-zafar/MedXpertQA/tree/harbor-parity",
     "adapter_pr": [],
     "dataset_pr": [],
     "parity_pr": [],
