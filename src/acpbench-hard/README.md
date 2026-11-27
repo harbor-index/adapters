@@ -68,7 +68,7 @@ Use `--source-dir /path/to/upstream` to avoid a download, `--limit 5` for a smok
 
 Parity has not run. `parity_experiment.json` is intentionally empty; this is not a completed parity claim.
 
-Adapter PR: https://github.com/harbor-index/adapters/pull/55. Dataset submission and parity upload remain pending.
+Adapter PR: https://github.com/harbor-index/adapters/pull/55. Generated dataset draft: https://github.com/harbor-framework/harbor-datasets/pull/317. Dataset publication and parity upload remain pending.
 
 Prepare the original-side cohort without model calls:
 
