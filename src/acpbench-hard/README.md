@@ -68,6 +68,19 @@ Use `--source-dir /path/to/upstream` to avoid a download, `--limit 5` for a smok
 
 Parity has not run. `parity_experiment.json` is intentionally empty; this is not a completed parity claim.
 
+Adapter PR: https://github.com/harbor-index/adapters/pull/55. Dataset submission and parity upload remain pending.
+
+Prepare the original-side cohort without model calls:
+
+```bash
+git clone https://github.com/Chenghao-Zhang/ACPBench.git acpbench-parity
+cd acpbench-parity
+git checkout daffd8064a2ffe2cee8c28a43dd4d05e2360a267
+uv run --python 3.12 --with jinja2==3.1.6 --with PyYAML==6.0.2 python harbor_parity/prepare.py --split parity --output-dir inputs
+```
+
+Use the fork's `harbor_parity/README.md` for container build, runner arguments, and scoring commands. Supply the agreed settings explicitly before executing model runs.
+
 [Original-side preparation and scoring](https://github.com/Chenghao-Zhang/ACPBench/tree/daffd8064a2ffe2cee8c28a43dd4d05e2360a267/harbor_parity) are published with reproduction commands. They read the pinned upstream data and scorer directly, without importing the adapter. An isolated Codex runner is included and has passed offline orchestration controls. Its real model connection and paired parity remain untested.
 The proposed comparison uses the same pinned CLI agent, dated model, prompt, limits, and container environment on both sides, with upstream grading on the original side. Proposed configuration for team review: `codex@0.118.0`, `gpt-5-mini-2025-08-07`, three runs per side, the same reasoning effort and inference settings, and a 1,800-second task timeout. This follows the matched CLI-agent approach used in the approved CanItEdit adapter. These choices and API provisioning are not yet confirmed; no paid run has started.
 
