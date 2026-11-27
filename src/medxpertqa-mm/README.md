@@ -155,14 +155,15 @@ Flags:
 
 **Approach.** The original harness calls a chat-completion API directly, so both sides send the same requests:
 
-- *Original side:* [fork of TsinghuaC3I/MedXpertQA](https://github.com/anas-zafar/MedXpertQA/tree/harbor-parity), branch `harbor-parity`. `main.py`, `utils.py`, `config/` are unmodified. `model/api_agent.py` gains one branch that builds the client from `OPENAI_API_KEY` / `OPENAI_BASE_URL`. `harbor_parity/run_original.py` calls upstream's `complete_item` for the 201 IDs.
+- *Original side:* [fork of TsinghuaC3I/MedXpertQA](https://github.com/anas-zafar/MedXpertQA/tree/harbor-parity), branch `harbor-parity`, commit [`8297735`](https://github.com/anas-zafar/MedXpertQA/commit/82977359b91e577e5b2ca6b9c7283d6ea311ba45) (upstream `5f1db16` plus one commit). `main.py`, `utils.py`, `config/` are unmodified. `model/api_agent.py` gains one branch that builds the client from `OPENAI_API_KEY` / `OPENAI_BASE_URL`. `harbor_parity/run_original.py` calls upstream's `complete_item` for the 201 IDs.
 - *Harbor side:* the `medxpertqa-llm` agent described under Adapter Features; scoring by the task verifier.
 
 Reproduction:
 
 ```bash
 # Original side
-git clone -b harbor-parity https://github.com/anas-zafar/MedXpertQA.git && cd MedXpertQA/eval
+git clone -b harbor-parity https://github.com/anas-zafar/MedXpertQA.git && cd MedXpertQA
+git checkout 8297735 && cd eval
 pip install -r harbor_parity/requirements.txt
 export OPENAI_API_KEY=... OPENAI_BASE_URL=...
 python harbor_parity/run_original.py --model <model id> --run-name run1
@@ -173,6 +174,8 @@ uv run medxpertqa-mm --split parity --output-dir ../../datasets/medxpertqa-mm-pa
 cd ../..
 PYTHONPATH=src/medxpertqa-mm/src harbor run -c src/medxpertqa-mm/run_medxpertqa-mm_parity.yaml --max-retries 2
 ```
+
+Versions used for the checks so far: Harbor 0.27.0, dataset commit `7e7c465`, original-side packages as pinned in `harbor_parity/requirements.txt` (`openai==1.65.1`).
 
 Score = accuracy in percent (original: `accuracy_percent` in `result.json`; Harbor: mean reward × 100). Report mean ± sample SEM over runs.
 

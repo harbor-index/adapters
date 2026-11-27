@@ -3,6 +3,8 @@
 # exact-match logic (see verify.py) and writes accuracy (0 or 1) as the reward.
 
 mkdir -p /logs/verifier
+# Never score from a reward file that existed before grading.
+rm -f /logs/verifier/reward.txt
 
 python3 /tests/verify.py \
     --answer-file /app/answer.txt \

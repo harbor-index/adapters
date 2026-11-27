@@ -16,10 +16,8 @@ jobs_dir: jobs
 n_attempts: 1
 timeout_multiplier: 1.0
 
-orchestrator:
-  type: local
-  n_concurrent_trials: 8
-  quiet: false
+n_concurrent_trials: 8
+quiet: false
 
 environment:
   type: docker
