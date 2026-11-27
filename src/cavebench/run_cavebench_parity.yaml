@@ -1,0 +1,21 @@
+# Parity run: the cavebench-llm agent (upstream run.py --paper-settings protocol)
+# on the 118-task parity subset.
+#   uv run --project src/cavebench cavebench --split parity --output-dir datasets/cavebench-parity
+#   export OPENROUTER_API_KEY=...            # never commit it
+#   PYTHONPATH=src/cavebench harbor run -c src/cavebench/run_cavebench_parity.yaml
+jobs_dir: jobs
+n_attempts: 1
+timeout_multiplier: 1.0
+orchestrator:
+  type: local
+  n_concurrent_trials: 4
+  quiet: false
+environment:
+  type: docker
+  force_build: true
+  delete: true
+agents:
+  - import_path: cavebench_llm_agent:CaveBenchLLMAgent
+    model_name: deepseek/deepseek-v4.1-flash-1017
+datasets:
+  - path: datasets/cavebench-parity

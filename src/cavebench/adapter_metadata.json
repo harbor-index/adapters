@@ -1,0 +1,30 @@
+[
+  {
+    "adapter_name": "cavebench",
+    "adapter_builders": ["Yichen Wang (ycwang6371@gmail.com)"],
+    "original_benchmark": [
+      {
+        "split": "test",
+        "size": 1180,
+        "harness": "llm",
+        "supported_agents": ["None"],
+        "adaptable": true,
+        "notes": "200 test episodes asked at k = 1..6 (apparatus S11 only at k = 3..6). Upstream evaluates VLMs directly with run.py --paper-settings (OpenRouter chat completions, recorded per-question settings in inference/profiles.json, at most one answer-completion request). Train/validation splits exist only for the fine-tuning baselines and are not adapted."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "test",
+        "adapted_benchmark_size": 1180,
+        "parity_benchmark_size": 118,
+        "parity_sampling_rate": 0.1,
+        "registry_benchmark_size": 1180,
+        "added_agents": ["cavebench-llm@1.0+upstream.2a4b865"],
+        "parity_matching_agents": [],
+        "parity_unmatching_agents": ["None"],
+        "parity_costs": null,
+        "notes": "Parity on a 118-task subset: one question per (apparatus, k), selected deterministically (adapter.py, PARITY_SEED). Parity results pending."
+      }
+    ]
+  }
+]
