@@ -345,7 +345,7 @@ _TODO._
 
 ## Authors & Contributions
 
-This adapter is developed and maintained by _TODO: your name_.
+This adapter is developed and maintained by [Yichen Wang](mailto:ycwang6371@gmail.com).
 
 **Issues and Contributions:**
 

@@ -1,7 +1,7 @@
 [
   {
     "adapter_name": "authorizationbench",
-    "adapter_builders": [],
+    "adapter_builders": ["Yichen Wang (ycwang6371@gmail.com)"],
     "original_benchmark": [
       {
         "split": "full",
