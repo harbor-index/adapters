@@ -67,6 +67,8 @@ Use `--source-dir /path/to/upstream` to avoid a download, `--limit 5` for a smok
 ## Comparison with Original Benchmark (Parity)
 
 Parity has not run. `parity_experiment.json` is intentionally empty; this is not a completed parity claim.
+
+[Original-side preparation and scoring](https://github.com/Chenghao-Zhang/ACPBench/tree/6e176f62c50822ac89891d7c21e4d670dd34759b/harbor_parity) are published with reproduction commands. They read the pinned upstream data and scorer directly, without importing the adapter. The model runner remains pending.
 The proposed comparison uses the same pinned CLI agent, dated model, prompt, limits, and container environment on both sides, with upstream grading on the original side. Proposed configuration for team review: `codex@0.118.0`, `gpt-5-mini-2025-08-07`, three runs per side, the same reasoning effort and inference settings, and a 1,800-second task timeout. This follows the matched CLI-agent approach used in the approved CanItEdit adapter. These choices and API provisioning are not yet confirmed; no paid run has started.
 
 The proposed subset has 104 tasks. Run paired sanity checks first, then one full paired subset run, then scale symmetrically to three runs per side. Record raw scores and mean ± sample SEM, preserving all attempts. Original-side runner and final reproduction commands remain to be added before submission as ready for review.
