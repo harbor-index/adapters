@@ -1,0 +1,10 @@
+{
+  "tasks": 110,
+  "prompt_matches": 110,
+  "problem_matches": 110,
+  "domain_matches": 110,
+  "reference_answers_scored": 110,
+  "reference_mean": 1.0,
+  "scorer_source_sha256": "30e04afa32597c118581c5d1cc25d30311f3612fdf005705d39a2beca5f5ff20",
+  "notes": "Independent original-side preparation and VAL scoring; no model calls. All 110 missing-answer controls also scored zero. This does not establish agent parity."
+}
