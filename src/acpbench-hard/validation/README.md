@@ -23,3 +23,5 @@ docker run --rm \
 `check_oracles.py` records all 1,040 task-level results, including exceptions. `check_controls.py` checks a reference, a wrong answer, and an empty answer in each of eight categories. The verifier must use `kstar-planner==1.6.0`: the older 1.4.1 return schema is incompatible with the upstream fallback scorer.
 
 The initial Harbor run using 1.4.1 was stopped after identifying that incompatibility; it is not final evidence. The replacement job is `acpbench-hard-oracle-full-v2`.
+
+The independent original-side preparation matches all 1,040 prompts and evaluator records. Its standalone scoring entry point also passes all 1,040 saved reference answers and scores all 1,040 missing answers as zero. `original-input-audit.json` records this audit and the scorer source hash. Model parity remains pending.
