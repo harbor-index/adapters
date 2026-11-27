@@ -51,7 +51,9 @@ def summarize(job: Path) -> None:
         grading = t / "verifier" / "grading.json"
         g = json.loads(grading.read_text()) if grading.is_file() else {}
         if g.get("oracle_shortcut"):
-            raise SystemExit(f"{t.name} used the oracle shortcut; regrade with FF_ORACLE_SHORTCUT=0")
+            raise SystemExit(
+                f"{t.name} used the oracle shortcut; regrade with FF_ORACLE_SHORTCUT=0"
+            )
         if g.get("failed", True) or "qualification_rate" not in g:
             errors.append(t.name)
             continue
@@ -62,16 +64,26 @@ def summarize(job: Path) -> None:
 
     print(f"== {job}")
     if rewards:
-        sem = statistics.stdev(rewards) / len(rewards) ** 0.5 if len(rewards) > 1 else 0.0
-        print(f"graded {len(rewards)}  mean {statistics.mean(rewards):.3f} ± {sem:.3f} (SEM)  "
-              f"min {min(rewards):.3f}  max {max(rewards):.3f}")
-    print(f"no reward (judge_error or missing): {len(errors)}  fewer judges than configured: {short_panel}")
+        sem = (
+            statistics.stdev(rewards) / len(rewards) ** 0.5 if len(rewards) > 1 else 0.0
+        )
+        print(
+            f"graded {len(rewards)}  mean {statistics.mean(rewards):.3f} ± {sem:.3f} (SEM)  "
+            f"min {min(rewards):.3f}  max {max(rewards):.3f}"
+        )
+    print(
+        f"no reward (judge_error or missing): {len(errors)}  fewer judges than configured: {short_panel}"
+    )
     for rtype, labels in sorted(by_type.items(), key=lambda kv: -len(kv[1])):
-        print(f"  {rtype:40s} {sum(labels):5d}/{len(labels):<5d} {sum(labels) / len(labels):.3f}")
+        print(
+            f"  {rtype:40s} {sum(labels):5d}/{len(labels):<5d} {sum(labels) / len(labels):.3f}"
+        )
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     sub = parser.add_subparsers(dest="cmd", required=True)
     p = sub.add_parser("swap", help="copy a job and rotate report.md across its trials")
     p.add_argument("src", type=Path)

@@ -6,7 +6,9 @@ from pathlib import Path
 from .adapter import FrontierFinanceAdapter
 
 # Default output dir: <repo>/datasets/<adapter_id>
-DEFAULT_OUTPUT_DIR = Path(__file__).resolve().parents[4] / "datasets" / "frontier-finance"
+DEFAULT_OUTPUT_DIR = (
+    Path(__file__).resolve().parents[4] / "datasets" / "frontier-finance"
+)
 
 
 def main() -> None:

@@ -126,7 +126,9 @@ def parity_subset(queries: list[dict]) -> list[dict]:
         strata.setdefault(q["use_cases"][0], []).append(q)
     quota = {k: PARITY_SIZE * len(v) / len(queries) for k, v in strata.items()}
     counts = {k: math.floor(v) for k, v in quota.items()}
-    for k in sorted(quota, key=lambda k: (counts[k] - quota[k], k))[: PARITY_SIZE - sum(counts.values())]:
+    for k in sorted(quota, key=lambda k: (counts[k] - quota[k], k))[
+        : PARITY_SIZE - sum(counts.values())
+    ]:
         counts[k] += 1
     rng = random.Random(PARITY_SEED)
     return [q for k in sorted(strata) for q in rng.sample(strata[k], counts[k])]
@@ -160,10 +162,15 @@ class FrontierFinanceAdapter:
                 for q in queries
                 if str(q["query_id"]) in wanted or task_id_for(q["query_id"]) in wanted
             ]
-            known = {str(q["query_id"]) for q in queries} | {task_id_for(q["query_id"]) for q in queries}
+            known = {str(q["query_id"]) for q in queries} | {
+                task_id_for(q["query_id"]) for q in queries
+            }
             unknown = sorted(wanted - known)
             if unknown:
-                print(f"Warning: unknown task id(s) ignored: {', '.join(unknown)}", file=sys.stderr)
+                print(
+                    f"Warning: unknown task id(s) ignored: {', '.join(unknown)}",
+                    file=sys.stderr,
+                )
         if self.limit is not None:
             queries = queries[: self.limit]
         return queries
@@ -194,11 +201,13 @@ class FrontierFinanceAdapter:
         toml_path = task_dir / "task.toml"
         toml_path.write_text(
             toml_path.read_text(encoding="utf-8")
-            .replace("{task_id}", task_id_for(query_id))
             .replace("{query_id}", query_id)
             .replace("{use_cases}", json.dumps(query.get("use_cases") or []))
             .replace("{capabilities}", json.dumps(query.get("capabilities") or []))
-            .replace("{verifier_timeout_sec}", f"{verifier_timeout_sec(len(query['rubrics']))}.0"),
+            .replace(
+                "{verifier_timeout_sec}",
+                f"{verifier_timeout_sec(len(query['rubrics']))}.0",
+            ),
             encoding="utf-8",
         )
 
@@ -215,7 +224,14 @@ class FrontierFinanceAdapter:
         tests_dir = task_dir / "tests"
         record = {
             k: query[k]
-            for k in ("query_id", "query", "query_date", "use_cases", "capabilities", "rubrics")
+            for k in (
+                "query_id",
+                "query",
+                "query_date",
+                "use_cases",
+                "capabilities",
+                "rubrics",
+            )
             if k in query
         }
         (tests_dir / "rubrics.jsonl").write_text(
@@ -225,5 +241,7 @@ class FrontierFinanceAdapter:
         # Oracle report: written by solve.sh; a byte-identical copy lives in
         # tests/ so the verifier can recognise the oracle without a judge call.
         report = build_oracle_report(query)
-        (task_dir / "solution" / "oracle_report.md").write_text(report, encoding="utf-8")
+        (task_dir / "solution" / "oracle_report.md").write_text(
+            report, encoding="utf-8"
+        )
         (tests_dir / "oracle_report.md").write_text(report, encoding="utf-8")

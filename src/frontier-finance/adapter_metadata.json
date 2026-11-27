@@ -32,7 +32,7 @@
         "parity_unmatching_agents": [
           "None"
         ],
-        "parity_costs": "$22",
+        "parity_costs": "~$22.30 for parity and its checks; ~$26.66 including the large-task judge check",
         "notes": "Parity on the 11-task --split parity subset (5%, stratified by use case), 3 runs per side, graded on both sides by the unmodified upstream grader with upstream's judge panel (claude-sonnet-4-6, gemini-3.1-pro-preview, gpt-5.4). Oracle reports are constructed from rubrics; byte-identical oracle reports skip the judges."
       }
     ]
