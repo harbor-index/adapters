@@ -8,5 +8,6 @@
     "https://github.com/harbor-framework/adapters/pull/58"
   ],
   "parity_status": "not run; awaiting team configuration",
-  "oracle_status": "in progress"
+  "oracle_status": "110/110 Harbor oracle trials passed, zero exceptions",
+  "oracle_scope": "Generated before documentation/license additions and the explicit check=False/formatting-only verifier change; verification behavior unchanged."
 }

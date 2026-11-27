@@ -77,7 +77,7 @@ The proposed subset has 11 tasks. Run paired sanity checks first, then one full 
 - The added instruction is `Save your answer to /app/plan.txt.` Apply it identically on the original side during parity.
 - This adapter exposes the initial zero-shot PDDL planning task to a terminal agent. It does not reproduce the upstream multi-round LLM-Modulo feedback loop. Parity must compare the same terminal agent on both sides, not claim equality with historical model-call or backprompting results.
 - Reference solutions and all grading dependencies are unavailable during ordinary agent execution.
-- Oracle verification, negative controls, parity, dataset registration, and result publication are tracked separately; task generation alone does not establish completion.
+- Harbor oracle: 110/110 tasks pass with zero exceptions. No-op controls: 3/3 return zero. Five additional VAL positive/negative controls pass. Raw job summaries are under `validation/`. Parity and dataset publication remain pending.
 
 ## Installation / Prerequisites
 
