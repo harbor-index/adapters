@@ -9,7 +9,7 @@
     "number_of_runs": null,
     "notes": "PENDING: parity experiments have not been run. Fill in after the parity plan is confirmed with the Harbor team. Original side: https://github.com/anas-zafar/MedXpertQA branch harbor-parity at commit 8297735 (upstream TsinghuaC3I/MedXpertQA at 5f1db16 plus the parity driver). Dataset: HuggingFace TsinghuaC3I/MedXpertQA at commit 7e7c465.",
     "original_parity_repo": "https://github.com/anas-zafar/MedXpertQA/tree/82977359b91e577e5b2ca6b9c7283d6ea311ba45",
-    "adapter_pr": [],
+    "adapter_pr": ["https://github.com/harbor-index/adapters/pull/57"],
     "dataset_pr": [],
     "parity_pr": [],
     "metrics": [
