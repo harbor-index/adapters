@@ -1,0 +1,36 @@
+[
+  {
+    "adapter_name": "acpbench-hard",
+    "adapter_builders": [
+      "Chenghao Zhang (82429372+Chenghao-Zhang@users.noreply.github.com)"
+    ],
+    "original_benchmark": [
+      {
+        "split": "test",
+        "size": 1040,
+        "harness": "llm",
+        "supported_agents": [
+          "None"
+        ],
+        "adaptable": true,
+        "notes": "Pinned public upstream test split."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "test",
+        "adapted_benchmark_size": 1040,
+        "parity_benchmark_size": 0,
+        "parity_sampling_rate": 0,
+        "registry_benchmark_size": 0,
+        "added_agents": [
+          "None"
+        ],
+        "parity_matching_agents": [],
+        "parity_unmatching_agents": [],
+        "parity_costs": null,
+        "notes": "Parity pending team coordination; proposed subset: 104 tasks. Dataset not yet registered."
+      }
+    ]
+  }
+]
