@@ -1,0 +1,40 @@
+[
+  {
+    "adapter_name": "taxcalcbench",
+    "adapter_builders": [
+      "Gloria Tan (gloriayytan2021@gmail.com)"
+    ],
+    "original_benchmark": [
+      {
+        "split": "full",
+        "size": 101,
+        "harness": "llm",
+        "supported_agents": [
+          "None"
+        ],
+        "adaptable": true,
+        "notes": "TaxCalcBench at fdfe0db992ae9033f5b8b942633181a3596da64c: 50 TY2025 cases with PDF inputs (10 each: federal, CA, IL, NY, VA) and 51 TY2024 cases with JSON inputs (federal). Upstream makes one model call per case (no agent) and scores the returned form line by line; its leaderboard is per tax year. No exclusions."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "full",
+        "adapted_benchmark_size": 101,
+        "parity_benchmark_size": 101,
+        "parity_sampling_rate": 1.0,
+        "registry_benchmark_size": 101,
+        "added_agents": [
+          "taxcalcbench-direct@1.0.0"
+        ],
+        "parity_matching_agents": [
+          "taxcalcbench-direct@1.0.0+openai/gpt-6-luna"
+        ],
+        "parity_unmatching_agents": [
+          "None"
+        ],
+        "parity_costs": "$7",
+        "notes": "All 101 upstream cases are adapted, and parity ran on all of them: taxcalcbench-direct@1.0.0 (a Harbor port of upstream's single Responses API call) with openai/gpt-6-luna at thinking level high, 5 runs per side; the run ranges overlap on all four upstream metrics (details in parity_experiment.json and the README). Standard CLI agent, Harbor side only: Codex CLI 0.171.0 with gpt-6-luna, 35.0% strictly correct returns over 100 of 101 tasks. parity_costs: $2.81 for the original side (upstream's LiteLLM estimate, the 6-case sanity check included), about the same for the Harbor side, and $1.32 for the Codex run. registry_benchmark_size is the 101 tasks the dataset PR registers (requested ID column-tax/taxcalcbench, tag v1.0). The expected returns are public, so the agent phase of every task has no network; Harbor allows the model endpoint it resolves for an installed agent."
+      }
+    ]
+  }
+]

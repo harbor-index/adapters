@@ -1,0 +1,7 @@
+# task_id tax_year upstream_case; must equal the `--split sanity` selection (checked by a unit test)
+ty25-ca-004 ty25 ty25-ca-004
+ty25-ny-002 ty25 ty25-ny-002
+ty25-us-001 ty25 ty25-us-001
+ty24-hoh-schedule-b-ssa1099-unemployment ty24 hoh-schedule-b-ssa1099-unemployment
+ty24-hoh-w2-1099g-unemployment-schedulec-loss ty24 hoh-w2-1099g-unemployment-schedulec-loss
+ty24-mfj-both-blind-nontaxable-social-security ty24 mfj-both-blind-nontaxable-social-security

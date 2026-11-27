@@ -1,0 +1,19 @@
+# Reference job config: oracle over the full dataset (expect 101/101).
+#   harbor run -c src/taxcalcbench/run_taxcalcbench.yaml
+jobs_dir: jobs
+n_attempts: 1
+n_concurrent_trials: 4
+environment:
+  type: docker
+  delete: true
+agents:
+  - name: oracle
+# Other agents, e.g.:
+# agents:
+#   - name: codex
+#     model_name: openai/<model>
+# agents:
+#   - name: claude-code
+#     model_name: anthropic/<model>
+datasets:
+  - path: datasets/taxcalcbench

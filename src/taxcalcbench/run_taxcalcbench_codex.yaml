@@ -1,0 +1,32 @@
+# Standard CLI agent on all 101 tasks, on Daytona (adapted side only; the parity
+# comparison uses taxcalcbench-direct). Shows that an agent working inside the container can read
+# /app/input and write /app/output/return.txt.
+#
+#   (from src/taxcalcbench)  uv run taxcalcbench --output-dir ../../datasets/taxcalcbench-full
+#   (from the repository root)
+#   export OPENAI_API_KEY=...
+#   export OPENAI_BASE_URL=...
+#   export DAYTONA_API_KEY=...
+#   uv run --project src/taxcalcbench --extra parity harbor run \
+#     -c src/taxcalcbench/run_taxcalcbench_codex.yaml --job-name codex-full-run1
+#
+# The tasks give the agent phase no network. The harness allows the model
+# endpoint it resolves for the agent (here the host of OPENAI_BASE_URL), so
+# Codex can reach the model and nothing else. If you pass --allow-agent-host,
+# list the model endpoint too: explicit hosts replace the automatic one. Web
+# search stays off, as in upstream's base setting.
+jobs_dir: jobs
+n_attempts: 1
+n_concurrent_trials: 4
+environment:
+  type: daytona
+  delete: true
+agents:
+  - name: codex
+    model_name: openai/gpt-6-luna
+    kwargs:
+      version: "0.171.0"
+      reasoning_effort: high
+      web_search: disabled
+datasets:
+  - path: datasets/taxcalcbench-full

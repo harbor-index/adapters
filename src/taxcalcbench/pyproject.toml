@@ -1,0 +1,26 @@
+[project]
+name = "harbor-taxcalcbench-adapter"
+version = "0.1.0"
+description = "Harbor adapter for TaxCalcBench (column-tax/tax-calc-bench)"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = ["lxml>=6.0", "numpy>=1.24"]  # numpy: imported by upstream tax_return_evaluator
+
+[project.optional-dependencies]
+# Parity agent (taxcalcbench.parity_agent). LiteLLM and the OpenAI SDK are pinned
+# to the versions in upstream tax-calc-bench@fdfe0db's uv.lock; google-genai and
+# httpx are imported by upstream's generator, python-dotenv by its CLI.
+parity = ["harbor[daytona]==0.27.0", "litellm==1.100.5", "openai==2.43.0", "google-genai>=2.17.0,<3.0.0", "httpx>=0.28.1", "python-dotenv>=1.2.2"]
+
+[project.scripts]
+taxcalcbench = "taxcalcbench.main:main"
+
+[build-system]
+requires = ["hatchling>=1,<2"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/taxcalcbench"]
+
+[dependency-groups]
+dev = ["pytest>=8"]
