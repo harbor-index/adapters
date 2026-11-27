@@ -4,7 +4,7 @@
     "agent": "<agent>@<version>",
     "model": "<model>",
     "date": "YYYY-MM-DD",
-    "adapted_benchmark_size": null,
+    "adapted_benchmark_size": 282,
     "parity_benchmark_size": null,
     "number_of_runs": null,
     "notes": null,

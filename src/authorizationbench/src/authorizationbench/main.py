@@ -47,6 +47,11 @@ def main() -> None:
         help="Existing AuthorizationBench checkout at the pinned commit "
         "(default: fetch it into ~/.cache/harbor-authorizationbench)",
     )
+    parser.add_argument(
+        "--include-excluded",
+        action="store_true",
+        help="Also generate the tasks in EXCLUDED_TASKS (see README, Excluded tasks)",
+    )
     args = parser.parse_args()
 
     adapter = AuthorizationBenchAdapter(
@@ -55,6 +60,7 @@ def main() -> None:
         limit=args.limit,
         task_ids=args.task_ids,
         source_dir=args.source_dir,
+        include_excluded=args.include_excluded,
     )
 
     adapter.run()

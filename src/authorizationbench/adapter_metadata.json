@@ -19,7 +19,7 @@
     "harbor_adapter": [
       {
         "split": "full",
-        "adapted_benchmark_size": null,
+        "adapted_benchmark_size": 282,
         "parity_benchmark_size": null,
         "parity_sampling_rate": null,
         "registry_benchmark_size": null,
