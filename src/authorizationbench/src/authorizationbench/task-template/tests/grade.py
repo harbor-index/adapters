@@ -52,12 +52,17 @@ def _toml_value(value: Any) -> str:
     raise TypeError(f"unsupported TOML value: {value!r}")
 
 
-def _profile_block(name: str, model: str, api_key: str, base_url: str, kwargs: str) -> str:
+# The authors' recorded judge calls use max_tokens 16000 (e.g. scripted-path-receipts-and-eval/
+# T0041-m-d-h/deepseek-high/completion_source.json); the judge class default is 4000, at which a
+# high-effort reasoning judge can spend every token reasoning and return no answer.
+JUDGE_MAX_TOKENS = 16000
+
+
+def _profile_block(name: str, model: str, api_key: str, base_url: str, kwargs: dict) -> str:
     lines = [f"[llm.{name}]", f"model = {_toml_value(model)}", f"api_key = {_toml_value(api_key)}"]
     if base_url:
         lines.append(f"base_url = {_toml_value(base_url)}")
-    if kwargs:
-        lines.append(f"completion_kwargs = {_toml_value(json.loads(kwargs))}")
+    lines.append(f"completion_kwargs = {_toml_value(kwargs)}")
     return "\n".join(lines)
 
 
@@ -68,7 +73,9 @@ def write_judge_config(eval_dir: Path) -> dict[str, str]:
     if not model or not api_key:
         raise SystemExit("AUTHZ_JUDGE_MODEL and AUTHZ_JUDGE_API_KEY must be set for grading")
     base_url = os.environ.get("AUTHZ_JUDGE_BASE_URL", "").strip()
-    kwargs = os.environ.get("AUTHZ_JUDGE_COMPLETION_KWARGS", "").strip()
+    raw_kwargs = os.environ.get("AUTHZ_JUDGE_COMPLETION_KWARGS", "").strip()
+    kwargs = json.loads(raw_kwargs) if raw_kwargs else {}
+    kwargs.setdefault("max_tokens", JUDGE_MAX_TOKENS)
     fb_model = os.environ.get("AUTHZ_JUDGE_FALLBACK_MODEL", "").strip() or model
     blocks = [
         _profile_block("opus_5_5", model, api_key, base_url, kwargs),

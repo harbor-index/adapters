@@ -296,7 +296,11 @@ upstream entry point `evaluation/run_eval.py --harness openhands --prompt native
   ```
 
   The upstream judges' pinned litellm (1.102.0) rejects a top-level `reasoning_effort` for this
-  model, so the effort goes through OpenRouter's `reasoning` field instead.
+  model, so the effort goes through OpenRouter's `reasoning` field instead. The grader sets the
+  judges' `max_tokens` to 16000, as in the authors' recorded judge calls
+  (`.../T0041-m-d-h/deepseek-high/completion_source.json`), unless
+  `AUTHZ_JUDGE_COMPLETION_KWARGS` sets it. At the judge class default of 4000, a high-effort
+  judge sometimes spends every token on reasoning and returns no answer (inconclusive verdict).
 
 ## Troubleshooting
 
