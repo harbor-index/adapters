@@ -1,0 +1,25 @@
+# Reference job config for SWEeper-Bench. Run from the adapters repository root:
+#   harbor run -c src/sweeper-bench/run_sweeper-bench.yaml
+# The verifier needs credentials in the host environment: OPENAI_API_KEY, or
+# SWEEPER_VERIFIER_AUTH=subscription plus CODEX_AUTH_JSON (see README).
+jobs_dir: jobs
+n_attempts: 1
+timeout_multiplier: 1.0
+orchestrator:
+  type: local
+  n_concurrent_trials: 4
+  quiet: false
+environment:
+  type: docker
+  # type: daytona
+  force_build: false
+  delete: true
+agents:
+  - name: oracle
+  # - name: nop        # with --ve SWEEPER_EVALUATE_EMPTY_PATCH=1 to verify the unpatched app
+  # - name: codex
+  #   model_name: openai/<dated-model-id>
+  # - name: claude-code
+  #   model_name: anthropic/<dated-model-id>
+datasets:
+  - path: datasets/sweeper-bench

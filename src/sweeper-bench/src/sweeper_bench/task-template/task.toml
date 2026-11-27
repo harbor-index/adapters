@@ -1,0 +1,84 @@
+schema_version = "1.4"
+
+[task]
+name = "zlab-princeton/sweeper-bench__{task_id}"
+description = "{description}"
+authors = [
+    { name = "Yang Yao" },
+    { name = "Haozhe Chen" },
+    { name = "Bingyi Kang" },
+    { name = "Karthik R Narasimhan" },
+    { name = "Zhuang Liu" },
+]
+keywords = ["sweeper-bench", "web-app", "bug-discovery", "browser", "{language_keyword}"]
+
+[metadata]
+difficulty = "hard"
+category = "debugging"
+tags = ["sweeper-bench", "web-app", "browser", "{slug}"]
+upstream_case_id = "{case_id}"
+upstream_repo = "{repo}"
+upstream_base_commit = "{base_commit}"
+upstream_reference_commit = "{reference_commit}"
+upstream_pr = "{pr}"
+upstream_runner_commit = "{runner_commit}"
+upstream_dataset_revision = "{dataset_revision}"
+prompt_level = "scoped"
+prompt_templates = "browser"
+
+[agent]
+# Upstream prediction timeout is 8 hours with an unlimited time budget.
+timeout_sec = 28800.0
+# Upstream prediction egress allows model-provider hosts only
+# (runtime/allowlist.txt). Harbor adds the configured inference endpoint.
+network_mode = "allowlist"
+allowed_hosts = [
+    "api.anthropic.com",
+    "api.openai.com",
+    "chatgpt.com",
+    "auth.openai.com",
+    "app.ppapi.ai",
+    "generativelanguage.googleapis.com",
+]
+
+[environment]
+build_timeout_sec = 3600.0
+# Upstream runs the product and the agent on one 8 vCPU / 16 GB VM.
+cpus = 8
+memory_mb = 16384
+storage_mb = 30720
+
+[environment.healthcheck]
+# Same readiness rule as upstream runtime/product.sh: any non-5xx answer.
+command = "code=$(curl --noproxy '*' -s -o /dev/null -w '%{http_code}' --max-time 45 http://127.0.0.1:13200 || true); [ -n \"$code\" ] && [ \"$code\" != 000 ] && [ \"$code\" -lt 500 ]"
+interval_sec = 5.0
+timeout_sec = 50.0
+start_period_sec = 600.0
+start_interval_sec = 5.0
+retries = 3
+
+[[verifier.collect]]
+command = "bash /opt/sweeper/collect-patch.sh"
+timeout_sec = 300.0
+
+[verifier]
+# Upstream evaluation timeout is 3 hours per case.
+timeout_sec = 10800.0
+environment_mode = "separate"
+
+[verifier.env]
+SWEEPER_VERIFIER_HARNESS = "${SWEEPER_VERIFIER_HARNESS:-codex}"
+SWEEPER_VERIFIER_MODEL = "${SWEEPER_VERIFIER_MODEL:-gpt-5.6-luna}"
+SWEEPER_VERIFIER_EFFORT = "${SWEEPER_VERIFIER_EFFORT:-xhigh}"
+SWEEPER_VERIFIER_AUTH = "${SWEEPER_VERIFIER_AUTH:-api}"
+SWEEPER_EVALUATE_EMPTY_PATCH = "${SWEEPER_EVALUATE_EMPTY_PATCH:-0}"
+OPENAI_API_KEY = "${OPENAI_API_KEY:-}"
+# Optional OpenAI-compatible endpoint (same override as the parity fork).
+OPENAI_BASE_URL = "${OPENAI_BASE_URL:-}"
+CODEX_AUTH_JSON = "${CODEX_AUTH_JSON:-}"
+
+[verifier.environment]
+build_timeout_sec = 3600.0
+cpus = 8
+memory_mb = 16384
+storage_mb = 30720

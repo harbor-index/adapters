@@ -1,0 +1,24 @@
+# Separate verifier environment. Upstream evaluates a patch with two
+# containers on one VM: a fresh product container published on
+# 127.0.0.1:13200 and a browser-verifier container with --network host.
+# Here `browser-verifier` shares the network namespace of `main` (the fresh
+# evaluation product), so http://127.0.0.1:13200 reaches the same app. The two
+# exchange commands and results through the `sweeper-exchange` volume.
+services:
+  main:
+    volumes:
+      - sweeper-exchange:/sweeper-exchange
+  browser-verifier:
+    build:
+      context: .
+      dockerfile: verifier.Dockerfile
+    network_mode: "service:main"
+    shm_size: "1g"
+    volumes:
+      - sweeper-exchange:/sweeper-exchange
+    environment:
+      TIMEOUT_BrowserStartEvent: "120"
+      TIMEOUT_BrowserLaunchEvent: "120"
+
+volumes:
+  sweeper-exchange:
