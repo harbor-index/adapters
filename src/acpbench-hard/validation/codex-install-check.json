@@ -16,5 +16,7 @@
   "exception_info": null,
   "finished_at": "2026-11-27T19:18:25.040323Z",
   "install_only": true,
-  "notes": "Harbor 0.27.0 install-only check. No model execution or scoring. Standalone image separately reports codex-cli 0.118.0, Node v22.23.5 and ripgrep 13.0.0; runtime equivalence is not established by installation alone."
+  "notes": "Harbor 0.27.0 install-only check. No model execution or scoring. Standalone image separately reports codex-cli 0.118.0, Node v22.23.5 and ripgrep 13.0.0; runtime equivalence is not established by installation alone.",
+  "task_name": "blocksworld-hard-001",
+  "scope": "Shared terminal-agent environment installation smoke check, performed on one Blocksworld task; not ACPBench runtime scoring."
 }
