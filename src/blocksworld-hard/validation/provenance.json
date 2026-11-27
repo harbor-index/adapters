@@ -1,0 +1,12 @@
+{
+  "upstream_url": "https://github.com/karthikv792/LLMs-Planning",
+  "upstream_revision": "fc638a1aff7df3fe7a1a1d289fa2c04cc24dc284",
+  "adapter_contract_revision": "7b4df9deb2381ae32f26e6cebec06aaa2975dc56",
+  "harbor_version": "0.27.0",
+  "reference_prs": [
+    "https://github.com/harbor-framework/adapters/pull/8",
+    "https://github.com/harbor-framework/adapters/pull/58"
+  ],
+  "parity_status": "not run; awaiting team configuration",
+  "oracle_status": "in progress"
+}
