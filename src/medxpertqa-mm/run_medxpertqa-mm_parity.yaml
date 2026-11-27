@@ -1,0 +1,44 @@
+# MedXpertQA-MM: parity subset (201 tasks = 10% of every
+# (medical_task, question_type) stratum, seed 42).
+#
+# Generate the subset first (from src/medxpertqa-mm/):
+#   uv run medxpertqa-mm --split parity --output-dir ../../datasets/medxpertqa-mm-parity
+#
+# Then, from the repository root, once per parity run:
+#   export OPENAI_API_KEY=...        # and OPENAI_BASE_URL for another OpenAI-compatible endpoint
+#   PYTHONPATH=src/medxpertqa-mm/src harbor run -c src/medxpertqa-mm/run_medxpertqa-mm_parity.yaml --max-retries 2
+#
+# The agent sends the same two chat-completion requests as the original harness
+# (zero-shot CoT, images attached). The model must accept image input. The model
+# name below is a placeholder until the parity plan is confirmed; use the exact id.
+
+jobs_dir: jobs
+n_attempts: 1
+timeout_multiplier: 1.0
+
+n_concurrent_trials: 8
+quiet: false
+
+environment:
+  type: docker
+  # type: daytona
+  force_build: false
+  delete: true
+
+agents:
+  - import_path: medxpertqa_mm.agent:MedXpertQALLMAgent
+    model_name: MODEL_ID_TO_BE_CONFIRMED
+    # kwargs:                      # only if the endpoint rejects upstream's parameters;
+    #   drop_params: logprobs      # mirror with MEDXPERTQA_PARITY_DROP_PARAMS on the original side
+    #   token_param: max_completion_tokens
+
+# Standard CLI agent on the same subset (Harbor side only, not a parity comparison):
+# agents:
+#   - name: claude-code
+#     model_name: anthropic/claude-haiku-4-5
+
+metrics:
+  - type: mean
+
+datasets:
+  - path: datasets/medxpertqa-mm-parity

@@ -1,0 +1,38 @@
+schema_version = "1.0"
+
+[task]
+name = "tsinghuac3i/medxpertqa-mm__{{TASK_ID}}"
+description = "MedXpertQA-MM {{SOURCE_ID}}: expert-level multimodal medical multiple-choice question"
+authors = [
+    { name = "Yuxin Zuo" },
+    { name = "Shang Qu", email = "lindsay2864tt@gmail.com" },
+    { name = "Yifei Li" },
+    { name = "Zhangren Chen" },
+    { name = "Xuekai Zhu" },
+    { name = "Ermo Hua" },
+    { name = "Kaiyan Zhang" },
+    { name = "Ning Ding", email = "dn97@mail.tsinghua.edu.cn" },
+    { name = "Bowen Zhou" },
+]
+keywords = ["medical", "multimodal", "multiple-choice", "clinical-reasoning"]
+
+[metadata]
+benchmark = "medxpertqa-mm"
+source_id = "{{SOURCE_ID}}"
+category = "medical-qa"
+medical_task = "{{MEDICAL_TASK}}"
+body_system = "{{BODY_SYSTEM}}"
+question_type = "{{QUESTION_TYPE}}"
+num_images = {{NUM_IMAGES}}
+
+[verifier]
+timeout_sec = 120.0
+
+[agent]
+timeout_sec = 900.0
+
+[environment]
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
