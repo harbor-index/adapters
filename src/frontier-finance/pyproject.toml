@@ -1,0 +1,22 @@
+[project]
+name = "harbor-frontier-finance-adapter"
+version = "0.1.0"
+description = "Harbor adapter for Samaya AI's FrontierFinance benchmark"
+readme = "README.md"
+authors = [
+    { name = "Chaoqi", email = "136579807+Chaoqi31@users.noreply.github.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "huggingface-hub>=0.24",
+]
+
+[project.scripts]
+frontier-finance = "frontier_finance.main:main"
+
+[build-system]
+requires = ["uv_build>=0.9.17,<0.10.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "frontier_finance"
