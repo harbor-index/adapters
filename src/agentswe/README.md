@@ -128,7 +128,8 @@ uv run --project src/agentswe --extra parity harbor run -p datasets/agentswe \
 harbor run -p datasets/agentswe -a codex -m "<model>"
 ```
 
-Provider configuration is read from the environment of the `harbor` process:
+Provider configuration is read from the environment of the `harbor` process (Harbor asks before
+loading the `[verifier.env]` values; pass `--yes` in non-interactive runs):
 
 | Variable | Used by | Default |
 |---|---|---|
