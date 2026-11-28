@@ -9,7 +9,7 @@ in the Harbor format at the configured output directory.
 import argparse
 from pathlib import Path
 
-from .adapter import AgentSWEAdapter
+from .adapter import DEFAULT_PROFILE, UPSTREAM_COMMIT, AgentSWEAdapter
 
 # Default output dir: <repo>/datasets/<adapter_id>
 DEFAULT_OUTPUT_DIR = Path(__file__).resolve().parents[4] / "datasets" / "agentswe"
@@ -38,7 +38,30 @@ def main() -> None:
         "--task-ids",
         nargs="+",
         default=None,
-        help="Only generate these task IDs",
+        help="Only generate these task IDs (upstream id or short name, e.g. repo)",
+    )
+    parser.add_argument(
+        "--split",
+        choices=("full", "lite", "parity"),
+        default="full",
+        help="full: every adapted task; lite/parity: the AgentSWE-Lite tasks",
+    )
+    parser.add_argument(
+        "--profile",
+        default=DEFAULT_PROFILE,
+        help="Upstream configuration profile whose overlays are applied (default: lite-v1.1)",
+    )
+    parser.add_argument(
+        "--upstream-dir",
+        type=Path,
+        default=None,
+        help=f"Existing AgentSWE checkout at commit {UPSTREAM_COMMIT[:12]} (default: clone into --cache-dir)",
+    )
+    parser.add_argument(
+        "--cache-dir",
+        type=Path,
+        default=None,
+        help="Where the pinned AgentSWE checkout is cloned (default: ~/.cache/harbor-agentswe)",
     )
     args = parser.parse_args()
 
@@ -47,6 +70,10 @@ def main() -> None:
         overwrite=args.overwrite,
         limit=args.limit,
         task_ids=args.task_ids,
+        split=args.split,
+        profile=args.profile,
+        upstream_dir=args.upstream_dir,
+        cache_dir=args.cache_dir,
     )
 
     adapter.run()

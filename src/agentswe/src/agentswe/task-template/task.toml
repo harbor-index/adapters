@@ -1,56 +1,60 @@
-# Refer to https://harborframework.com/docs/task-format for more details.
-
-schema_version = "1.0"
-
-# =============================================================================
-# Task Section
-# Task identity, authors, and keywords.
-# =============================================================================
-[task]
-# Task name format: "<org>/<benchmark>__<task_id>", e.g. "openai/mmmlu__mmmlu-ar-xy-00000"
-# The adapter fills in {task_id} per task when rendering this template.
-name = "TODO_ORG/agentswe__{task_id}"
-
-# description = "Optional short description of the task."
-
-# Authors should be sourced from the benchmark's BibTeX citation.
-authors = [
-    { name = "TODO: Author Name", email = "TODO: author@email.com" },
+version = "1.0"
+artifacts = [
+  { source = "/workspace/submission" },
+  { source = "{{ENV_PREFIX}}" },
+  { source = "/var/agentswe/run", service = "evaluator" },
 ]
 
-# Keywords for filtering and categorization.
-keywords = ["TODO"]
+[task]
+name = "agentswe/{{TASK_ID}}"
+description = "AgentSWE Creation task `{{SHORT}}` ({{TITLE}}): build a task-specific agent from a natural-language requirement in one Builder session with authoritative dev feedback; the frozen agent is scored on held-out cases."
+authors = [{{AUTHORS}}]
+keywords = ["agentswe", "{{FAMILY}}", "agent-building", "long-horizon", "llm-as-a-judge", "{{SHORT}}"]
 
-# =============================================================================
-# Metadata Section
-# =============================================================================
 [metadata]
-# Task difficulty: "easy", "medium", "hard"
-difficulty = "easy"
+difficulty = "hard"
+category = "agent-development"
+agentswe_family = "{{FAMILY}}"
+agentswe_task = "{{TASK_ID}}"
+agentswe_short = "{{SHORT}}"
+agentswe_tier = "{{TIER}}"
+agentswe_lite = {{LITE}}
+agentswe_profile = "{{PROFILE}}"
+agentswe_max_dev_rounds = {{MAX_DEV_ROUNDS}}
+upstream_repo = "https://github.com/VectorSpaceLab/AgentSWE"
+upstream_commit = "{{COMMIT}}"
 
-# Category of the task (e.g., "programming", "debugging", "refactoring")
-category = "programming"
-
-# =============================================================================
-# Verifier Section
-# Settings for the verification/grading process
-# =============================================================================
-[verifier]
-# Maximum time (in seconds) allowed for verification to complete
-timeout_sec = 120.0
-
-# =============================================================================
-# Agent Section
-# Settings for the AI agent solving the task
-# =============================================================================
 [agent]
-# Maximum time (in seconds) allowed for the agent to complete the task
-timeout_sec = 120.0
+timeout_sec = {{BUILDER_TIMEOUT}}
+user = "root"
 
-# =============================================================================
-# Environment Section
-# Docker container and resource settings
-# =============================================================================
+[verifier]
+environment_mode = "separate"
+timeout_sec = {{VERIFIER_TIMEOUT}}
+user = "root"
+
+[verifier.env]
+AGENTSWE_RUNTIME_BASE_URL = "${AGENTSWE_RUNTIME_BASE_URL:-https://api.deepseek.com/v1}"
+AGENTSWE_RUNTIME_API_KEY = "${AGENTSWE_RUNTIME_API_KEY}"
+AGENTSWE_RUNTIME_MODEL = "${AGENTSWE_RUNTIME_MODEL:-deepseek-flash}"
+AGENTSWE_RUNTIME_EFFORT = "${AGENTSWE_RUNTIME_EFFORT:-high}"
+AGENTSWE_RUNTIME_MODEL_ALIASES = "${AGENTSWE_RUNTIME_MODEL_ALIASES:-deepseek-flash}"
+AGENTSWE_JUDGE_BASE_URL = "${AGENTSWE_JUDGE_BASE_URL:-https://api.deepseek.com/v1}"
+AGENTSWE_JUDGE_API_KEY = "${AGENTSWE_JUDGE_API_KEY}"
+AGENTSWE_JUDGE_MODEL = "${AGENTSWE_JUDGE_MODEL:-deepseek-flash}"
+AGENTSWE_JUDGE_EFFORT = "${AGENTSWE_JUDGE_EFFORT:-max}"
+AGENTSWE_PROTOCOL_MODE = "${AGENTSWE_PROTOCOL_MODE:-formal}"
+
+# Upstream one_stop.py freezes the delivery after the Builder exits; sidecar hooks run after main stops.
+[[verifier.collect]]
+service = "evaluator"
+command = "python3 -m agentswe_harbor.freeze"
+timeout_sec = 7200.0
+
 [environment]
-# Maximum time (in seconds) allowed for building the Docker image
-build_timeout_sec = 600.0
+build_timeout_sec = 3600.0
+cpus = 2
+memory_mb = 8192
+storage_mb = 16384
+allow_internet = true
+workdir = "/workspace"
