@@ -269,8 +269,9 @@ A run's score is its held-out mean (0–100) on each task; a parity run's score 
   | Optimization | `tbench` | | planned | about 150 GB of disk, nested task containers |
 - **Differences from upstream:**
   - Per-case jobs run as processes in the evaluator containers instead of each in a container of its own. The
-    Candidate step runs as an unprivileged user, and each step sees only the mounts its compose file declares.
-    Upstream also restricts a Candidate's network to the broker; here it shares the sidecar's network.
+    Candidate step runs as an unprivileged user without new privileges, each step sees only the mounts its compose
+    file declares, and whatever a Candidate leaves in scratch directories is removed when its trial ends. Upstream
+    also restricts a Candidate's network to the broker; here it shares the sidecar's network.
   - The verifier runs the held-out cases one at a time (upstream: two at a time). This changes only wall time.
   - Host tools that upstream binds into per-case containers (`git`, `strace`) are installed in the evaluator images.
   - The Builder's model traffic goes through the builder role broker in the sidecar instead of a host-side broker.

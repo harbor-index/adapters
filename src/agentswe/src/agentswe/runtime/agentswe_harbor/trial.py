@@ -6,6 +6,7 @@ import os
 import pwd
 import shutil
 import signal
+import stat
 import subprocess
 import tomllib
 import traceback
@@ -16,6 +17,10 @@ from . import settings
 from .brokers import BASE_ENV
 
 AGENT_DIR, VERIFIER_DIR, ARTIFACTS_DIR = Path("/logs/agent"), Path("/logs/verifier"), Path("/logs/artifacts")
+# The Candidate writes only its outputs and evidence (/logs/artifacts); the root steps own the other two.
+LOG_DIRS = {AGENT_DIR: 0o755, VERIFIER_DIR: 0o755, ARTIFACTS_DIR: 0o777}
+# World-writable directories of the evaluator images, where a Candidate can leave files behind.
+SCRATCH_DIRS = (Path("/tmp"), Path("/var/tmp"), Path("/run/lock"), Path("/dev/shm"))
 WORKDIR = Path("/workspace")
 # Mount targets that upstream's per-case compose files use; any other target is rejected.
 MOUNT_ROOTS = ("/tests", "/solution", "/submission", "/active-case", "/candidate-output", "/evaluator", "/harness",
@@ -45,12 +50,24 @@ def remove(path: Path) -> None:
         path.unlink()
 
 
-def clear(path: Path) -> None:
+def clear(path: Path, mode: int = 0o755) -> None:
     """Empty a directory in place: the outer Harbor verifier mounts /logs/verifier."""
     path.mkdir(parents=True, exist_ok=True)
     for child in path.iterdir():
         remove(child)
-    path.chmod(0o777)
+    path.chmod(mode)
+
+
+def remove_owned(uid: int, roots: tuple[Path, ...]) -> None:
+    """Remove every entry `uid` created below `roots`, which it can only do in world-writable directories."""
+    pending = list(roots)
+    while pending:
+        for child in pending.pop().iterdir():
+            info = child.lstat()
+            if info.st_uid == uid:
+                remove(child)
+            elif stat.S_ISDIR(info.st_mode) and info.st_mode & stat.S_IWOTH:
+                pending.append(child)
 
 
 def linked(source: Path) -> bool:
@@ -110,11 +127,13 @@ def kill_user_processes(uid: int) -> None:
 
 
 def run_script(script: str, environment: dict[str, str], timeout: float, log: Path, user: str) -> int | None:
-    """Run a step script as `user`; None when it times out. Nothing the step started outlives it."""
+    """Run a step script as `user`; None when it times out. Nothing the step started outlives it, and, as in
+    upstream's no-new-privileges containers, nothing it runs gains privileges (setuid binaries included)."""
     account = pwd.getpwnam(user)
     with log.open("wb") as output:
         process = subprocess.Popen(
-            ["bash", script], env={**BASE_ENV, "HOME": account.pw_dir, **environment}, cwd=WORKDIR,
+            ["setpriv", "--no-new-privs", "bash", script],
+            env={**BASE_ENV, "HOME": account.pw_dir, **environment}, cwd=WORKDIR,
             stdout=output, stderr=subprocess.STDOUT, start_new_session=True,
             user=account.pw_uid, group=account.pw_gid, extra_groups=[],
         )
@@ -151,8 +170,8 @@ def run_trial(task_dir: Path, trial_dir: Path) -> None:
         "verifier_result": None,
     }
     try:
-        for directory in (AGENT_DIR, VERIFIER_DIR, ARTIFACTS_DIR):
-            clear(directory)
+        for directory, mode in LOG_DIRS.items():
+            clear(directory, mode)
         with step(task_dir, "solution", task_dir / "environment" / "docker-compose.yaml") as (environment, targets):
             # A job that runs the delivered submission runs it unprivileged: upstream isolates it in a container of
             # its own, here it shares the evaluator's.
@@ -177,5 +196,10 @@ def run_trial(task_dir: Path, trial_dir: Path) -> None:
         for source, destination in ((AGENT_DIR, trial_dir / "agent"), (VERIFIER_DIR, trial_dir / "verifier"),
                                     (ARTIFACTS_DIR, trial_dir / "artifacts" / "logs" / "artifacts")):
             shutil.copytree(source, destination, symlinks=True, dirs_exist_ok=True)
+        # Upstream runs every per-case trial in a fresh container: nothing this one wrote reaches the next.
+        for directory, mode in LOG_DIRS.items():
+            clear(directory, mode)
+        candidate = pwd.getpwnam(settings.CANDIDATE_USER)
+        remove_owned(candidate.pw_uid, (*SCRATCH_DIRS, Path(candidate.pw_dir)))
         result["finished_at"] = datetime.now(timezone.utc).isoformat()
         (trial_dir / "result.json").write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
