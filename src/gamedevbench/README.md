@@ -2,11 +2,11 @@
 
 ## Overview
 
-This adapter converts all **333 tasks** in [waynchi/GameDevBench](https://github.com/waynchi/gamedevbench) at `54589a477d6c1a15255707a861db6b01126797aa`. The count comes from 333 starter ZIPs in `tasks/`, each matched to a reference ZIP in `tasks_gt/`. No tasks are excluded. This is Wayne Chi's Godot benchmark, distinct from GameCraft and similarly named projects.
+This adapter converts all **333 tasks** in [waynchi/GameDevBench](https://github.com/waynchi/gamedevbench) at [upstream revision 54589a4](https://github.com/waynchi/gamedevbench/tree/54589a477d6c1a15255707a861db6b01126797aa). The count comes from 333 starter ZIPs in `tasks/`, each matched to a reference ZIP in `tasks_gt/`. No tasks are excluded. This is Wayne Chi's Godot benchmark, distinct from GameCraft and similarly named projects.
 
 Tasks cover 2D and 3D graphics, animation, user interfaces, and gameplay logic, using Godot scenes, GDScript, shaders, and visual assets. The upstream repository is Apache-2.0 licensed; retain attribution included with task assets. Conversion preserves the official task prompts and formal verifier bytes.
 
-Development status: all 333 tasks are generated and source-audited. The final AP/Docker Harbor oracle passed **333/333**, with zero execution errors, complete unique task coverage, unchanged formal verifier hashes, strict confinement and Godot 4.4.1 on every task. This uses the verified SG shared runtime; the equivalent public recipe independently passed a source-build oracle trial. The initial 325/333 adapter baseline and all failed attempts remain preserved. Model parity, Daytona validation, dataset registration and publication are pending.
+Development status: all 333 tasks are generated and source-audited. The final AP/Docker Harbor oracle passed **333/333**, with zero execution errors, complete unique task coverage, unchanged formal verifier hashes, strict confinement and Godot 4.4.1 on every task. This uses the verified SG shared runtime; the equivalent public recipe independently passed a source-build oracle trial. The initial 325/333 adapter baseline and all failed attempts remain preserved. On the fixed 30-task parity sample, the original runner and Harbor each passed 69 of 90 scored trials with Codex and GPT-6.1 Sol. Registry publication is pending.
 
 ## What is GameDevBench?
 
@@ -22,7 +22,7 @@ Development status: all 333 tasks are generated and source-audited. The final AP
 - Applies an explicit, hash-checked reference-only compatibility profile; `--oracle-profile original` reproduces unmodified GT payloads.
 - Records task identity, package and verifier hashes, compatibility actions, outer security state, and official validation results. Identity or hash mismatches fail verification.
 - Provides a public Docker recipe, verified by an actual source-build oracle trial, and optional `--runtime-image` for a shared runtime. Internal SG images are deployment assets, not public prerequisites.
-- Adds no custom agent implementation. OpenCode parity requires the same agreed, pinned version on both sides before inference.
+- Uses Harbor’s built-in Codex agent for parity with the upstream Codex runner.
 
 ## Generated Task Structure
 
@@ -69,7 +69,7 @@ Resume with the saved configuration:
 
     harbor job resume -p jobs/JOB_DIRECTORY
 
-Oracle needs no model API. The current agent and verifier configurations use `network_mode = "no-network"`. Model runs require an agreed API egress policy and frozen agent/model configuration. The dataset is not registered yet; use local paths.
+Oracle needs no model API. The current agent and verifier configurations use `network_mode = "no-network"`. The parity configuration connects Codex to the model through a host-side relay. The dataset is not registered yet; use local paths.
 
 ## Usage: Create Task Directories
 
@@ -88,6 +88,7 @@ For a diagnostic subset:
 | `--source-dir` | Required upstream snapshot matching the embedded manifest |
 | `--limit` | First N selected tasks; N must be positive |
 | `--task-ids` | Explicit upstream IDs, such as `task_0002` |
+| `--split` | `full` generates all 333 tasks by default. `parity` selects the fixed 30 tasks and takes no `--limit` or `--task-ids`. |
 | `--overwrite` | Regenerate existing output belonging to this adapter and revision |
 | `--runtime-image` | Existing shared runtime; pin and record its digest for deployment |
 | `--workers` | Local packaging threads; defaults to 4; no model calls |
@@ -99,27 +100,20 @@ The adapter does not download or silently update upstream data. Conversion uses 
 
 ## Comparison with Original Benchmark (Parity)
 
-**No model parity has run.** [parity_experiment.json](parity_experiment.json) is intentionally empty. No model scores or inference costs are reported.
+Both runners used Codex 0.171.0 with GPT-6.1 Sol (xhigh), Godot 4.4.1 and a 600-second agent timeout on Docker with ModelRouter. The sample was fixed before inference. It covers three display tasks and 27 headless tasks, including 12 variants. The manifest records the task IDs and selection rules. [Parity manifest](src/gamedevbench/tasks.parity30.yaml)
 
 | Agent | Model | Metric | Number of Runs | Dataset Size | Original Performance | Harbor Performance |
 | --- | --- | --- | --- | --- | --- | --- |
-| OpenCode version pending | Pending team agreement | Pass rate (mean ± sample SEM) | 0 | 0 | Not run | Not run |
+| Codex 0.171.0 | GPT-6.1 Sol (xhigh) | pass@1 (mean ± sample SEM) | 3 per runner | 30/333 | 76.67% ± 5.09 pp | 76.67% ± 0.00 pp |
 
-Validation targets Harbor `99218a4611e3bd76e49ce3b5f977e8c8134ad3ac` (0.23.0), the upstream revision above, and Godot 4.4.1. Structural auditing compares prompts with the actual upstream prompt function, agent files with the actual sandbox-filter method, and private tests byte-for-byte with `tasks/`.
+The original runner passed 25, 24 and 20 tasks in successive runs. Harbor passed 23 tasks in each run. Both runners passed 69 of 90 scored trials. The full Harbor oracle passed 333/333 tasks. [Parity experiment](parity_experiment.json) · [Scores and trajectories](https://huggingface.co/datasets/TianshiXu/gamedevbench-parity-experiments/tree/d1e2329f2b0464cd61891b05706465c53f35dd12/adapters/gamedevbench)
 
-Final formal-test oracle evidence: evaluation `gdb-harbor-final-20261117-f1718e9d`, AP job `ap-xts-gamedevbench-harbor-1ec082fd5bb3439f-d2`, 333/333 rewards of 1.0, zero exceptions. The full Harbor job took 27m45s; AP controller including setup and archive preparation took 1746.320 seconds. Original formal test hashes match before and after all 333 trials. Task bundle SHA256: `2d6e4abc5d1e23c896f08bbfa0e13ccd3525dcb43a29c3b152db98793185fdec`; raw AP artifact SHA256: `ecaa513eaad0a0b42268e03292e60d8ffc9270ca9cb23bb72957cac97367aea4`. This is oracle correctness evidence; model parity remains pending.
+To reproduce, follow the setup instructions in the evidence directory to prepare the tasks and start the provider gateway. From that directory, run the paired commands below for round 1. Repeat with round numbers 2 and 3 and a distinct Harbor job name each time. [Setup and reproduction instructions](https://huggingface.co/datasets/TianshiXu/gamedevbench-parity-experiments/blob/d1e2329f2b0464cd61891b05706465c53f35dd12/adapters/gamedevbench/README.md)
 
-An earlier AP run passed 333/333 reference projects using each `tasks_gt/` package's own tests. That is a GT integrity check, not model parity or the formal Harbor oracle result. Harbor instead evaluates reference projects against formal `tasks/` tests.
-
-For future original-side parity, use a separate environment at the pinned upstream commit, extract tasks, install the agreed OpenCode version, and supply the agreed YAML task subset. The official entry point is:
-
-    uv run python gamedevbench/src/benchmark_runner.py --agent opencode --model PROVIDER/MODEL --confinement strict run --task-list /path/to/agreed-tasks.yaml
-
-The Harbor entry point, after configuring API egress and model mapping, is:
-
-    harbor run -p datasets/gamedevbench -a opencode -m PROVIDER/MODEL
-
-These are command shapes, not an approved parity configuration. Freeze agent version, provider/model, reasoning settings, prompts, tools, timeout, task subset, resources, image digests, and both commits. Run symmetric sanity checks, then at least two independent repeats per side (three recommended). Report mean pass rate ± sample SEM and retain every raw run and cost record. Formal contribution parity requires the Harbor team's agreed Daytona and 2077AI setup.
+```bash
+bash reproduce/run-original.sh 1
+harbor run -c config.yaml --job-name parity-run1 --max-retries 0
+```
 
 ## Notes & Caveats
 
@@ -135,7 +129,7 @@ These are command shapes, not an approved parity configuration. Freeze agent ver
 - **Budgets:** agent 600 seconds, matching upstream; verifier 1320 seconds for two official 600-second stages plus overhead. Each environment requests 2 CPUs and 4 GiB. Cold public image builds have a separate 3600-second setup budget; prebuilt-runtime mode keeps 1200 seconds.
 - **Storage:** original ZIPs and generated projects occupy several GiB. The large `task_0021` starter is an LFS object; a pointer is invalid input.
 - **Optional prompts:** MCP/runtime-video flags preserve upstream prompt settings only. Their complete tools and behavior are not parity-validated yet.
-- **Publication:** no adapter PR, registry tag, or Hugging Face evidence upload has been created. Local AP records are development evidence.
+- Registry publication and campaign acceptance of the Docker/ModelRouter results are pending. [Dataset PR #319](https://github.com/harbor-framework/harbor-datasets/pull/319) · [Parity PR #323](https://huggingface.co/datasets/harborframework/parity-experiments/discussions/323) · [Per-task results](https://huggingface.co/datasets/TianshiXu/gamedevbench-parity-experiments/blob/d1e2329f2b0464cd61891b05706465c53f35dd12/adapters/gamedevbench/paired_tasks.csv)
 
 ## Installation / Prerequisites
 
@@ -171,4 +165,4 @@ Install the pinned Harbor checkout in a separate environment. The public task Do
 
 ## Authors & Contributions
 
-Original benchmark: Wayne Chi and the GameDevBench authors above. Adapter development: xts (`xutianshi.xts@alibaba-inc.com`). Generated metadata credits all eleven original authors. Contribution follows the [Harbor-Index workflow](https://www.harbor-index.org/contribute) and [agent guide](https://www.harbor-index.org/tutorial/agent-guide), with contract snapshot `harbor-index/adapters@7b4df9deb2381ae32f26e6cebec06aaa2975dc56`.
+Original benchmark: Wayne Chi and the GameDevBench authors above. Adapter development: xts (`tianshixu@stu.pku.edu.cn`). Generated metadata credits all eleven original authors. Contribution follows the [Harbor-Index workflow](https://www.harbor-index.org/contribute) and [agent guide](https://www.harbor-index.org/tutorial/agent-guide), with contract snapshot `harbor-index/adapters@7b4df9deb2381ae32f26e6cebec06aaa2975dc56`.

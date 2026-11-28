@@ -1,0 +1,45 @@
+# Proposed Harbor parity subset for waynchi/gamedevbench.
+# Upstream commit: 54589a477d6c1a15255707a861db6b01126797aa
+# Population: datasets/final-cached-v1/generation_manifest.json (333 tasks).
+# Use original_task_config.json metadata and the generation manifest's display flags.
+# Rank candidates by ascending SHA256 of
+# gamedevbench-parity-v1:54589a477d6c1a15255707a861db6b01126797aa:<task_id>
+# Select in order:
+# 1. Both adapted display tasks, plus the first native display task by hash.
+# 2. 12 of the 138 headless variants, then 15 of the 183 other headless tasks.
+# A variant has a non-self parent or source_type variant/manual_variant.
+# Prefer source_variant_of over variant_of, ignoring self-links.
+# Follow task-ID parents to the root and select at most one task per root.
+# Keep at most three tasks per known source repository (lowercase, trailing slash removed).
+# Model results were not used for selection.
+tasks:
+  - task_0006
+  - task_0018
+  - task_0025
+  - task_0030 # Display enabled by the adapter
+  - task_0040
+  - task_0042
+  - task_0052
+  - task_0054
+  - task_0059 # Display enabled by the adapter
+  - task_0072 # Upstream requires display
+  - task_0083
+  - task_0094
+  - task_0100
+  - task_0128
+  - task_0147
+  - task_0152
+  - task_0168
+  - task_0172
+  - task_0173
+  - task_0174
+  - task_0190
+  - task_0193
+  - task_0222
+  - task_0229
+  - task_0240
+  - task_0259
+  - task_0274
+  - task_0280
+  - task_0304
+  - task_0316

@@ -133,12 +133,12 @@ class GameDevBenchAdapter:
             raise ValueError("Task names must be stable, unique, and namespaced")
         description = (f"{len(rows)} GameDevBench Godot tasks from waynchi/gamedevbench@{REVISION}. "
                        "Original prompts and formal tests; declared oracle-only reference adaptations. "
-                       "Adapter: xts. Model parity has not run; this is an unpublished development dataset.")
+                       "Adapted by xts from the work of Wayne Chi and colleagues. On the fixed 30-task parity sample, Codex 0.171.0 with GPT-6.1 Sol averaged 76.67% pass@1 on both runners across three runs on Docker.")
         (self.output_dir / "dataset.toml").write_text(
             'schema_version = "1.0"\n\n[dataset]\nname = "gamedevbench/gamedevbench"\n'
             + 'description = ' + json.dumps(description) + '\n'
             + 'keywords = ["godot", "game-development"]\n'
-            + 'authors = [{name = "Wayne Chi"}, {name = "xts", email = "xutianshi.xts@alibaba-inc.com"}]\n')
+            + 'authors = [{name = "Wayne Chi"}, {name = "xts", email = "tianshixu@stu.pku.edu.cn"}]\n')
         report = {"upstream_revision": REVISION, "count": len(rows), "tasks": rows,
                   "verification_source": "tasks/", "oracle_source": "tasks_gt/",
                   "oracle_file_policy": "all-reference-data-except-graders-and-caches-v1",

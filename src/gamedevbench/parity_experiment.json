@@ -1,1 +1,40 @@
-[]
+[
+  {
+    "adapter_name": "gamedevbench",
+    "agent": "codex@0.171.0",
+    "model": "gpt-6.1-sol",
+    "date": "2026-11-28",
+    "adapted_benchmark_size": 333,
+    "parity_benchmark_size": 30,
+    "number_of_runs": 3,
+    "notes": "Fixed 30/333 sample. Codex 0.171.0, xhigh, Godot 4.4.1, 600 s agent timeout; Harbor verifier 1320 s. MCP, runtime video, web search and multi-agent disabled. Docker + ModelRouter, two slots per side. All 30 tasks are counted once per side in each round. Per-task verdicts and scoring provenance accompany the evidence. Scores are percentages, SEM across runs. Platform acceptance pending. The original side used upstream's Codex runner with the wrapper in the parity evidence (reproduce/run-original.sh).",
+    "original_parity_repo": "https://github.com/waynchi/gamedevbench/tree/54589a477d6c1a15255707a861db6b01126797aa",
+    "adapter_pr": [
+      "https://github.com/harbor-index/adapters/pull/14"
+    ],
+    "dataset_pr": [
+      "https://github.com/harbor-framework/harbor-datasets/pull/319"
+    ],
+    "parity_pr": [
+      "https://huggingface.co/datasets/harborframework/parity-experiments/discussions/323"
+    ],
+    "metrics": [
+      {
+        "benchmark_name": "GameDevBench",
+        "metric": "pass@1",
+        "original": "76.6667 ± 5.0918",
+        "harbor": "76.6667 ± 0.0000",
+        "original_runs": [
+          83.33333333333333,
+          80.0,
+          66.66666666666667
+        ],
+        "harbor_runs": [
+          76.66666666666667,
+          76.66666666666667,
+          76.66666666666667
+        ]
+      }
+    ]
+  }
+]
