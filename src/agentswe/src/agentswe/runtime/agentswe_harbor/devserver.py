@@ -24,8 +24,9 @@ class FreezeHandler(socketserver.StreamRequestHandler):
 def main() -> None:
     """Upstream's host-side dev controller (one_stop.DevController) inside the task: dev rounds run upstream's
     run_adapter_phase, which drives the task's own adapter.py; the delivery is frozen when the Builder exits."""
-    settings.prepare()
+    # Before settings.prepare() points the judge variables at the judge broker.
     providers = brokers.take_providers("runtime", "judge", "builder")
+    settings.prepare()
     adapter, one_stop = settings.import_upstream()
     log_dir = settings.RUN_DIR / "brokers"
     with contextlib.ExitStack() as stack:

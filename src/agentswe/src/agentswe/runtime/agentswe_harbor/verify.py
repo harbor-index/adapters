@@ -26,8 +26,9 @@ def write_result(result: dict) -> None:
 def main() -> int:
     """Held-out evaluation of the frozen delivery, as upstream one_stop.main runs it after the freeze. The reward is
     the held-out mean / 100; an evaluator-side failure exits without a reward instead of recording a zero."""
-    settings.prepare()
+    # Before settings.prepare() points the judge variables at the judge broker.
     providers = brokers.take_providers("runtime", "judge")
+    settings.prepare()
     adapter, one_stop = settings.import_upstream()
     if not FREEZE_MANIFEST.is_file():
         # No valid dev submission and no valid final workspace: upstream records a hidden mean of 0.
