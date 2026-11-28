@@ -19,10 +19,11 @@ judge (0–100 per case; a run's score is the mean over its held-out cases).
   (`repo`), `database-analytics` (`db`) and `scientific-pdf-translation` (`pdf`), plus
   `evidence-grounded-document-qa` (`qa`). The remaining tasks are listed in [Notes & Caveats](#notes--caveats) with
   the reason for each exclusion.
-- **Main adaptation:** upstream runs every task through Harbor but orchestrates it from a host-side controller that
-  starts up to 23 Harbor jobs per task. Here that controller runs inside the task as an `evaluator` sidecar and as a
-  separate verifier, so a task is one Harbor trial. Prompts, cases, rubrics, harnesses and scoring scripts are the
-  upstream files at the pinned commit, unchanged.
+- **Main adaptation:** upstream runs every task through Harbor, orchestrated by a host-side controller that starts up
+  to 23 Harbor jobs per task. Here that controller runs inside the task, unchanged: upstream's `one_stop.py` and each
+  task's own `adapter.py` drive the dev rounds in an `evaluator` sidecar and the held-out evaluation in a separate
+  verifier, and the per-case jobs they launch run as local processes. A task is one Harbor trial. Prompts, cases,
+  rubrics, harnesses and scoring scripts are the upstream files at the pinned commit.
 
 ## What is AgentSWE?
 
@@ -41,29 +42,38 @@ tasks improve an agent's score on an existing benchmark.
   copies each task's upstream files into the generated task; the configuration profile (`lite-v1.1` by default) is
   applied as upstream does (overlay files replace base files).
 - **Builder session:** the task's `instruction.md` is upstream's Builder prompt (`one_stop.builder_instruction`),
-  byte for byte. The Builder sees `/builder-package` (requirement documents and public dev cases), a writable private
-  copy of the task's conda environment at its documented path, and writes its agent to `/workspace/submission`.
-- **Authoritative dev feedback:** `submit_dev_candidate` talks to upstream's `one_stop.DevController` running in the
-  `evaluator` sidecar over a socket on a shared volume (same CLI, same feedback text, same round limit and
-  idempotency rules). The sidecar holds the dev cases, rubric, broker stack and provider keys; the Builder container
-  holds none of them.
+  byte for byte. The Builder sees `/builder-package` (requirement documents and public dev cases) and a writable
+  private copy of the task's environment, and writes its agent to `/workspace/submission`. The environment paths and
+  variables are the ones upstream gives its Builder container, computed with upstream's own `one_stop.builder_compose`
+  and `runtime_contract.prepare_compose`.
+- **Authoritative dev feedback:** `submit_dev_candidate` talks to upstream's `one_stop.DevController` in the
+  `evaluator` sidecar over a socket on a shared volume (same CLI, feedback text, round limit and idempotency rules).
+  Each dev round runs upstream's `one_stop.run_adapter_phase`, which drives the task's `adapter.py` exactly as on the
+  host. The sidecar holds the dev cases, rubric, broker stack and provider keys; the Builder container holds none of
+  them.
+- **Per-case jobs as processes:** upstream's `adapter.py` stages each case as a Candidate job and an Eval job and runs
+  them with `harbor run --config <job>`. Inside the task, that command (`agentswe_harbor.harbor`) runs each staged job
+  as Harbor would with its oracle agent and a separate verifier: `solution/solve.sh`, then `tests/test.sh`, with every
+  mount and environment variable of the job's compose files recreated for that step only, and the trial written in
+  Harbor's layout for upstream's collectors. As upstream does (`n_concurrent = 2`), dev rounds run two cases at a time:
+  one in the `evaluator` sidecar and one in `evaluator-worker`, a second container from the same image. Candidates run
+  as an unprivileged user that cannot read the evaluator's files.
 - **Freeze and held-out evaluation:** after the Builder exits, a `[[verifier.collect]]` hook calls upstream's
   `freeze_after_builder_exit` in the sidecar. The frozen delivery, the Builder's environment and the dev records are
-  passed to a separate verifier (`tests/Dockerfile`), which holds the held-out cases and runs each case exactly as
-  upstream's Candidate and Eval jobs do: it stages them with the task's own `adapter.py`, executes their
-  `solution/solve.sh` and `tests/test.sh`, and recreates every mount and environment variable their generated compose
-  files declare. Candidates run as an unprivileged user; reward = held-out mean / 100.
+  passed to a separate verifier (`tests/Dockerfile`, the only image with the held-out cases), which checks both
+  digests and runs upstream's `run_adapter_phase` on the held-out cases. Reward = held-out mean / 100.
 - **Upstream broker topology:** Candidate → evaluator broker (`runners/creation/broker_v2.py`) → runtime role broker
   (`broker/agentswe_broker`) → provider; Result judge → judge role broker → provider; Builder → builder role broker
   (`--rate-limit-policy as_503`) → provider. Only the role brokers hold provider keys.
 - **Images:** built from upstream's pinned recipes (Ubuntu digest, apt snapshot, `env-builder` micromamba environments,
   `trusted-browser` bundle), all `linux/amd64`. No privileged containers and no Docker socket; `repo` adds only
   `SYS_PTRACE`, which its upstream verifier needs for `strace`.
-- **Failures are not zeros:** a provider or broker failure withholds the score (the verifier exits without a reward),
-  following upstream's `assert_runtime_health`.
+- **Failures are not zeros:** an evaluator-side failure (provider or broker failure, missing evidence) withholds the
+  score: the verifier exits without a reward, following upstream's `assert_runtime_health`.
 - **Builder harness:** `agentswe.codex_agent:AgentSWECodex` is upstream's `ProviderCodex` (Codex 0.144.1 with the
-  AgentSWE-Lite model catalog generated by upstream `gen_codex_config.py`) ported to Harbor 0.27.0. Any Harbor agent can
-  be used as the Builder; the custom agent is what the parity experiments use.
+  AgentSWE-Lite model catalog generated by upstream `gen_codex_config.py`) ported to Harbor 0.27.0; it subclasses the
+  vendored upstream class and replaces only `run`. Any Harbor agent can be used as the Builder; the custom agent is
+  what the parity experiments use.
 
 ## Generated Task Structure
 
@@ -73,11 +83,11 @@ agentswe/
 │   ├── task.toml                      # agent 8 h, separate verifier, artifacts, freeze hook
 │   ├── instruction.md                 # upstream Builder prompt
 │   ├── environment/
-│   │   ├── Dockerfile                 # Builder: task env (private copy) + /builder-package
-│   │   ├── docker-compose.yaml        # main + evaluator sidecar, shared volumes
+│   │   ├── Dockerfile                 # Builder: task environment (private copy) + /builder-package
+│   │   ├── docker-compose.yaml        # main, evaluator, evaluator-worker, shared volumes
 │   │   ├── builder-package/           # requirement documents + public dev cases
 │   │   ├── submit_dev_candidate       # wrapper around upstream's client
-│   │   └── evaluator/                 # sidecar image: DevController, brokers, dev cases, rubric
+│   │   └── evaluator/                 # sidecar image: upstream controller, brokers, dev cases, rubric
 │   ├── solution/
 │   │   └── solve.sh                   # null delivery (no upstream reference agents exist)
 │   └── tests/
@@ -98,12 +108,22 @@ src/agentswe/
 ├── parity_experiment.json
 ├── pyproject.toml
 ├── run_agentswe.yaml
+├── run_agentswe_parity.yaml
 └── src/agentswe/
     ├── adapter.py                     # AgentSWEAdapter: pin, select, render tasks
     ├── main.py                        # CLI
     ├── codex_agent.py                 # AgentSWECodex (Builder harness)
-    ├── codex_builder/                 # upstream gen_codex_config.py + Lite catalog (vendored)
-    ├── runtime/agentswe_harbor/       # sidecar + verifier runtime (devserver, freeze, pipeline, verify)
+    ├── codex_builder/                 # upstream builders/codex: ProviderCodex, gen_codex_config.py, Lite catalog
+    ├── runtime/
+    │   ├── agentswe_harbor/           # runtime baked into the evaluator and verifier images
+    │   │   ├── devserver.py           #   sidecar: brokers, upstream DevController, freeze socket
+    │   │   ├── worker.py              #   evaluator-worker: the second per-case job slot
+    │   │   ├── harbor.py              #   `harbor run` for upstream's per-case jobs
+    │   │   ├── trial.py               #   one per-case job as processes
+    │   │   ├── brokers.py             #   upstream's broker stack as processes
+    │   │   ├── freeze.py, verify.py   #   collect hook, held-out evaluation
+    │   │   └── settings.py
+    │   └── bin/                       # harbor and docker commands for upstream's adapter.py
     └── task-template/
 ```
 
@@ -123,7 +143,7 @@ harbor run -c src/agentswe/run_agentswe.yaml
 
 # AgentSWE Builder harness (as in the parity experiments)
 uv run --project src/agentswe --extra parity harbor run -p datasets/agentswe \
-  --agent agentswe.codex_agent:AgentSWECodex -m gpt-6-luna \
+  --agent agentswe.codex_agent:AgentSWECodex -m gpt-6.1-sol \
   --ak version=0.144.1 --ak context_window=272000
 
 # Any Harbor agent as the Builder
@@ -137,9 +157,8 @@ loading the `[verifier.env]` values; pass `--yes` in non-interactive runs):
 |---|---|---|
 | `AGENTSWE_RUNTIME_BASE_URL` / `_API_KEY` / `_MODEL` / `_EFFORT` | runtime role broker (model the delivered agent calls) | `https://api.deepseek.com/v1`, `deepseek-flash`, `high` |
 | `AGENTSWE_JUDGE_BASE_URL` / `_API_KEY` / `_MODEL` / `_EFFORT` | judge role broker (Result judge) | `https://api.deepseek.com/v1`, `deepseek-flash`, `max` |
-| `AGENTSWE_BUILDER_BASE_URL` / `_API_KEY` / `_MODEL` / `_EFFORT` | builder role broker (only for `AgentSWECodex`) | unset |
-| `AGENTSWE_PROTOCOL_MODE=smoke` | upstream smoke budget: 1 dev round, 1 held-out case | `formal` |
-| `AGENTSWE_DOCKER_REGISTRY`, `AGENTSWE_BUILD_PROXY`, `AGENTSWE_APT_MIRROR`, `AGENTSWE_CONDA_CHANNEL`, `AGENTSWE_PIP_INDEX_URL`, `AGENTSWE_NODE_DIST_URL` | image builds behind a firewall | public upstreams |
+| `AGENTSWE_BUILDER_BASE_URL` / `_API_KEY` / `_MODEL` / `_EFFORT` | builder role broker (only for `AgentSWECodex`) | unset; effort `xhigh` |
+| `AGENTSWE_DOCKER_REGISTRY`, `AGENTSWE_BUILD_PROXY`, `AGENTSWE_APT_MIRROR`, `AGENTSWE_CONDA_CHANNEL`, `AGENTSWE_PIP_INDEX_URL`, `AGENTSWE_NODE_DIST_URL`, `AGENTSWE_NPM_REGISTRY`, `AGENTSWE_UBUNTU_MIRROR`, `AGENTSWE_CFT_BASE_URL` | optional mirrors and proxy for image builds (upstream's build arguments) | public sources |
 
 ## Usage: Create Task Directories
 
@@ -160,26 +179,24 @@ Available flags:
 
 ## Comparison with Original Benchmark (Parity)
 
-Parity is in progress; the plan below is under discussion with the Harbor team.
+Parity is in progress.
 
 | Agent | Model | Metric | Number of Runs | Dataset Size | Original Benchmark Performance | Harbor Adapter Performance |
 |-------|-------|--------|------------------|--------------|------------------------------|----------------------------|
-| agentswe-codex@0.144.1 | gpt-6-luna | held-out mean score | pending | 3 (Creation Lite) | pending | pending |
+| agentswe-codex@0.144.1 | gpt-6.1-sol | held-out mean score | pending | 3 (Creation Lite) | pending | pending |
 
-- **Configuration (both sides):** Builder Codex 0.144.1 with the AgentSWE-Lite catalog and `gpt-6-luna` (effort
-  `xhigh`); runtime and judge `deepseek-v4.1-flash-1017` (`lite-v1.1` efforts: runtime `high`, judge `max`); formal
-  protocol (10 dev rounds, 6 held-out cases) with a 2 h Builder session on both sides (upstream
-  `AGENTSWE_BUILDER_TIMEOUT_SEC=7200`; Harbor `--agent-timeout-multiplier 0.25`); same machine, local Docker.
-- **Original-side host adjustments (no code or scoring change):** the host's Docker daemon cannot reach Docker Hub, so
-  upstream's three pinned pull images (`images/images.json`: Ubuntu, gost, alpine) are pulled from a Docker Hub mirror
-  at the same digests; conda, pip, npm, Node and Chrome downloads use hash-checked mirrors on both sides.
-- **Additional check:** score replay — the same frozen delivery scored by upstream's Candidate/Eval jobs and by the
-  Harbor verifier, with request bodies to the runtime and judge compared.
+- **Configuration (both sides):** Builder Codex 0.144.1 with the AgentSWE-Lite catalog and `gpt-6.1-sol` (effort
+  `max`); runtime and judge `deepseek-v4.1-flash-1017` (`lite-v1.1` efforts: runtime `high`, judge `max`); formal
+  protocol (10 dev rounds, 6 held-out cases, two cases evaluated at a time) with a 2 h Builder session on both sides
+  (upstream `AGENTSWE_BUILDER_TIMEOUT_SEC=7200`; Harbor `--agent-timeout-multiplier 0.25`).
+- **Session limit:** on both sides the Builder session ends at the Harbor agent timeout. Harbor records it as an
+  `AgentTimeoutError`, which upstream's Lite protocol accepts as the session limit; the frozen delivery is scored as
+  usual.
 
-Reproduction (both sides on the same host; provider variables as in the table above):
+Reproduction (provider variables as in the table above):
 
 ```bash
-# Original side: unmodified upstream at the pinned commit
+# Original side: upstream at the pinned commit
 git clone https://github.com/VectorSpaceLab/AgentSWE.git && cd AgentSWE
 git checkout 6643c7398b2d7dd58b32b6a3a829e564ab68a23f
 cat >> .env <<'EOF'
@@ -193,8 +210,8 @@ AGENTSWE_CREATION_JUDGE_MODEL=deepseek-v4.1-flash-1017
 AGENTSWE_RUNTIME_MODEL_ALIASES=deepseek-flash
 AGENTSWE_BUILDER_BASE_URL=<builder provider>/v1
 AGENTSWE_BUILDER_API_KEY=<key>
-AGENTSWE_BUILDER_MODEL=gpt-6-luna
-AGENTSWE_BUILDER_EFFORT=xhigh
+AGENTSWE_BUILDER_MODEL=gpt-6.1-sol
+AGENTSWE_BUILDER_EFFORT=max
 AGENTSWE_BUILDER_CONTEXT_WINDOW=272000
 EOF
 for task in repo db pdf; do python3 -m agentswe setup $task; done
@@ -226,16 +243,18 @@ A run's score is its held-out mean (0–100) on each task; a parity run's score 
     sandbox), `document-to-editable-pptx` (LibreOffice bundle and host-fetched assets), `formal-theorem-proving`
     (Lean release fetched on the host by upstream setup) and `schema-guided-web-extraction` (Playwright browsers
     fetched at build time; generated and lint-clean, not yet verified).
-- **Differences from upstream:** per-case Candidate and Eval jobs run sequentially as processes inside the evaluator
-  or verifier container instead of in separate containers; Candidates run as an unprivileged user with a scrubbed
-  environment, while upstream also restricts their network to the broker. The Builder's model traffic goes through
-  the builder role broker in the sidecar instead of a host-side broker. The Builder runs as root, as in upstream's
-  Builder task (it may install packages into its private environment); `harbor lint --select ALL` reports this as
-  `root-agent`.
+- **Differences from upstream:**
+  - Per-case jobs run as processes in the evaluator containers instead of each in a container of its own. The
+    Candidate step runs as an unprivileged user, and each step sees only the mounts its compose file declares.
+    Upstream also restricts a Candidate's network to the broker; here it shares the sidecar's network.
+  - The verifier runs the held-out cases one at a time (upstream: two at a time). This changes only wall time.
+  - Host tools that upstream binds into per-case containers (`git`, `strace`) are installed in the evaluator images.
+  - The Builder's model traffic goes through the builder role broker in the sidecar instead of a host-side broker.
+  - The Builder runs as root, as in upstream's Builder task (it may install packages into its private environment);
+    `harbor lint --select ALL` reports this as `root-agent`.
 - **Large environments:** the Builder's environment reaches the verifier as one tarball (`scientific-pdf-translation`
   is about 3.6 GB), so a trial needs several GB of free Docker disk beyond its images.
-- **Variance:** single builds vary a lot (upstream reports 32.8, 33.3 and 90.5 for the same configuration); report
-  means over several runs.
+- **Variance:** a single build of the same configuration can score very differently; compare means over several runs.
 - **Cost and time:** a formal run is up to 8 h of Builder session plus up to 10 dev evaluations and 6 held-out cases.
 
 ## Installation / Prerequisites
@@ -250,10 +269,10 @@ A run's score is its held-out mean (0–100) on each task; a parity run's score 
 
 ## Troubleshooting
 
-- **Image builds behind a firewall:** set `AGENTSWE_DOCKER_REGISTRY` to a Docker Hub mirror and `AGENTSWE_BUILD_PROXY`
-  (or a Docker client `proxies` configuration) for apt, conda, Node and Chrome downloads.
+- **Image builds through a mirror or proxy:** set `AGENTSWE_DOCKER_REGISTRY` to a Docker Hub mirror and
+  `AGENTSWE_BUILD_PROXY` (or a Docker client `proxies` configuration) for apt, conda, Node and Chrome downloads.
 - **Verifier exits without a reward:** an evaluator-side failure (provider error, broker failure, missing evidence);
-  see `/logs/verifier` and the per-case logs under `hidden_phase/` in the trial directory.
+  see `/logs/verifier` and the per-case jobs under `hidden_jobs/` in the trial directory.
 - **`submit_dev_candidate` reports the controller missing:** the `evaluator` sidecar failed to start; check its logs.
 
 ## Citation
@@ -279,5 +298,6 @@ This adapter is developed and maintained by [Zixuan Wang](https://github.com/wan
 
 ## Acknowledgement
 
-AgentSWE was created by Jiahao Wang, Hongjin Qian, Yuyang Hu, Jiajun Zhang and Zheng Liu. The vendored Codex
-configuration generator (`codex_builder/`) is upstream's `builders/codex` code under the Apache-2.0 license.
+AgentSWE was created by Jiahao Wang, Hongjin Qian, Yuyang Hu, Jiajun Zhang and Zheng Liu. The vendored
+`codex_builder/` (Codex provider agent, configuration generator and model catalog) is upstream's `builders/codex` code
+under the Apache-2.0 license.

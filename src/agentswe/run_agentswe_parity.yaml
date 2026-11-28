@@ -2,7 +2,7 @@
 # Run from the repository root with the adapter's parity extra:
 #   uv run --project src/agentswe --extra parity harbor run -c src/agentswe/run_agentswe_parity.yaml --yes
 # Provider variables (AGENTSWE_RUNTIME_* / AGENTSWE_JUDGE_* / AGENTSWE_BUILDER_*) come from the environment;
-# runtime and judge: deepseek-v4.1-flash-1017; builder role broker: gpt-6-luna, effort max.
+# runtime and judge: deepseek-v4.1-flash-1017; builder role broker: gpt-6.1-sol, effort max.
 jobs_dir: jobs
 n_attempts: 3
 # 2 h Builder session on both sides (the formal session is 8 h).
@@ -14,7 +14,7 @@ environment:
   delete: true
 agents:
   - import_path: agentswe.codex_agent:AgentSWECodex
-    model_name: gpt-6-luna
+    model_name: gpt-6.1-sol
     kwargs:
       version: 0.144.1
       context_window: 272000

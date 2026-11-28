@@ -15,7 +15,7 @@ agents:
   - name: oracle
   # AgentSWE Builder harness (run with `uv run --project src/agentswe --extra parity harbor run ...`):
   # - import_path: agentswe.codex_agent:AgentSWECodex
-  #   model_name: gpt-6-luna
+  #   model_name: gpt-6.1-sol
   #   kwargs:
   #     version: 0.144.1
   #     context_window: 272000
