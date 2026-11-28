@@ -123,7 +123,7 @@ harbor run -c src/agentswe/run_agentswe.yaml
 
 # AgentSWE Builder harness (as in the parity experiments)
 uv run --project src/agentswe --extra parity harbor run -p datasets/agentswe \
-  --agent-import-path agentswe.codex_agent:AgentSWECodex -m gpt-6-luna \
+  --agent agentswe.codex_agent:AgentSWECodex -m gpt-6-luna \
   --ak version=0.144.1 --ak context_window=272000
 
 # Any Harbor agent as the Builder
@@ -166,8 +166,13 @@ Parity is in progress; the plan below is under discussion with the Harbor team.
 |-------|-------|--------|------------------|--------------|------------------------------|----------------------------|
 | agentswe-codex@0.144.1 | gpt-6-luna | held-out mean score | pending | 3 (Creation Lite) | pending | pending |
 
-- **Configuration (both sides):** Builder Codex 0.144.1 with the AgentSWE-Lite catalog and `gpt-6-luna`; runtime and
-  judge `deepseek-v4.1-flash` (`lite-v1.1` profile efforts: runtime `high`, judge `max`); same machine, local Docker.
+- **Configuration (both sides):** Builder Codex 0.144.1 with the AgentSWE-Lite catalog and `gpt-6-luna` (effort
+  `xhigh`); runtime and judge `deepseek-v4.1-flash-1017` (`lite-v1.1` efforts: runtime `high`, judge `max`); formal
+  protocol (10 dev rounds, 6 held-out cases) with a 2 h Builder session on both sides (upstream
+  `AGENTSWE_BUILDER_TIMEOUT_SEC=7200`; Harbor `--agent-timeout-multiplier 0.25`); same machine, local Docker.
+- **Original-side host adjustments (no code or scoring change):** the host's Docker daemon cannot reach Docker Hub, so
+  upstream's three pinned pull images (`images/images.json`: Ubuntu, gost, alpine) are pulled from a Docker Hub mirror
+  at the same digests; conda, pip, npm, Node and Chrome downloads use hash-checked mirrors on both sides.
 - **Additional check:** score replay — the same frozen delivery scored by upstream's Candidate/Eval jobs and by the
   Harbor verifier, with request bodies to the runtime and judge compared.
 
@@ -181,22 +186,32 @@ cat >> .env <<'EOF'
 AGENTSWE_PROFILE=lite-v1.1
 AGENTSWE_DEFAULT_BASE_URL=<runtime/judge provider>/v1
 AGENTSWE_DEFAULT_API_KEY=<key>
-AGENTSWE_RUNTIME_MODEL=deepseek-v4.1-flash
-AGENTSWE_JUDGE_MODEL=deepseek-v4.1-flash
+AGENTSWE_RUNTIME_MODEL=deepseek-v4.1-flash-1017
+AGENTSWE_JUDGE_MODEL=deepseek-v4.1-flash-1017
+AGENTSWE_CREATION_RUNTIME_MODEL=deepseek-v4.1-flash-1017
+AGENTSWE_CREATION_JUDGE_MODEL=deepseek-v4.1-flash-1017
+AGENTSWE_RUNTIME_MODEL_ALIASES=deepseek-flash
 AGENTSWE_BUILDER_BASE_URL=<builder provider>/v1
 AGENTSWE_BUILDER_API_KEY=<key>
 AGENTSWE_BUILDER_MODEL=gpt-6-luna
+AGENTSWE_BUILDER_EFFORT=xhigh
 AGENTSWE_BUILDER_CONTEXT_WINDOW=272000
 EOF
-python3 -m agentswe setup repo
-python3 -m agentswe run repo --builder codex --seed 1
+for task in repo db pdf; do python3 -m agentswe setup $task; done
+for task in repo db pdf; do for seed in 1 2 3; do
+  AGENTSWE_BUILDER_TIMEOUT_SEC=7200 python3 -m agentswe run $task --builder codex --seed $seed
+done; done
+python3 -m agentswe status
 
-# Harbor side
-cd src/agentswe && uv run agentswe --output-dir ../../datasets/agentswe && cd ../..
-uv run --project src/agentswe --extra parity harbor run -p datasets/agentswe/repository-bug-repair \
-  --agent-import-path agentswe.codex_agent:AgentSWECodex -m gpt-6-luna \
-  --ak version=0.144.1 --ak context_window=272000
+# Harbor side (same provider variables, plus AGENTSWE_BUILDER_* for the builder role broker)
+cd src/agentswe && uv run agentswe --split parity --output-dir ../../datasets/agentswe-parity && cd ../..
+uv run --project src/agentswe --extra parity harbor run -p datasets/agentswe-parity \
+  --agent agentswe.codex_agent:AgentSWECodex -m gpt-6-luna \
+  --ak version=0.144.1 --ak context_window=272000 \
+  --agent-timeout-multiplier 0.25 -k 3 -n 3 --yes
 ```
+
+A run's score is its held-out mean (0–100) on each task; a parity run's score is the mean over the three tasks.
 
 ## Notes & Caveats
 
