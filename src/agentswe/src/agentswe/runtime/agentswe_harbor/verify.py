@@ -31,6 +31,9 @@ def main() -> int:
     settings.prepare()
     adapter, one_stop = settings.import_upstream()
     if not FREEZE_MANIFEST.is_file():
+        if not (settings.RUN_DIR / "freeze_failure.json").is_file():
+            print("AgentSWE infrastructure error, score withheld: the delivery was never frozen", file=sys.stderr)
+            return 1
         # No valid dev submission and no valid final workspace: upstream records a hidden mean of 0.
         write_result({"reward": 0.0, "hidden_mean": 0.0, "status": "builder_artifact_invalid"})
         return 0
