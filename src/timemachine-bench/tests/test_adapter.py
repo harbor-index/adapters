@@ -86,6 +86,15 @@ def test_all_records_generate(records, generated):
         dockerfile = (task_dir / "environment" / "Dockerfile").read_text()
         assert not re.search(r"__[A-Z_]+__", dockerfile), "unrendered placeholder"
         assert "FROM --platform=linux/amd64 mirror.gcr.io/python:3.12.11@sha256:" in dockerfile
+        # /work is snapshotted right after the patches (before any upstream
+        # build step) and restored after setup, as upstream's mounted copy is
+        steps = [line for line in dockerfile.splitlines() if line.startswith("RUN ")]
+        snapshot = steps.index("RUN cp -a /work /opt/timemachine/work-pristine")
+        assert steps[snapshot - 1].startswith("RUN patch -p0 -t -E -d /work")
+        setup = next(i for i, s in enumerate(steps) if "run_setup.sh" in s)
+        assert snapshot < setup
+        restore = dockerfile.index("mv /opt/timemachine/work-pristine /work")
+        assert dockerfile.index("env_check.py") < restore < dockerfile.index("--write-baseline")
         # nothing the agent could read reveals the reference solution
         assert not (task_dir / "environment" / "gold.patch").exists()
         assert "gold" not in dockerfile.lower()

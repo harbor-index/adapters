@@ -31,15 +31,24 @@ RUN git init -q /work \
 
 # The record's `patch` (unpinned dependency manifests plus the setup and test
 # scripts) and `test_patch`, applied as upstream 03_apply_patches.sh does.
+# Upstream's agent edits a separate copy of the repository in exactly this
+# state, which is kept here before any build step touches /work.
 COPY timemachine/ /opt/timemachine/
 RUN __APPLY_PATCHES__
+RUN cp -a /work /opt/timemachine/work-pristine
 __EXTRA_UPSTREAM_STEPS__
 RUN bash /opt/timemachine/run_setup.sh __SETUP_SCRIPT__ __MIGRATION_DATE__
 
 # Record whether the resolved packages equal the record's dependency_versions
-# (reported in verifier/metrics.json) and the starting content of /work, so
-# that the agent's edits can be collected for the separate verifier; then
-# remove the build-only files.
+# (reported in verifier/metrics.json). Then put /work back to its pre-build
+# state: upstream mounts the agent's copy of the repository over /work for
+# every test run, so files the build steps left in /work (build/, *.egg-info,
+# edited manifests) are never seen by the agent or the tests. The installed
+# environment is unchanged. Finally record the starting content of /work, so
+# that the agent's edits can be collected for the separate verifier, and remove
+# the build-only files.
 RUN python3 -I /opt/timemachine/env_check.py \
+ && rm -rf /work \
+ && mv /opt/timemachine/work-pristine /work \
  && python3 -I /opt/timemachine/collect.py --write-baseline \
  && rm -rf /opt/pypi-timemachine /opt/timemachine/patches /opt/timemachine/run_setup.sh /root/.cache/pip
