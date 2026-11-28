@@ -1,0 +1,23 @@
+# Harbor side of the AgentSWE parity experiments (see README "Comparison with Original Benchmark").
+# Run from the repository root with the adapter's parity extra:
+#   uv run --project src/agentswe --extra parity harbor run -c src/agentswe/run_agentswe_parity.yaml --yes
+# Provider variables (AGENTSWE_RUNTIME_* / AGENTSWE_JUDGE_* / AGENTSWE_BUILDER_*) come from the environment;
+# runtime and judge: deepseek-v4.1-flash-1017; builder role broker: gpt-6.1-sol, effort max.
+jobs_dir: jobs
+n_attempts: 3
+# 2 h Builder session on both sides (the formal session is 8 h).
+agent_timeout_multiplier: 0.25
+n_concurrent_trials: 3
+environment:
+  type: docker
+  force_build: false
+  delete: true
+agents:
+  - import_path: agentswe.codex_agent:AgentSWECodex
+    model_name: gpt-6.1-sol
+    kwargs:
+      version: 0.144.1
+      context_window: 272000
+datasets:
+  # uv run agentswe --split parity --output-dir datasets/agentswe-parity
+  - path: datasets/agentswe-parity

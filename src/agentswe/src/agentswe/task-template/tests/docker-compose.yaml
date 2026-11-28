@@ -1,0 +1,6 @@
+services:
+  main:
+    platform: linux/amd64
+    build:
+      args:
+{{BUILD_ARGS}}{{EVALUATOR_CAPS}}

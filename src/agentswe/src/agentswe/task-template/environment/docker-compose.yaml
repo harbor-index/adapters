@@ -1,0 +1,51 @@
+x-agentswe-build-args: &build-args
+{{BUILD_ARGS}}
+
+services:
+  main:
+    platform: linux/amd64
+    build:
+      args: *build-args
+    volumes:
+      - agentswe-submission:/workspace/submission
+      - agentswe-env:{{ENV_PREFIX}}
+      - agentswe-controller:/run/agentswe-controller
+
+  # Upstream's host-side dev controller (one_stop.DevController) with its broker stack. It holds the dev
+  # cases, rubric and provider keys; the Builder reaches it only through submit_dev_candidate and the
+  # builder broker. Upstream evaluates two cases at a time, in separate containers: the evaluator runs one
+  # per-case job, evaluator-worker the other.
+  evaluator:
+    platform: linux/amd64
+    build:
+      context: ./evaluator
+      args: *build-args
+    depends_on:
+      - main{{EVALUATOR_CAPS}}
+    environment:
+{{EVALUATOR_ENV}}
+    # The Builder's environment lives at its own path; each job step points the upstream prefix path at it
+    # (Candidate) or at the trusted runtime (verifiers, Result judge).
+    volumes:
+      - agentswe-submission:/workspace/submission:ro
+      - agentswe-state:/var/agentswe
+      - agentswe-env:/var/agentswe/builder-env:ro
+      - agentswe-controller:/run/agentswe-controller
+
+  evaluator-worker:
+    platform: linux/amd64
+    build:
+      context: ./evaluator
+      args: *build-args
+    command: ["python3", "-m", "agentswe_harbor.worker"]
+    depends_on:
+      - evaluator{{EVALUATOR_CAPS}}
+    volumes:
+      - agentswe-state:/var/agentswe
+      - agentswe-env:/var/agentswe/builder-env:ro
+
+volumes:
+  agentswe-submission:
+  agentswe-env:
+  agentswe-controller:
+  agentswe-state:

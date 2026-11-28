@@ -1,0 +1,4 @@
+#!/bin/sh
+# Upstream's preflight records `docker version`; there is no Docker daemon inside a task.
+[ "$1" = version ] || { echo "docker is not available inside the task: docker $*" >&2; exit 1; }
+echo "none (per-case jobs run as local processes)"

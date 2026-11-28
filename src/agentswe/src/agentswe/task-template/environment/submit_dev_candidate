@@ -1,0 +1,8 @@
+#!/bin/sh
+# The evaluator sidecar writes its per-trial controller token next to the shared socket.
+set -eu
+if [ -z "${AGENTSWE_DEV_CONTROLLER_TOKEN:-}" ] && [ -r /run/agentswe-controller/token ]; then
+  AGENTSWE_DEV_CONTROLLER_TOKEN=$(cat /run/agentswe-controller/token)
+  export AGENTSWE_DEV_CONTROLLER_TOKEN
+fi
+exec python3 /usr/local/libexec/agentswe/submit_dev_candidate "$@"

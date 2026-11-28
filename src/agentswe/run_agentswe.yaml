@@ -1,0 +1,23 @@
+jobs_dir: jobs
+n_attempts: 1
+timeout_multiplier: 1.0
+orchestrator:
+  type: local
+  # Each trial runs a Builder session plus a sidecar and a verifier with their own images.
+  n_concurrent_trials: 1
+  quiet: false
+environment:
+  type: docker
+  force_build: false
+  delete: true
+agents:
+  # Null delivery: exercises freeze, Candidate and Eval jobs; expected reward 0.
+  - name: oracle
+  # AgentSWE Builder harness (run with `uv run --project src/agentswe --extra parity harbor run ...`):
+  # - import_path: agentswe.codex_agent:AgentSWECodex
+  #   model_name: gpt-6.1-sol
+  #   kwargs:
+  #     version: 0.144.1
+  #     context_window: 272000
+datasets:
+  - path: datasets/agentswe

@@ -1,0 +1,28 @@
+[
+  {
+    "adapter_name": "agentswe",
+    "agent": "agentswe-codex@0.144.1",
+    "model": "gpt-6.1-sol",
+    "date": "2026-11-29",
+    "adapted_benchmark_size": 4,
+    "parity_benchmark_size": 3,
+    "number_of_runs": 0,
+    "notes": "In progress. Both sides: Codex 0.144.1 with the AgentSWE-Lite catalog, builder gpt-6.1-sol (effort max), runtime and judge deepseek-v4.1-flash-1017 (lite-v1.1 efforts: runtime high, judge max), formal protocol with a 2 h Builder session. Original side: upstream AgentSWE 6643c739 `agentswe run <task> --builder codex`. Metric: held-out mean score (0-100) per run, averaged over the parity tasks.",
+    "original_parity_repo": "https://github.com/VectorSpaceLab/AgentSWE/tree/6643c7398b2d7dd58b32b6a3a829e564ab68a23f",
+    "adapter_pr": [
+      "https://github.com/harbor-index/adapters/pull/60"
+    ],
+    "dataset_pr": [],
+    "parity_pr": [],
+    "metrics": [
+      {
+        "benchmark_name": "AgentSWE",
+        "metric": "held-out mean score",
+        "original": "pending",
+        "harbor": "pending",
+        "original_runs": [],
+        "harbor_runs": []
+      }
+    ]
+  }
+]
