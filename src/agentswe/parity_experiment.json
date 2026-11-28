@@ -9,7 +9,9 @@
     "number_of_runs": 0,
     "notes": "Planned, not yet run. Both sides: Codex 0.144.1 with the AgentSWE-Lite catalog, builder gpt-6-luna, runtime and judge deepseek-v4.1-flash (lite-v1.1 efforts), same machine. Original side: upstream AgentSWE 6643c739 `agentswe run <task> --builder codex`. Metric: held-out mean score (0-100) per run, averaged over the parity tasks.",
     "original_parity_repo": "https://github.com/VectorSpaceLab/AgentSWE/tree/6643c7398b2d7dd58b32b6a3a829e564ab68a23f",
-    "adapter_pr": [],
+    "adapter_pr": [
+      "https://github.com/harbor-index/adapters/pull/60"
+    ],
     "dataset_pr": [],
     "parity_pr": [],
     "metrics": [
