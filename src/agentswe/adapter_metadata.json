@@ -1,29 +1,47 @@
 [
   {
     "adapter_name": "agentswe",
-    "adapter_builders": [],
+    "adapter_builders": [
+      "Zixuan Wang (zixuan.alex.wang@gmail.com)"
+    ],
     "original_benchmark": [
       {
-        "split": "test",
-        "size": null,
-        "harness": null,
-        "supported_agents": null,
+        "split": "full",
+        "size": 25,
+        "harness": "agent",
+        "supported_agents": [
+          "codex@0.144.1"
+        ],
         "adaptable": true,
-        "notes": null
+        "notes": "Creation 10, Editing 10, Optimization 5. Builders run in Codex 0.144.1 through upstream's ProviderCodex Harbor agent; runtime and judge default to deepseek-flash (lite-v1.1)."
+      },
+      {
+        "split": "lite",
+        "size": 8,
+        "harness": "agent",
+        "supported_agents": [
+          "codex@0.144.1"
+        ],
+        "adaptable": true,
+        "notes": "AgentSWE-Lite: repo, db, pdf (Creation); deeptutor, aider, openwiki (Editing); tau3, pinch (Optimization)."
       }
     ],
     "harbor_adapter": [
       {
-        "split": "test",
-        "adapted_benchmark_size": null,
-        "parity_benchmark_size": null,
-        "parity_sampling_rate": null,
-        "registry_benchmark_size": null,
-        "added_agents": [],
+        "split": "full",
+        "adapted_benchmark_size": 3,
+        "parity_benchmark_size": 3,
+        "parity_sampling_rate": 1.0,
+        "registry_benchmark_size": 3,
+        "added_agents": [
+          "agentswe-codex@0.144.1"
+        ],
         "parity_matching_agents": [],
-        "parity_unmatching_agents": null,
-        "parity_costs": null,
-        "notes": null
+        "parity_unmatching_agents": [
+          "None"
+        ],
+        "parity_costs": "$0",
+        "notes": "Work in progress. Adapted: the Creation tasks of AgentSWE-Lite (repository-bug-repair, database-analytics, scientific-pdf-translation). Editing, Optimization and multi-service Creation tasks are excluded for now (see README). Parity has not been run yet; parity_costs counts provider spend only (free gateway keys so far)."
       }
     ]
   }
