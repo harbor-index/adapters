@@ -221,7 +221,9 @@ class TaskWriter:
         last = max(i for i, line in enumerate(lines) if line.startswith("FROM scratch"))
         for name in TRUSTED_BROWSER_FILES:
             shutil.copy2(source / name, context / name)
-        stages = "\n".join(lines[first:last]) + "\n"
+        # These stages pin exact package versions of their apt snapshot, which a live mirror does not
+        # serve; keep them on the snapshot even when APT_MIRROR is set for the other stages.
+        stages = ("\n".join(lines[first:last]) + "\n").replace("APT_MIRROR", "TRUSTED_BROWSER_APT_MIRROR")
         final = (
             f"COPY --from=assemble /out/trusted-browser-v1 {DEPS_ROOT}/trusted-browser-v1\n"
             f"COPY --from=assemble /out/runtime-dependencies-v1 {DEPS_ROOT}/runtime-dependencies-v1\n"
