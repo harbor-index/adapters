@@ -1,0 +1,40 @@
+[
+  {
+    "adapter_name": "loopsbench",
+    "adapter_builders": ["Boyuan Zheng (144276763+Boyuannz@users.noreply.github.com)"],
+    "original_benchmark": [
+      {
+        "split": "full",
+        "size": 112,
+        "harness": "agent",
+        "supported_agents": [
+          "claude-code@f44331c",
+          "codex@f44331c",
+          "copilot@f44331c",
+          "cursor@f44331c",
+          "mini-swe-agent@f44331c",
+          "openhands@f44331c",
+          "oracle@f44331c",
+          "qwen-code@f44331c",
+          "swe-agent@f44331c"
+        ],
+        "adaptable": true,
+        "notes": "Bundle c47e13a and upstream harness revision f44331c. Agent tags identify built-in harness integrations. Runtime executable versions will be pinned for parity."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "full",
+        "adapted_benchmark_size": 104,
+        "parity_benchmark_size": 0,
+        "parity_sampling_rate": 0.0,
+        "registry_benchmark_size": 0,
+        "added_agents": ["None"],
+        "parity_matching_agents": [],
+        "parity_unmatching_agents": ["None"],
+        "parity_costs": null,
+        "notes": "Harbor 0.27.0 graded all 104 final task packages with separate verifiers on oahu. The full run scored 97/104. The tasks that scored zero were java-ds-coursework, jpf-symbolic-execution, net-os-labs, os-c-fs-labs, riscv-os-multiproject, spring-course-mgmt-fullstack, x86-os-four-labs. See the README for the independent controls. Eight source tasks are excluded. Parity settings are pending team coordination."
+      }
+    ]
+  }
+]

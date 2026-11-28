@@ -1,0 +1,240 @@
+# Verifier egress for the 104 reviewed tasks in bundle c47e13a.
+# Evidence on oahu: datasets/isolated_oracle_20261122T072255Z task IDs,
+# corresponding source run-tests.sh / Dockerfiles, and
+# jobs/isolated_oracle_legacy_20261122T081219Z/*/verifier/post-test.txt.
+# Exact hosts include required package/artifact redirects. Historical test
+# logs were collected under the previous policy and are not allowlist tests.
+
+[hosts]
+uv = ["astral.sh", "releases.astral.sh", "github.com", "release-assets.githubusercontent.com"]
+pypi = ["pypi.org", "files.pythonhosted.org"]
+ubuntu = ["archive.ubuntu.com", "security.ubuntu.com"]
+debian = ["deb.debian.org"]
+aliyun = ["mirrors.aliyun.com"]
+nodesource = ["deb.nodesource.com"]
+maven_central = ["repo.maven.apache.org", "repo1.maven.org"]
+jboss = ["repository.jboss.org"]
+princeton = ["algs4.cs.princeton.edu"]
+cargo = ["index.crates.io", "static.crates.io"]
+go = ["proxy.golang.org", "sum.golang.org", "storage.googleapis.com"]
+npm = ["registry.npmjs.org"]
+nuget = ["api.nuget.org", "globalcdn.nuget.org"]
+
+# Stage pinned pytest in the interpreter the original script uses. These
+# installs are already satisfied when the offline verifier runs the script.
+[build.task_riscv_cpu_six_labs]
+anchor = "COPY requirements/ /workspace/requirements/"
+replacement = """
+COPY requirements/ /workspace/requirements/
+RUN python3 -m venv /tmp/loopsbench-venv \\
+    && /tmp/loopsbench-venv/bin/pip install --no-cache-dir pytest==8.4.1
+"""
+
+[build.task_sicp_py_scheme_sql]
+anchor = "RUN pip install --no-cache-dir pytest"
+replacement = "RUN pip install --no-cache-dir pytest==8.4.1"
+
+# Use image-provided dependencies or the pinned build steps above.
+[profiles.offline]
+host_sets = []
+task_ids = [
+    "task_ansible_seg11",
+    "task_ansible_seg13",
+    "task_compiler_rustlike_rv32",
+    "task_cs61b_extra_java_bundle",
+    "task_db_query_optimizer_labs",
+    "task_db_storage_index_labs",
+    "task_dcqcn_rdma_evolution",
+    "task_deep_learning_three_assignments",
+    "task_distributed_fs_chfs",
+    "task_django_seg01",
+    "task_django_seg05",
+    "task_ds_five_assignments",
+    "task_echarts_seg01",
+    "task_echarts_seg04",
+    "task_echarts_seg05",
+    "task_echarts_seg07",
+    "task_echarts_seg08",
+    "task_echarts_seg09",
+    "task_echarts_seg10",
+    "task_echarts_seg11",
+    "task_echarts_seg13",
+    "task_graphics_raster_2d",
+    "task_lsm_vector_store_four_stage",
+    "task_mlir_circuit_ir",
+    "task_mlsys_autodiff_pa1",
+    "task_net_os_labs",
+    "task_node_seg03",
+    "task_os_distributed_practicals",
+    "task_perses_program_reduction",
+    "task_rails_seg09",
+    "task_riscv_cpu_six_labs",
+    "task_riscv_cpu_sv",
+    "task_sicp_py_scheme_sql",
+    "task_sql_engine_myjql",
+]
+
+# Apt and uv bootstrap run inside the original grading script.
+[profiles.uv_ubuntu]
+host_sets = ["uv","pypi","ubuntu"]
+task_ids = [
+    "task_afl_fuzzing",
+    "task_alloy_formal_modeling",
+    "task_architecture_riscv_labs",
+    "task_boogie_dafny",
+    "task_cocos2dx_navmesh_medium",
+    "task_cocos2dx_physics2d_medium",
+    "task_compiler",
+    "task_compiler_cmm_mips",
+    "task_compiler_fdmj_llvm",
+    "task_cpachecker",
+    "task_cvc_smt_solver",
+    "task_doop_souffle_static_analysis",
+    "task_evosuite_test_generation",
+    "task_frama_c",
+    "task_gem5_architecture_simulation",
+    "task_godot_bootstrap_medium",
+    "task_godot_navigation2d_medium",
+    "task_graph_processing",
+    "task_graphics_scotty3d",
+    "task_java_ds_coursework",
+    "task_jpf_symbolic_execution",
+    "task_ligra_graph_evolution",
+    "task_linux011_kernel_hacks",
+    "task_mininet_network_simulation",
+    "task_mysql_sql_labs",
+    "task_opengl_glfw_labs",
+    "task_os_c_fs_labs",
+    "task_os_labs_asm_kernel",
+    "task_raylib_shapes2d_medium",
+    "task_raylib_textures_hard",
+    "task_rdma_ns3_evolution",
+    "task_riscv_cpu_verilog_three",
+    "task_riscv_os_multiproject",
+    "task_sat_minisat_glucose",
+    "task_sklearn_ml_toolchain",
+    "task_soot_taint_analysis",
+    "task_stream_mining",
+    "task_systems_csapp_labs",
+    "task_systems_four_labs",
+    "task_x86_os_four_labs",
+    "task_z3_fixedpoint_verification",
+]
+
+[profiles.uv_debian]
+host_sets = ["uv","pypi","debian"]
+task_ids = [
+    "task_deep_rl_coursework",
+    "task_ml_four_assignments",
+    "task_nandteris",
+    "task_numpy_dl_aics_style",
+]
+
+# Maven may resolve test plugins or dependencies from the submitted tree.
+[profiles.uv_ubuntu_maven]
+host_sets = ["uv","pypi","ubuntu","maven_central"]
+task_ids = [
+    "task_calcite_query_optimization",
+    "task_dbcompiler",
+    "task_spring_course_mgmt_fullstack",
+]
+
+[profiles.uv_debian_cargo]
+host_sets = ["uv","pypi","debian","cargo"]
+task_ids = [
+    "task_compiler_sysy_rust",
+]
+
+# The base image rewrites Ubuntu apt sources to this mirror.
+[profiles.uv_aliyun]
+host_sets = ["uv","pypi","aliyun"]
+task_ids = [
+    "task_ns3_network_simulation",
+]
+
+# The base image adds the NodeSource apt repository.
+[profiles.uv_ubuntu_nodesource]
+host_sets = ["uv","pypi","ubuntu","nodesource"]
+task_ids = [
+    "task_xjqkl",
+]
+
+# The Java tests can fetch JUnit and algs4 jars.
+[profiles.uv_java]
+host_sets = ["uv","pypi","maven_central","princeton"]
+task_ids = [
+    "task_datastructs_java",
+]
+
+# ClickHouse and MLP install Python test dependencies. Panda3D makepanda
+# installs the pinned panda3d-interrogate wheel during verification.
+[profiles.pypi]
+host_sets = ["pypi"]
+task_ids = [
+    "task_ClickHouse_seg07",
+    "task_mlp_numpy_coursework",
+    "task_panda3d_collision_hard",
+    "task_panda3d_pgraph_medium",
+]
+
+# The script creates a fresh Python venv; Go builds against the snapshot.
+[profiles.pypi_go]
+host_sets = ["pypi","go"]
+task_ids = [
+    "task_dist_sys_raft_go",
+]
+
+# Build caches are best-effort. NanoDB's upstream Maven-only control reached collection.
+[profiles.maven]
+host_sets = ["maven_central"]
+task_ids = [
+    "task_db_nanodb",
+    "task_networks_proxy_rdt",
+]
+
+# The bootstrap and unit runner call Maven; Hadoop also declares JBoss Public.
+[profiles.maven_hadoop]
+host_sets = ["maven_central","jboss"]
+task_ids = [
+    "task_hadoop_seg05",
+]
+
+[profiles.go]
+host_sets = ["go"]
+task_ids = [
+    "task_navidrome_seg04",
+    "task_navidrome_seg05",
+]
+
+# The grader can resolve modules and run npm or npx from the snapshot.
+[profiles.go_npm]
+host_sets = ["go","npm"]
+task_ids = [
+    "task_navidrome_seg02",
+    "task_navidrome_seg07",
+]
+
+# NodeBB can fall back to npx mocha when local installs are incomplete.
+[profiles.npm]
+host_sets = ["npm"]
+task_ids = [
+    "task_NodeBB_seg01",
+    "task_NodeBB_seg03",
+    "task_NodeBB_seg05",
+]
+
+# The grader builds and runs .NET projects against the snapshot.
+[profiles.nuget]
+host_sets = ["nuget"]
+task_ids = [
+    "task_monogame_math2d_medium",
+    "task_monogame_transform3d_medium",
+]
+
+# Use Docker's network_mode: none to retain NET_ADMIN for loopback aliases.
+[profiles.tcp]
+host_sets = []
+upstream_static_tester = true
+task_ids = [
+    "task_tcp_course_stack",
+]
