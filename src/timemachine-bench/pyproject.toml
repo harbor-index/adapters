@@ -1,0 +1,31 @@
+[project]
+name = "harbor-timemachine-bench-adapter"
+version = "0.1.0"
+description = "Harbor adapter for TimeMachine-bench: repository-level Python dependency-migration tasks"
+readme = "README.md"
+authors = [
+    { name = "Junhao Liu", email = "junhaoliu2023@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = []
+
+[project.scripts]
+timemachine-bench = "timemachine_bench.main:main"
+
+[build-system]
+requires = ["uv_build>=0.13.10,<0.14.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "timemachine_bench"
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[tool.ruff]
+line-length = 100
+# verbatim copy of the upstream agent (see parity_agent/runner/README.md)
+extend-exclude = ["src/timemachine_bench/parity_agent/runner"]
+
+[tool.pytest.ini_options]
+addopts = "-p no:cacheprovider"

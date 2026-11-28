@@ -1,0 +1,52 @@
+version = "1.0"
+
+[task]
+name = "tohoku-nlp/timemachine-bench__{task_id}"
+description = "Migrate {repo_name} to Python {python_version} and the dependency versions available on {migration_date} so that its unchanged test suite passes."
+authors = [
+    { name = "Ryo Fujii" },
+    { name = "Makoto Morishita" },
+    { name = "Kazuki Yano" },
+    { name = "Jun Suzuki" },
+]
+keywords = ["timemachine-bench", "dependency-migration", "python", "software-engineering"]
+
+[metadata]
+difficulty = "{difficulty}"
+category = "software-engineering"
+tags = ["migration", "python", "{test_type}"]
+repo_name = "{repo_name}"
+repo_url = "{repo_url}"
+commit_hash = "{commit_hash}"
+reproduction_target_date = "{reproduction_target_date}"
+reproduction_target_version = "{reproduction_target_version}"
+migration_target_date = "{migration_date}"
+migration_target_version = "{python_version}"
+test_type = "{test_type}"
+test_count = {test_count}
+related_modules = "{related_modules}"
+license = "{license}"
+
+[agent]
+# Upstream bounds its agent by 100 LLM calls and 10 test runs of up to 600 s,
+# not by wall-clock time.
+timeout_sec = 3600.0
+
+[verifier]
+# One run of the upstream test script (600 s limit) plus applying the edits.
+timeout_sec = 900.0
+# Grade in an untouched container of the task image, as upstream runs its tests
+# in a fresh container of the image: only the agent's edits to /work cross over.
+environment_mode = "separate"
+
+[[verifier.collect]]
+command = "python3 -I /opt/timemachine/collect.py"
+timeout_sec = 300.0
+
+[environment]
+# The build clones the repository and resolves its dependencies through the
+# date-filtered index; some packages are compiled from source.
+build_timeout_sec = 3600.0
+cpus = 2
+memory_mb = 8192
+storage_mb = 20480
