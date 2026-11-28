@@ -1,0 +1,44 @@
+{
+    "single_input_configs": [
+        {
+            "batch_size": 2,
+            "num_tokens": 128
+        }
+    ],
+    "single_init_configs": [
+        {
+            "up_features": 14336
+        }
+    ],
+    "single_shared_configs": [
+        {
+            "num_features": 4096
+        }
+    ],
+    "multi_input_configs": [
+        {
+            "batch_size": 2,
+            "num_tokens": 128
+        },
+        {
+            "batch_size": 4,
+            "num_tokens": 1024
+        }
+    ],
+    "multi_init_configs": [
+        {
+            "up_features": 7168
+        },
+        {
+            "up_features": 14336
+        }
+    ],
+    "multi_shared_configs": [
+        {
+            "num_features": 2048
+        },
+        {
+            "num_features": 4096
+        }
+    ]
+}

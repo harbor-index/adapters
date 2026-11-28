@@ -1,0 +1,47 @@
+{
+    "single_input_configs": [
+        {
+            "batch_size": 1
+        }
+    ],
+    "single_init_configs": [
+        {
+            "init_method": "random"
+        }
+    ],
+    "single_shared_configs": [
+        {
+            "num_features": 64,
+            "dim1": 256,
+            "dim2": 256
+        }
+    ],
+    "multi_input_configs": [
+        {
+            "batch_size": 1
+        },
+        {
+            "batch_size": 8
+        }
+    ],
+    "multi_init_configs": [
+        {
+            "init_method": "random"
+        },
+        {
+            "init_method": "standard"
+        }
+    ],
+    "multi_shared_configs": [
+        {
+            "num_features": 1,
+            "dim1": 256,
+            "dim2": 256
+        },
+        {
+            "num_features": 64,
+            "dim1": 256,
+            "dim2": 256
+        }
+    ]
+}

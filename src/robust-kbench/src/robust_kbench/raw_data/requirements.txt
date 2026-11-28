@@ -1,0 +1,11 @@
+torch
+dotmap
+triton
+pycuda
+ninja
+backoff
+openai
+google-generativeai
+anthropic
+boto3
+instructor

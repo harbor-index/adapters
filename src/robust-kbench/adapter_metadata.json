@@ -1,0 +1,39 @@
+[
+  {
+    "adapter_name": "robust-kbench",
+    "adapter_builders": [
+      "zlanta (zlanta@users.noreply.github.com)"
+    ],
+    "original_benchmark": [
+      {
+        "name": "robust-kbench",
+        "split": "custom_curated",
+        "size": 11,
+        "harness": "harbor",
+        "paper_title": "Robust-KBench: A Robustness-focused CUDA Kernel Generation Benchmark",
+        "paper_url": "https://arxiv.org/abs/2509.14279",
+        "repo_url": "https://github.com/SakanaAI/robust-kbench",
+        "supported_agents": [
+          "all"
+        ],
+        "adaptable": true,
+        "notes": "Sakana AI released benchmark focusing on robustness and correctness of generated CUDA kernels under varied input tensor shapes and initialization settings."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "name": "robust-kbench",
+        "split": "custom_curated",
+        "size": 11,
+        "category": "coding",
+        "difficulty": "hard",
+        "adapted_benchmark_size": 11,
+        "parity_benchmark_size": 11,
+        "parity_sampling_rate": 1.0,
+        "registry_benchmark_size": 11,
+        "parity_costs": "$50",
+        "notes": "Adapted with multi_input_settings=True, multi_init_settings=True, and NVIDIA_TF32_OVERRIDE=0. Excludes mnist_conv_relu_pool__forward by default because its upstream golden kernel exceeds consumer GPU 100KB shared-memory limits."
+      }
+    ]
+  }
+]

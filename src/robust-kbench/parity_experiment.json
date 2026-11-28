@@ -1,0 +1,38 @@
+[
+  {
+    "adapter_name": "robust-kbench",
+    "agent": "oracle",
+    "model": "ground_truth",
+    "date": "2026-11-28",
+    "adapted_benchmark_size": 11,
+    "parity_benchmark_size": 11,
+    "number_of_runs": 2,
+    "notes": "Oracle solution (upstream Sakana AI highlighted reference CUDA kernels) achieves 100% correctness pass across multi-input and multi-init configurations with TF32 disabled.",
+    "original_parity_repo": "https://github.com/SakanaAI/robust-kbench",
+    "adapter_pr": [
+      "https://github.com/harbor-index/adapters/pull/41"
+    ],
+    "dataset_pr": [
+      "https://github.com/harbor-framework/harbor-datasets/pull/TODO"
+    ],
+    "parity_pr": [
+      "https://huggingface.co/datasets/harborframework/parity-experiments/discussions/TODO"
+    ],
+    "metrics": [
+      {
+        "benchmark_name": "robust-kbench (Oracle vs Adapter)",
+        "metric": "correctness_rate",
+        "original": "1.0 +/- 0.0",
+        "tb_adapter": "1.0 +/- 0.0",
+        "original_runs": [
+          1.0,
+          1.0
+        ],
+        "tb_adapter_runs": [
+          1.0,
+          1.0
+        ]
+      }
+    ]
+  }
+]

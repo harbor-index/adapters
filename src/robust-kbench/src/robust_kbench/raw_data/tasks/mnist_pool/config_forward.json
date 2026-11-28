@@ -1,0 +1,44 @@
+{
+    "single_input_configs": [
+        {
+            "batch_size": 64,
+            "in_channels": 64,
+            "height": 28,
+            "width": 28
+        }
+    ],
+    "single_init_configs": [
+        {
+            "kernel_size": 2
+        }  
+    ],
+    "single_shared_configs": [
+        {}
+    ],
+    "multi_input_configs": [
+        {
+            "batch_size": 64,
+            "in_channels": 64,
+            "height": 28,
+            "width": 28
+        },
+        {
+            "batch_size": 64,
+            "in_channels": 128,
+            "height": 12,
+            "width": 12
+        }
+    ],
+    "multi_init_configs": [
+        {
+            "kernel_size": 2
+        },
+        {
+            "kernel_size": 2
+        }
+    ],
+    "multi_shared_configs": [
+        {},
+        {}
+    ]
+}

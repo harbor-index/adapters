@@ -1,0 +1,30 @@
+{
+    "single_input_configs": [
+        {
+            "batch_size": 64,
+            "num_classes": 10
+        }
+    ],
+    "single_init_configs": [
+        {}
+    ],
+    "single_shared_configs": [
+        {}
+    ],
+    "multi_input_configs": [
+        {
+            "batch_size": 64,
+            "num_classes": 10
+        },
+        {
+            "batch_size": 4096,
+            "num_classes": 100
+        }
+    ],
+    "multi_init_configs": [
+        {}
+    ],
+    "multi_shared_configs": [
+        {}
+    ]
+}
