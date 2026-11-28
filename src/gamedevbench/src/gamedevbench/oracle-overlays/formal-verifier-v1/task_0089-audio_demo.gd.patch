@@ -1,0 +1,9 @@
+--- a/scripts/audio_demo.gd
++++ b/scripts/audio_demo.gd
+@@ -38,4 +38,5 @@
+ 		"Available Streams: {0} | Queue: {1}".format([
+ 			str(AudioManager.available.size()), str(AudioManager.queue.size())
+ 		])
+-	
++	$CanvasLayer/HBoxContainer/Label2.text = str(AudioManager.available.size())
++	$CanvasLayer/HBoxContainer/Label3.text = str(AudioManager.queue.size())

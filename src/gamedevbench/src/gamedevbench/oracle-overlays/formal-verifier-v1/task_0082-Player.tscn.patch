@@ -1,0 +1,106 @@
+--- a/scenes/Player.tscn
++++ b/scenes/Player.tscn
+@@ -1466,6 +1466,12 @@
+ }, {
+ "duration": 1.0,
+ "texture": SubResource("AtlasTexture_fyhfp")
++}, {
++"duration": 1.0,
++"texture": SubResource("AtlasTexture_ros5g")
++}, {
++"duration": 1.0,
++"texture": SubResource("AtlasTexture_hq6m0")
+ }],
+ "loop": true,
+ "name": &"run0",
+@@ -1516,6 +1522,12 @@
+ }, {
+ "duration": 1.0,
+ "texture": SubResource("AtlasTexture_5trrr")
++}, {
++"duration": 1.0,
++"texture": SubResource("AtlasTexture_gusmc")
++}, {
++"duration": 1.0,
++"texture": SubResource("AtlasTexture_g6jhj")
+ }],
+ "loop": true,
+ "name": &"run1",
+@@ -1566,6 +1578,12 @@
+ }, {
+ "duration": 1.0,
+ "texture": SubResource("AtlasTexture_fgvl0")
++}, {
++"duration": 1.0,
++"texture": SubResource("AtlasTexture_m46cm")
++}, {
++"duration": 1.0,
++"texture": SubResource("AtlasTexture_dwosq")
+ }],
+ "loop": true,
+ "name": &"run2",
+@@ -1616,6 +1634,12 @@
+ }, {
+ "duration": 1.0,
+ "texture": SubResource("AtlasTexture_o4421")
++}, {
++"duration": 1.0,
++"texture": SubResource("AtlasTexture_pygm2")
++}, {
++"duration": 1.0,
++"texture": SubResource("AtlasTexture_628te")
+ }],
+ "loop": true,
+ "name": &"run3",
+@@ -1666,6 +1690,12 @@
+ }, {
+ "duration": 1.0,
+ "texture": SubResource("AtlasTexture_4hc25")
++}, {
++"duration": 1.0,
++"texture": SubResource("AtlasTexture_5dwh2")
++}, {
++"duration": 1.0,
++"texture": SubResource("AtlasTexture_v2dqn")
+ }],
+ "loop": true,
+ "name": &"run4",
+@@ -1716,6 +1746,12 @@
+ }, {
+ "duration": 1.0,
+ "texture": SubResource("AtlasTexture_et8qn")
++}, {
++"duration": 1.0,
++"texture": SubResource("AtlasTexture_0ybu3")
++}, {
++"duration": 1.0,
++"texture": SubResource("AtlasTexture_n5pma")
+ }],
+ "loop": true,
+ "name": &"run5",
+@@ -1766,6 +1802,12 @@
+ }, {
+ "duration": 1.0,
+ "texture": SubResource("AtlasTexture_twbbq")
++}, {
++"duration": 1.0,
++"texture": SubResource("AtlasTexture_eosdi")
++}, {
++"duration": 1.0,
++"texture": SubResource("AtlasTexture_vxyme")
+ }],
+ "loop": true,
+ "name": &"run6",
+@@ -1816,6 +1858,12 @@
+ }, {
+ "duration": 1.0,
+ "texture": SubResource("AtlasTexture_rf2sd")
++}, {
++"duration": 1.0,
++"texture": SubResource("AtlasTexture_rgeti")
++}, {
++"duration": 1.0,
++"texture": SubResource("AtlasTexture_16oai")
+ }],
+ "loop": true,
+ "name": &"run7",

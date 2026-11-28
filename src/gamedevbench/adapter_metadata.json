@@ -1,0 +1,40 @@
+[
+  {
+    "adapter_name": "gamedevbench",
+    "adapter_builders": [
+      "tianshi xu (tianshixu@stu.pku.edu.cn)"
+    ],
+    "original_benchmark": [
+      {
+        "split": "full",
+        "size": 333,
+        "harness": "agent",
+        "supported_agents": [
+          "codex@0.171.0"
+        ],
+        "adaptable": true,
+        "notes": "Codex was evaluated on the fixed 30-task sample. Upstream also supports other agents."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "full",
+        "adapted_benchmark_size": 333,
+        "parity_benchmark_size": 30,
+        "parity_sampling_rate": 0.09009009009009009,
+        "registry_benchmark_size": 0,
+        "added_agents": [
+          "None"
+        ],
+        "parity_matching_agents": [
+          "codex@0.171.0+gpt-6.1-sol"
+        ],
+        "parity_unmatching_agents": [
+          "None"
+        ],
+        "parity_costs": "$76.89",
+        "notes": "Docker + ModelRouter. Cost is the sum of native runner estimates including one transport retry. Actual billing is unknown. Oracle passed 333/333. Registry publication and campaign acceptance of this platform are pending."
+      }
+    ]
+  }
+]

@@ -1,0 +1,44 @@
+version = "1.0"
+artifacts = ["/workspace"]
+
+[task]
+name = "gamedevbench/{task_name}"
+authors = [
+  { name = "Wayne Chi" }, { name = "Yixiong Fang" },
+  { name = "Arnav Yayavaram" }, { name = "Siddharth Yayavaram" },
+  { name = "Seth Karten" }, { name = "Qiuhong Anna Wei" },
+  { name = "Runkun Chen" }, { name = "Alexander Wang" },
+  { name = "Valerie Chen" }, { name = "Ameet Talwalkar" },
+  { name = "Chris Donahue" },
+]
+keywords = ["godot", "game-development"]
+
+[metadata]
+category = "programming"
+tags = ["godot", "gdscript", "game-development"]
+upstream_task_id = "{task_id}"
+upstream_revision = "{revision}"
+
+[agent]
+timeout_sec = 600.0
+
+[verifier]
+timeout_sec = 1320.0
+environment_mode = "separate"
+
+[verifier.env]
+GAMEDEVBENCH_TASK_ID = "{task_id}"
+
+[verifier.environment]
+network_mode = "no-network"
+build_timeout_sec = 1200.0
+cpus = 2
+memory_mb = 4096
+storage_mb = 10240
+
+[environment]
+network_mode = "no-network"
+build_timeout_sec = 1200.0
+cpus = 2
+memory_mb = 4096
+storage_mb = 10240

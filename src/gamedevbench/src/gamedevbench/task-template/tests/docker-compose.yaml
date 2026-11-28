@@ -1,0 +1,5 @@
+services:
+  main:
+    image: ${MAIN_IMAGE_NAME}
+    cap_add: [SYS_ADMIN, NET_ADMIN]
+    security_opt: [no-new-privileges:true, apparmor:unconfined, seccomp:unconfined]

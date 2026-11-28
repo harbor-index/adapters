@@ -1,0 +1,30 @@
+--- a/scenes/audio_demo.tscn
++++ b/scenes/audio_demo.tscn
+@@ -40,3 +40,27 @@
+ text = "Available Streams:"
+ horizontal_alignment = 1
+ vertical_alignment = 1
++
++[node name="Label2" type="Label" parent="CanvasLayer/HBoxContainer"]
++layout_mode = 2
++theme_override_fonts/font = ExtResource("1")
++theme_override_font_sizes/font_size = 24
++text = "0"
++horizontal_alignment = 1
++vertical_alignment = 1
++
++[node name="Label4" type="Label" parent="CanvasLayer/HBoxContainer"]
++layout_mode = 2
++theme_override_fonts/font = ExtResource("1")
++theme_override_font_sizes/font_size = 24
++text = "Queue:"
++horizontal_alignment = 1
++vertical_alignment = 1
++
++[node name="Label3" type="Label" parent="CanvasLayer/HBoxContainer"]
++layout_mode = 2
++theme_override_fonts/font = ExtResource("1")
++theme_override_font_sizes/font_size = 24
++text = "0"
++horizontal_alignment = 1
++vertical_alignment = 1

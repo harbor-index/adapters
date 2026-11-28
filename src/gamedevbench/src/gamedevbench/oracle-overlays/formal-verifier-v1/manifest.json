@@ -1,0 +1,56 @@
+{
+  "profile": "formal-verifier-v1",
+  "upstream_revision": "54589a477d6c1a15255707a861db6b01126797aa",
+  "scope": "Oracle solution only; upstream packages, agent starter, prompt and formal verifier unchanged.",
+  "tasks": [
+    {
+      "task_id": "task_0082",
+      "reason": "Preserve all fifteen directional walk atlas regions; append the first two existing frames to each cyclic run timeline to meet the unchanged formal seventeen-frame requirement. No atlas regions or source image bytes change. The asset/test inconsistency remains disclosed.",
+      "files": [
+        {
+          "path": "scenes/Player.tscn",
+          "original_sha256": "c871fa45628f9d87ca2c9c1dffb6f765d94d4d1a4a9db276cddb25c9b78568a8",
+          "replacement_sha256": "f4867fe72dc240153036ae11c1d63a82872a2be40b3541ce2288c17a008c0e51"
+        }
+      ]
+    },
+    {
+      "task_id": "task_0089",
+      "reason": "Keep the instruction-requested combined Label and its dynamic updates. Add the three legacy count/heading Labels required by the original verifier, with the same font, and update the two auxiliary counts. No test-aware branch, hidden node, or conditional verifier behavior is added.",
+      "files": [
+        {
+          "path": "scenes/audio_demo.tscn",
+          "original_sha256": "3f8c08b4451bdb5f5819b42122bc4c0ea47131b23070c866a65aeb08dcfc9354",
+          "replacement_sha256": "198355764c6d48b640f5c411384839490b98b0d5fd5fec3efc7226629355541f"
+        },
+        {
+          "path": "scripts/audio_demo.gd",
+          "original_sha256": "49471b29921d35bad2f18eeb129cdc7aadee3347172e597515cbe426554d3b1c",
+          "replacement_sha256": "c912a0f5c3cfef36983086edb6c5d5ddd52ddfe2e16963d39796ec6822ce7179"
+        }
+      ]
+    },
+    {
+      "task_id": "task_0107",
+      "reason": "The formal verifier checks original BaseMaterial3D parameters and then calls the shader-swap method. Remove the premature automatic _ready swap, retaining the complete callable conversion logic and parameter copy.",
+      "files": [
+        {
+          "path": "scripts/weapon_manager.gd",
+          "original_sha256": "e37a84581e348a0a8d3cbd2056880c77d4d298a11943afeadf0e8e81a9126876",
+          "replacement_sha256": "37e4378769a8e6a7fee9eb0e08755b144c3537e21fb181aad2ff249fec2c649e"
+        }
+      ]
+    },
+    {
+      "task_id": "task_0112",
+      "reason": "Move the wall frame from interior x=4..15 to the complete outer border of the existing 20x12 Background rectangle. Reuse the original wall atlas tiles; keep Background, Props, TileSet and assets unchanged.",
+      "files": [
+        {
+          "path": "scenes/main.tscn",
+          "original_sha256": "89edb3716ec870486b26ee6f14dd2e89b860f6389e8c52b0b57f27b72d7d2ed7",
+          "replacement_sha256": "4ca6a9abc45b95c71b400a1ae44a42cba0acdb4081a622aedb3d16e67838a1fe"
+        }
+      ]
+    }
+  ]
+}
