@@ -1,5 +1,7 @@
 # ACPBench-Hard → Harbor
 
+> Working documentation draft. The contributor must author the final README before review.
+
 ## Overview
 
 The generative test split of ACPBench-Hard: eight reasoning categories, each containing 130 questions across thirteen planning domains (1,040 total). Boolean and multiple-choice ACPBench questions and development examples are not evaluation tasks.
@@ -66,7 +68,7 @@ Use `--source-dir /path/to/upstream` to avoid a download, `--limit 5` for a smok
 
 ## Comparison with Original Benchmark (Parity)
 
-Parity has not run. `parity_experiment.json` is intentionally empty; this is not a completed parity claim.
+Formal parity has not run; exploratory pilots are described below. `parity_experiment.json` is intentionally empty; this is not a completed parity claim.
 
 Adapter PR: https://github.com/harbor-index/adapters/pull/55. Generated dataset draft: https://github.com/harbor-framework/harbor-datasets/pull/317. Dataset publication and parity upload remain pending.
 
@@ -75,14 +77,14 @@ Prepare the original-side cohort without model calls:
 ```bash
 git clone https://github.com/Chenghao-Zhang/ACPBench.git acpbench-parity
 cd acpbench-parity
-git checkout daffd8064a2ffe2cee8c28a43dd4d05e2360a267
+git checkout 10fe9de53eb9fcdaa80350ff98ece757c3307c9e
 uv run --python 3.12 --with jinja2==3.1.6 --with PyYAML==6.0.2 python harbor_parity/prepare.py --split parity --output-dir inputs
 ```
 
 Use the fork's `harbor_parity/README.md` for container build, runner arguments, and scoring commands. Supply the agreed settings explicitly before executing model runs.
 
-[Original-side preparation and scoring](https://github.com/Chenghao-Zhang/ACPBench/tree/daffd8064a2ffe2cee8c28a43dd4d05e2360a267/harbor_parity) are published with reproduction commands. They read the pinned upstream data and scorer directly, without importing the adapter. An isolated Codex runner is included and has passed offline orchestration controls. Its real model connection and paired parity remain untested.
-The proposed comparison uses the same pinned CLI agent, dated model, prompt, limits, and container environment on both sides, with upstream grading on the original side. Proposed configuration for team review: `codex@0.118.0`, `gpt-5-mini-2025-08-07`, three runs per side, the same reasoning effort and inference settings, and a 1,800-second task timeout. This follows the matched CLI-agent approach used in the approved CanItEdit adapter. These choices and API provisioning are not yet confirmed; no paid run has started.
+[Original-side preparation and scoring](https://github.com/Chenghao-Zhang/ACPBench/tree/10fe9de53eb9fcdaa80350ff98ece757c3307c9e/harbor_parity) are published with reproduction commands. They read the pinned upstream data and scorer directly, without importing the adapter. An isolated Codex runner is included and has passed offline orchestration controls. The HTTP Responses connection has been exercised with paired exploratory pilots; formal parity remains pending.
+The proposed comparison uses the same pinned CLI agent, exact provider model ID, prompt, limits, and container environment on both sides, with upstream grading on the original side. Proposed configuration for team review: `codex@0.118.0`, `gpt-6-luna`, three runs per side, the same reasoning effort and inference settings, and a 1,800-second task timeout. This follows the matched CLI-agent approach used in the approved CanItEdit adapter. The contributor supplies API access; formal experiment settings still await team confirmation. Eight-task low-effort pilots scored 3/8 on each side, with three missing answer files per side. A postselected two-task medium-effort diagnostic scored 1/2 original and 0/2 Harbor, with missing files persisting. These diagnostics do not establish parity or reliable file output.
 
 The proposed subset has 104 tasks. Run paired sanity checks first, then one full paired subset run, then scale symmetrically to three runs per side. Record raw scores and mean ± sample SEM, preserving all attempts. The original-side runner is published above; final agreed reproduction commands and model results remain required before submission as ready for review.
 
@@ -93,7 +95,7 @@ The proposed subset has 104 tasks. Run paired sanity checks first, then one full
 - The added instruction is `Save your answer to /app/answer.txt.` Apply it identically on the original side during parity.
 - The two-shot benchmark prompt is retained; terminal-agent performance is not directly comparable to a single model-call paper result. Planner fallback and parser behavior remain upstream behavior.
 - Reference solutions and all grading dependencies are unavailable during ordinary agent execution.
-- All 1,040 generated oracle answers pass the pinned upstream scorer in Docker. One Harbor smoke trial passes; the full Harbor oracle run is in progress. Parity and publication have not run.
+- All 1,040 generated oracle answers pass the pinned upstream scorer in Docker. The full Harbor oracle run passes 1,040/1,040 tasks with zero exceptions; task coverage and dataset checksums were audited. Formal parity and dataset publication remain pending.
 
 ## Installation / Prerequisites
 
