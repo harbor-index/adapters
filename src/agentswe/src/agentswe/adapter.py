@@ -24,7 +24,6 @@ TRUSTED_BROWSER_FILES = ("runtime-dependencies.manifest.json", "fonts.manifest.j
 DEPS_ROOT = "/opt/agentswe-deps"
 
 AUTHORS = ("Jiahao Wang", "Hongjin Qian", "Yuyang Hu", "Jiajun Zhang", "Zheng Liu")
-BUILDER_APT_PACKAGES = "curl"
 EVALUATOR_APT_PACKAGES = "curl strace"
 
 
@@ -198,12 +197,16 @@ class TaskWriter:
         lines[index] += " AS envbuild"
         return "\n".join(lines) + "\n"
 
-    def base_stage(self, packages: str) -> str:
-        """Upstream images/task-base/Dockerfile (Ubuntu digest + apt snapshot), from its FROM line."""
-        text = (self.upstream / "images" / "task-base" / "Dockerfile").read_text(encoding="utf-8")
+    def upstream_stage(self, image: str) -> str:
+        """An upstream images/<image>/Dockerfile from its FROM line (Ubuntu digest, apt snapshot, pins)."""
+        text = (self.upstream / "images" / image / "Dockerfile").read_text(encoding="utf-8")
         lines = text.splitlines()
         index = next(i for i, line in enumerate(lines) if line.startswith("FROM "))
-        body = "\n".join(lines[index:]) + "\n"
+        return "\n".join(lines[index:]) + "\n"
+
+    def base_stage(self, packages: str) -> str:
+        """Upstream task-base (the Candidate image) with the evaluator's extra packages."""
+        body = self.upstream_stage("task-base")
         if "ARG INSTALL_EXTRA=\n" not in body:
             raise RuntimeError("unexpected upstream task-base Dockerfile")
         return body.replace("ARG INSTALL_EXTRA=\n", f'ARG INSTALL_EXTRA="{packages}"\n')
@@ -254,7 +257,8 @@ class TaskWriter:
         documented = sys.modules["runtime_contract"].documented_prefix(public, self.task.env_prefix)
         self.render("environment/Dockerfile", {
             "ENV_BUILDER_STAGE": self.env_builder_stage(),
-            "BASE_STAGE": self.base_stage(BUILDER_APT_PACKAGES),
+            # Upstream Builder trials run FROM builder-codex (Node 24.6.0 + Codex 0.144.1).
+            "BASE_STAGE": self.upstream_stage("builder-codex"),
             "ENV_PREFIX": self.task.env_prefix,
             "ENV_ALIASES": links,
             "DOCUMENTED_PREFIX": documented,
