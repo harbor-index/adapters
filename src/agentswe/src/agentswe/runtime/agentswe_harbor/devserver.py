@@ -3,6 +3,7 @@ from __future__ import annotations
 import contextlib
 import functools
 import json
+import os
 import secrets
 import socketserver
 from pathlib import Path
@@ -24,16 +25,19 @@ class FreezeHandler(socketserver.StreamRequestHandler):
 def main() -> None:
     """Upstream's host-side dev controller (one_stop.DevController) inside the task: dev rounds run upstream's
     run_adapter_phase, which drives the task's own adapter.py; the delivery is frozen when the Builder exits."""
+    # Only AgentSWECodex sends its model traffic through the builder role broker; other agents bring their own.
+    roles = ("runtime", "judge", "builder") if os.environ.get("AGENTSWE_BUILDER_API_KEY") else ("runtime", "judge")
     # Before settings.prepare() points the judge variables at the judge broker.
-    providers = brokers.take_providers("runtime", "judge", "builder")
+    providers = brokers.take_providers(*roles)
     settings.prepare()
     adapter, one_stop = settings.import_upstream()
     log_dir = settings.RUN_DIR / "brokers"
     with contextlib.ExitStack() as stack:
-        builder_token = secrets.token_urlsafe(32)
-        brokers.role_broker(stack, "builder", providers["builder"], builder_token, bind="0.0.0.0",
-                            port=settings.BUILDER_BROKER_PORT, log_dir=log_dir)
-        (CONTROLLER_DIR / "builder-token").write_text(builder_token, encoding="utf-8")
+        if "builder" in providers:
+            builder_token = secrets.token_urlsafe(32)
+            brokers.role_broker(stack, "builder", providers["builder"], builder_token, bind="0.0.0.0",
+                                port=settings.BUILDER_BROKER_PORT, log_dir=log_dir)
+            (CONTROLLER_DIR / "builder-token").write_text(builder_token, encoding="utf-8")
         judge_credential = brokers.evaluation_brokers(stack, providers, log_dir)
         brokers.serve_relays(expose=True)
         trusted_digest = functools.cache(lambda: one_stop.environment_tree_digest(settings.TRUSTED_ENV_PREFIX))
