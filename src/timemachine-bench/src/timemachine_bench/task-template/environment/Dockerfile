@@ -1,0 +1,40 @@
+# TimeMachine-bench task: __REPO_NAME__ @ __COMMIT_HASH__
+#
+# Rebuilds the upstream per-task image (the record's `dockerfile` field):
+# Python 3.12.11, the repository at its benchmark commit with the record's
+# patches applied, and its dependencies resolved by the upstream setup script
+# against a PyPI index frozen at __MIGRATION_DATE__.
+FROM __BASE_IMAGE__
+
+# Upstream resolves dependencies through its date-filtered PyPI index
+# (services/pypi-timemachine, a git submodule). The same server, at the
+# submodule commit upstream pins, runs only while the setup script runs and is
+# removed afterwards.
+RUN git clone -q https://github.com/r-fujii/pypi-timemachine.git /opt/pypi-timemachine/src \
+ && git -C /opt/pypi-timemachine/src checkout -q __PYPI_TIMEMACHINE_COMMIT__ \
+ && python -m venv /opt/pypi-timemachine/venv \
+ && /opt/pypi-timemachine/venv/bin/pip install -q --no-cache-dir --index-url https://pypi.org/simple \
+      -r /opt/pypi-timemachine/src/requirements.txt \
+ && /opt/pypi-timemachine/venv/bin/pip install -q --no-cache-dir --index-url https://pypi.org/simple \
+      --no-deps /opt/pypi-timemachine/src
+
+WORKDIR /work
+
+# The repository at the benchmark commit, without git history
+# (upstream agents/src/setup/init/01_clone_repo.sh).
+RUN git init -q /work \
+ && git -C /work fetch -q --depth 1 __REPO_URL__ __COMMIT_HASH__ \
+ && git -C /work checkout -q FETCH_HEAD \
+ && rm -rf /work/.git
+
+# The record's `patch` (unpinned dependency manifests plus the setup and test
+# scripts) and `test_patch`, applied as upstream 03_apply_patches.sh does.
+COPY timemachine/ /opt/timemachine/
+RUN __APPLY_PATCHES__
+__EXTRA_UPSTREAM_STEPS__
+RUN bash /opt/timemachine/run_setup.sh __SETUP_SCRIPT__ __MIGRATION_DATE__
+
+# Record the starting content of /work so that the agent's edits can be
+# collected for the separate verifier, then remove the build-only files.
+RUN python3 -I /opt/timemachine/collect.py --write-baseline \
+ && rm -rf /opt/pypi-timemachine /opt/timemachine/patches /opt/timemachine/run_setup.sh /root/.cache/pip

@@ -1,0 +1,41 @@
+# Reference config for the TimeMachine-bench adapter.
+#
+#   uv run timemachine-bench --output-dir datasets/timemachine-bench
+#   harbor run -c src/timemachine-bench/run_timemachine-bench.yaml
+#
+# The oracle agent is the default: it applies each record's gold patch and
+# should reach reward 1.0 on all 100 tasks. Every image build clones the task
+# repository from GitHub and resolves its dependencies from PyPI through the
+# date-filtered index, so builds need network access.
+jobs_dir: jobs
+n_attempts: 1
+timeout_multiplier: 1.0
+orchestrator:
+  type: local
+  n_concurrent_trials: 4
+  quiet: false
+environment:
+  type: docker
+  # type: daytona
+  force_build: true
+  delete: true
+  # env:
+  #   OPENAI_API_KEY: ${OPENAI_API_KEY}
+  #   OPENAI_BASE_URL: ${OPENAI_BASE_URL}
+  #   DAYTONA_API_KEY: ${DAYTONA_API_KEY}
+
+# Default: oracle agent for verification
+agents:
+  - name: oracle
+
+# Uncomment to run with other agents:
+# agents:
+#   - name: codex
+#     model_name: openai/gpt-5-mini
+#
+# agents:
+#   - name: claude-code
+#     model_name: anthropic/claude-haiku-4-5
+
+datasets:
+  - path: datasets/timemachine-bench

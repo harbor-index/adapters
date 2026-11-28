@@ -1,0 +1,25 @@
+# Harbor side of the parity experiment: the upstream baseline agent
+# (timemachine-agent) on the 10-task parity subset, 3 attempts per task.
+#
+#   uv run timemachine-bench --split parity --output-dir datasets/timemachine-bench-parity
+#   export OPENAI_API_KEY=...            # and OPENAI_BASE_URL for a compatible endpoint
+#   PYTHONPATH=src/timemachine-bench/src harbor run -c src/timemachine-bench/run_timemachine-bench_parity.yaml
+#
+# The model name after "openai/" is passed unchanged to the upstream agent's
+# ChatOpenAI(model=..., temperature=0), as OPENAI_MODEL_NAME is upstream.
+jobs_dir: jobs
+n_attempts: 3
+timeout_multiplier: 1.0
+orchestrator:
+  type: local
+  n_concurrent_trials: 4
+  quiet: false
+environment:
+  type: docker
+  force_build: true
+  delete: true
+agents:
+  - import_path: timemachine_bench.parity_agent.agent:TimeMachineParityAgent
+    model_name: openai/MODEL_ID_AGREED_WITH_THE_TEAM
+datasets:
+  - path: datasets/timemachine-bench-parity

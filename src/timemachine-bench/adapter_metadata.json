@@ -1,0 +1,46 @@
+[
+  {
+    "adapter_name": "timemachine-bench",
+    "adapter_builders": ["Junhao Liu (junhaoliu2023@gmail.com)"],
+    "original_benchmark": [
+      {
+        "split": "verified",
+        "size": 100,
+        "harness": "agent",
+        "supported_agents": ["timemachine-agent@9928dbf"],
+        "adaptable": true,
+        "notes": "Human-verified subset with gold patches (benchmark/data/v1/timemachine-bench-verified.jsonl at tohoku-nlp/timemachine-bench@9928dbf). The upstream baseline agent is a LangGraph tool-calling loop (agents/src/main/solve_openai.py, solve_bedrock.py); metrics are pass@1 and prec@1."
+      },
+      {
+        "split": "full",
+        "size": 1145,
+        "harness": "agent",
+        "supported_agents": ["timemachine-agent@9928dbf"],
+        "adaptable": false,
+        "notes": "Automatically constructed set; records have no gold_patch, so no oracle solution exists."
+      },
+      {
+        "split": "random",
+        "size": 100,
+        "harness": "agent",
+        "supported_agents": ["timemachine-agent@9928dbf"],
+        "adaptable": false,
+        "notes": "Random sample of the full set; records have no gold_patch, so no oracle solution exists."
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "verified",
+        "adapted_benchmark_size": 100,
+        "parity_benchmark_size": 10,
+        "parity_sampling_rate": 0.1,
+        "registry_benchmark_size": 100,
+        "added_agents": ["timemachine-agent@upstream-9928dbf"],
+        "parity_matching_agents": [],
+        "parity_unmatching_agents": [],
+        "parity_costs": null,
+        "notes": "Parity pending (plan: upstream baseline agent ported as timemachine-agent, 10-task stratified subset via --split parity, 3 runs per side). Reward is upstream pass@1 (test script exit status); prec@1 is reported per trial in verifier/metrics.json."
+      }
+    ]
+  }
+]
