@@ -232,7 +232,11 @@ A run's score is its held-out mean (0–100) on each task; a parity run's score 
 - **Differences from upstream:** per-case Candidate and Eval jobs run sequentially as processes inside the evaluator
   or verifier container instead of in separate containers; Candidates run as an unprivileged user with a scrubbed
   environment, while upstream also restricts their network to the broker. The Builder's model traffic goes through
-  the builder role broker in the sidecar instead of a host-side broker.
+  the builder role broker in the sidecar instead of a host-side broker. The Builder runs as root, as in upstream's
+  Builder task (it may install packages into its private environment); `harbor lint --select ALL` reports this as
+  `root-agent`.
+- **Large environments:** the Builder's environment reaches the verifier as one tarball (`scientific-pdf-translation`
+  is about 3.6 GB), so a trial needs several GB of free Docker disk beyond its images.
 - **Variance:** single builds vary a lot (upstream reports 32.8, 33.3 and 90.5 for the same configuration); report
   means over several runs.
 - **Cost and time:** a formal run is up to 8 h of Builder session plus up to 10 dev evaluations and 6 held-out cases.
