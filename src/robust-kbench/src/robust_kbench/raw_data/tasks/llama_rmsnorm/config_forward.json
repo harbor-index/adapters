@@ -1,0 +1,41 @@
+{
+    "single_input_configs": [
+        {
+            "batch_size": 16,
+            "num_tokens": 1024
+        }
+    ],
+    "single_init_configs": [
+        {
+            "eps": 1e-8
+        }
+    ],
+    "single_shared_configs": [
+        {
+            "num_features": 4096
+        }
+    ],
+    "multi_input_configs": [
+        {
+            "batch_size": 16,
+            "num_tokens": 1024
+        },
+        {
+            "batch_size": 64,
+            "num_tokens": 1024
+        }
+    ],
+    "multi_init_configs": [
+        {
+            "eps": 1e-8
+        }
+    ],
+    "multi_shared_configs": [
+        {
+            "num_features": 2048
+        },
+        {
+            "num_features": 4096
+        }
+    ]
+}

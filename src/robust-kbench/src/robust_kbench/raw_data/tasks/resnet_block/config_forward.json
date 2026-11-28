@@ -1,0 +1,65 @@
+{
+    "single_input_configs": [
+        {
+            "batch_size": 32
+        }
+    ],
+    "single_init_configs": [
+        {
+            "out_channels": 64,
+            "stride": 1,
+            "downsample": false
+        },
+        {
+            "out_channels": 128,
+            "stride": 2,
+            "downsample": true
+        }
+    ],
+    "single_shared_configs": [
+        {
+            "in_channels": 64
+        }
+    ],
+    "multi_input_configs": [
+        {
+            "batch_size": 32
+        },
+        {
+            "batch_size": 16
+        }
+    ],
+    "multi_init_configs": [
+        {
+            "out_channels": 64,
+            "stride": 1,
+            "downsample": false
+        },
+        {
+            "out_channels": 128,
+            "stride": 2,
+            "downsample": true
+        },
+        {
+            "out_channels": 256,
+            "stride": 2,
+            "downsample": true
+        },
+        {
+            "out_channels": 512,
+            "stride": 2,
+            "downsample": true
+        }
+    ],
+    "multi_shared_configs": [
+        {
+            "in_channels": 64
+        },
+        {
+            "in_channels": 128
+        },
+        {
+            "in_channels": 256
+        }
+    ]
+}

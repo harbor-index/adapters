@@ -1,0 +1,57 @@
+{
+    "single_input_configs": [
+        {
+            "batch_size": 8
+        }
+    ],
+    "single_init_configs": [
+        {
+            
+            "out_channels": 64,
+            "stride": 1,
+            "padding": 1,
+            "init_method": "xavier"
+        }  
+    ],
+    "single_shared_configs": [
+        {
+            "in_channels": 64
+        }
+    ],
+    "multi_input_configs": [
+        {
+            "batch_size": 32
+        },
+        {
+            "batch_size": 16
+        }
+    ],
+    "multi_init_configs": [
+        {
+            "out_channels": 128,
+            "init_method": "xavier",
+            "stride": 1,
+            "padding": 1
+        },
+        {
+            "out_channels": 64,
+            "init_method": "xavier",
+            "stride": 2,
+            "padding": 1
+        },
+        {
+            "out_channels": 64,
+            "init_method": "xavier",
+            "stride": 1,
+            "padding": 0
+        }        
+    ],
+    "multi_shared_configs": [
+        {
+            "in_channels": 256
+        },
+        {
+            "in_channels": 128
+        }
+    ]
+}

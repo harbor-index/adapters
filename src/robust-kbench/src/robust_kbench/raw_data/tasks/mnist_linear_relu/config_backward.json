@@ -1,0 +1,44 @@
+{
+    "single_input_configs": [
+        {
+            "batch_size": 64
+        }
+    ],
+    "single_init_configs": [
+        {
+            "num_output_features": 10,
+            "init_method": "kaiming"
+        }  
+    ],
+    "single_shared_configs": [
+        {
+            "num_input_features": 128
+        }
+    ],
+    "multi_input_configs": [
+        {
+            "batch_size": 64
+        },
+        {
+            "batch_size": 4
+        }
+    ],
+    "multi_init_configs": [
+        {
+            "num_output_features": 10,
+            "init_method": "kaiming"
+        },
+        {
+            "num_output_features": 4096,
+            "init_method": "xavier"
+        }
+    ],
+    "multi_shared_configs": [
+        {
+            "num_input_features": 128
+        },
+        {
+            "num_input_features": 4096
+        }
+    ]
+}
