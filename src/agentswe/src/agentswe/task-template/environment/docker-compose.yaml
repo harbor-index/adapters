@@ -1,0 +1,54 @@
+x-agentswe-build-args: &build-args
+  DOCKER_REGISTRY: ${AGENTSWE_DOCKER_REGISTRY:-docker.io}
+  APT_MIRROR: ${AGENTSWE_APT_MIRROR:-}
+  CONDA_FORGE_URL: ${AGENTSWE_CONDA_CHANNEL:-https://conda.anaconda.org/conda-forge}
+  PIP_INDEX_URL: ${AGENTSWE_PIP_INDEX_URL:-https://pypi.org/simple}
+  NODE_DIST_URL: ${AGENTSWE_NODE_DIST_URL:-https://nodejs.org/dist}
+  http_proxy: ${AGENTSWE_BUILD_PROXY:-}
+  https_proxy: ${AGENTSWE_BUILD_PROXY:-}
+
+services:
+  main:
+    platform: linux/amd64
+    build:
+      args: *build-args
+    volumes:
+      - agentswe-submission:/workspace/submission
+      - agentswe-env:{{ENV_PREFIX}}
+      - agentswe-controller:/run/agentswe-controller
+
+  # Upstream's host-side dev controller (one_stop.DevController) and per-case evaluator.
+  # Holds the dev cases, rubric, broker and provider keys; the Builder reaches it only
+  # through submit_dev_candidate on the shared socket.
+  evaluator:
+    platform: linux/amd64
+    build:
+      context: ./evaluator
+      args: *build-args
+    depends_on:
+      - main
+{{EVALUATOR_CAPS}}
+    environment:
+      AGENTSWE_BUILDER_BASE_URL: ${AGENTSWE_BUILDER_BASE_URL:-}
+      AGENTSWE_BUILDER_API_KEY: ${AGENTSWE_BUILDER_API_KEY:-}
+      AGENTSWE_BUILDER_MODEL: ${AGENTSWE_BUILDER_MODEL:-}
+      AGENTSWE_BUILDER_EFFORT: ${AGENTSWE_BUILDER_EFFORT:-xhigh}
+      AGENTSWE_RUNTIME_BASE_URL: ${AGENTSWE_RUNTIME_BASE_URL:-https://api.deepseek.com/v1}
+      AGENTSWE_RUNTIME_API_KEY: ${AGENTSWE_RUNTIME_API_KEY:-}
+      AGENTSWE_RUNTIME_MODEL: ${AGENTSWE_RUNTIME_MODEL:-deepseek-flash}
+      AGENTSWE_RUNTIME_EFFORT: ${AGENTSWE_RUNTIME_EFFORT:-high}
+      AGENTSWE_RUNTIME_MODEL_ALIASES: ${AGENTSWE_RUNTIME_MODEL_ALIASES:-deepseek-flash}
+      AGENTSWE_JUDGE_BASE_URL: ${AGENTSWE_JUDGE_BASE_URL:-https://api.deepseek.com/v1}
+      AGENTSWE_JUDGE_API_KEY: ${AGENTSWE_JUDGE_API_KEY:-}
+      AGENTSWE_JUDGE_MODEL: ${AGENTSWE_JUDGE_MODEL:-deepseek-flash}
+      AGENTSWE_JUDGE_EFFORT: ${AGENTSWE_JUDGE_EFFORT:-max}
+      AGENTSWE_PROTOCOL_MODE: ${AGENTSWE_PROTOCOL_MODE:-formal}
+    volumes:
+      - agentswe-submission:/workspace/submission:ro
+      - agentswe-env:{{ENV_PREFIX}}:ro
+      - agentswe-controller:/run/agentswe-controller
+
+volumes:
+  agentswe-submission:
+  agentswe-env:
+  agentswe-controller:
