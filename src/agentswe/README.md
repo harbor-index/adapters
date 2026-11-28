@@ -205,10 +205,7 @@ python3 -m agentswe status
 
 # Harbor side (same provider variables, plus AGENTSWE_BUILDER_* for the builder role broker)
 cd src/agentswe && uv run agentswe --split parity --output-dir ../../datasets/agentswe-parity && cd ../..
-uv run --project src/agentswe --extra parity harbor run -p datasets/agentswe-parity \
-  --agent agentswe.codex_agent:AgentSWECodex -m gpt-6-luna \
-  --ak version=0.144.1 --ak context_window=272000 \
-  --agent-timeout-multiplier 0.25 -k 3 -n 3 --yes
+uv run --project src/agentswe --extra parity harbor run -c src/agentswe/run_agentswe_parity.yaml --yes
 ```
 
 A run's score is its held-out mean (0–100) on each task; a parity run's score is the mean over the three tasks.
