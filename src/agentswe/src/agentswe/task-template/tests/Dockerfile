@@ -14,7 +14,7 @@ ENV PYTHONPATH=/opt/agentswe-harbor \
     AGENTSWE_TASK_DIR={{TASK_DIR}} \
     AGENTSWE_CREATION_SHARED={{UPSTREAM_ROOT}}/runners/creation \
     AGENTSWE_PROVIDER_BROKER_DIR={{UPSTREAM_ROOT}}/broker \
-    AGENTSWE_CANDIDATE_ENV_PREFIX={{ENV_PREFIX}}
+    AGENTSWE_CANDIDATE_ENV_PREFIX=/var/agentswe/builder-root{{ENV_PREFIX}}
 RUN mkdir -p /var/agentswe /workspace
 # A bundled separate verifier owns /tests: Harbor does not upload tests/ into it.
 COPY test.sh /tests/test.sh

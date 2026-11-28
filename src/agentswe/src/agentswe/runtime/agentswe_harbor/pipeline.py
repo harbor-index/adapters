@@ -97,11 +97,18 @@ def materialize_mounts(volumes: list[dict[str, Any]]) -> list[Path]:
         if not source.exists():
             raise InfrastructureError(f"mount source missing: {source}")
         destination = Path(target)
+        if LINKED_MOUNT_PATTERN.match(target):
+            # Environment prefixes are per-step links; a real tree here would be an environment.
+            if destination.exists() and not destination.is_symlink():
+                raise InfrastructureError(f"refusing to replace environment directory {target}")
+            _remove(destination)
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.symlink_to(source.resolve(), target_is_directory=True)
+            created.append(destination)
+            continue
         _remove(destination)
         destination.parent.mkdir(parents=True, exist_ok=True)
-        if LINKED_MOUNT_PATTERN.match(target):
-            destination.symlink_to(source.resolve(), target_is_directory=True)
-        elif source.is_dir():
+        if source.is_dir():
             shutil.copytree(source, destination, symlinks=True)
         else:
             shutil.copy2(source, destination)

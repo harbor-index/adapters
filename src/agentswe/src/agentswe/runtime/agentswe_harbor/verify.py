@@ -13,6 +13,7 @@ VERIFIER_DIR = Path("/logs/verifier")
 FREEZE_MANIFEST = settings.STATE_DIR / "run" / "freeze_manifest.json"
 # The Builder's private environment, archived in the Builder container by a collect hook.
 ENVIRONMENT_ARCHIVE = Path("/var/agentswe-env/environment.tar")
+BUILDER_ROOT = settings.STATE_DIR / "builder-root"
 
 
 def hidden_cases() -> list[str]:
@@ -44,7 +45,9 @@ def main() -> int:
     if not ENVIRONMENT_ARCHIVE.is_file():
         print(f"Builder environment archive missing: {ENVIRONMENT_ARCHIVE}", file=sys.stderr)
         return 1
-    subprocess.run(["tar", "-C", "/", "-xf", str(ENVIRONMENT_ARCHIVE)], check=True)
+    # Unpacked under its own root: the upstream prefix path is a per-step link (see pipeline).
+    BUILDER_ROOT.mkdir(parents=True, exist_ok=True)
+    subprocess.run(["tar", "-C", str(BUILDER_ROOT), "-xf", str(ENVIRONMENT_ARCHIVE)], check=True)
     # Upstream one_stop.py: the Candidate environment must be the one recorded at freeze time.
     one_stop = importlib.import_module("one_stop")
     expected_environment = freeze.get("environment_digest")

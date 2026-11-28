@@ -47,9 +47,11 @@ services:
       AGENTSWE_JUDGE_MODEL: ${AGENTSWE_JUDGE_MODEL:-deepseek-flash}
       AGENTSWE_JUDGE_EFFORT: ${AGENTSWE_JUDGE_EFFORT:-max}
       AGENTSWE_PROTOCOL_MODE: ${AGENTSWE_PROTOCOL_MODE:-formal}
+    # The Builder's environment lives at its own path; each per-case job step points the upstream
+    # prefix path at it (Candidate) or at the trusted runtime (verifiers, Result judge).
     volumes:
       - agentswe-submission:/workspace/submission:ro
-      - agentswe-env:{{ENV_PREFIX}}:ro
+      - agentswe-env:/var/agentswe/builder-env:ro
       - agentswe-controller:/run/agentswe-controller
 
 volumes:

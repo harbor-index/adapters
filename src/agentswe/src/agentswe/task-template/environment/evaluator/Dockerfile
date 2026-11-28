@@ -13,7 +13,7 @@ ENV PYTHONPATH=/opt/agentswe-harbor \
     AGENTSWE_TASK_DIR={{TASK_DIR}} \
     AGENTSWE_CREATION_SHARED={{UPSTREAM_ROOT}}/runners/creation \
     AGENTSWE_PROVIDER_BROKER_DIR={{UPSTREAM_ROOT}}/broker \
-    AGENTSWE_CANDIDATE_ENV_PREFIX={{ENV_PREFIX}}
+    AGENTSWE_CANDIDATE_ENV_PREFIX=/var/agentswe/builder-env
 RUN mkdir -p /var/agentswe /workspace
 WORKDIR /var/agentswe
 CMD ["python3", "-m", "agentswe_harbor.devserver"]
