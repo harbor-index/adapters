@@ -4,7 +4,7 @@
     "agent": "agentswe-codex@0.144.1",
     "model": "gpt-6-luna",
     "date": "2026-11-28",
-    "adapted_benchmark_size": 3,
+    "adapted_benchmark_size": 4,
     "parity_benchmark_size": 3,
     "number_of_runs": 0,
     "notes": "Planned, not yet run. Both sides: Codex 0.144.1 with the AgentSWE-Lite catalog, builder gpt-6-luna, runtime and judge deepseek-v4.1-flash (lite-v1.1 efforts), same machine. Original side: upstream AgentSWE 6643c739 `agentswe run <task> --builder codex`. Metric: held-out mean score (0-100) per run, averaged over the parity tasks.",

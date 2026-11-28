@@ -14,10 +14,11 @@ judge (0–100 per case; a run's score is the mean over its held-out cases).
 - **Upstream size:** 25 tasks in three families: Creation (10), Editing (10) and Optimization (5). AgentSWE-Lite is an
   8-task subset (Creation `repo`, `db`, `pdf`; Editing `deeptutor`, `aider`, `openwiki`; Optimization `tau3`,
   `pinch`).
-- **This adapter:** one Harbor task per AgentSWE task. The current release adapts the Creation family tasks whose
-  per-case evaluation needs a single container: `repository-bug-repair` (`repo`), `database-analytics` (`db`) and
-  `scientific-pdf-translation` (`pdf`), i.e. all Creation tasks of AgentSWE-Lite. The remaining tasks are listed in
-  [Notes & Caveats](#notes--caveats) with the reason for each exclusion.
+- **This adapter:** one Harbor task per AgentSWE task. The current release adapts four Creation tasks whose
+  per-case evaluation needs a single container: the three Creation tasks of AgentSWE-Lite, `repository-bug-repair`
+  (`repo`), `database-analytics` (`db`) and `scientific-pdf-translation` (`pdf`), plus
+  `evidence-grounded-document-qa` (`qa`). The remaining tasks are listed in [Notes & Caveats](#notes--caveats) with
+  the reason for each exclusion.
 - **Main adaptation:** upstream runs every task through Harbor but orchestrates it from a host-side controller that
   starts up to 23 Harbor jobs per task. Here that controller runs inside the task as an `evaluator` sidecar and as a
   separate verifier, so a task is one Harbor trial. Prompts, cases, rubrics, harnesses and scoring scripts are the
@@ -84,6 +85,7 @@ agentswe/
 │       ├── docker-compose.yaml
 │       └── test.sh                    # python3 -m agentswe_harbor.verify
 ├── database-analytics/
+├── evidence-grounded-document-qa/
 └── scientific-pdf-translation/
 ```
 
@@ -207,9 +209,11 @@ uv run --project src/agentswe --extra parity harbor run -p datasets/agentswe/rep
     task container does not have.
   - *Optimization (5 tasks):* each runs an upstream benchmark harness (τ³, PinchBench, BrowseComp, OSWorld,
     Terminal-Bench) in its own multi-container topology; to follow.
-  - *Creation tasks with multi-service per-case jobs:* `desktop-gui-automation` (GUI control plane and model relay),
-    `document-to-editable-pptx` and `web-research-report` (search front, LibreOffice), `authorized-vulnerability-
-    validation` (`NET_ADMIN` sandbox), and the remaining single-container Creation tasks until they are verified.
+  - *Other Creation tasks:* `desktop-gui-automation` (GUI control plane and model relay services),
+    `web-research-report` (search front and a second environment), `authorized-vulnerability-validation` (`NET_ADMIN`
+    sandbox), `document-to-editable-pptx` (LibreOffice bundle and host-fetched assets), `formal-theorem-proving`
+    (Lean release fetched on the host by upstream setup) and `schema-guided-web-extraction` (Playwright browsers
+    fetched at build time; generated and lint-clean, not yet verified).
 - **Differences from upstream:** per-case Candidate and Eval jobs run sequentially as processes inside the evaluator
   or verifier container instead of in separate containers; Candidates run as an unprivileged user with a scrubbed
   environment, while upstream also restricts their network to the broker. The Builder's model traffic goes through

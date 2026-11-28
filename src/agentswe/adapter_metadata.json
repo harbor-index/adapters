@@ -29,10 +29,10 @@
     "harbor_adapter": [
       {
         "split": "full",
-        "adapted_benchmark_size": 3,
+        "adapted_benchmark_size": 4,
         "parity_benchmark_size": 3,
-        "parity_sampling_rate": 1.0,
-        "registry_benchmark_size": 3,
+        "parity_sampling_rate": 0.75,
+        "registry_benchmark_size": 4,
         "added_agents": [
           "agentswe-codex@0.144.1"
         ],
@@ -41,7 +41,7 @@
           "None"
         ],
         "parity_costs": "$0",
-        "notes": "Work in progress. Adapted: the Creation tasks of AgentSWE-Lite (repository-bug-repair, database-analytics, scientific-pdf-translation). Editing, Optimization and multi-service Creation tasks are excluded for now (see README). Parity has not been run yet; parity_costs counts provider spend only (free gateway keys so far)."
+        "notes": "Work in progress. Adapted: the Creation tasks of AgentSWE-Lite (repository-bug-repair, database-analytics, scientific-pdf-translation) and evidence-grounded-document-qa; the parity subset is the three Lite tasks. Editing, Optimization and the other Creation tasks are excluded for now (see README). Parity has not been run yet; parity_costs counts provider spend only (free gateway keys so far)."
       }
     ]
   }
