@@ -1,0 +1,49 @@
+schema_version = "1.0"
+
+# The answer is graded in a separate verifier container, where Harbor restores
+# this artifact at the same path.
+artifacts = ["/workspace/answer.json"]
+
+[task]
+name = "{task_name}"
+description = "{description}"
+authors = [
+    { name = "Guanxin Lin" },
+    { name = "Chen Yang" },
+    { name = "Shenxiang Zeng" },
+    { name = "Honghui Zhu" },
+    { name = "Xin Li" },
+    { name = "Wenbo Deng" },
+    { name = "Jiansheng Fan" },
+    { name = "Chen Wang", email = "chwang@tsinghua.edu.cn" },
+]
+keywords = ["cavebench", "vision", "physical-reasoning", "abductive-reasoning", "{domain_tag}", "{scene_tag}", "k{k}"]
+
+[metadata]
+difficulty = "hard"
+category = "visual-reasoning"
+tags = ["vision", "physical-reasoning", "{domain_tag}", "{scene_tag}", "k{k}"]
+upstream_id = "{upstream_id}"
+paper_scene = "{paper_scene}"
+scene_title = "{title}"
+domain = "{domain}"
+sample_id = "{sample_id}"
+k = {k}
+source_commit = "{source_commit}"
+hf_revision = "{hf_revision}"
+
+[agent]
+# Upstream allows up to 300 s for the primary request plus 60 s for the
+# answer-completion request; CLI agents get headroom to inspect the frames.
+timeout_sec = 900.0
+
+[verifier]
+timeout_sec = 120.0
+environment_mode = "separate"
+
+[environment]
+# The build downloads one pinned test-frame archive (5-44 MB) from Hugging Face.
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 4096

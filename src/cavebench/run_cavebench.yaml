@@ -1,0 +1,18 @@
+# Oracle run over the full CaveBench test split (1,180 tasks).
+#   uv run --project src/cavebench cavebench --output-dir datasets/cavebench
+#   harbor run -c src/cavebench/run_cavebench.yaml
+jobs_dir: jobs
+n_attempts: 1
+timeout_multiplier: 1.0
+orchestrator:
+  type: local
+  n_concurrent_trials: 4
+  quiet: false
+environment:
+  type: docker
+  force_build: true
+  delete: true
+agents:
+  - name: oracle
+datasets:
+  - path: datasets/cavebench
