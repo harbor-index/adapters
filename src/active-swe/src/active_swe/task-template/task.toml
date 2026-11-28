@@ -1,0 +1,45 @@
+schema_version = "1.0"
+
+# The agent's predicted patch (the prompt's output contract). With a separate
+# verifier this is the only thing carried from the agent's container into the
+# fresh grading container, as in upstream's two-container gen/eval design.
+artifacts = ["/testbed/.active-swe-tmp/solution.patch"]
+
+[task]
+name = "xlearning-scu/active-swe__{task_id}"
+description = "Active-SWE Recorded track: find and fix the recorded bug(s) in the files pending review, with no issue report."
+authors = [
+    { name = "Haobin Li" },
+    { name = "Ping Deng" },
+    { name = "Weizhong Qian" },
+    { name = "Liang Jiang" },
+    { name = "Zhenyu Huang" },
+    { name = "Mouxing Yang" },
+    { name = "Xi Peng" },
+]
+keywords = ["active-swe", "debugging", "proactive-bug-fixing", "{language_tag}", "{set}"]
+
+[metadata]
+difficulty = "{difficulty}"
+category = "debugging"
+upstream_instance_id = "{instance_id}"
+repo = "{repo}"
+language = "{language}"
+test_framework = "{test_framework}"
+bug_categories = {major_category}
+
+[verifier]
+# Upstream grades in a fresh container from the same image with no network.
+environment_mode = "separate"
+network_mode = "no-network"
+timeout_sec = {verifier_timeout}
+
+[agent]
+timeout_sec = {agent_timeout}
+
+[environment]
+build_timeout_sec = 3600.0
+cpus = 4
+memory_mb = 8192
+storage_mb = 20480
+gpus = 0

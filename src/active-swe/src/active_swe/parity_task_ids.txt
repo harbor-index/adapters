@@ -1,0 +1,12 @@
+hard-django__django-18975
+hard-matplotlib__matplotlib-26952
+hard-open-policy-agent__gatekeeper__1950
+simple-andreasfertig__cppinsights__409
+simple-asciidoctor__asciidoctor-pdf__2481
+simple-graphhopper__graphhopper__2921
+simple-jqlang__jq-2919
+simple-laravel__framework__36902
+simple-moment__luxon__889
+simple-tobymao__sqlglot__899
+simple-trpc__trpc__1006
+simple-uutils__coreutils__3053

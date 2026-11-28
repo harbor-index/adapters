@@ -1,0 +1,4 @@
+services:
+  harbor-docker-egress-control-sidecar:
+    sysctls:
+      net.ipv6.conf.lo.disable_ipv6: "0"
