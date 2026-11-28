@@ -183,7 +183,7 @@ class TaskWriter:
             "AUTHORS": authors,
             "COMMIT": UPSTREAM_COMMIT,
             "PROFILE": self.profile,
-            "ENV_PREFIX": self.task.env_prefix,
+            "ENV_PREFIX_RELATIVE": self.task.env_prefix.lstrip("/"),
             "BUILDER_TIMEOUT": f"{float(protocol['builder_session_sec'])}",
             "VERIFIER_TIMEOUT": f"{float(verifier_timeout)}",
             "MAX_DEV_ROUNDS": str(one_stop.MAX_DEV_ROUNDS),

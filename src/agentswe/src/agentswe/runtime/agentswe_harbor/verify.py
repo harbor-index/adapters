@@ -3,6 +3,7 @@ from __future__ import annotations
 import importlib
 import json
 import os
+import subprocess
 import sys
 from pathlib import Path
 
@@ -10,6 +11,8 @@ from . import settings
 
 VERIFIER_DIR = Path("/logs/verifier")
 FREEZE_MANIFEST = settings.STATE_DIR / "run" / "freeze_manifest.json"
+# The Builder's private environment, archived in the Builder container by a collect hook.
+ENVIRONMENT_ARCHIVE = Path("/var/agentswe-env/environment.tar")
 
 
 def hidden_cases() -> list[str]:
@@ -38,6 +41,10 @@ def main() -> int:
     if adapter.tree_digest(candidate) != freeze["digest"]:
         print("frozen submission digest changed between freeze and verification", file=sys.stderr)
         return 1
+    if not ENVIRONMENT_ARCHIVE.is_file():
+        print(f"Builder environment archive missing: {ENVIRONMENT_ARCHIVE}", file=sys.stderr)
+        return 1
+    subprocess.run(["tar", "-C", "/", "-xf", str(ENVIRONMENT_ARCHIVE)], check=True)
     # Upstream one_stop.py: the Candidate environment must be the one recorded at freeze time.
     one_stop = importlib.import_module("one_stop")
     expected_environment = freeze.get("environment_digest")

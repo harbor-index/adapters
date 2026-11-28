@@ -1,7 +1,7 @@
 version = "1.0"
 artifacts = [
   { source = "/workspace/submission" },
-  { source = "{{ENV_PREFIX}}" },
+  { source = "/var/agentswe-env/environment.tar" },
   { source = "/var/agentswe/run", service = "evaluator" },
 ]
 
@@ -44,6 +44,13 @@ AGENTSWE_JUDGE_API_KEY = "${AGENTSWE_JUDGE_API_KEY}"
 AGENTSWE_JUDGE_MODEL = "${AGENTSWE_JUDGE_MODEL:-deepseek-flash}"
 AGENTSWE_JUDGE_EFFORT = "${AGENTSWE_JUDGE_EFFORT:-max}"
 AGENTSWE_PROTOCOL_MODE = "${AGENTSWE_PROTOCOL_MODE:-formal}"
+
+# The Builder's private environment travels as one tarball: artifact uploads rewrite symlink
+# targets, which upstream's environment digest would treat as a change.
+[[verifier.collect]]
+service = "main"
+command = "tar -C / -cf /var/agentswe-env/environment.tar {{ENV_PREFIX_RELATIVE}}"
+timeout_sec = 1800.0
 
 # Upstream one_stop.py freezes the delivery after the Builder exits; sidecar hooks run after main stops.
 [[verifier.collect]]
