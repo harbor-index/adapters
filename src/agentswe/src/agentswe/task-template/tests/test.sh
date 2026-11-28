@@ -1,17 +1,6 @@
 #!/bin/bash
-
-# This script should exit with code 0 if tests pass, non-zero otherwise
-
-echo "Running tests..."
-
-# TODO: Add your test commands here
-# Example:
-# python -m pytest tests/ -rA
-# ./run_tests.py
-
-# Generate reward based on previous test command result
-if [ $? -eq 0 ]; then
-  echo 1 > /logs/verifier/reward.txt
-else
-  echo 0 > /logs/verifier/reward.txt
-fi
+# Held-out evaluation of the frozen delivery with upstream's Candidate and Eval jobs.
+# Writes /logs/verifier/reward.txt (hidden mean / 100); an infrastructure failure exits
+# non-zero without a reward instead of recording a zero.
+set -euo pipefail
+exec python3 -m agentswe_harbor.verify
