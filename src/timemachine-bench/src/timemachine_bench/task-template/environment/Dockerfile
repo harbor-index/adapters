@@ -3,8 +3,10 @@
 # Rebuilds the upstream per-task image (the record's `dockerfile` field):
 # Python 3.12.11, the repository at its benchmark commit with the record's
 # patches applied, and its dependencies resolved by the upstream setup script
-# against a PyPI index frozen at __MIGRATION_DATE__.
-FROM __BASE_IMAGE__
+# against a PyPI index frozen at __MIGRATION_DATE__. Upstream resolved its
+# environments on x86_64, and some records resolve to different wheels on
+# other architectures, so the image is built for linux/amd64.
+FROM --platform=linux/amd64 __BASE_IMAGE__
 
 # Upstream resolves dependencies through its date-filtered PyPI index
 # (services/pypi-timemachine, a git submodule). The same server, at the
@@ -34,7 +36,10 @@ RUN __APPLY_PATCHES__
 __EXTRA_UPSTREAM_STEPS__
 RUN bash /opt/timemachine/run_setup.sh __SETUP_SCRIPT__ __MIGRATION_DATE__
 
-# Record the starting content of /work so that the agent's edits can be
-# collected for the separate verifier, then remove the build-only files.
-RUN python3 -I /opt/timemachine/collect.py --write-baseline \
+# Record whether the resolved packages equal the record's dependency_versions
+# (reported in verifier/metrics.json) and the starting content of /work, so
+# that the agent's edits can be collected for the separate verifier; then
+# remove the build-only files.
+RUN python3 -I /opt/timemachine/env_check.py \
+ && python3 -I /opt/timemachine/collect.py --write-baseline \
  && rm -rf /opt/pypi-timemachine /opt/timemachine/patches /opt/timemachine/run_setup.sh /root/.cache/pip

@@ -65,6 +65,8 @@ def test_all_records_generate(records, generated):
             "environment/Dockerfile",
             "environment/timemachine/patches/patch.diff",
             "environment/timemachine/collect.py",
+            "environment/timemachine/env_check.py",
+            "environment/timemachine/dependency_versions.txt",
             "environment/timemachine/run_setup.sh",
             "solution/solve.sh",
             "solution/gold.patch",
@@ -83,6 +85,7 @@ def test_all_records_generate(records, generated):
         assert config["verifier"]["environment_mode"] == "separate"
         dockerfile = (task_dir / "environment" / "Dockerfile").read_text()
         assert not re.search(r"__[A-Z_]+__", dockerfile), "unrendered placeholder"
+        assert "FROM --platform=linux/amd64 mirror.gcr.io/python:3.12.11@sha256:" in dockerfile
         # nothing the agent could read reveals the reference solution
         assert not (task_dir / "environment" / "gold.patch").exists()
         assert "gold" not in dockerfile.lower()
@@ -229,3 +232,19 @@ def test_prec_matches_upstream_definition(tmp_path):
 def test_generated_tasks_contain_no_bytecode(generated):
     assert not list(generated.rglob("__pycache__"))
     assert not list(generated.rglob("*.pyc"))
+
+
+def test_env_check_normalization():
+    env_check = _load_module(
+        TEMPLATE_DIR / "environment" / "timemachine" / "env_check.py", "tmb_env_check"
+    )
+    recorded = [
+        "PyYAML==6.0.2",
+        "# Editable install with no version control (k8s-snapshots==0.1.0)",
+        "-e /work",
+        "choix @ file:///work",
+        "typing_extensions==4.14.1",
+    ]
+    frozen = ["pyyaml==6.0.2", "typing-extensions==4.14.1", "-e /work"]
+    assert env_check.requirements(recorded) == env_check.requirements(frozen)
+    assert env_check.requirements(["numpy==2.3.2"]) != env_check.requirements(["numpy==1.26.4"])

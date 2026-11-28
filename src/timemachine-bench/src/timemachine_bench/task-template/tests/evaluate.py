@@ -36,6 +36,9 @@ WORK = Path("/work")
 TESTS = Path("/tests")
 SUBMISSION = Path("/logs/artifacts/timemachine")
 VERIFIER = Path("/logs/verifier")
+# Written at image build by /opt/timemachine/env_check.py; the verifier runs in
+# a fresh container of the image, so this is the build's own result.
+ENV_CHECK = Path("/opt/timemachine/env_check.json")
 
 # Upstream agents/src/main/solve_*.py: CONTAINER_TIMEOUT_SEC = 600.
 TEST_TIMEOUT_SEC = 600
@@ -252,6 +255,7 @@ def main() -> int:
         "discarded_files": discarded,
         "deleted_files_ignored": summary.get("deleted", []),
         "new_files_ignored": summary.get("new", []),
+        "environment": json.loads(ENV_CHECK.read_text()) if ENV_CHECK.is_file() else None,
     }
     (VERIFIER / "metrics.json").write_text(json.dumps(details, indent=2))
     print(

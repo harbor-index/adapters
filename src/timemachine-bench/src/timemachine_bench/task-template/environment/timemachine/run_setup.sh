@@ -30,8 +30,15 @@ if [ "${ready}" -ne 1 ]; then
 fi
 
 cd /work
+# The index server streams every file from PyPI, and project pages with many
+# files (e.g. grpcio) can take longer than pip's 15 s default to filter. A
+# timed-out page makes pip backtrack to other versions instead of failing, so
+# the network limits are raised; they do not change how pip resolves.
 PIP_INDEX_URL="http://localhost:5000/snapshot/${date}" \
 PIP_TRUSTED_HOST=localhost \
+PIP_DEFAULT_TIMEOUT=300 \
+PIP_RETRIES=10 \
+POETRY_REQUESTS_TIMEOUT=300 \
   bash "/work/${script}"
 status=$?
 

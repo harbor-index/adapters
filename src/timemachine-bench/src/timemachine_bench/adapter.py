@@ -259,6 +259,7 @@ class TimeMachineBenchAdapter:
         patches_dir = env_dir / "timemachine" / "patches"
         patches_dir.mkdir(parents=True)
         (patches_dir / "patch.diff").write_text(raw["patch"])
+        (env_dir / "timemachine" / "dependency_versions.txt").write_text(raw["dependency_versions"])
         apply = "patch -p0 -t -E -d /work < /opt/timemachine/patches/patch.diff"
         if raw["test_patch"].strip():
             (patches_dir / "test_patch.diff").write_text(raw["test_patch"])
