@@ -1,0 +1,8 @@
+{
+  "total": 1040,
+  "passed": 1040,
+  "errors": [],
+  "raw_results_sha256": "beb0715f5478b85ddd0422f9bb6b5539da3778a08f3c2a1511211c1cb30ab2c0",
+  "scope": "All generated reference answers evaluated with the untouched upstream parser and evaluator in the verifier image. This is not the full Harbor end-to-end run.",
+  "planner_version": "1.6.0"
+}

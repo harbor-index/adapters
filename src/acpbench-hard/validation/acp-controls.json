@@ -1,0 +1,170 @@
+[
+  {
+    "category": "app",
+    "task": "acpbench-hard-app-1044594258043400716",
+    "case": "reference",
+    "reward": 1.0,
+    "expected": 1.0
+  },
+  {
+    "category": "app",
+    "task": "acpbench-hard-app-1044594258043400716",
+    "case": "wrong",
+    "reward": 0.0,
+    "expected": 0.0
+  },
+  {
+    "category": "app",
+    "task": "acpbench-hard-app-1044594258043400716",
+    "case": "empty",
+    "reward": 0.0,
+    "expected": 0.0
+  },
+  {
+    "category": "areach",
+    "task": "acpbench-hard-areach-1146593782563714949",
+    "case": "reference",
+    "reward": 1.0,
+    "expected": 1.0
+  },
+  {
+    "category": "areach",
+    "task": "acpbench-hard-areach-1146593782563714949",
+    "case": "wrong",
+    "reward": 0.0,
+    "expected": 0.0
+  },
+  {
+    "category": "areach",
+    "task": "acpbench-hard-areach-1146593782563714949",
+    "case": "empty",
+    "reward": 0.0,
+    "expected": 0.0
+  },
+  {
+    "category": "just",
+    "task": "acpbench-hard-just-1034046769448917270",
+    "case": "reference",
+    "reward": 1.0,
+    "expected": 1.0
+  },
+  {
+    "category": "just",
+    "task": "acpbench-hard-just-1034046769448917270",
+    "case": "wrong",
+    "reward": 0.0,
+    "expected": 0.0
+  },
+  {
+    "category": "just",
+    "task": "acpbench-hard-just-1034046769448917270",
+    "case": "empty",
+    "reward": 0.0,
+    "expected": 0.0
+  },
+  {
+    "category": "land",
+    "task": "acpbench-hard-land-1004416112542762044",
+    "case": "reference",
+    "reward": 1.0,
+    "expected": 1.0
+  },
+  {
+    "category": "land",
+    "task": "acpbench-hard-land-1004416112542762044",
+    "case": "wrong",
+    "reward": 0.0,
+    "expected": 0.0
+  },
+  {
+    "category": "land",
+    "task": "acpbench-hard-land-1004416112542762044",
+    "case": "empty",
+    "reward": 0.0,
+    "expected": 0.0
+  },
+  {
+    "category": "nexta",
+    "task": "acpbench-hard-nexta-1289815508863566791",
+    "case": "reference",
+    "reward": 1.0,
+    "expected": 1.0
+  },
+  {
+    "category": "nexta",
+    "task": "acpbench-hard-nexta-1289815508863566791",
+    "case": "wrong",
+    "reward": 0.0,
+    "expected": 0.0
+  },
+  {
+    "category": "nexta",
+    "task": "acpbench-hard-nexta-1289815508863566791",
+    "case": "empty",
+    "reward": 0.0,
+    "expected": 0.0
+  },
+  {
+    "category": "prog",
+    "task": "acpbench-hard-prog-1131373886503585195",
+    "case": "reference",
+    "reward": 1.0,
+    "expected": 1.0
+  },
+  {
+    "category": "prog",
+    "task": "acpbench-hard-prog-1131373886503585195",
+    "case": "wrong",
+    "reward": 0.0,
+    "expected": 0.0
+  },
+  {
+    "category": "prog",
+    "task": "acpbench-hard-prog-1131373886503585195",
+    "case": "empty",
+    "reward": 0.0,
+    "expected": 0.0
+  },
+  {
+    "category": "reach",
+    "task": "acpbench-hard-reach-1311402517631283414",
+    "case": "reference",
+    "reward": 1.0,
+    "expected": 1.0
+  },
+  {
+    "category": "reach",
+    "task": "acpbench-hard-reach-1311402517631283414",
+    "case": "wrong",
+    "reward": 0.0,
+    "expected": 0.0
+  },
+  {
+    "category": "reach",
+    "task": "acpbench-hard-reach-1311402517631283414",
+    "case": "empty",
+    "reward": 0.0,
+    "expected": 0.0
+  },
+  {
+    "category": "val",
+    "task": "acpbench-hard-val-1118142788780448311",
+    "case": "reference",
+    "reward": 1.0,
+    "expected": 1.0
+  },
+  {
+    "category": "val",
+    "task": "acpbench-hard-val-1118142788780448311",
+    "case": "wrong",
+    "reward": 0.0,
+    "expected": 0.0
+  },
+  {
+    "category": "val",
+    "task": "acpbench-hard-val-1118142788780448311",
+    "case": "empty",
+    "reward": 0.0,
+    "expected": 0.0
+  }
+]

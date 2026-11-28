@@ -1,0 +1,10 @@
+{
+  "tasks": 1040,
+  "prompt_matches": 1040,
+  "record_matches": 1040,
+  "method": "Independent original-side prepare.py reads upstream YAML and test data, without importing the Harbor adapter; full byte comparison of prompts and JSON equality of evaluator inputs.",
+  "original_scorer_reference_passes": 1040,
+  "original_scorer_missing_answer_zeroes": 1040,
+  "original_scorer_sha256": "d385d2df929c8a5ce318350c6050f9ad5133cb5e1ea907cc346a8342152431c7",
+  "scoring_notes": "Standalone original-side CLI imports the pinned upstream source directly. No model calls; this is not agent parity."
+}
