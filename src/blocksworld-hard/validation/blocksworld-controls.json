@@ -1,0 +1,27 @@
+[
+  {
+    "case": "empty",
+    "reward": 0.0,
+    "expected": 0.0
+  },
+  {
+    "case": "unknown_action",
+    "reward": 0.0,
+    "expected": 0.0
+  },
+  {
+    "case": "inapplicable_action",
+    "reward": 0.0,
+    "expected": 0.0
+  },
+  {
+    "case": "valid_prefix_without_goal",
+    "reward": 0.0,
+    "expected": 0.0
+  },
+  {
+    "case": "reference",
+    "reward": 1.0,
+    "expected": 1.0
+  }
+]
