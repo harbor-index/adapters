@@ -1,0 +1,20 @@
+#!/usr/bin/env python3
+"""Docker CLI override for the Firebase IPv6 loopback reproduction on Linux."""
+import os
+import sys
+from pathlib import Path
+
+args = sys.argv[1:]
+if args[:1] == ["run"] and any(
+    args[i:i + 2] == ["--network", "none"] for i in range(len(args))
+):
+    args[1:1] = ["--sysctl", "net.ipv6.conf.lo.disable_ipv6=0"]
+elif args[:1] == ["compose"] and any(
+    Path(arg).name == "docker-compose-egress-control.yaml" for arg in args
+):
+    compose_files = [i for i, arg in enumerate(args[:-1]) if arg == "-f"]
+    insert_at = compose_files[-1] + 2
+    override = Path(__file__).resolve().with_name("loopback.yaml")
+    args[insert_at:insert_at] = ["-f", str(override)]
+
+os.execv("/usr/bin/docker", ["docker", *args])

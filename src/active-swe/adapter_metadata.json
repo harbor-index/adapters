@@ -1,0 +1,34 @@
+[
+  {
+    "adapter_name": "active-swe",
+    "adapter_builders": [
+      "HarperLi680"
+    ],
+    "original_benchmark": [
+      {
+        "split": "main",
+        "size": 400,
+        "harness": "agent",
+        "supported_agents": [
+          "Claude Code"
+        ],
+        "adaptable": true,
+        "notes": "Recorded track"
+      }
+    ],
+    "harbor_adapter": [
+      {
+        "split": "full",
+        "adapted_benchmark_size": 400,
+        "parity_benchmark_size": 12,
+        "parity_sampling_rate": 0.03,
+        "registry_benchmark_size": null,
+        "added_agents": [],
+        "parity_matching_agents": null,
+        "parity_unmatching_agents": null,
+        "parity_costs": null,
+        "notes": "Proposed parity sample. Runs and registry publication pending."
+      }
+    ]
+  }
+]

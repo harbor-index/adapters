@@ -1,0 +1,39 @@
+{
+  "simple-django__django-14372": {
+    "A FileField with unique=True shouldn't allow two instances with the": "test_unique_when_same_filename",
+    "Calling delete on an unset FileField should not call the file deletion": "test_delete_when_file_unset",
+    "FieldField.open() returns self so it can be used as a context manager.": "test_open_returns_self",
+    "FileField.model returns the concrete model for fields defined in an": "test_abstract_filefield_model",
+    "FileField.save_form_data() considers None to mean \"no change\" rather": "test_unchanged",
+    "FileField.save_form_data() will clear its instance attribute value if": "test_clearable",
+    "FileField.save_form_data(), if passed a truthy value, updates its": "test_changed",
+    "Simulate a FileField with an S3 storage which uses keys rather than": "test_filefield_awss3_storage",
+    "The temporary uploaded file is moved rather than copied to the": "test_move_temporary_file"
+  },
+  "simple-django__django-15315": {
+    "A defined field name (name=\"fieldname\") is used instead of the model": "test_field_name",
+    "A translated display value is coerced to str.": "test_get_FIELD_display_translated",
+    "Field instances can be pickled.": "test_field_instance_is_picklable",
+    "Field instances from abstract models are not equal.": "test_abstract_inherited_fields",
+    "Field.formfield() sets disabled for fields with choices.": "test_formfield_disabled",
+    "Fields are ordered based on their creation.": "test_field_ordering",
+    "Fields with choices respect show_hidden_initial as a kwarg to": "test_show_hidden_initial",
+    "__repr__() of a field displays its name.": "test_field_repr",
+    "get_choices() works with Iterators.": "test_iterator_choices",
+    "get_choices() works with empty iterators.": "test_empty_iterator_choices"
+  },
+  "simple-django__django-18001": {
+    "#8149 - File objects with": "test_file_iteration_windows_newlines",
+    "ContentFile can accept both bytes and strings and the retrieved content": "test_content_file_input_type",
+    "ContentFile.size changes after a write().": "test_size_changing_after_writing",
+    "File objects should yield lines when iterated over.": "test_file_iteration",
+    "Open files passed into get_image_dimensions() should stay opened.": "test_not_closing_of_files",
+    "Regression test for #19457": "test_bug_19457",
+    "The constructor of ContentFile accepts 'name' (#16590).": "test_content_file_custom_name",
+    "The symbol django.core.files.NamedTemporaryFile is assigned as": "test_namedtemporaryfile_closes",
+    "The temporary file name has the same suffix as the original file.": "test_extension_kept",
+    "file_move_safe() ignores PermissionError thrown by copystat() and": "test_file_move_permissionerror",
+    "get_image_dimensions() called with a filename should closed the file.": "test_closing_of_filenames",
+    "get_image_dimensions() should catch struct.error while feeding the PIL": "test_valid_image"
+  }
+}
