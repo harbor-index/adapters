@@ -14,11 +14,10 @@ judge (0–100 per case; a run's score is the mean over its held-out cases).
 - **Upstream size:** 25 tasks in three families: Creation (10), Editing (10) and Optimization (5). AgentSWE-Lite is an
   8-task subset (Creation `repo`, `db`, `pdf`; Editing `deeptutor`, `aider`, `openwiki`; Optimization `tau3`,
   `pinch`).
-- **This adapter:** one Harbor task per AgentSWE task. The current release adapts four Creation tasks whose
-  per-case evaluation needs a single container: the three Creation tasks of AgentSWE-Lite, `repository-bug-repair`
-  (`repo`), `database-analytics` (`db`) and `scientific-pdf-translation` (`pdf`), plus
-  `evidence-grounded-document-qa` (`qa`). The remaining tasks are listed in [Notes & Caveats](#notes--caveats) with
-  the reason for each exclusion.
+- **This adapter:** one Harbor task per AgentSWE task. This release adapts four Creation tasks: the three Creation
+  tasks of AgentSWE-Lite, `repository-bug-repair` (`repo`), `database-analytics` (`db`) and
+  `scientific-pdf-translation` (`pdf`), plus `evidence-grounded-document-qa` (`qa`). [Task coverage](#task-coverage)
+  lists all 25 tasks with what upstream's evaluation of each one requires.
 - **Main adaptation:** upstream runs every task through Harbor, orchestrated by a host-side controller that starts up
   to 23 Harbor jobs per task. Here that controller runs inside the task, unchanged: upstream's `one_stop.py` and each
   task's own `adapter.py` drive the dev rounds in an `evaluator` sidecar and the held-out evaluation in a separate
@@ -37,6 +36,21 @@ validation). Creation tasks start from an empty workspace; Editing tasks extend 
 tasks improve an agent's score on an existing benchmark.
 
 ## Adapter Features
+
+```mermaid
+flowchart LR
+    subgraph trial["One Harbor trial"]
+        B["main: Builder<br/>(AgentSWECodex or any Harbor agent)"]
+        E["evaluator: upstream DevController,<br/>broker stack, per-case jobs"]
+        W["evaluator-worker:<br/>second per-case job slot"]
+        V["separate verifier: upstream<br/>run_adapter_phase on held-out cases"]
+        B -- "submit_dev_candidate" --> E
+        E -- "dev feedback" --> B
+        E <-- "two cases at a time" --> W
+        B -- "collect hooks: freeze" --> V
+    end
+    V --> R["reward = held-out mean / 100"]
+```
 
 - **Pinned upstream, generated tasks:** `agentswe` clones AgentSWE at the pinned commit (or uses `--upstream-dir`) and
   copies each task's upstream files into the generated task; the configuration profile (`lite-v1.1` by default) is
@@ -232,17 +246,27 @@ A run's score is its held-out mean (0–100) on each task; a parity run's score 
 - **Oracle:** upstream ships no reference agents for Creation tasks, so no delivery is known to reach reward 1.0.
   `solution/solve.sh` delivers a valid null agent; the oracle run checks that the pipeline (freeze, Candidate job,
   deterministic gates, Result judge) runs without exceptions and scores it 0.
-- **Excluded for now:**
-  - *Editing (10 tasks):* upstream runs them as system-scope systemd units with cgroup v2 delegation on the host and
-    sends the lower agent and judge only to the official DeepSeek API; this needs host-level privileges that a Harbor
-    task container does not have.
-  - *Optimization (5 tasks):* each runs an upstream benchmark harness (τ³, PinchBench, BrowseComp, OSWorld,
-    Terminal-Bench) in its own multi-container topology; to follow.
-  - *Other Creation tasks:* `desktop-gui-automation` (GUI control plane and model relay services),
-    `web-research-report` (search front and a second environment), `authorized-vulnerability-validation` (`NET_ADMIN`
-    sandbox), `document-to-editable-pptx` (LibreOffice bundle and host-fetched assets), `formal-theorem-proving`
-    (Lean release fetched on the host by upstream setup) and `schema-guided-web-extraction` (Playwright browsers
-    fetched at build time; generated and lint-clean, not yet verified).
+- <a id="task-coverage"></a>**Task coverage:** the remaining tasks are planned for this adapter. Each row gives what
+  upstream's own evaluation of the task requires (`task.json` at the pinned commit).
+
+  | Family | Task (short name) | Lite | Status | Upstream requirements beyond this release |
+  |---|---|---|---|---|
+  | Creation | `repository-bug-repair` (`repo`) | ✓ | adapted, parity | — |
+  | Creation | `database-analytics` (`db`) | ✓ | adapted, parity | — |
+  | Creation | `scientific-pdf-translation` (`pdf`) | ✓ | adapted, parity | — |
+  | Creation | `evidence-grounded-document-qa` (`qa`) | | adapted | — |
+  | Creation | `schema-guided-web-extraction` (`schema`) | | planned | Playwright browsers fetched at build time |
+  | Creation | `formal-theorem-proving` (`formal`) | | planned | Lean release fetched by upstream setup |
+  | Creation | `desktop-gui-automation` (`gui`) | | planned | GUI control plane and model relay services per case |
+  | Creation | `web-research-report` (`web`) | | planned | search service (Serper-compatible key) |
+  | Creation | `document-to-editable-pptx` (`pptx`) | | planned | search service; LibreOffice renderer image |
+  | Creation | `authorized-vulnerability-validation` (`security`) | | planned | `NET_ADMIN` network sandbox per case |
+  | Editing | `deeptutor`, `aider`, `openwiki` | ✓ | planned | cgroup v2 with systemd delegation (`systemd-run`, `bwrap`) for the edited agent; official DeepSeek API for its model and the judge |
+  | Editing | `ai-scientist`, `claude`, `codex`, `deepcode`, `dyad`, `openclaw`, `openhands` | | planned | as above; `codex` needs about 120 GB of disk |
+  | Optimization | `tau3`, `pinch` | ✓ | planned | upstream benchmark runtimes (τ³, PinchBench) per case |
+  | Optimization | `browsecomp` | | planned | search service and public web access |
+  | Optimization | `osworld` | | planned | KVM, about 160 GB of disk |
+  | Optimization | `tbench` | | planned | about 150 GB of disk, nested task containers |
 - **Differences from upstream:**
   - Per-case jobs run as processes in the evaluator containers instead of each in a container of its own. The
     Candidate step runs as an unprivileged user, and each step sees only the mounts its compose file declares.
