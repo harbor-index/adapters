@@ -2,27 +2,19 @@
 
 ## Overview
 
-This adapter converts all **333 tasks** in [waynchi/GameDevBench](https://github.com/waynchi/gamedevbench) at [upstream revision 54589a4](https://github.com/waynchi/gamedevbench/tree/54589a477d6c1a15255707a861db6b01126797aa). The count comes from 333 starter ZIPs in `tasks/`, each matched to a reference ZIP in `tasks_gt/`. No tasks are excluded. This is Wayne Chi's Godot benchmark, distinct from GameCraft and similarly named projects.
-
-Tasks cover 2D and 3D graphics, animation, user interfaces, and gameplay logic, using Godot scenes, GDScript, shaders, and visual assets. The upstream repository is Apache-2.0 licensed; retain attribution included with task assets. Conversion preserves the official task prompts and formal verifier bytes.
-
-Development status: all 333 tasks are generated and source-audited. The final AP/Docker Harbor oracle passed **333/333**, with zero execution errors, complete unique task coverage, unchanged formal verifier hashes, strict confinement and Godot 4.4.1 on every task. This uses the verified SG shared runtime; the equivalent public recipe independently passed a source-build oracle trial. The initial 325/333 adapter baseline and all failed attempts remain preserved. On the fixed 30-task parity sample, the original runner and Harbor each passed 69 of 90 scored trials with Codex and GPT-6.1 Sol. Registry publication is pending.
+This adapter converts all **333 tasks** in Wayne Chi and colleagues’ GameDevBench into Harbor tasks. Each task pairs a starter Godot project from `tasks/` with a reference project from `tasks_gt/`. The Harbor oracle passed **333/333**. On a fixed 30-task sample, the upstream runner and Harbor both averaged **76.67% pass@1**. [Original repository](https://github.com/waynchi/gamedevbench) · [Adapted revision](https://github.com/waynchi/gamedevbench/tree/54589a477d6c1a15255707a861db6b01126797aa)
 
 ## What is GameDevBench?
 
-[GameDevBench](https://waynechi.com/gamedevbench) evaluates agents that edit existing Godot projects to satisfy natural-language requirements derived from tutorials. Each formal task has an executable Godot test. A task receives binary success from the official validator; aggregate performance is the fraction passed. The [paper](https://arxiv.org/abs/2602.11103) describes the benchmark and multimodal feedback settings.
+An agent edits an existing Godot game to satisfy a natural-language request derived from a tutorial. Tasks cover 2D and 3D graphics, animation, user interfaces and gameplay logic. The submitted work can include scenes, GDScript, shaders and visual assets. An executable Godot test grades the resulting project. Each task earns 0 or 1, and the benchmark score is the fraction of tasks passed. [Project and leaderboard](https://waynechi.com/gamedevbench/) · [Paper](https://arxiv.org/abs/2602.11103)
 
 ## Adapter Features
 
-- Verifies an embedded manifest of 666 original task ZIPs and upstream runtime files. Git LFS assets must be materialized.
-- Reproduces official solver-file filtering and `create_task_prompt`. MCP and runtime-video prompt flags default to false and are recorded.
-- Uses Godot **4.4.1**, pinned official Python harness code, and strict Bubblewrap confinement for import and validation.
-- Places formal `tasks/` tests in a separate verifier container. Only `/workspace` transfers from the agent. The agent image contains neither private tests nor reference solutions.
-- Uses filtered `tasks_gt/` project files only for Harbor's oracle agent, excluding upstream tests.
-- Applies an explicit, hash-checked reference-only compatibility profile; `--oracle-profile original` reproduces unmodified GT payloads.
-- Records task identity, package and verifier hashes, compatibility actions, outer security state, and official validation results. Identity or hash mismatches fail verification.
-- Provides a public Docker recipe, verified by an actual source-build oracle trial, and optional `--runtime-image` for a shared runtime. Internal SG images are deployment assets, not public prerequisites.
-- Uses Harbor’s built-in Codex agent for parity with the upstream Codex runner.
+| Harbor component | GameDevBench source and behavior |
+| --- | --- |
+| Agent workspace | The adapter generates the prompt with upstream `create_task_prompt` and applies the upstream file filter to the starter project. The agent edits the project in `/workspace`. |
+| Verifier | Harbor transfers the finished workspace to a separate container. The verifier checks the formal test files against their upstream hashes, imports the project with Godot 4.4.1 and invokes the upstream validator under strict Bubblewrap confinement. |
+| Oracle | Harbor installs the reference project from `tasks_gt/` into the workspace. It is graded with the same formal tests from `tasks/` used for agent submissions. Four reference projects have documented adjustments. |
 
 ## Generated Task Structure
 
@@ -34,81 +26,63 @@ datasets/gamedevbench/
     ├── task.toml
     ├── instruction.md
     ├── source_manifest.json
-    ├── environment/
-    │   ├── Dockerfile
-    │   ├── docker-compose.yaml
-    │   ├── runtime/                  # Public build only
-    │   └── project-task_0002/        # Filtered starter project
-    ├── solution/
-    │   ├── solve.sh
-    │   └── project/                  # Filtered reference project
-    └── tests/
-        ├── Dockerfile
-        ├── docker-compose.yaml
-        ├── test.sh
-        ├── verify.py
-        └── payload-task_0002/
-            ├── binding.json
-            ├── original_task_config.json
-            └── official/            # Original test.gd, UID and test.tscn
+    ├── environment/project-task_0002/       # Agent’s starter project
+    ├── environment/Dockerfile
+    ├── solution/solve.sh
+    ├── solution/project/                    # Oracle reference project
+    ├── tests/test.sh
+    ├── tests/Dockerfile
+    └── tests/payload-task_0002/official/    # Upstream formal tests
 ```
 
-The standalone adapter at `src/gamedevbench/` contains `pyproject.toml`, `uv.lock`, documentation, metadata, and `src/gamedevbench/{adapter.py,main.py,upstream_manifest.json,task-template/}`. Stable task names are `gamedevbench/gamedevbench-task-XXXX`. Dependencies and harness code are shared; starter, verifier, and reference payloads are task-specific.
+The dataset manifest records the upstream revision and task list. Each task’s source manifest records the starter and reference archive hashes, formal test hashes and compatibility settings.
 
-## Run Evaluation / Harness
+## Installation / Prerequisites
 
-Install the pinned Harbor checkout separately. From the adapters repository root, after generating tasks:
-
-    harbor run -p datasets/gamedevbench -a oracle -n 2 --max-retries 0
-
-The reference job configuration is [run_gamedevbench.yaml](run_gamedevbench.yaml):
-
-    harbor run -c src/gamedevbench/run_gamedevbench.yaml
-
-Resume with the saved configuration:
-
-    harbor job resume -p jobs/JOB_DIRECTORY
-
-Oracle needs no model API. The current agent and verifier configurations use `network_mode = "no-network"`. The parity configuration connects Codex to the model through a host-side relay. The dataset is not registered yet; use local paths.
+Task generation requires Python 3.11+, uv, Git LFS and the pinned upstream checkout with its task archives materialized. For evaluation, use Linux x86-64, Python 3.12+, Docker with Compose v2 and Buildx, and a host that allows nested Bubblewrap namespaces. The public Dockerfile installs Godot 4.4.1 and the upstream runtime dependencies. The recorded evaluations used Harbor 0.23.0. [Harbor revision](https://github.com/harbor-framework/harbor/tree/99218a4611e3bd76e49ce3b5f977e8c8134ad3ac)
 
 ## Usage: Create Task Directories
 
-Obtain the pinned upstream revision and materialize its Git LFS task ZIPs. Preserve the original ZIPs and source files. From `src/gamedevbench` in the adapters repository:
+Run these commands from the **adapters repository root**. Replace `/path/to/gamedevbench` with the pinned upstream checkout. For all 333 tasks:
 
-    uv sync --frozen
-    uv run gamedevbench --source-dir /path/to/pinned/gamedevbench --output-dir ../../datasets/gamedevbench
+    uv run --frozen --project src/gamedevbench gamedevbench --source-dir /path/to/gamedevbench --output-dir datasets/gamedevbench
 
-For a diagnostic subset:
+For the same 30 tasks used in the parity experiment:
 
-    uv run gamedevbench --source-dir /path/to/pinned/gamedevbench --output-dir ../../datasets/gamedevbench-smoke --task-ids task_0002 task_0051 task_0052 task_0059 task_0069 task_0082 task_0089 task_0104
+    uv run --frozen --project src/gamedevbench gamedevbench --source-dir /path/to/gamedevbench --split parity --output-dir datasets/gamedevbench-parity
 
-| Flag | Purpose |
-| --- | --- |
-| `--output-dir` | Destination; defaults to `datasets/gamedevbench` in the adapters repository |
-| `--source-dir` | Required upstream snapshot matching the embedded manifest |
-| `--limit` | First N selected tasks; N must be positive |
-| `--task-ids` | Explicit upstream IDs, such as `task_0002` |
-| `--split` | `full` generates all 333 tasks by default. `parity` selects the fixed 30 tasks and takes no `--limit` or `--task-ids`. |
-| `--overwrite` | Regenerate existing output belonging to this adapter and revision |
-| `--runtime-image` | Existing shared runtime; pin and record its digest for deployment |
-| `--workers` | Local packaging threads; defaults to 4; no model calls |
-| `--oracle-profile` | `formal-verifier-v1` (default) applies declared oracle-only adjustments; `original` preserves the filtered original GT |
-| `--use-mcp` | Upstream MCP-enabled prompt setting; requires matching agent-side tools |
-| `--use-runtime-video` | Upstream runtime-video prompt setting; requires matching tools on both sides |
+Use `--task-ids task_0002` for a single task, or `--limit N` for the first N tasks. The public Docker recipe is the default. Use `--runtime-image` to supply a prebuilt shared runtime. See `gamedevbench --help` for the full CLI.
 
-The adapter does not download or silently update upstream data. Conversion uses the standard library; `uv_build` is its build dependency.
+## Run Evaluation / Harness
+
+From the adapters repository root, run the oracle on the generated tasks:
+
+    harbor run -p datasets/gamedevbench -a oracle -n 2 --max-retries 0
+
+The oracle runs offline. Harbor allows 600 seconds for the agent and 1,320 seconds for verification, which includes project import and testing. Each environment requests two CPUs and 4 GiB of memory. Use the local dataset path while registry publication is pending. [Example job configuration](run_gamedevbench.yaml) · [Dataset registration PR](https://github.com/harbor-framework/harbor-datasets/pull/319)
+
+### Oracle validation
+
+| Docker runtime | Tasks passed | Execution errors |
+| --- | ---: | ---: |
+| Prebuilt shared runtime, full dataset | 333/333 | 0 |
+| Public Dockerfile, single-task build and oracle check | 1/1 | 0 |
+
+All 333 full-run trials earned reward 1 with the original formal test hashes. [Terminal screenshot](docs/oracle-terminal-screenshot.png) · [Run summary](docs/oracle-summary.json) · [Captured output](docs/oracle-terminal.txt)
 
 ## Comparison with Original Benchmark (Parity)
 
-Both runners used Codex 0.171.0 with GPT-6.1 Sol (xhigh), Godot 4.4.1 and a 600-second agent timeout on Docker with ModelRouter. The sample was fixed before inference. It covers three display tasks and 27 headless tasks, including 12 variants. The manifest records the task IDs and selection rules. [Parity manifest](src/gamedevbench/tasks.parity30.yaml)
+Both runners used Codex 0.171.0, model ID `gpt-6.1-sol`, xhigh reasoning effort and a 600-second agent timeout. The experiment ran on Docker with ModelRouter. Harbor used its built-in Codex agent and the original benchmark used its upstream Codex runner.
 
 | Agent | Model | Metric | Number of Runs | Dataset Size | Original Performance | Harbor Performance |
 | --- | --- | --- | --- | --- | --- | --- |
-| Codex 0.171.0 | GPT-6.1 Sol (xhigh) | pass@1 (mean ± sample SEM) | 3 per runner | 30/333 | 76.67% ± 5.09 pp | 76.67% ± 0.00 pp |
+| Codex 0.171.0 | GPT-6.1 Sol (xhigh) | pass@1, mean ± sample SEM | 3 per runner | 30/333 (9.01%) | 76.67% ± 5.09 pp | 76.67% ± 0.00 pp |
 
-The original runner passed 25, 24 and 20 tasks in successive runs. Harbor passed 23 tasks in each run. Both runners passed 69 of 90 scored trials. The full Harbor oracle passed 333/333 tasks. [Parity experiment](parity_experiment.json) · [Scores and trajectories](https://huggingface.co/datasets/TianshiXu/gamedevbench-parity-experiments/tree/d1e2329f2b0464cd61891b05706465c53f35dd12/adapters/gamedevbench)
+The original runner passed **25, 24 and 20** tasks in successive runs. Harbor passed **23, 23 and 23**. Both runners passed 69 of 90 scored trials. SEM is calculated across the three run percentages and reported in percentage points. [Experiment metadata](parity_experiment.json) · [Per-task results](https://huggingface.co/datasets/TianshiXu/gamedevbench-parity-experiments/blob/d1e2329f2b0464cd61891b05706465c53f35dd12/adapters/gamedevbench/paired_tasks.csv)
 
-To reproduce, follow the setup instructions in the evidence directory to prepare the tasks and start the provider gateway. From that directory, run the paired commands below for round 1. Repeat with round numbers 2 and 3 and a distinct Harbor job name each time. [Setup and reproduction instructions](https://huggingface.co/datasets/TianshiXu/gamedevbench-parity-experiments/blob/d1e2329f2b0464cd61891b05706465c53f35dd12/adapters/gamedevbench/README.md)
+**Sample selection.** The sample was fixed before inference. It includes both tasks that needed display settings on Linux, one task that already required a display upstream, 12 headless variants and 15 other headless tasks. Within each group, selection used a hash of the pinned revision and task ID, taking at most one task per variant lineage and three per known source repository. The packaged manifest lists all 30 IDs and the selection rules. [Parity manifest](src/gamedevbench/tasks.parity30.yaml)
+
+**Reproduction.** Follow the linked instructions to prepare the 30 projects and start the provider gateway. From the evidence directory, start one command per runner in separate terminals. After both finish, repeat for rounds 2 and 3 with the matching round number and job name. [Setup, configuration and trajectories](https://huggingface.co/datasets/TianshiXu/gamedevbench-parity-experiments/blob/d1e2329f2b0464cd61891b05706465c53f35dd12/adapters/gamedevbench/README.md)
 
 ```bash
 bash reproduce/run-original.sh 1
@@ -117,37 +91,23 @@ harbor run -c config.yaml --job-name parity-run1 --max-retries 0
 
 ## Notes & Caveats
 
-- **Oracle evidence:** see the [terminal screenshot](docs/oracle-terminal-screenshot.png), [captured stdout](docs/oracle-terminal.txt), and [result summary](docs/oracle-summary.json). The screenshot displays saved output from the completed 333/333 run.
-- **Upstream reference fixes:** the five oracle-file changes for 0082, 0089, 0107 and 0112 are proposed in [waynchi/gamedevbench#16](https://github.com/waynchi/gamedevbench/pull/16). The PR is open and maintainer acceptance is pending. This adapter keeps the original pinned source and applies the same changes through its hash-checked oracle overlay. The three GT self-check script updates in that PR are not used here: Harbor always runs the unchanged formal `tasks/` tests.
-- **Formal tests versus GT tests:** upstream has 11 differing `test.gd` files and 34 differing `test.tscn` files between `tasks/` and `tasks_gt/`. Formal `tasks/` bytes are retained. Resolve any resulting reference or specification issues with recorded evidence rather than substituting GT tests.
-- **Declared Linux compatibility:** task 0051 adds a missing `scenes/Main.tscn` alias to `main.tscn`; task 0052 adds `scenes/player.tscn` to `Player.tscn`; tasks 0030 and 0059 default to display-enabled validation. Aliases apply only when absent and the canonical target exists. Original ZIPs, original project files, and verifier bytes stay intact. Each action is recorded.
-- **Resolved execution issues:** initial Docker trials had private-file mismatches and Bubblewrap `pivot_root` denial. Unique task context paths and the declared verifier permissions resolved these; the full baseline had no identity/hash/orchestration errors.
-- **Oracle-only adjustments:** the formal-verifier-v1 profile changes reference payloads for 0082, 0089, 0107 and 0112. For 0082 it retains all fifteen walk atlas regions and appends two existing frames to each cyclic run timeline to meet the original seventeen-frame check. For 0089 it retains the combined Label and adds the legacy statistic Labels demanded by the unchanged verifier. The 0082/0089 adjustments passed actual strict Harbor validation. The 0107 adjustment removes a premature automatic shader swap so the callable method receives original base materials; 0112 moves the wall frame to the Background rectangle border. All four adjusted references passed actual strict Harbor oracle checks with unchanged verifier hashes. The original task/specification discrepancies remain disclosed. No task prompt, starter project, or formal test changes; original ZIPs and failed baseline records are preserved.
-- **Cold build evidence:** a later six-task public-build job exhausted its 1200-second setup budget on every task before grading (6/6 execution errors). Logs show slow dependency downloads and installation. Public generation now allows 3600 seconds for builds; solver and verifier execution budgets are unchanged. AP full-oracle validation uses the previously verified SG shared runtime to remove repeated cold-download variability. The public recipe independently passed a source-build oracle trial.
-- **Reference packaging correction:** the initial adapter incorrectly reused the solver blacklist for oracle data and removed legitimate `test_cube.tres`/`test_sphere.tres` resources in 0024, 0025 and 0122. Oracle packaging now retains these original GT resources and excludes actual grader files by exact basename. Agent filtering stays exactly upstream. The 325/333 baseline is preserved as adaptation evidence; these three failures are adapter errors, not upstream GT defects.
-- **Isolation:** the separate verifier requests `SYS_ADMIN` and `NET_ADMIN` for official nested namespaces. Its current Docker diagnostic profile also uses unconfined AppArmor and Seccomp. Strict inner validation has no credentials or network. These permissions remain unverified on Daytona; Compose configuration does not establish provider support.
-- **Budgets:** agent 600 seconds, matching upstream; verifier 1320 seconds for two official 600-second stages plus overhead. Each environment requests 2 CPUs and 4 GiB. Cold public image builds have a separate 3600-second setup budget; prebuilt-runtime mode keeps 1200 seconds.
-- **Storage:** original ZIPs and generated projects occupy several GiB. The large `task_0021` starter is an LFS object; a pointer is invalid input.
-- **Optional prompts:** MCP/runtime-video flags preserve upstream prompt settings only. Their complete tools and behavior are not parity-validated yet.
-- Registry publication and campaign acceptance of the Docker/ModelRouter results are pending. [Dataset PR #319](https://github.com/harbor-framework/harbor-datasets/pull/319) · [Parity PR #323](https://huggingface.co/datasets/harborframework/parity-experiments/discussions/323) · [Per-task results](https://huggingface.co/datasets/TianshiXu/gamedevbench-parity-experiments/blob/d1e2329f2b0464cd61891b05706465c53f35dd12/adapters/gamedevbench/paired_tasks.csv)
+| Affected tasks | Compatibility change |
+| --- | --- |
+| 0030, 0059 | Enable a display during validation. |
+| 0051, 0052 | On case-sensitive Linux filesystems, supply a missing scene-name alias: `Main.tscn` resolves to `main.tscn` in 0051, and `player.tscn` resolves to `Player.tscn` in 0052. |
+| 0082 | The oracle retains the 15 walk atlas regions and repeats two existing frames on each cyclic run timeline to meet the formal 17-frame check. |
+| 0089 | The oracle retains the combined statistics label and adds the individual labels checked by the formal test. |
+| 0107 | The oracle defers the shader swap until the tested method is called with the original base materials. |
+| 0112 | The oracle places the wall frame on the border of the Background rectangle. |
 
-## Installation / Prerequisites
+The last four changes apply only to the reference projects. Select `--oracle-profile original` to generate the filtered references without those changes. All profiles use the upstream formal tests. [Upstream reference PR](https://github.com/waynchi/gamedevbench/pull/16)
 
-Use Python 3.11+ and uv for the adapter, Python 3.12+ for Harbor, and Docker with Compose v2 and Buildx. Allocate disk for projects and image layers. The host must support strict Bubblewrap namespaces inside the verifier.
-
-    cd src/gamedevbench
-    uv sync --frozen
-
-Install the pinned Harbor checkout in a separate environment. The public task Dockerfile installs Godot 4.4.1, upstream locked Python dependencies, Bubblewrap, Mesa, Xvfb, ffmpeg, and Node.js. Private SG access is needed only when explicitly selecting internal prebuilt images.
+The separate verifier uses `SYS_ADMIN`, `NET_ADMIN` and unconfined AppArmor and seccomp profiles for the upstream sandbox. A six-task public build previously timed out before grading with a 1,200-second setup budget. The public build allowance is now 3,600 seconds. Daytona support and campaign acceptance of the Docker/ModelRouter runs are pending. [Parity evidence PR](https://huggingface.co/datasets/harborframework/parity-experiments/discussions/323)
 
 ## Troubleshooting
 
-- **Source checksum mismatch:** verify the upstream revision and LFS materialization. Do not change expected hashes to accept unreviewed input.
-- **Private task or verifier hash mismatch:** retain trial evidence and inspect build contexts and actual image identities. Keep the identity and hash guards enabled.
-- **`pivot_root` or `/proc` permission error:** inspect recorded kernel, capabilities, Seccomp, and AppArmor state. Confirm the provider applies verifier permissions. An agent-only test does not exercise nested validation.
-- **Missing reward:** inspect Harbor exceptions and verifier logs. Normal validation writes reward 0 or 1.
-- **Display errors:** check Godot 4.4.1 and Xvfb. Display corrections for tasks 0030/0059 are explicit and recorded.
-- **Dataset not found in registry:** use generated local paths until publication.
+- **Task archive checksum mismatch.** Check the upstream revision and run `git lfs pull` in that checkout. A Git LFS pointer in place of the ZIP will fail the manifest check.
+- **Verifier fails at `pivot_root` or mounting `/proc`.** Check whether the host applies the verifier’s Compose permissions and supports nested namespaces. The verifier records the exception and validation details in `/logs/verifier/official_result.json`.
 
 ## Citation
 
@@ -165,4 +125,4 @@ Install the pinned Harbor checkout in a separate environment. The public task Do
 
 ## Authors & Contributions
 
-Original benchmark: Wayne Chi and the GameDevBench authors above. Adapter development: xts (`tianshixu@stu.pku.edu.cn`). Generated metadata credits all eleven original authors. Contribution follows the [Harbor-Index workflow](https://www.harbor-index.org/contribute) and [agent guide](https://www.harbor-index.org/tutorial/agent-guide), with contract snapshot `harbor-index/adapters@7b4df9deb2381ae32f26e6cebec06aaa2975dc56`.
+Wayne Chi and colleagues created GameDevBench and released the benchmark under Apache-2.0. Individual task assets retain their upstream attribution. Tianshi Xu (`tianshixu@stu.pku.edu.cn`) contributed the Harbor adapter. [Original benchmark](https://github.com/waynchi/gamedevbench) · [Adapter metadata](adapter_metadata.json)
