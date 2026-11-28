@@ -6,7 +6,9 @@
 #   PYTHONPATH=src/timemachine-bench/src harbor run -c src/timemachine-bench/run_timemachine-bench_parity.yaml
 #
 # The model name after "openai/" is passed unchanged to the upstream agent's
-# ChatOpenAI(model=..., temperature=0), as OPENAI_MODEL_NAME is upstream.
+# ChatOpenAI(model=..., temperature=0), as OPENAI_MODEL_NAME is upstream. With
+# the pinned langchain-openai, gpt-5* (non-chat) models ignore temperature=0
+# and run at the API default (1); this applies to both parity sides.
 jobs_dir: jobs
 n_attempts: 3
 timeout_multiplier: 1.0
@@ -20,6 +22,6 @@ environment:
   delete: true
 agents:
   - import_path: timemachine_bench.parity_agent.agent:TimeMachineParityAgent
-    model_name: openai/MODEL_ID_AGREED_WITH_THE_TEAM
+    model_name: openai/gpt-5-mini
 datasets:
   - path: datasets/timemachine-bench-parity

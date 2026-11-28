@@ -2,14 +2,16 @@
   {
     "adapter_name": "timemachine-bench",
     "agent": "timemachine-agent@upstream-9928dbf",
-    "model": "TBD (to be agreed with the Harbor team)",
+    "model": "gpt-5-mini",
     "date": null,
     "adapted_benchmark_size": 100,
     "parity_benchmark_size": 10,
     "number_of_runs": 3,
-    "notes": "Planned, not yet run. Upstream baseline agent (agents/src/main/solve_openai.py at tohoku-nlp/timemachine-bench@9928dbf) on both sides: unmodified upstream harness on the original side, the same code as timemachine-agent on the Harbor side. 10-task stratified subset (--split parity).",
+    "notes": "Planned, not yet run. Upstream baseline agent (agents/src/main/solve_openai.py at tohoku-nlp/timemachine-bench@9928dbf) on both sides: unmodified upstream harness on the original side, the same code as timemachine-agent on the Harbor side. Model gpt-5-mini through an OpenAI-compatible endpoint (Azure AI Foundry); the pinned langchain-openai drops temperature=0 for gpt-5 models, so both sides sample at the API default. 10-task stratified subset (--split parity), linux/amd64 on both sides.",
     "original_parity_repo": "https://github.com/yyy1000/timemachine-bench/tree/harbor-parity",
-    "adapter_pr": ["https://github.com/harbor-index/adapters/pull/58"],
+    "adapter_pr": [
+      "https://github.com/harbor-index/adapters/pull/58"
+    ],
     "dataset_pr": [],
     "parity_pr": [],
     "metrics": [
