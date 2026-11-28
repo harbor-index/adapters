@@ -1,6 +1,4 @@
-{{ENV_BUILDER_STAGE}}
-COPY env-spec /tmp/agentswe-env-spec
-RUN agentswe-build-env /tmp/agentswe-env-spec {{ENV_PREFIX}}
+{{ENV_BUILD_STAGES}}
 
 {{BASE_STAGE}}
 # Builder: run-private writable copy of the task environment (upstream one_stop.prepare_private_environment).

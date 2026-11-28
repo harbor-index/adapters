@@ -19,7 +19,12 @@ UPSTREAM_ROOT = "/opt/agentswe-upstream"
 # Creation tasks whose upstream per-case jobs use only the `main` service.
 # Tasks with extra per-case services (GUI control plane, search front, LibreOffice,
 # NET_ADMIN sandboxes) are documented exclusions.
-SUPPORTED_TASKS = ("repository-bug-repair", "database-analytics", "scientific-pdf-translation")
+SUPPORTED_TASKS = (
+    "repository-bug-repair",
+    "database-analytics",
+    "scientific-pdf-translation",
+    "evidence-grounded-document-qa",
+)
 TRUSTED_BROWSER_FILES = ("runtime-dependencies.manifest.json", "fonts.manifest.json", "assemble.py")
 DEPS_ROOT = "/opt/agentswe-deps"
 
@@ -189,13 +194,31 @@ class TaskWriter:
             "MAX_DEV_ROUNDS": str(one_stop.MAX_DEV_ROUNDS),
         }
 
-    def env_builder_stage(self) -> str:
-        """Upstream images/env-builder/Dockerfile, verbatim, as the first build stage."""
-        text = (self.upstream / "images" / "env-builder" / "Dockerfile").read_text(encoding="utf-8")
-        lines = text.splitlines()
-        index = next(i for i, line in enumerate(lines) if line.startswith("FROM "))
-        lines[index] += " AS envbuild"
-        return "\n".join(lines) + "\n"
+    def env_build_stages(self) -> str:
+        """Upstream's environment build: images/env-builder/Dockerfile plus the build stage of
+        images/env-builder/env.Dockerfile, which runs agentswe-build-env on the task's env spec."""
+        spec = json.loads((self.task.root / "env" / "env.json").read_text(encoding="utf-8"))
+        if spec.get("downloads"):
+            raise RuntimeError(f"{self.task.task_id}: env.json downloads (host-fetched assets) are not supported")
+        if self.task.env_prefix != f"/opt/agentswe/benchmark/envs/{self.task.env_name}":
+            raise RuntimeError(f"{self.task.task_id}: env mount {self.task.env_prefix} is not the env.Dockerfile path")
+        images = self.upstream / "images" / "env-builder"
+        builder = (images / "Dockerfile").read_text(encoding="utf-8").splitlines()
+        index = next(i for i, line in enumerate(builder) if line.startswith("FROM "))
+        builder[index] += " AS envbuilder"
+        env_lines = (images / "env.Dockerfile").read_text(encoding="utf-8").splitlines()
+        start = next(i for i, line in enumerate(env_lines) if line.startswith("FROM "))
+        end = next(i for i, line in enumerate(env_lines) if line.startswith("FROM scratch"))
+        stage = "\n".join(env_lines[start:end])
+        for old, new in (
+            ("FROM ${ENV_BUILDER} AS build", "FROM envbuilder AS envbuild"),
+            ("ARG ENV_NAME\n", f"ARG ENV_NAME={self.task.env_name}\n"),
+            ("COPY --from=spec . /spec", "COPY env-spec /spec"),
+        ):
+            if old not in stage:
+                raise RuntimeError(f"unexpected upstream env.Dockerfile: {old!r} not found")
+            stage = stage.replace(old, new, 1)
+        return "\n".join(builder) + "\n\n" + stage + "\n"
 
     def upstream_stage(self, image: str) -> str:
         """An upstream images/<image>/Dockerfile from its FROM line (Ubuntu digest, apt snapshot, pins)."""
@@ -258,7 +281,7 @@ class TaskWriter:
         ) or "true"
         documented = sys.modules["runtime_contract"].documented_prefix(public, self.task.env_prefix)
         self.render("environment/Dockerfile", {
-            "ENV_BUILDER_STAGE": self.env_builder_stage(),
+            "ENV_BUILD_STAGES": self.env_build_stages(),
             # Upstream Builder trials run FROM builder-codex (Node 24.6.0 + Codex 0.144.1).
             "BASE_STAGE": self.upstream_stage("builder-codex"),
             "ENV_PREFIX": self.task.env_prefix,
@@ -295,7 +318,7 @@ class TaskWriter:
         self.copy_env_spec(context)
         extra_stages, extra_final = self.trusted_browser_stages(context)
         self.render("tests/Dockerfile" if hidden else "environment/evaluator/Dockerfile", {
-            "ENV_BUILDER_STAGE": self.env_builder_stage(),
+            "ENV_BUILD_STAGES": self.env_build_stages(),
             "EXTRA_STAGES": extra_stages,
             "EXTRA_FINAL": extra_final,
             "BASE_STAGE": self.base_stage(EVALUATOR_APT_PACKAGES),

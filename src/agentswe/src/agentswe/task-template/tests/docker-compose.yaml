@@ -9,6 +9,9 @@ services:
         PIP_INDEX_URL: ${AGENTSWE_PIP_INDEX_URL:-https://pypi.org/simple}
         NODE_DIST_URL: ${AGENTSWE_NODE_DIST_URL:-https://nodejs.org/dist}
         CFT_BASE_URL: ${AGENTSWE_CFT_BASE_URL:-https://storage.googleapis.com/chrome-for-testing-public}
+        NPM_REGISTRY: ${AGENTSWE_NPM_REGISTRY:-https://registry.npmjs.org}
+        PLAYWRIGHT_DOWNLOAD_HOST: ${AGENTSWE_PLAYWRIGHT_DOWNLOAD_HOST:-}
+        UBUNTU_ARCHIVE_URL: ${AGENTSWE_UBUNTU_MIRROR:-http://archive.ubuntu.com/ubuntu}
         http_proxy: ${AGENTSWE_BUILD_PROXY:-}
         https_proxy: ${AGENTSWE_BUILD_PROXY:-}
 {{EVALUATOR_CAPS}}

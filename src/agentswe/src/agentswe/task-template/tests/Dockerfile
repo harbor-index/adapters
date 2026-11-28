@@ -1,6 +1,4 @@
-{{ENV_BUILDER_STAGE}}
-COPY env-spec /tmp/agentswe-env-spec
-RUN agentswe-build-env /tmp/agentswe-env-spec {{ENV_PREFIX}}
+{{ENV_BUILD_STAGES}}
 
 {{EXTRA_STAGES}}
 {{BASE_STAGE}}
