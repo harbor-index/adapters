@@ -1,16 +1,21 @@
 # Harbor side of the parity experiment: the upstream baseline agent
-# (timemachine-agent) on the 10-task parity subset, 3 attempts per task.
+# (timemachine-agent) on the 10-task parity subset. This is the exact config the
+# reported runs used; each run is a separate job with one attempt per task:
 #
 #   uv run timemachine-bench --split parity --output-dir datasets/timemachine-bench-parity
 #   export OPENAI_API_KEY=...            # and OPENAI_BASE_URL for a compatible endpoint
-#   PYTHONPATH=src/timemachine-bench/src harbor run -c src/timemachine-bench/run_timemachine-bench_parity.yaml
+#   for k in 1 2 3; do
+#     PYTHONPATH=src/timemachine-bench/src harbor run \
+#       -c src/timemachine-bench/run_timemachine-bench_parity.yaml \
+#       --job-name timemachine-bench-parity-run$k
+#   done
 #
 # The model name after "openai/" is passed unchanged to the upstream agent's
 # ChatOpenAI(model=..., temperature=0), as OPENAI_MODEL_NAME is upstream. With
 # the pinned langchain-openai, gpt-5* (non-chat) models ignore temperature=0
 # and run at the API default (1); this applies to both parity sides.
 jobs_dir: jobs
-n_attempts: 3
+n_attempts: 1
 timeout_multiplier: 1.0
 orchestrator:
   type: local
