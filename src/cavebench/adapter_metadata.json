@@ -19,7 +19,7 @@
         "parity_benchmark_size": 118,
         "parity_sampling_rate": 0.1,
         "registry_benchmark_size": 1180,
-        "added_agents": ["cavebench-llm@1.0+upstream.2a4b865"],
+        "added_agents": ["cavebench-llm@1.0+upstream.c0f8cbe"],
         "parity_matching_agents": [],
         "parity_unmatching_agents": ["None"],
         "parity_costs": null,

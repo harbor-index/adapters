@@ -25,7 +25,7 @@ from harbor.agents.installed.base import BaseInstalledAgent
 from harbor.environments.base import BaseEnvironment
 from harbor.models.agent.context import AgentContext
 
-UPSTREAM_COMMIT = "2a4b865deeed1eb6dab0c15ba43f0b4adb611009"
+UPSTREAM_COMMIT = "c0f8cbee47af72a9437b5ab82f3f03b391e2a819"
 UPSTREAM_RAW = f"https://raw.githubusercontent.com/PIER-Lab/CaveBench/{UPSTREAM_COMMIT}"
 UPSTREAM_DIR = "/opt/cavebench-upstream"
 # Files the protocol imports, pinned by SHA-256 at UPSTREAM_COMMIT.

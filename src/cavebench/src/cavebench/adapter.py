@@ -24,7 +24,7 @@ from pathlib import Path
 HF_REPO = "linguanxin/CaveBench"
 HF_REVISION = "df3c19c4cf2fe0ff08aef1d5e47f7ac7a8f22733"
 UPSTREAM_REPO = "https://github.com/PIER-Lab/CaveBench"
-UPSTREAM_COMMIT = "2a4b865deeed1eb6dab0c15ba43f0b4adb611009"
+UPSTREAM_COMMIT = "c0f8cbee47af72a9437b5ab82f3f03b391e2a819"
 
 # Pinned inputs from the HF dataset at HF_REVISION.
 SOURCE_FILES = {

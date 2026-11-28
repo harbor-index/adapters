@@ -1,14 +1,14 @@
 [
   {
     "adapter_name": "cavebench",
-    "agent": "cavebench-llm@1.0+upstream.2a4b865",
+    "agent": "cavebench-llm@1.0+upstream.c0f8cbe",
     "model": "deepseek/deepseek-v4.1-flash-1017",
     "date": "YYYY-MM-DD",
     "adapted_benchmark_size": 1180,
     "parity_benchmark_size": 118,
     "number_of_runs": 3,
     "notes": "Pending: parity not run yet. Original side: run.py --paper-settings on the fork below (runner robustness only).",
-    "original_parity_repo": "https://github.com/wyc0807/CaveBench/tree/9ec9f4760856754df0a437cd855014fbbc4b660d",
+    "original_parity_repo": "https://github.com/wyc0807/CaveBench/tree/fe4c99990626b93b6c04cd77b6fb4e08f84a1019",
     "adapter_pr": [],
     "dataset_pr": [],
     "parity_pr": [],
