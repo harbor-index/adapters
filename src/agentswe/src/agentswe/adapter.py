@@ -6,36 +6,74 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
+import tomllib
 from dataclasses import dataclass
 from pathlib import Path
 
 UPSTREAM_REPO = "https://github.com/VectorSpaceLab/AgentSWE.git"
 UPSTREAM_COMMIT = "6643c7398b2d7dd58b32b6a3a829e564ab68a23f"
 DEFAULT_PROFILE = "lite-v1.1"
+DEFAULT_CACHE_DIR = Path.home() / ".cache" / "harbor-agentswe"
 TEMPLATE_DIR = Path(__file__).resolve().parent / "task-template"
-RUNTIME_DIR = Path(__file__).resolve().parent / "runtime" / "agentswe_harbor"
+RUNTIME_DIR = Path(__file__).resolve().parent / "runtime"
 UPSTREAM_ROOT = "/opt/agentswe-upstream"
+DEPS_ROOT = "/opt/agentswe-deps"
 
-# Creation tasks whose upstream per-case jobs use only the `main` service.
-# Tasks with extra per-case services (GUI control plane, search front, LibreOffice,
-# NET_ADMIN sandboxes) are documented exclusions.
+# Creation tasks whose per-case jobs use only the `main` service and no host-fetched downloads. The README
+# gives the reason for each excluded task.
 SUPPORTED_TASKS = (
     "repository-bug-repair",
     "database-analytics",
     "scientific-pdf-translation",
     "evidence-grounded-document-qa",
 )
-TRUSTED_BROWSER_FILES = ("runtime-dependencies.manifest.json", "fonts.manifest.json", "assemble.py")
-DEPS_ROOT = "/opt/agentswe-deps"
-
 AUTHORS = ("Jiahao Wang", "Hongjin Qian", "Yuyang Hu", "Jiajun Zhang", "Zheng Liu")
-EVALUATOR_APT_PACKAGES = "curl strace"
+TRUSTED_BROWSER_FILES = ("runtime-dependencies.manifest.json", "fonts.manifest.json", "assemble.py")
+EVALUATOR_PACKAGES = "curl strace"
+# Unpacking the Builder environment and the environment digests before the held-out cases.
+VERIFIER_SETUP_SEC = 1800
+
+# Optional mirrors and proxy for image builds (upstream's image build args); unset, the public sources are used.
+BUILD_ARGS = {
+    "DOCKER_REGISTRY": "${AGENTSWE_DOCKER_REGISTRY:-docker.io}",
+    "APT_MIRROR": "${AGENTSWE_APT_MIRROR:-}",
+    "CONDA_FORGE_URL": "${AGENTSWE_CONDA_CHANNEL:-https://conda.anaconda.org/conda-forge}",
+    "PIP_INDEX_URL": "${AGENTSWE_PIP_INDEX_URL:-https://pypi.org/simple}",
+    "NODE_DIST_URL": "${AGENTSWE_NODE_DIST_URL:-https://nodejs.org/dist}",
+    "NPM_REGISTRY": "${AGENTSWE_NPM_REGISTRY:-https://registry.npmjs.org}",
+    "PLAYWRIGHT_DOWNLOAD_HOST": "${AGENTSWE_PLAYWRIGHT_DOWNLOAD_HOST:-}",
+    "UBUNTU_ARCHIVE_URL": "${AGENTSWE_UBUNTU_MIRROR:-http://archive.ubuntu.com/ubuntu}",
+    "CFT_BASE_URL": "${AGENTSWE_CFT_BASE_URL:-https://storage.googleapis.com/chrome-for-testing-public}",
+    "http_proxy": "${AGENTSWE_BUILD_PROXY:-}",
+    "https_proxy": "${AGENTSWE_BUILD_PROXY:-}",
+}
+# Runtime model and Result judge of the evaluation (profile lite-v1.1 defaults); None marks a required value.
+EVALUATION_ENV = {
+    "AGENTSWE_RUNTIME_BASE_URL": "https://api.deepseek.com/v1",
+    "AGENTSWE_RUNTIME_API_KEY": None,
+    "AGENTSWE_RUNTIME_MODEL": "deepseek-flash",
+    "AGENTSWE_RUNTIME_EFFORT": "high",
+    "AGENTSWE_RUNTIME_MODEL_ALIASES": "deepseek-flash",
+    "AGENTSWE_JUDGE_BASE_URL": "https://api.deepseek.com/v1",
+    "AGENTSWE_JUDGE_API_KEY": None,
+    "AGENTSWE_JUDGE_MODEL": "deepseek-flash",
+    "AGENTSWE_JUDGE_EFFORT": "max",
+}
+# The Builder's model, reached only through the builder role broker in the evaluator.
+BUILDER_ENV = {
+    "AGENTSWE_BUILDER_BASE_URL": None,
+    "AGENTSWE_BUILDER_API_KEY": None,
+    "AGENTSWE_BUILDER_MODEL": None,
+    "AGENTSWE_BUILDER_EFFORT": "xhigh",
+}
 
 
 @dataclass(frozen=True)
 class UpstreamTask:
     root: Path
     data: dict
+    env: dict
 
     @property
     def task_id(self) -> str:
@@ -46,12 +84,9 @@ class UpstreamTask:
         return self.data["family"]
 
     @property
-    def env_name(self) -> str:
-        return self.data["envs"][0]
-
-    @property
     def env_prefix(self) -> str:
-        return json.loads((self.root / "env" / "env.json").read_text())["mount"]
+        """Where upstream's env.Dockerfile builds the environment, and so where its scripts point."""
+        return self.env["mount"]
 
 
 def ensure_upstream(upstream_dir: Path | None, cache_dir: Path) -> Path:
@@ -78,6 +113,10 @@ def copy_overlaid(task: UpstreamTask, sub: str, profile: str, destination: Path,
         shutil.copytree(overlay, destination, symlinks=True, dirs_exist_ok=True)
 
 
+def from_first(lines: list[str], prefix: str) -> int:
+    return next(index for index, line in enumerate(lines) if line.startswith(prefix))
+
+
 class AgentSWEAdapter:
     def __init__(
         self,
@@ -88,7 +127,7 @@ class AgentSWEAdapter:
         split: str = "full",
         profile: str = DEFAULT_PROFILE,
         upstream_dir: Path | None = None,
-        cache_dir: Path | None = None,
+        cache_dir: Path = DEFAULT_CACHE_DIR,
         **kwargs,
     ):
         self.output_dir = Path(output_dir)
@@ -98,19 +137,20 @@ class AgentSWEAdapter:
         self.split = split
         self.profile = profile
         self.upstream_dir = upstream_dir
-        self.cache_dir = cache_dir or Path.home() / ".cache" / "harbor-agentswe"
+        self.cache_dir = cache_dir
 
     def select_tasks(self, upstream: Path) -> list[UpstreamTask]:
         tasks = []
         for path in sorted((upstream / "tasks" / "creation").glob("*/task.json")):
-            data = json.loads(path.read_text())
+            data = json.loads(path.read_text(encoding="utf-8"))
             if data["id"] not in SUPPORTED_TASKS:
                 continue
             if self.split in ("lite", "parity") and not data.get("lite"):
                 continue
             if self.task_ids and data["id"] not in self.task_ids and data["short"] not in self.task_ids:
                 continue
-            tasks.append(UpstreamTask(path.parent, data))
+            env = json.loads((path.parent / "env" / "env.json").read_text(encoding="utf-8"))
+            tasks.append(UpstreamTask(path.parent, data, env))
         return tasks[: self.limit] if self.limit else tasks
 
     def run(self) -> None:
@@ -139,29 +179,42 @@ class TaskWriter:
 
     def write(self) -> None:
         shutil.copytree(TEMPLATE_DIR, self.destination, ignore=shutil.ignore_patterns("__pycache__"))
-        one_stop = self.import_one_stop()
-        self.render("task.toml", self.toml_values(one_stop))
-        # Upstream's Builder prompt, unchanged (one_stop.builder_instruction).
-        self.render("instruction.md", {
-            "BUILDER_INSTRUCTION": one_stop.builder_instruction(one_stop.MAX_DEV_ROUNDS),
+        one_stop, runtime_contract = self.import_upstream()
+        env_stages = self.env_build_stages()
+        evaluator = self.destination / "environment" / "evaluator"
+        self.write_evaluator_context(evaluator, env_stages, hidden=False)
+        self.write_evaluator_context(self.destination / "tests", env_stages, hidden=True)
+        staged = evaluator / "upstream" / "tasks" / self.task.family / self.task.task_id
+        self.write_builder_context(one_stop, runtime_contract, staged, env_stages)
+        self.render("environment/docker-compose.yaml", {
+            "BUILD_ARGS": self.yaml_mapping(BUILD_ARGS, 2),
+            "ENV_PREFIX": self.task.env_prefix,
+            "EVALUATOR_CAPS": self.evaluator_caps(),
+            "EVALUATOR_ENV": self.yaml_mapping(EVALUATION_ENV | BUILDER_ENV, 6),
         })
-        self.write_builder_environment(one_stop)
-        self.write_evaluator_context(self.destination / "environment" / "evaluator", hidden=False)
-        self.write_evaluator_context(self.destination / "tests", hidden=True)
+        self.render("tests/docker-compose.yaml", {
+            "BUILD_ARGS": self.yaml_mapping(BUILD_ARGS, 8),
+            "EVALUATOR_CAPS": self.evaluator_caps(),
+        })
+        self.render("task.toml", self.toml_values(one_stop))
+        # Upstream's Builder prompt, unchanged.
+        self.render("instruction.md", {
+            "BUILDER_INSTRUCTION": one_stop.builder_instruction(int(self.task.data["protocol"]["max_dev_rounds"])),
+        })
         for script in self.destination.rglob("*.sh"):
             script.chmod(0o755)
 
-    def import_one_stop(self):
-        adapter_dir = self.task.root / "adapter"
-        shared = self.upstream / "runners" / "creation"
-        for name in ("one_stop", "adapter"):
+    def import_upstream(self):
+        """The task's one_stop.py (with its adapter.py) and runners/creation/runtime_contract.py."""
+        for name in ("one_stop", "adapter", "runtime_contract"):
             sys.modules.pop(name, None)
-        sys.path[:0] = [str(adapter_dir), str(shared)]
+        paths = [str(self.task.root / "adapter"), str(self.upstream / "runners" / "creation")]
+        sys.path[:0] = paths
         try:
-            return importlib.import_module("one_stop")
+            return importlib.import_module("one_stop"), importlib.import_module("runtime_contract")
         finally:
-            sys.path.remove(str(adapter_dir))
-            sys.path.remove(str(shared))
+            for path in paths:
+                sys.path.remove(path)
 
     def render(self, relative: str, values: dict[str, str]) -> None:
         text = (TEMPLATE_DIR / relative).read_text(encoding="utf-8")
@@ -172,12 +225,27 @@ class TaskWriter:
             raise RuntimeError(f"unrendered placeholders in {relative}: {leftover}")
         (self.destination / relative).write_text(text, encoding="utf-8")
 
+    @staticmethod
+    def yaml_mapping(values: dict[str, str | None], indent: int) -> str:
+        """Compose entries that read each value from the environment of `harbor run`, with its default."""
+        return "\n".join(
+            " " * indent + f"{key}: " + (value if value is not None and value.startswith("${")
+                                         else "${" + f"{key}:-{value or ''}" + "}")
+            for key, value in values.items()
+        )
+
     def toml_values(self, one_stop) -> dict[str, str]:
         protocol = self.task.data["protocol"]
-        hidden = len(protocol["heldout_cases"])
-        # Per hidden case: Candidate job + verifier (660 s each) and Eval job (1800 s) + verifier (660 s).
-        verifier_timeout = hidden * (660 + 660 + 1800 + 660)
-        authors = ", ".join(f'{{ name = "{name}" }}' for name in AUTHORS)
+        adapter = one_stop.adapter
+        case = protocol["heldout_cases"][0]
+        candidate = tomllib.loads(adapter.candidate_task_toml(case))
+        evaluation = tomllib.loads(adapter.eval_task_toml(case))
+        # Every held-out case, one at a time, at upstream's per-job limits (including the Eval retries of tasks
+        # that have them), after unpacking the Builder environment.
+        candidate_sec = candidate["agent"]["timeout_sec"] + candidate["verifier"]["timeout_sec"]
+        eval_sec = (evaluation["agent"]["timeout_sec"] + evaluation["verifier"]["timeout_sec"]) * (
+            1 + getattr(adapter, "DEFAULT_EVAL_INFRASTRUCTURE_RETRIES", 0))
+        verifier_timeout = VERIFIER_SETUP_SEC + len(protocol["heldout_cases"]) * (candidate_sec + eval_sec)
         return {
             "TASK_ID": self.task.task_id,
             "SHORT": self.task.data["short"],
@@ -185,34 +253,35 @@ class TaskWriter:
             "FAMILY": self.task.family,
             "TIER": self.task.data.get("tier", ""),
             "LITE": "true" if self.task.data.get("lite") else "false",
-            "AUTHORS": authors,
+            "AUTHORS": ", ".join(f'{{ name = "{name}" }}' for name in AUTHORS),
             "COMMIT": UPSTREAM_COMMIT,
             "PROFILE": self.profile,
             "ENV_PREFIX_RELATIVE": self.task.env_prefix.lstrip("/"),
             "BUILDER_TIMEOUT": f"{float(protocol['builder_session_sec'])}",
             "VERIFIER_TIMEOUT": f"{float(verifier_timeout)}",
-            "MAX_DEV_ROUNDS": str(one_stop.MAX_DEV_ROUNDS),
+            "MAX_DEV_ROUNDS": str(protocol["max_dev_rounds"]),
+            "VERIFIER_ENV": "\n".join(
+                f'{key} = "${{{key}}}"' if value is None else f'{key} = "${{{key}:-{value}}}"'
+                for key, value in EVALUATION_ENV.items()
+            ),
         }
 
     def env_build_stages(self) -> str:
         """Upstream's environment build: images/env-builder/Dockerfile plus the build stage of
         images/env-builder/env.Dockerfile, which runs agentswe-build-env on the task's env spec."""
-        spec = json.loads((self.task.root / "env" / "env.json").read_text(encoding="utf-8"))
-        if spec.get("downloads"):
+        if self.task.env.get("downloads"):
             raise RuntimeError(f"{self.task.task_id}: env.json downloads (host-fetched assets) are not supported")
-        if self.task.env_prefix != f"/opt/agentswe/benchmark/envs/{self.task.env_name}":
+        env_name = self.task.env["name"]
+        if self.task.env_prefix != f"/opt/agentswe/benchmark/envs/{env_name}":
             raise RuntimeError(f"{self.task.task_id}: env mount {self.task.env_prefix} is not the env.Dockerfile path")
         images = self.upstream / "images" / "env-builder"
         builder = (images / "Dockerfile").read_text(encoding="utf-8").splitlines()
-        index = next(i for i, line in enumerate(builder) if line.startswith("FROM "))
-        builder[index] += " AS envbuilder"
+        builder[from_first(builder, "FROM ")] += " AS envbuilder"
         env_lines = (images / "env.Dockerfile").read_text(encoding="utf-8").splitlines()
-        start = next(i for i, line in enumerate(env_lines) if line.startswith("FROM "))
-        end = next(i for i, line in enumerate(env_lines) if line.startswith("FROM scratch"))
-        stage = "\n".join(env_lines[start:end])
+        stage = "\n".join(env_lines[from_first(env_lines, "FROM "):from_first(env_lines, "FROM scratch")])
         for old, new in (
             ("FROM ${ENV_BUILDER} AS build", "FROM envbuilder AS envbuild"),
-            ("ARG ENV_NAME\n", f"ARG ENV_NAME={self.task.env_name}\n"),
+            ("ARG ENV_NAME\n", f"ARG ENV_NAME={env_name}\n"),
             ("COPY --from=spec . /spec", "COPY env-spec /spec"),
         ):
             if old not in stage:
@@ -222,31 +291,28 @@ class TaskWriter:
 
     def upstream_stage(self, image: str) -> str:
         """An upstream images/<image>/Dockerfile from its FROM line (Ubuntu digest, apt snapshot, pins)."""
-        text = (self.upstream / "images" / image / "Dockerfile").read_text(encoding="utf-8")
-        lines = text.splitlines()
-        index = next(i for i, line in enumerate(lines) if line.startswith("FROM "))
-        return "\n".join(lines[index:]) + "\n"
+        lines = (self.upstream / "images" / image / "Dockerfile").read_text(encoding="utf-8").splitlines()
+        return "\n".join(lines[from_first(lines, "FROM "):]) + "\n"
 
-    def base_stage(self, packages: str) -> str:
-        """Upstream task-base (the Candidate image) with the evaluator's extra packages."""
+    def base_stage(self) -> str:
+        """Upstream task-base (the image of upstream's per-case jobs) with the evaluator's extra packages."""
         body = self.upstream_stage("task-base")
         if "ARG INSTALL_EXTRA=\n" not in body:
             raise RuntimeError("unexpected upstream task-base Dockerfile")
-        return body.replace("ARG INSTALL_EXTRA=\n", f'ARG INSTALL_EXTRA="{packages}"\n')
+        return body.replace("ARG INSTALL_EXTRA=\n", f'ARG INSTALL_EXTRA="{EVALUATOR_PACKAGES}"\n')
 
-    def trusted_browser_stages(self, context: Path) -> tuple[str, str]:
-        """Upstream images/trusted-browser/Dockerfile build stages (exported by `agentswe setup` upstream)."""
+    def trusted_browser(self, context: Path) -> tuple[str, str]:
+        """Upstream images/trusted-browser/Dockerfile build stages, as `agentswe setup` exports them."""
         if "trusted-browser" not in self.task.data.get("images", []):
             return "", ""
         source = self.upstream / "images" / "trusted-browser"
-        lines = (source / "Dockerfile").read_text(encoding="utf-8").splitlines()
-        first = next(i for i, line in enumerate(lines) if line.startswith("FROM "))
-        last = max(i for i, line in enumerate(lines) if line.startswith("FROM scratch"))
         for name in TRUSTED_BROWSER_FILES:
             shutil.copy2(source / name, context / name)
-        # These stages pin exact package versions of their apt snapshot, which a live mirror does not
-        # serve; keep them on the snapshot even when APT_MIRROR is set for the other stages.
-        stages = ("\n".join(lines[first:last]) + "\n").replace("APT_MIRROR", "TRUSTED_BROWSER_APT_MIRROR")
+        lines = (source / "Dockerfile").read_text(encoding="utf-8").splitlines()
+        last = max(index for index, line in enumerate(lines) if line.startswith("FROM scratch"))
+        # These stages pin exact package versions of their apt snapshot, which a live mirror does not serve; keep
+        # them on the snapshot even when APT_MIRROR is set for the other stages.
+        stages = ("\n".join(lines[from_first(lines, "FROM "):last]) + "\n").replace("APT_MIRROR", "TRUSTED_BROWSER_APT_MIRROR")
         final = (
             f"COPY --from=assemble /out/trusted-browser-v1 {DEPS_ROOT}/trusted-browser-v1\n"
             f"COPY --from=assemble /out/runtime-dependencies-v1 {DEPS_ROOT}/runtime-dependencies-v1\n"
@@ -259,92 +325,82 @@ class TaskWriter:
         shutil.copytree(self.task.root / "env", context / "env-spec")
         shutil.copy2(self.upstream / "images" / "env-builder" / "agentswe-build-env", context / "agentswe-build-env")
 
-    def env_aliases(self, one_stop) -> list[str]:
-        runtime_contract = sys.modules["runtime_contract"]
-        aliases = runtime_contract.environment_aliases(Path("/nonexistent"), self.task.env_prefix)
-        package = self.destination / "environment" / "builder-package"
-        aliases.add(runtime_contract.documented_prefix(package, self.task.env_prefix))
-        return sorted(alias for alias in aliases if alias != self.task.env_prefix)
+    def has_fontconfig(self) -> bool:
+        return "/fontconfig-" in (self.task.root / "env" / "conda-explicit.txt").read_text(encoding="utf-8")
 
-    def write_builder_environment(self, one_stop) -> None:
+    def builder_service(self, one_stop, runtime_contract, public: Path) -> dict:
+        """Upstream's Builder service (one_stop.builder_compose, then runtime_contract.prepare_compose), computed
+        against a probe that has what prepare_compose reads from the environment: bin/pip's shebang, lib/,
+        browsers/ and etc/fonts/fonts.conf. The Builder image asserts the real environment matches it."""
+        with tempfile.TemporaryDirectory() as tmp:
+            probe = Path(tmp) / "environment"
+            (probe / "bin").mkdir(parents=True)
+            (probe / "lib").mkdir()
+            (probe / "bin" / "pip").write_text(f"#!{self.task.env_prefix}/bin/python\n", encoding="utf-8")
+            if self.has_fontconfig():
+                (probe / "etc" / "fonts").mkdir(parents=True)
+                (probe / "etc" / "fonts" / "fonts.conf").write_text("", encoding="utf-8")
+            compose = one_stop.builder_compose(public_package=public, env_prefix=probe,
+                                               workspace_submission=Path(tmp) / "submission",
+                                               controller_socket=Path(tmp) / "controller.sock", controller_token="")
+            service = runtime_contract.prepare_compose(Path(tmp) / "docker-compose.yaml", compose)["services"]["main"]
+            service["aliases"] = sorted(volume["target"] for volume in service["volumes"]
+                                        if Path(volume["source"]) == probe.resolve())
+        return service
+
+    def write_builder_context(self, one_stop, runtime_contract, staged: Path, env_stages: str) -> None:
         context = self.destination / "environment"
         public = context / "builder-package"
-        with _Staging(self.task, self.profile) as (builder_package, benchmark):
-            one_stop.prepare_public_builder_package(
-                builder_package=builder_package, benchmark=benchmark, destination=public)
+        one_stop.prepare_public_builder_package(
+            builder_package=staged / "builder_package", benchmark=staged / "benchmark", destination=public)
         self.copy_env_spec(context)
         shutil.copy2(self.task.root / "adapter" / "builder-template" / "environment" / "submit_dev_candidate",
                      context / "submit_dev_candidate.upstream")
-        aliases = self.env_aliases(one_stop)
-        links = " && ".join(
-            f"mkdir -p {Path(alias).parent} && ln -s {self.task.env_prefix} {alias}" for alias in aliases
-        ) or "true"
-        documented = sys.modules["runtime_contract"].documented_prefix(public, self.task.env_prefix)
+        service = self.builder_service(one_stop, runtime_contract, public)
+        prefix = self.task.env_prefix
+        checks = [f"test -d {prefix}/lib", f"test ! -e {prefix}/browsers",
+                  f"test {'-f' if self.has_fontconfig() else '! -e'} {prefix}/etc/fonts/fonts.conf"]
+        links = [f"mkdir -p {Path(alias).parent} && ln -s {prefix} {alias}"
+                 for alias in service["aliases"] if alias != prefix]
+        # The controller token comes from the evaluator at run time (environment/submit_dev_candidate).
+        environment = {key: value for key, value in service["environment"].items()
+                       if key != "AGENTSWE_DEV_CONTROLLER_TOKEN" and not key.lower().endswith("_proxy")}
         self.render("environment/Dockerfile", {
-            "ENV_BUILD_STAGES": self.env_build_stages(),
+            "ENV_BUILD_STAGES": env_stages,
             # Upstream Builder trials run FROM builder-codex (Node 24.6.0 + Codex 0.144.1).
             "BASE_STAGE": self.upstream_stage("builder-codex"),
-            "ENV_PREFIX": self.task.env_prefix,
-            "ENV_ALIASES": links,
-            "DOCUMENTED_PREFIX": documented,
+            "ENV_PREFIX": prefix,
+            "ENV_LAYOUT": " \\\n && ".join(checks + links),
+            "BUILDER_ENV": " \\\n    ".join(f"{key}={value}" for key, value in sorted(environment.items())),
         })
-        self.render("environment/docker-compose.yaml", {
-            "ENV_PREFIX": self.task.env_prefix,
-            "EVALUATOR_CAPS": self.evaluator_caps(),
-        })
-        self.render("tests/docker-compose.yaml", {"EVALUATOR_CAPS": self.evaluator_caps()})
 
     def evaluator_caps(self) -> str:
         """Upstream's Candidate verifier traces the repair worker (strace) only where task.json asks for it."""
         if "strace" not in self.task.data.get("host", {}).get("host_tools", []):
             return ""
-        return "    cap_add:\n      - SYS_PTRACE"
+        return "\n    cap_add:\n      - SYS_PTRACE"
 
-    def write_evaluator_context(self, context: Path, hidden: bool) -> None:
+    def write_evaluator_context(self, context: Path, env_stages: str, hidden: bool) -> None:
         upstream_task = context / "upstream" / "tasks" / self.task.family / self.task.task_id
         ignore = None if hidden else shutil.ignore_patterns("test_cases")
         copy_overlaid(self.task, "benchmark", self.profile, upstream_task / "benchmark", ignore=ignore)
         copy_overlaid(self.task, "builder_package", self.profile, upstream_task / "builder_package")
-        shutil.copytree(self.task.root / "adapter", upstream_task / "adapter",
-                        ignore=shutil.ignore_patterns("__pycache__"))
+        shutil.copytree(self.task.root / "adapter", upstream_task / "adapter", ignore=shutil.ignore_patterns("__pycache__"))
         shutil.copytree(self.task.root / "env", upstream_task / "env")
         shutil.copy2(self.task.root / "task.json", upstream_task / "task.json")
-        shutil.copytree(self.upstream / "runners" / "creation", context / "upstream" / "runners" / "creation",
-                        ignore=shutil.ignore_patterns("__pycache__"))
-        shutil.copytree(self.upstream / "broker" / "agentswe_broker",
-                        context / "upstream" / "broker" / "agentswe_broker",
-                        ignore=shutil.ignore_patterns("__pycache__"))
-        shutil.copytree(RUNTIME_DIR, context / "agentswe_harbor", ignore=shutil.ignore_patterns("__pycache__"))
+        for part in (("runners", "creation"), ("broker", "agentswe_broker")):
+            shutil.copytree(self.upstream.joinpath(*part), context.joinpath("upstream", *part),
+                            ignore=shutil.ignore_patterns("__pycache__"))
+        shutil.copytree(RUNTIME_DIR / "agentswe_harbor", context / "agentswe_harbor", ignore=shutil.ignore_patterns("__pycache__"))
+        shutil.copytree(RUNTIME_DIR / "bin", context / "bin")
         self.copy_env_spec(context)
-        extra_stages, extra_final = self.trusted_browser_stages(context)
+        trusted_stages, trusted_final = self.trusted_browser(context)
         self.render("tests/Dockerfile" if hidden else "environment/evaluator/Dockerfile", {
-            "ENV_BUILD_STAGES": self.env_build_stages(),
-            "EXTRA_STAGES": extra_stages,
-            "EXTRA_FINAL": extra_final,
-            "BASE_STAGE": self.base_stage(EVALUATOR_APT_PACKAGES),
+            "ENV_BUILD_STAGES": env_stages,
+            "EXTRA_STAGES": trusted_stages,
+            "EXTRA_FINAL": trusted_final,
+            "BASE_STAGE": self.base_stage(),
             "ENV_PREFIX": self.task.env_prefix,
             "TASK_DIR": f"{UPSTREAM_ROOT}/tasks/{self.task.family}/{self.task.task_id}",
             "UPSTREAM_ROOT": UPSTREAM_ROOT,
         })
-
-
-class _Staging:
-    """Profile-overlaid builder_package and benchmark in a temporary directory."""
-
-    def __init__(self, task: UpstreamTask, profile: str) -> None:
-        self.task = task
-        self.profile = profile
-
-    def __enter__(self) -> tuple[Path, Path]:
-        import tempfile
-
-        self.tmp = Path(tempfile.mkdtemp(prefix="agentswe-stage-"))
-        builder_package = self.tmp / "builder_package"
-        benchmark = self.tmp / "benchmark"
-        copy_overlaid(self.task, "builder_package", self.profile, builder_package)
-        copy_overlaid(self.task, "benchmark", self.profile, benchmark,
-                      ignore=shutil.ignore_patterns("test_cases"))
-        return builder_package, benchmark
-
-    def __exit__(self, *exc_info: object) -> None:
-        shutil.rmtree(self.tmp, ignore_errors=True)

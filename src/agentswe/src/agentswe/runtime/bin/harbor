@@ -1,0 +1,4 @@
+#!/bin/sh
+# Upstream's adapter.py runs each per-case job with `$AGENTSWE_HARBOR_ROOT/bin/harbor run --config <job>`;
+# inside a task the job's trials run as local processes (agentswe_harbor/harbor.py).
+exec python3 -m agentswe_harbor.harbor "$@"

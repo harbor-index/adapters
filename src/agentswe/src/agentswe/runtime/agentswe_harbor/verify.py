@@ -1,78 +1,73 @@
 from __future__ import annotations
 
-import importlib
+import contextlib
 import json
-import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
 
-from . import settings
+from . import brokers, settings
+from .trial import VERIFIER_DIR, clear
 
-VERIFIER_DIR = Path("/logs/verifier")
-FREEZE_MANIFEST = settings.STATE_DIR / "run" / "freeze_manifest.json"
+FREEZE_MANIFEST = settings.RUN_DIR / "freeze_manifest.json"
 # The Builder's private environment, archived in the Builder container by a collect hook.
 ENVIRONMENT_ARCHIVE = Path("/var/agentswe-env/environment.tar")
+# Unpacked below its own root: the upstream prefix path is a per-step link (trial.step).
 BUILDER_ROOT = settings.STATE_DIR / "builder-root"
-
-
-def hidden_cases() -> list[str]:
-    if os.environ.get("AGENTSWE_PROTOCOL_MODE") == "smoke":
-        return list(settings.TASK["smoke"]["heldout_cases"])
-    return list(settings.PROTOCOL["heldout_cases"])
+PHASE_ID = "harbor-hidden"
 
 
 def write_result(result: dict) -> None:
-    VERIFIER_DIR.mkdir(parents=True, exist_ok=True)
     (VERIFIER_DIR / "agentswe_result.json").write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
     (VERIFIER_DIR / "reward.txt").write_text(f"{result['reward']}\n", encoding="utf-8")
 
 
 def main() -> int:
-    settings.apply_process_environment()
-    from . import pipeline
-
-    adapter = pipeline.upstream_adapter()
+    """Held-out evaluation of the frozen delivery, as upstream one_stop.main runs it after the freeze. The reward is
+    the held-out mean / 100; an evaluator-side failure exits without a reward instead of recording a zero."""
+    settings.prepare()
+    providers = brokers.take_providers("runtime", "judge")
+    adapter, one_stop = settings.import_upstream()
     if not FREEZE_MANIFEST.is_file():
-        # Upstream one_stop.py: no valid final workspace and no valid dev submission -> no delivery.
+        # No valid dev submission and no valid final workspace: upstream records a hidden mean of 0.
         write_result({"reward": 0.0, "hidden_mean": 0.0, "status": "builder_artifact_invalid"})
         return 0
-    freeze = json.loads(FREEZE_MANIFEST.read_text(encoding="utf-8"))
-    candidate = Path(freeze["path"])
-    if adapter.tree_digest(candidate) != freeze["digest"]:
-        print("frozen submission digest changed between freeze and verification", file=sys.stderr)
-        return 1
-    if not ENVIRONMENT_ARCHIVE.is_file():
-        print(f"Builder environment archive missing: {ENVIRONMENT_ARCHIVE}", file=sys.stderr)
-        return 1
-    # Unpacked under its own root: the upstream prefix path is a per-step link (see pipeline).
-    BUILDER_ROOT.mkdir(parents=True, exist_ok=True)
+    frozen = json.loads(FREEZE_MANIFEST.read_text(encoding="utf-8"))
+    candidate = Path(frozen["path"])
+    BUILDER_ROOT.mkdir(mode=0o755)
     subprocess.run(["tar", "-C", str(BUILDER_ROOT), "-xf", str(ENVIRONMENT_ARCHIVE)], check=True)
-    # Upstream one_stop.py: the Candidate environment must be the one recorded at freeze time.
-    one_stop = importlib.import_module("one_stop")
-    expected_environment = freeze.get("environment_digest")
-    if expected_environment and one_stop.environment_tree_digest(settings.CANDIDATE_ENV_PREFIX) != expected_environment:
-        print("Builder environment differs from the frozen environment digest", file=sys.stderr)
-        return 1
-    try:
-        summary, phase_dir = pipeline.run_phase("hidden", candidate, hidden_cases())
-    except pipeline.InfrastructureError as exc:
-        # A failed evaluation is not a zero score: exit without a reward.
-        print(f"AgentSWE infrastructure error, score withheld: {exc}", file=sys.stderr)
-        return 1
-    # The inner per-case jobs reuse /logs/verifier; keep only this trial's outputs there.
-    pipeline.clear_dir(VERIFIER_DIR)
-    pipeline.shutil.copytree(phase_dir, VERIFIER_DIR / "hidden_phase", symlinks=True,
-                             ignore=pipeline.shutil.ignore_patterns("evaluator-broker.env"))
+    ENVIRONMENT_ARCHIVE.unlink()
+    if one_stop.environment_tree_digest(settings.CANDIDATE_ENV_PREFIX) != frozen["environment_digest"]:
+        raise SystemExit("the Builder environment differs from the one recorded at freeze time")
+    if adapter.tree_digest(candidate) != frozen["digest"]:
+        raise SystemExit("the frozen submission changed between freeze and verification")
+    with contextlib.ExitStack() as stack:
+        judge_credential = brokers.evaluation_brokers(stack, providers, settings.RUN_DIR / "brokers-hidden")
+        try:
+            summary, phase_dir = one_stop.run_adapter_phase(
+                run_dir=settings.RUN_DIR, phase_id=PHASE_ID, candidate=candidate, cases=None,
+                benchmark=settings.TASK_DIR / "benchmark", env_prefix=settings.CANDIDATE_ENV_PREFIX,
+                trusted_env_prefix=settings.TRUSTED_ENV_PREFIX,
+                trusted_env_digest=one_stop.environment_tree_digest(settings.TRUSTED_ENV_PREFIX),
+                credential_file=judge_credential, jobs_dir=settings.JOBS_DIR, n_concurrent=settings.N_CONCURRENT,
+            )
+        except RuntimeError as exc:
+            print(f"AgentSWE infrastructure error, score withheld: {exc}", file=sys.stderr)
+            return 1
+    if adapter.tree_digest(candidate) != frozen["digest"]:
+        raise SystemExit("the frozen submission changed during the held-out evaluation")
+    # The per-case jobs reused /logs/verifier; keep this trial's evidence there.
+    clear(VERIFIER_DIR)
+    shutil.copytree(phase_dir, VERIFIER_DIR / "hidden_phase", symlinks=True)
+    for job in settings.JOBS_DIR.glob(f"*{PHASE_ID}*"):
+        shutil.copytree(job, VERIFIER_DIR / "hidden_jobs" / job.name, symlinks=True)
     write_result({
         "reward": round(summary["mean_score"] / 100.0, 6),
         "hidden_mean": summary["mean_score"],
-        "hidden_scores": {item["case_id"]: item["score"] for item in summary["cases"]},
-        "valid_case_count": summary["valid_case_count"],
-        "contract_valid_count": summary["contract_valid_count"],
-        "api_totals": summary["api_totals"],
-        "freeze_reason": freeze.get("reason"),
-        "candidate_digest": freeze["digest"],
+        "hidden_scores": {case["case_id"]: case["score"] for case in summary["cases"]},
+        "freeze_reason": frozen.get("reason"),
+        "candidate_digest": frozen["digest"],
         "status": "scored",
     })
     return 0

@@ -34,16 +34,7 @@ timeout_sec = {{VERIFIER_TIMEOUT}}
 user = "root"
 
 [verifier.env]
-AGENTSWE_RUNTIME_BASE_URL = "${AGENTSWE_RUNTIME_BASE_URL:-https://api.deepseek.com/v1}"
-AGENTSWE_RUNTIME_API_KEY = "${AGENTSWE_RUNTIME_API_KEY}"
-AGENTSWE_RUNTIME_MODEL = "${AGENTSWE_RUNTIME_MODEL:-deepseek-flash}"
-AGENTSWE_RUNTIME_EFFORT = "${AGENTSWE_RUNTIME_EFFORT:-high}"
-AGENTSWE_RUNTIME_MODEL_ALIASES = "${AGENTSWE_RUNTIME_MODEL_ALIASES:-deepseek-flash}"
-AGENTSWE_JUDGE_BASE_URL = "${AGENTSWE_JUDGE_BASE_URL:-https://api.deepseek.com/v1}"
-AGENTSWE_JUDGE_API_KEY = "${AGENTSWE_JUDGE_API_KEY}"
-AGENTSWE_JUDGE_MODEL = "${AGENTSWE_JUDGE_MODEL:-deepseek-flash}"
-AGENTSWE_JUDGE_EFFORT = "${AGENTSWE_JUDGE_EFFORT:-max}"
-AGENTSWE_PROTOCOL_MODE = "${AGENTSWE_PROTOCOL_MODE:-formal}"
+{{VERIFIER_ENV}}
 
 # The Builder's private environment travels as one tarball: artifact uploads rewrite symlink
 # targets, which upstream's environment digest would treat as a change.

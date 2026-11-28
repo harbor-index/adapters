@@ -1,15 +1,5 @@
 x-agentswe-build-args: &build-args
-  DOCKER_REGISTRY: ${AGENTSWE_DOCKER_REGISTRY:-docker.io}
-  APT_MIRROR: ${AGENTSWE_APT_MIRROR:-}
-  CONDA_FORGE_URL: ${AGENTSWE_CONDA_CHANNEL:-https://conda.anaconda.org/conda-forge}
-  PIP_INDEX_URL: ${AGENTSWE_PIP_INDEX_URL:-https://pypi.org/simple}
-  NODE_DIST_URL: ${AGENTSWE_NODE_DIST_URL:-https://nodejs.org/dist}
-  NPM_REGISTRY: ${AGENTSWE_NPM_REGISTRY:-https://registry.npmjs.org}
-  PLAYWRIGHT_DOWNLOAD_HOST: ${AGENTSWE_PLAYWRIGHT_DOWNLOAD_HOST:-}
-  UBUNTU_ARCHIVE_URL: ${AGENTSWE_UBUNTU_MIRROR:-http://archive.ubuntu.com/ubuntu}
-  CFT_BASE_URL: ${AGENTSWE_CFT_BASE_URL:-https://storage.googleapis.com/chrome-for-testing-public}
-  http_proxy: ${AGENTSWE_BUILD_PROXY:-}
-  https_proxy: ${AGENTSWE_BUILD_PROXY:-}
+{{BUILD_ARGS}}
 
 services:
   main:
@@ -21,40 +11,41 @@ services:
       - agentswe-env:{{ENV_PREFIX}}
       - agentswe-controller:/run/agentswe-controller
 
-  # Upstream's host-side dev controller (one_stop.DevController) and per-case evaluator.
-  # Holds the dev cases, rubric, broker and provider keys; the Builder reaches it only
-  # through submit_dev_candidate on the shared socket.
+  # Upstream's host-side dev controller (one_stop.DevController) with its broker stack. It holds the dev
+  # cases, rubric and provider keys; the Builder reaches it only through submit_dev_candidate and the
+  # builder broker. Upstream evaluates two cases at a time, in separate containers: the evaluator runs one
+  # per-case job, evaluator-worker the other.
   evaluator:
     platform: linux/amd64
     build:
       context: ./evaluator
       args: *build-args
     depends_on:
-      - main
-{{EVALUATOR_CAPS}}
+      - main{{EVALUATOR_CAPS}}
     environment:
-      AGENTSWE_BUILDER_BASE_URL: ${AGENTSWE_BUILDER_BASE_URL:-}
-      AGENTSWE_BUILDER_API_KEY: ${AGENTSWE_BUILDER_API_KEY:-}
-      AGENTSWE_BUILDER_MODEL: ${AGENTSWE_BUILDER_MODEL:-}
-      AGENTSWE_BUILDER_EFFORT: ${AGENTSWE_BUILDER_EFFORT:-xhigh}
-      AGENTSWE_RUNTIME_BASE_URL: ${AGENTSWE_RUNTIME_BASE_URL:-https://api.deepseek.com/v1}
-      AGENTSWE_RUNTIME_API_KEY: ${AGENTSWE_RUNTIME_API_KEY:-}
-      AGENTSWE_RUNTIME_MODEL: ${AGENTSWE_RUNTIME_MODEL:-deepseek-flash}
-      AGENTSWE_RUNTIME_EFFORT: ${AGENTSWE_RUNTIME_EFFORT:-high}
-      AGENTSWE_RUNTIME_MODEL_ALIASES: ${AGENTSWE_RUNTIME_MODEL_ALIASES:-deepseek-flash}
-      AGENTSWE_JUDGE_BASE_URL: ${AGENTSWE_JUDGE_BASE_URL:-https://api.deepseek.com/v1}
-      AGENTSWE_JUDGE_API_KEY: ${AGENTSWE_JUDGE_API_KEY:-}
-      AGENTSWE_JUDGE_MODEL: ${AGENTSWE_JUDGE_MODEL:-deepseek-flash}
-      AGENTSWE_JUDGE_EFFORT: ${AGENTSWE_JUDGE_EFFORT:-max}
-      AGENTSWE_PROTOCOL_MODE: ${AGENTSWE_PROTOCOL_MODE:-formal}
-    # The Builder's environment lives at its own path; each per-case job step points the upstream
-    # prefix path at it (Candidate) or at the trusted runtime (verifiers, Result judge).
+{{EVALUATOR_ENV}}
+    # The Builder's environment lives at its own path; each job step points the upstream prefix path at it
+    # (Candidate) or at the trusted runtime (verifiers, Result judge).
     volumes:
       - agentswe-submission:/workspace/submission:ro
+      - agentswe-state:/var/agentswe
       - agentswe-env:/var/agentswe/builder-env:ro
       - agentswe-controller:/run/agentswe-controller
+
+  evaluator-worker:
+    platform: linux/amd64
+    build:
+      context: ./evaluator
+      args: *build-args
+    command: ["python3", "-m", "agentswe_harbor.worker"]
+    depends_on:
+      - evaluator{{EVALUATOR_CAPS}}
+    volumes:
+      - agentswe-state:/var/agentswe
+      - agentswe-env:/var/agentswe/builder-env:ro
 
 volumes:
   agentswe-submission:
   agentswe-env:
   agentswe-controller:
+  agentswe-state:
